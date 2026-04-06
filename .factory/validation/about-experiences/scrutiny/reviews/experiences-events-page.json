@@ -1,0 +1,51 @@
+{
+  "featureId": "experiences-events-page",
+  "reviewedAt": "2026-04-06T03:15:00.000Z",
+  "commitId": "f92f4db",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "The Experiences & Events page is well-implemented with all 5 required sections: Hero, Pop-Up Dinners with event cards, Past Events gallery, Catering CTA, and Event Testimonials. The code follows project conventions (zero border-radius, proper typography, Tailwind utility classes, Next.js Image component, design tokens). Data is sourced correctly from constants.ts. Responsive breakpoints are properly applied. The CTA links to /catering as required. The split-layout in CateringCTA correctly uses max-container without section-padding per AGENTS.md convention. A few minor non-blocking issues were identified.",
+    "issues": [
+      {
+        "file": "src/components/experiences/ExperiencesContent.tsx",
+        "line": 1,
+        "severity": "non_blocking",
+        "description": "Unnecessary 'use client' directive. The component does not use any React hooks (useState, useEffect, etc.), event handlers, or browser APIs. It only imports client components (Button, Rating) which is allowed from server components. AboutContent.tsx follows the correct pattern as a server component. Removing 'use client' would enable server-side rendering for this page's static content."
+      },
+      {
+        "file": "src/components/experiences/ExperiencesContent.tsx",
+        "line": 11,
+        "severity": "non_blocking",
+        "description": "PAST_EVENT_PHOTOS data is hardcoded in the component file rather than in src/lib/constants.ts. Per AGENTS.md convention ('All content in src/lib/constants.ts with clear sections'), this data should be centralized in constants.ts with a corresponding TypeScript interface in types.ts. The EVENTS and TESTIMONIALS data are correctly imported from constants.ts, but the past event photos break this pattern."
+      },
+      {
+        "file": "src/components/experiences/ExperiencesContent.tsx",
+        "line": 69,
+        "severity": "non_blocking",
+        "description": "Hero uses the same Unsplash image (photo-1414235077428-338989a2e8c0) as PAST_EVENT_PHOTOS[5] (the 'Communal Table' photo). While not a bug, using the same image in two places on the same page is slightly jarring and reduces visual variety."
+      },
+      {
+        "file": "src/components/experiences/ExperiencesContent.tsx",
+        "line": 86,
+        "severity": "non_blocking",
+        "description": "The eyebrow text 'DINE · CONNECT · EXPERIENCE' uses the class 'text-primary' which renders as Deep Terracotta. On the dark overlay (bg-black/45), this color may have marginal contrast for accessibility (WCAG AA). Other hero sections in the project use similar patterns so this is consistent, but worth noting."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "Multiple content components (ExperiencesContent, CateringContent, TestimonialsContent) use 'use client' even when some don't need it (ExperiencesContent has no hooks/interactivity). AGENTS.md says 'Use \"use client\" directive only when needed (interactive components)' but workers may be defaulting to 'use client' as a safety measure. The distinction could be clearer, perhaps with an example showing that importing a client component from a server component is valid.",
+      "evidence": "ExperiencesContent.tsx line 1 has 'use client' but grep for useState/useEffect/onClick returns no matches. AboutContent.tsx correctly omits it despite also importing Button (a client component)."
+    },
+    {
+      "area": "conventions",
+      "observation": "AGENTS.md convention states 'All content in src/lib/constants.ts with clear sections', but the worker placed PAST_EVENT_PHOTOS data inline in the component file. This suggests the convention boundary between 'content data' (goes in constants) and 'presentational/layout data' (can live in component) is not clearly defined. The worker may have considered past event photos as component-local data since it's not shared across pages.",
+      "evidence": "src/components/experiences/ExperiencesContent.tsx lines 11-55 contain PAST_EVENT_PHOTOS array with 6 items. No corresponding interface in types.ts."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "The Experiences & Events page passes review. All 5 required sections are implemented correctly: Hero with 'Soul Good Experiences' headline, Pop-Up Dinners with Tastemakers description and event cards (dates, venues, prices, GET TICKETS CTAs), Past Events photo gallery, Catering CTA linking to /catering, and Event Testimonials filtered to events/catering categories. The implementation follows project design conventions (zero border-radius, proper fonts, Tailwind tokens, responsive breakpoints). TypeScript and lint checks pass. Four non-blocking issues were identified: unnecessary 'use client' directive, past event photos data not in constants.ts, duplicate hero/gallery image, and minor contrast concern on the hero eyebrow text. None are blocking."
+}
