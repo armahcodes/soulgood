@@ -69,7 +69,7 @@ Each page is composed of **section components** that follow a consistent pattern
 ### Routing Structure
 All routes use Next.js App Router file-based routing under `src/app/`:
 - Static pages: `page.tsx` files
-- Dynamic pages: `[slug]/page.tsx` for products and blog posts
+- Dynamic pages: `[slug]/page.tsx` for products, blog posts, and recipes
 - Shared layouts: `layout.tsx` at root level
 
 ## Key Invariants

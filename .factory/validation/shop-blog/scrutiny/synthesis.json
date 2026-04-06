@@ -1,7 +1,7 @@
 {
   "milestone": "shop-blog",
-  "round": 1,
-  "status": "fail",
+  "round": 2,
+  "status": "pass",
   "validatorsRun": {
     "test": { "passed": true, "command": "N/A - no test suite configured", "exitCode": 0 },
     "typecheck": { "passed": true, "command": "npx tsc --noEmit", "exitCode": 0 },
@@ -9,92 +9,44 @@
     "build": { "passed": true, "command": "pnpm build", "exitCode": 0 }
   },
   "reviewsSummary": {
-    "total": 4,
-    "passed": 3,
-    "failed": 1,
-    "failedFeatures": ["blog-listing-and-articles"]
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "failedFeatures": []
   },
-  "blockingIssues": [
-    {
-      "featureId": "blog-listing-and-articles",
-      "severity": "blocking",
-      "description": "Recipe cards on /recipes link to /blog/${recipe.slug} but 8 of 9 recipe slugs (rainbow-power-bowl, golden-turmeric-latte, blackened-fish-tacos, collard-green-wraps, sweet-potato-coconut-soup, berry-smoothie-bowl, jerk-cauliflower-bites, green-detox-juice) don't exist in BLOG_POSTS, causing 404 errors when clicked. Only herb-crusted-salmon has a matching blog post. Fix options: (1) create /recipes/[slug] route with recipe detail pages, (2) add matching blog posts for each recipe, or (3) change recipe card links to point only to existing blog posts."
-    }
-  ],
+  "blockingIssues": [],
   "nonBlockingIssues": [
     {
-      "featureId": "shop-listing-product-cards",
+      "featureId": "fix-recipe-404s",
       "severity": "non_blocking",
-      "description": "Product type includes 'snacks' category but shop filters only expose All/Seasonings/Juices/Bundles. Snack products appear under 'All' but cannot be filtered individually. Matches feature spec but creates a data-UI gap."
+      "description": "RecipeDetailContent.tsx uses 'use client' directive unnecessarily — component has no hooks or event handlers and could be a server component. Same pattern as BlogArticleContent.tsx noted in round 1."
     },
     {
-      "featureId": "shop-listing-product-cards",
+      "featureId": "fix-recipe-404s",
       "severity": "non_blocking",
-      "description": "Product badges use default/primary color variant instead of accent variant. Ambiguous spec - terracotta (primary) vs olive green (accent) are both valid brand accent colors."
-    },
-    {
-      "featureId": "product-detail-page",
-      "severity": "non_blocking",
-      "description": "Subscription state is not persisted to CartItem when adding to cart. CartItem type only has {product, quantity} — no isSubscription flag. Subscription price choice is lost on add-to-cart."
-    },
-    {
-      "featureId": "product-detail-page",
-      "severity": "non_blocking",
-      "description": "TrustBadges grid uses grid-cols-3 without responsive fallback for ultra-narrow screens (<375px)."
-    },
-    {
-      "featureId": "blog-listing-and-articles",
-      "severity": "non_blocking",
-      "description": "BlogArticleContent.tsx uses 'use client' directive unnecessarily — component has no hooks or event handlers and could be a server component."
-    },
-    {
-      "featureId": "blog-listing-and-articles",
-      "severity": "non_blocking",
-      "description": "RecipeCategory type is 'all' | string which collapses to string, losing type safety for category values."
-    },
-    {
-      "featureId": "faq-and-contact",
-      "severity": "non_blocking",
-      "description": "Contact form uses dual validation (both RHF validate prop and manual Zod safeParse in onSubmit), contradicting AGENTS.md but matching existing Newsletter.tsx codebase pattern."
-    },
-    {
-      "featureId": "faq-and-contact",
-      "severity": "non_blocking",
-      "description": "Contact form subject select uses empty string default rather than a disabled placeholder option — minor UX nit."
+      "description": "Recipe cookTime uses '0 min' string for no-cook recipes (smoothie bowl, green detox juice) rather than null/undefined. RecipeDetailContent handles this with conditional rendering but it's a minor data modeling oddity."
     }
   ],
-  "appliedUpdates": [],
+  "appliedUpdates": [
+    {
+      "target": "library",
+      "description": "Updated architecture.md to list recipes as a third dynamic route type alongside products and blog posts.",
+      "sourceFeature": "fix-recipe-404s"
+    }
+  ],
   "suggestedGuidanceUpdates": [
     {
       "target": "AGENTS.md",
-      "suggestion": "Clarify form validation convention: AGENTS.md says 'Do NOT also add RHF validate prop (redundant dual validation)' but the reference implementation (Newsletter.tsx) uses both validate prop and manual safeParse. Either update AGENTS.md to acknowledge the dual pattern as acceptable, or fix Newsletter.tsx to match the documented convention. This affects all form-containing features.",
-      "evidence": "Newsletter.tsx (lines 46-52) and ContactContent.tsx (lines 274-280, 286-292, 310-315, 336-341) both use dual validation. Workers consistently follow the codebase pattern over the AGENTS.md text.",
+      "suggestion": "Add explicit guidance about 'use client' directive: detail content components (BlogArticleContent, RecipeDetailContent) that only render data and use no hooks/event handlers should NOT use 'use client'. Workers consistently add it to all content components even though AGENTS.md already says 'Use \"use client\" directive only when needed'. Consider adding examples of when to use vs not use it.",
+      "evidence": "Both BlogArticleContent.tsx and RecipeDetailContent.tsx (added in fix-recipe-404s) have unnecessary 'use client'. The pattern has been flagged in both round 1 and round 2 reviews across two different workers, indicating the existing AGENTS.md guidance is not specific enough.",
       "isSystemic": true
-    },
-    {
-      "target": "AGENTS.md",
-      "suggestion": "Add guidance for recipe routing: Recipes are a separate content type from blog posts and should either have their own /recipes/[slug] dynamic route with detail pages, or the recipe data should include explicit links to matching blog post slugs. Currently recipes link to /blog/{slug} but most recipe slugs don't have corresponding blog posts.",
-      "evidence": "RecipesContent.tsx links to /blog/${recipe.slug} but 8 of 9 recipe slugs don't exist in BLOG_POSTS (generateStaticParams). This is the root cause of the blocking 404 issue.",
-      "isSystemic": false
     }
   ],
   "rejectedObservations": [
     {
-      "observation": "Product type includes 'snacks' as a category value, but shop filters don't expose a Snacks button — data-UI mismatch.",
-      "reason": "Matches feature spec exactly (spec says 'All, Seasonings, Juices, Bundles'). Adding Snacks filter would be a scope expansion, not a fix."
-    },
-    {
-      "observation": "CartItem type does not support subscription pricing — cross-cutting data model gap.",
-      "reason": "Known limitation that aligns with the project's 'all data hardcoded, backend later' approach. CartItem subscription support is an enhancement for backend integration phase, not a current milestone blocker."
-    },
-    {
-      "observation": "Worker did not run pnpm build during feature verification.",
-      "reason": "Validators are run by the scrutiny validator (this process) and build passed. Worker skill doesn't explicitly require build in verification steps."
-    },
-    {
-      "observation": "BlogArticleContent.tsx uses 'use client' unnecessarily — no client-side interactivity.",
-      "reason": "Isolated instance, not systemic. Non-blocking performance nit that doesn't warrant a guidance update."
+      "observation": "architecture.md should mention /recipes/[slug] as a dynamic route type",
+      "reason": "Applied directly — updated architecture.md to include recipes alongside products and blog posts."
     }
   ],
-  "previousRound": null
+  "previousRound": ".factory/validation/shop-blog/scrutiny/synthesis.json (round 1)"
 }

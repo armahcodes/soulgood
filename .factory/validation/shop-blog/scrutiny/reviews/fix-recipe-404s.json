@@ -1,0 +1,39 @@
+{
+  "featureId": "fix-recipe-404s",
+  "reviewedAt": "2026-04-06T04:45:00.000Z",
+  "commitId": "5fa237d",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "The fix correctly addresses the original blocking issue (recipe card 404s) by: (1) creating a new /recipes/[slug] dynamic route with generateStaticParams that maps all 9 RECIPES slugs, (2) updating RecipesContent.tsx links from /blog/${slug} to /recipes/${slug}, and (3) creating a comprehensive RecipeDetailContent component with hero image, metadata bar (prep/cook time, servings, difficulty), ingredients list, numbered instructions, CTA section, and related recipes grid. The Recipe interface was extended with cookTime, ingredients, and instructions fields, and all 9 recipes in constants.ts were populated with full recipe detail data. The implementation follows project conventions: zero border-radius, Tailwind utility classes, Next.js Image with data-placeholder, proper font classes, design token colors, and correct transition timing. The page uses generateMetadata for SEO with OpenGraph support and notFound() for invalid slugs. Related recipes logic correctly filters same-category first, then fills from other categories, capped at 3. The build succeeds with all 9 recipe routes generated. One non-blocking issue: RecipeDetailContent uses 'use client' unnecessarily (same pattern as BlogArticleContent noted in the prior review).",
+    "issues": [
+      {
+        "file": "src/components/blog/RecipeDetailContent.tsx",
+        "line": 1,
+        "severity": "non_blocking",
+        "description": "Component has 'use client' directive but uses no React hooks (useState, useEffect, useMemo, useRef) or event handlers. All computation (related recipe filtering) is pure JS that can run on the server. The Button component it imports already has its own 'use client' directive, so it doesn't require the parent to be a client component. Removing 'use client' would reduce client-side JS bundle size. This is the same pattern noted in the prior review for BlogArticleContent."
+      },
+      {
+        "file": "src/lib/constants.ts",
+        "line": 1209,
+        "severity": "non_blocking",
+        "description": "Recipe prepTime values were changed from combined prep+cook times (e.g., '30 min') to just prep times (e.g., '15 min') with a new separate cookTime field. This is an improvement, but the cookTime for smoothie bowl and green detox juice is '0 min' string rather than a more natural null/undefined. The RecipeDetailContent handles this with a conditional (cookTime !== '0 min'), but it's a minor data modeling oddity."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "architecture.md states 'Dynamic pages: [slug]/page.tsx for products and blog posts' but now /recipes/[slug] is a third dynamic route type. The architecture doc should be updated to reflect that recipes have their own dynamic route separate from blog posts.",
+      "evidence": "src/app/recipes/[slug]/page.tsx was added in commit 5fa237d. .factory/library/architecture.md line about 'Dynamic pages' only mentions products and blog posts."
+    },
+    {
+      "area": "conventions",
+      "observation": "Worker repeated the same 'use client' unnecessary usage pattern that was flagged in the prior review of blog-listing-and-articles. RecipeDetailContent.tsx has 'use client' but no hooks or event handlers. AGENTS.md says 'Use \"use client\" directive only when needed (interactive components)' — convention is documented but consistently not followed for detail content components.",
+      "evidence": "src/components/blog/RecipeDetailContent.tsx:1 has 'use client'. No useState/useEffect/onClick found in file. Same issue was noted for BlogArticleContent.tsx in the blog-listing-and-articles review."
+    }
+  ],
+  "addressesFailureFrom": ".factory/validation/shop-blog/scrutiny/reviews/blog-listing-and-articles.json",
+  "summary": "The fix fully and correctly addresses the original blocking issue. All 9 recipe slugs now have dedicated /recipes/[slug] detail pages with proper static generation, SEO metadata, hero image, metadata bar, ingredients list, numbered instructions, CTA, and related recipes. Recipe card links in RecipesContent.tsx correctly point to /recipes/${slug} instead of /blog/${slug}, eliminating all 404 errors. Build confirmed successful with all 9 routes. Two non-blocking issues: unnecessary 'use client' on RecipeDetailContent (same pattern as prior review), and '0 min' string for cookTime on no-cook recipes. Overall a clean, well-structured fix that follows project conventions."
+}
