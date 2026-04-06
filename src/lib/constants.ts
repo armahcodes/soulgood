@@ -107,11 +107,35 @@ export const MEAL_PLANS: MealPlan[] = [
     tagline: "Fuel your body. Elevate your day.",
     description:
       "Two chef-crafted meals and a cold-pressed juice daily, designed to optimize your performance and keep you energized from morning to night. Each meal is nutrient-dense, seasonally inspired, and rooted in ancestral wisdom.",
+    longDescription:
+      "Performance Fuel is your daily foundation for peak living. Each day, Chef Kyla prepares two nutrient-dense meals — lunch and dinner — along with a cold-pressed juice crafted from seasonal produce. Every recipe is rooted in the healing traditions of Southern soul food, elevated with modern nutritional science. Whether you're an athlete, a busy professional, or simply someone who believes food should work as hard as you do, Performance Fuel delivers clean, intentional nourishment without the hassle of meal prep.",
     includes: [
       "2 chef-crafted meals per day",
       "1 cold-pressed juice per day",
       "Seasonal menu rotation",
       "Nutritionist-approved macros",
+    ],
+    whatsIncludedDetailed: [
+      {
+        title: "Chef-Crafted Lunch",
+        description:
+          "A hearty, balanced midday meal featuring lean proteins, ancient grains, and vibrant seasonal vegetables. Designed for sustained energy without the afternoon crash.",
+      },
+      {
+        title: "Chef-Crafted Dinner",
+        description:
+          "A nourishing evening meal that draws on Southern soul food traditions — slow-cooked, richly seasoned, and prepared with healing ingredients like turmeric, ginger, and leafy greens.",
+      },
+      {
+        title: "Cold-Pressed Juice",
+        description:
+          "A daily dose of raw, cold-pressed nutrition. Our juices rotate seasonally and feature combinations like golden turmeric sunrise, green vitality, and beet berry detox.",
+      },
+      {
+        title: "Seasonal Menu Rotation",
+        description:
+          "Our menu changes weekly to keep your palate excited and your body nourished with peak-season produce sourced from local farms whenever possible.",
+      },
     ],
     pricing: {
       threeDayOneTime: 189,
@@ -121,6 +145,8 @@ export const MEAL_PLANS: MealPlan[] = [
     },
     image:
       "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop",
+    heroImage:
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600&h=900&fit=crop",
     faqs: [
       {
         id: "pf-faq-1",
@@ -136,6 +162,47 @@ export const MEAL_PLANS: MealPlan[] = [
           "While specific meal selection isn't available, you can indicate dietary preferences and restrictions, and our kitchen will accommodate them.",
         category: "meal-plans",
       },
+      {
+        id: "pf-faq-3",
+        question: "How many calories are in each meal?",
+        answer:
+          "Each meal is designed to provide 500–700 calories of balanced macronutrients. Our nutritionist ensures every plate has the right balance of protein, healthy fats, and complex carbohydrates.",
+        category: "meal-plans",
+      },
+      {
+        id: "pf-faq-4",
+        question: "Is Performance Fuel suitable for athletes?",
+        answer:
+          "Absolutely. Performance Fuel is designed with active individuals in mind. The macros are optimized for sustained energy, recovery, and lean muscle support.",
+        category: "meal-plans",
+      },
+      {
+        id: "pf-faq-5",
+        question: "How do I store and reheat the meals?",
+        answer:
+          "All meals arrive fresh and should be refrigerated immediately. Most meals reheat beautifully in 2–3 minutes in the microwave or 5–7 minutes in the oven at 350°F. Juices should be consumed cold.",
+        category: "meal-plans",
+      },
+    ],
+    reviews: [
+      {
+        id: "pf-review-1",
+        name: "Marcus T.",
+        text: "As a former athlete, I'm picky about my nutrition. Chef Kyla's Performance Fuel plan gives me everything I need — clean fuel that actually tastes amazing.",
+        rating: 5,
+      },
+      {
+        id: "pf-review-2",
+        name: "Jasmine R.",
+        text: "I've been on Performance Fuel for three months and my energy levels have completely transformed. The lunches keep me going through my busiest days.",
+        rating: 5,
+      },
+      {
+        id: "pf-review-3",
+        name: "Derek S.",
+        text: "The juices alone are worth it. But the meals? Next level. I've tried every meal delivery in LA and this is the one that sticks.",
+        rating: 5,
+      },
     ],
   },
   {
@@ -146,6 +213,8 @@ export const MEAL_PLANS: MealPlan[] = [
     tagline: "Complete nourishment for mind, body, and soul.",
     description:
       "Our most comprehensive plan — two meals, a cold-pressed juice, and a functional snack daily. Designed for those seeking full alignment through intentional, healing nutrition that honors both tradition and modern wellness science.",
+    longDescription:
+      "Full Alignment Fuel is the ultimate expression of Soul Good's philosophy: food as medicine, food as love. Every day, you receive two meticulously crafted meals, a cold-pressed juice, and a functional snack — each designed to work together as a complete system of nourishment. The snacks feature adaptogens, superfoods, and ancient ingredients chosen for their stress-relieving, gut-healing, and energy-sustaining properties. With priority delivery windows and our most comprehensive weekly menu, Full Alignment is for those who are ready to commit fully to their wellness journey.",
     includes: [
       "2 chef-crafted meals per day",
       "1 cold-pressed juice per day",
@@ -153,6 +222,38 @@ export const MEAL_PLANS: MealPlan[] = [
       "Seasonal menu rotation",
       "Nutritionist-approved macros",
       "Priority delivery windows",
+    ],
+    whatsIncludedDetailed: [
+      {
+        title: "Chef-Crafted Lunch",
+        description:
+          "A hearty, balanced midday meal featuring lean proteins, ancient grains, and vibrant seasonal vegetables. Designed for sustained energy without the afternoon crash.",
+      },
+      {
+        title: "Chef-Crafted Dinner",
+        description:
+          "A nourishing evening meal rooted in Southern soul food traditions — slow-cooked, richly seasoned, and prepared with healing ingredients like turmeric, ginger, and leafy greens.",
+      },
+      {
+        title: "Cold-Pressed Juice",
+        description:
+          "A daily dose of raw, cold-pressed nutrition. Our juices rotate seasonally and feature combinations like golden turmeric sunrise, green vitality, and beet berry detox.",
+      },
+      {
+        title: "Functional Snack",
+        description:
+          "Handcrafted adaptogen energy bites, turmeric-ginger bars, or superfood trail mixes — each designed to bridge your meals with sustained energy and stress-relieving functional ingredients.",
+      },
+      {
+        title: "Priority Delivery Windows",
+        description:
+          "Full Alignment members get first pick of delivery windows, ensuring your meals arrive exactly when you need them — Sunday evening or early Monday morning.",
+      },
+      {
+        title: "Seasonal Menu Rotation",
+        description:
+          "Our menu changes weekly, sourcing peak-season produce from local farms to keep flavors fresh and nutrients at their highest potency.",
+      },
     ],
     pricing: {
       threeDayOneTime: 239,
@@ -162,6 +263,8 @@ export const MEAL_PLANS: MealPlan[] = [
     },
     image:
       "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&h=600&fit=crop",
+    heroImage:
+      "https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=1600&h=900&fit=crop",
     faqs: [
       {
         id: "fa-faq-1",
@@ -176,6 +279,47 @@ export const MEAL_PLANS: MealPlan[] = [
         answer:
           "Functional snacks rotate weekly and include items like adaptogen energy bites, turmeric-ginger bars, and superfood trail mixes — all made from scratch.",
         category: "meal-plans",
+      },
+      {
+        id: "fa-faq-3",
+        question: "What are adaptogens and why are they in the snacks?",
+        answer:
+          "Adaptogens are natural herbs and mushrooms — like ashwagandha, reishi, and maca — that help your body manage stress, boost immunity, and sustain energy. We incorporate them into our snacks for functional benefits beyond basic nutrition.",
+        category: "meal-plans",
+      },
+      {
+        id: "fa-faq-4",
+        question: "What does priority delivery mean?",
+        answer:
+          "Full Alignment members receive their deliveries first during each delivery window. You'll be among the first to receive your weekly meals, typically Sunday evening between 5–7 PM or Monday morning between 6–8 AM.",
+        category: "meal-plans",
+      },
+      {
+        id: "fa-faq-5",
+        question: "Can I switch between Full Alignment and Performance Fuel?",
+        answer:
+          "Yes! Subscribers can switch plans at any time. Changes made by Thursday at midnight will apply to the following week's delivery.",
+        category: "meal-plans",
+      },
+    ],
+    reviews: [
+      {
+        id: "fa-review-1",
+        name: "Chris B.",
+        text: "The Full Alignment plan is a game changer. The snacks are just as thoughtful as the meals, and the juice is the best I've ever had. Period.",
+        rating: 5,
+      },
+      {
+        id: "fa-review-2",
+        name: "Tanya W.",
+        text: "I've tried every meal delivery service in LA. Soul Good is different — it feels like someone who actually cares is cooking for you. Because they are.",
+        rating: 5,
+      },
+      {
+        id: "fa-review-3",
+        name: "Alicia M.",
+        text: "The energy bites are addictive and the priority delivery is so convenient. Full Alignment has become an essential part of my weekly routine.",
+        rating: 5,
       },
     ],
   },

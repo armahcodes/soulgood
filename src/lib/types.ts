@@ -21,6 +21,18 @@ export interface Product {
   inStock: boolean;
 }
 
+export interface MealPlanIncludedItem {
+  title: string;
+  description: string;
+}
+
+export interface MealPlanReview {
+  id: string;
+  name: string;
+  text: string;
+  rating: number;
+}
+
 export interface MealPlan {
   id: string;
   slug: string;
@@ -28,7 +40,9 @@ export interface MealPlan {
   tier: "performance-fuel" | "full-alignment";
   tagline: string;
   description: string;
+  longDescription: string;
   includes: string[];
+  whatsIncludedDetailed: MealPlanIncludedItem[];
   pricing: {
     threeDayOneTime: number;
     threeDaySubscription: number;
@@ -36,7 +50,9 @@ export interface MealPlan {
     fiveDaySubscription: number;
   };
   image: string;
+  heroImage: string;
   faqs: FAQ[];
+  reviews: MealPlanReview[];
 }
 
 export interface BlogPost {
