@@ -1,0 +1,64 @@
+{
+  "groupId": "order-configurator",
+  "testedAt": "2026-04-05T00:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "page": "/meal-plans/order",
+    "sessionId": "c1601f4f520f__g3",
+    "readOnly": true,
+    "clientSideStateOnly": true
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": {
+    "VAL-MEAL-003": {
+      "status": "pass",
+      "evidence": [
+        "meal-plans/order-configurator/step-1-plan-tier.png",
+        "meal-plans/order-configurator/step-2-subscription.png",
+        "meal-plans/order-configurator/step-3-day-count.png",
+        "meal-plans/order-configurator/step-4-delivery.png",
+        "meal-plans/order-configurator/step-5-dietary.png",
+        "meal-plans/order-configurator/step-6-addons.png",
+        "meal-plans/order-configurator/step-7-review.png",
+        "meal-plans/order-configurator/back-to-step6.png"
+      ],
+      "notes": "All 7 steps render correctly: (1) Choose Plan with Performance Fuel and Full Alignment options, (2) Subscription Type with Weekly Subscription and One-Time Order, (3) Day Count with 3-Day and 5-Day plans, (4) Delivery Schedule with Sunday Evening, Monday Morning, and Twice per Week, (5) Dietary Preferences with 6 checkbox options, (6) Add-ons with 4 optional extras with prices, (7) Review with full summary and Place Order button. Back navigation works correctly (tested going from Step 7 back to Step 6, preserving selections). Step progress indicator shows completed steps with checkmarks. NEXT/BACK buttons present on each step."
+    },
+    "VAL-MEAL-004": {
+      "status": "pass",
+      "evidence": [
+        "meal-plans/order-configurator/step-2-subscription.png",
+        "meal-plans/order-configurator/step-2-onetime-selected.png"
+      ],
+      "notes": "Subscription type step shows two options: (1) Weekly Subscription with SAVE 15% discount badge showing $254/week (crossed-out $299 one-time price), and (2) One-Time Order at $299/order. Toggling between them updates the displayed price. Subscription is pre-selected by default."
+    },
+    "VAL-MEAL-005": {
+      "status": "pass",
+      "evidence": [
+        "meal-plans/order-configurator/step-3-day-count.png",
+        "meal-plans/order-configurator/step-3-3day-selected.png"
+      ],
+      "notes": "Day count step shows two options: 3-Day Plan (6 meals + 3 juices, $161/week) and 5-Day Plan (BEST VALUE badge, 10 meals + 5 juices, $254/week). Selecting 3-Day updates the current total header from $254 to $161. 5-Day plan is pre-selected by default."
+    },
+    "VAL-MEAL-006": {
+      "status": "pass",
+      "evidence": [
+        "meal-plans/order-configurator/step-5-dietary.png",
+        "meal-plans/order-configurator/step-5-dietary-selected.png"
+      ],
+      "notes": "Dietary preferences step shows 6 checkbox options: Vegan, Gluten-Free, Dairy-Free, Nut-Free, Shellfish-Free, and Other. Multiple selections allowed. Tested selecting Vegan and Dairy-Free simultaneously — both show checked state with cream background highlight. Allergen disclaimer text is shown below the options."
+    },
+    "VAL-MEAL-007": {
+      "status": "pass",
+      "evidence": [
+        "meal-plans/order-configurator/step-7-review.png",
+        "meal-plans/order-configurator/step-7-review-details.png",
+        "meal-plans/order-configurator/step-7-review-total.png"
+      ],
+      "notes": "Review step displays complete summary of all selections: PLAN (Performance Fuel), TYPE (Weekly Subscription with SAVE 15% badge), DAYS PER WEEK (5-Day Plan, $254), DELIVERY (Sunday Evening 5-7 PM), DIETARY PREFERENCES (Vegan, Dairy-Free), ADD-ONS (Extra Cold-Pressed Juice Pack +$24). ORDER TOTAL shown as $278 per week, billed weekly. PLACE ORDER button and BACK button present. Terms agreement text displayed below Place Order button."
+    }
+  },
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 5 assertions: all 5 passed. The order configurator functions correctly with 7 steps, proper back/next navigation, price updates on selection changes, dietary preference checkboxes, and a comprehensive review summary with accurate total calculation."
+}

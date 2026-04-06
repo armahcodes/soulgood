@@ -1,0 +1,40 @@
+{
+  "groupId": "plan-details-menu",
+  "testedAt": "2026-04-05T12:00:00Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "sessionId": "c1601f4f520f__g2",
+    "pages": ["/meal-plans/performance-fuel", "/meal-plans/full-alignment", "/menu"],
+    "readOnly": true
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": {
+    "VAL-MEAL-002": {
+      "status": "pass",
+      "evidence": [
+        "meal-plans/meal-plan-details/VAL-MEAL-002-performance-fuel-hero.png",
+        "meal-plans/meal-plan-details/VAL-MEAL-002-performance-fuel-description.png",
+        "meal-plans/meal-plan-details/VAL-MEAL-002-performance-fuel-included.png",
+        "meal-plans/meal-plan-details/VAL-MEAL-002-performance-fuel-pricing.png",
+        "meal-plans/meal-plan-details/VAL-MEAL-002-performance-fuel-full.png",
+        "meal-plans/meal-plan-details/VAL-MEAL-002-full-alignment-hero.png",
+        "meal-plans/meal-plan-details/VAL-MEAL-002-full-alignment-full.png"
+      ],
+      "notes": "Both plan detail pages (Performance Fuel and Full Alignment Fuel) render correctly with all required elements: hero image with plan name and tagline, plan description section, what's included list (lunch, dinner, juice, snack, seasonal menu rotation), pricing section with subscription/one-time toggle and pricing cards, and 'Start Your Plan' CTA buttons. FAQ and Customer Reviews sections also present. No console errors detected."
+    },
+    "VAL-MEAL-008": {
+      "status": "pass",
+      "evidence": [
+        "meal-plans/meal-plan-details/VAL-MEAL-008-weekly-menu-desktop-hero.png",
+        "meal-plans/meal-plan-details/VAL-MEAL-008-weekly-menu-desktop-meals.png",
+        "meal-plans/meal-plan-details/VAL-MEAL-008-weekly-menu-desktop-full.png",
+        "meal-plans/meal-plan-details/VAL-MEAL-008-weekly-menu-mobile-top.png",
+        "meal-plans/meal-plan-details/VAL-MEAL-008-weekly-menu-mobile-full.png"
+      ],
+      "notes": "Weekly menu page displays meals organized by day (Monday through Friday) with meal images, category labels (Breakfast Juice, Lunch, Dinner, Snack), meal names, and descriptions. Desktop view shows 4 meals per row. Mobile view (375px) correctly stacks meals in a single column with full-width images. CTA section at bottom ('Ready to Eat This Good?'). No console errors detected."
+    }
+  },
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 2 assertions: 2 passed. VAL-MEAL-002 confirmed both plan detail pages (Performance Fuel and Full Alignment Fuel) render hero images, descriptions, what's included lists, pricing with subscription/one-time toggle, and Start Your Plan CTAs. VAL-MEAL-008 confirmed weekly menu displays meals organized by day with images, names, and descriptions at both desktop and mobile widths."
+}

@@ -1,0 +1,40 @@
+{
+  "groupId": "meal-plans-comparison",
+  "testedAt": "2026-04-05T12:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "sessionId": "c1601f4f520f__g1",
+    "readOnly": true,
+    "noSharedMutableState": true
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": {
+    "VAL-MEAL-001": {
+      "status": "pass",
+      "evidence": [
+        "meal-plans/meal-plans-comparison/VAL-MEAL-001-plans-comparison-desktop.png",
+        "meal-plans/meal-plans-comparison/VAL-MEAL-001-plans-comparison-mobile.png"
+      ],
+      "notes": "Meal plans comparison page renders correctly at both desktop (1280px) and mobile (375px) widths. Desktop shows side-by-side comparison cards for Performance Fuel (Tier 1, $165/3-day) and Full Alignment Fuel (Tier 2, $203/3-day) with descriptions, included items (checkmarks), pricing, and 'EXPLORE PLAN' CTA buttons. Mobile view stacks cards vertically. Sidebar navigation present on desktop, horizontal scrollable nav on mobile. No console errors."
+    },
+    "VAL-MEAL-009": {
+      "status": "pass",
+      "evidence": [
+        "meal-plans/meal-plans-comparison/VAL-MEAL-009-delivery-info.png"
+      ],
+      "notes": "Delivery area information displays correctly on the meal plans comparison page. Shows 'We Deliver Across Greater Los Angeles' heading with 'NEIGHBORHOODS WE SERVE' section listing 21 neighborhoods in a 3-column grid (Long Beach, Culver City, Westwood, Hollywood, Downtown LA, Burbank, Woodland Hills, Torrance, Santa Monica, Beverly Hills, Silver Lake, Pasadena, Sherman Oaks, Calabasas, Inglewood, Venice, West Hollywood, Echo Park, Glendale, Encino, Malibu). Also shows 'DELIVERY SCHEDULE' section with 3 options: Sunday Evening Delivery (3pm-9pm), Monday Morning Delivery (6am-10am), and Twice Weekly. No console errors."
+    },
+    "VAL-MEAL-010": {
+      "status": "pass",
+      "evidence": [
+        "meal-plans/meal-plans-comparison/VAL-MEAL-001-plans-comparison-mobile.png",
+        "meal-plans/meal-plans-comparison/VAL-MEAL-010-meal-plans-mobile.png",
+        "meal-plans/meal-plans-comparison/VAL-MEAL-010-mobile-top.png"
+      ],
+      "notes": "Responsive layout confirmed via both viewport resizing (375x812) and CSS class review. Plan comparison cards use 'grid grid-cols-1 md:grid-cols-2' — stacking vertically at mobile, side-by-side at md+. Page layout uses 'flex flex-col lg:flex-row' — sidebar hidden on mobile, replaced by horizontal scrollable nav (lg:hidden). Plan card images, descriptions, included items, pricing, and CTA buttons all render correctly at mobile width with full-width layout. No console errors."
+    }
+  },
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 3 assertions: all 3 passed. VAL-MEAL-001 (comparison page renders with both plan tiers), VAL-MEAL-009 (delivery area info with neighborhoods and schedule options), VAL-MEAL-010 (responsive layout with vertical stacking on mobile). No console errors detected."
+}
