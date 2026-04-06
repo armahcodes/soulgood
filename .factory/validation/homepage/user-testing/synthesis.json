@@ -1,0 +1,31 @@
+{
+  "milestone": "homepage",
+  "round": 1,
+  "status": "pass",
+  "assertionsSummary": {
+    "total": 14,
+    "passed": 14,
+    "failed": 0,
+    "blocked": 0
+  },
+  "passedAssertions": [
+    "VAL-HOME-001",
+    "VAL-HOME-002",
+    "VAL-HOME-003",
+    "VAL-HOME-004",
+    "VAL-HOME-005",
+    "VAL-HOME-006",
+    "VAL-HOME-007",
+    "VAL-HOME-008",
+    "VAL-HOME-009",
+    "VAL-HOME-010",
+    "VAL-HOME-011",
+    "VAL-DESIGN-001",
+    "VAL-DESIGN-002",
+    "VAL-DESIGN-005"
+  ],
+  "failedAssertions": [],
+  "blockedAssertions": [],
+  "appliedUpdates": [],
+  "previousRound": null
+}

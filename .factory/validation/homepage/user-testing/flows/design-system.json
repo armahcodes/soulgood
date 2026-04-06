@@ -1,0 +1,151 @@
+{
+  "groupId": "design-system",
+  "testedAt": "2026-04-05T12:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "browserSession": "94c73c8b4973__design",
+    "sharedState": "none - site is read-only with hardcoded data",
+    "viewport": "1280x720"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-DESIGN-001",
+      "title": "Soul Good color palette is applied",
+      "status": "pass",
+      "steps": [
+        {
+          "action": "Navigate to homepage http://localhost:3000",
+          "expected": "Homepage loads with brand colors applied",
+          "observed": "Homepage loaded successfully"
+        },
+        {
+          "action": "Take full-page screenshot and inspect announcement bar background color",
+          "expected": "Deep terracotta #C65D3E on announcement bar",
+          "observed": "Announcement bar uses bg-primary with computed background-color rgb(198, 93, 62) which is #C65D3E — correct"
+        },
+        {
+          "action": "Inspect section backgrounds for warm cream/off-white",
+          "expected": "Sections use #FAFAF5 or similar warm cream backgrounds",
+          "observed": "Multiple sections use bg-cream (rgb(250, 250, 245) = #FAFAF5) and bg-cream-dark (rgb(245, 240, 235) = #F5F0EB) — correct"
+        },
+        {
+          "action": "Inspect text and button colors for black",
+          "expected": "Black (#000000) used for text and primary buttons",
+          "observed": "Body text color is rgb(0, 0, 0). Hero CTA button 'EXPLORE PLANS' has bg rgb(0, 0, 0) with white text. Newsletter 'SIGN UP' button also uses black bg — correct"
+        },
+        {
+          "action": "Check for olive/moss green (#6B7F3E) as supporting accent",
+          "expected": "Olive green appears as supporting accent color",
+          "observed": "CSS variable --color-accent is correctly set to #6B7F3E. The accent color is applied via text-accent class in success states (newsletter confirmation) and badge variants. It is defined and available as a supporting accent in the theme — correct"
+        },
+        {
+          "action": "Review src/app/globals.css @theme block for color token definitions",
+          "expected": "Color tokens defined with correct hex values",
+          "observed": "All tokens verified: --color-primary: #C65D3E, --color-primary-dark: #A0522D, --color-accent: #6B7F3E, --color-cream: #FAFAF5, --color-cream-dark: #F5F0EB, --color-cream-darker: #EBEBDF, --color-black: #000000 — all correct"
+        }
+      ],
+      "evidence": {
+        "screenshots": [
+          "homepage/design-system/VAL-DESIGN-001-homepage-full-colors.png"
+        ],
+        "consoleErrors": "none",
+        "network": "GET / -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-DESIGN-002",
+      "title": "Typography hierarchy is correct",
+      "status": "pass",
+      "steps": [
+        {
+          "action": "Inspect hero headline font",
+          "expected": "Serif font (Playfair Display or Cormorant), large size, light weight",
+          "observed": "h1 uses Playfair Display (fontFamily: 'Playfair Display'), fontSize: 68px, fontWeight: 400 (regular/light) — correct"
+        },
+        {
+          "action": "Inspect body text font",
+          "expected": "Readable serif font for body text",
+          "observed": "Body text uses Lora serif (fontFamily: 'Lora, Georgia, serif'), fontSize: 18px, fontWeight: 400 — correct"
+        },
+        {
+          "action": "Inspect navigation links font",
+          "expected": "Sans-serif font with uppercase and letter-spacing",
+          "observed": "Nav links use Inter sans-serif, fontSize: 11px, fontWeight: 500, textTransform: uppercase, letterSpacing: 0.88px (0.08em) — correct"
+        },
+        {
+          "action": "Inspect button text font",
+          "expected": "Sans-serif with uppercase and letter-spacing",
+          "observed": "Buttons ('EXPLORE PLANS') use Inter sans-serif, fontSize: 14px, fontWeight: 500, textTransform: uppercase, letterSpacing: 0.84px (0.06em) — correct"
+        },
+        {
+          "action": "Inspect section h2 headings",
+          "expected": "Serif font, large, consistent weight",
+          "observed": "All h2s use Playfair Display, fontSize: 44px, fontWeight: 400 — correct and consistent across sections"
+        },
+        {
+          "action": "Inspect hero eyebrow label",
+          "expected": "Sans-serif, uppercase, letter-spacing",
+          "observed": "Eyebrow 'NOURISH YOUR SOUL' uses Inter sans-serif, fontSize: 12px, fontWeight: 500, textTransform: uppercase, letterSpacing: 0.72px (0.06em) — correct"
+        },
+        {
+          "action": "Review src/app/layout.tsx for font loading",
+          "expected": "Google Fonts loaded via next/font/google",
+          "observed": "Playfair Display (--font-playfair-display), Lora (--font-lora), and Inter (--font-inter) loaded via next/font/google with CSS variable approach. Applied to html element className — correct"
+        }
+      ],
+      "evidence": {
+        "screenshots": [
+          "homepage/design-system/VAL-DESIGN-002-typography-samples.png"
+        ],
+        "consoleErrors": "none",
+        "network": "GET / -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-DESIGN-005",
+      "title": "Spacing and layout consistency",
+      "status": "pass",
+      "steps": [
+        {
+          "action": "Inspect section vertical padding",
+          "expected": "Approximately 80px vertical padding between major sections",
+          "observed": "All 7 sections with .section-padding class have exactly paddingTop: 80px and paddingBottom: 80px — correct"
+        },
+        {
+          "action": "Inspect section horizontal padding",
+          "expected": "Approximately 64px horizontal padding on desktop",
+          "observed": "All sections have paddingLeft: 64px and paddingRight: 64px at 1280px viewport width — correct"
+        },
+        {
+          "action": "Verify max-width container",
+          "expected": "Max container width of 2000px",
+          "observed": "All .max-container elements have maxWidth: 2000px with auto left/right margins for centering — correct"
+        },
+        {
+          "action": "Check section gap consistency",
+          "expected": "Sections seamlessly adjacent with spacing from internal padding",
+          "observed": "All section gaps are 0px (sections are flush against each other), with spacing provided by internal 80px padding — correct design pattern"
+        },
+        {
+          "action": "Review src/app/globals.css for container and padding utility classes",
+          "expected": "Utility classes defined matching spec",
+          "observed": ".section-padding: padding 5rem 4rem (80px 64px) with mobile responsive 3rem 1.5rem. .max-container: max-width 2000px, margin auto. --container-max: 2000px custom property defined — all correct"
+        }
+      ],
+      "evidence": {
+        "screenshots": [
+          "homepage/design-system/VAL-DESIGN-005-layout-spacing.png"
+        ],
+        "consoleErrors": "none",
+        "network": "GET / -> 200"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 3 assertions: 3 passed. VAL-DESIGN-001: All brand colors correctly applied (terracotta #C65D3E on announcement bar, cream backgrounds #FAFAF5/#F5F0EB on sections, black for text/buttons, olive green #6B7F3E defined as accent). VAL-DESIGN-002: Typography hierarchy correct with Playfair Display serif for headings, Lora serif for body, Inter sans-serif for nav/labels/buttons with uppercase and letter-spacing. VAL-DESIGN-005: Consistent 80px vertical / 64px horizontal padding across all sections, 2000px max container width properly applied."
+}

@@ -1,0 +1,113 @@
+{
+  "groupId": "homepage-interactive",
+  "testedAt": "2026-04-05T12:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "browserSession": "94c73c8b4973__interactive",
+    "notes": "Read-only site with hardcoded data, no shared mutable state"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-HOME-006",
+      "title": "Press logos section renders",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to homepage", "expected": "Homepage loads", "observed": "Homepage loaded successfully" },
+        { "action": "Scroll to press logos section", "expected": "Horizontal row of press logos with quotes", "observed": "Section displays 4 press logos (Los Angeles Times, Bon Appétit, Well+Good, Essence) with associated editorial quotes below each" }
+      ],
+      "evidence": {
+        "screenshots": ["homepage/homepage-interactive/VAL-HOME-006-press-logos.png"],
+        "consoleErrors": "none",
+        "network": "GET / -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-HOME-007",
+      "title": "Nutrition philosophy pillars carousel",
+      "status": "pass",
+      "steps": [
+        { "action": "Scroll to philosophy pillars section", "expected": "Cards in horizontal carousel with images and descriptions", "observed": "Section shows 'Our Pillars of Nourishment' heading with 5 pillar cards: Ancestral Wisdom, Nutrient Density, Eat the Rainbow, Functional Ingredients, Intentional Preparation. Each has image, title, description, and Read More link" },
+        { "action": "Check for navigation arrows", "expected": "Previous/Next slide buttons present", "observed": "Both 'Previous slide' and 'Next slide' buttons found" },
+        { "action": "Click Next slide button", "expected": "Carousel scrolls to show more content", "observed": "Carousel scroll triggered successfully (scrollWidth: 1172 > clientWidth: 1152)" }
+      ],
+      "evidence": {
+        "screenshots": ["homepage/homepage-interactive/VAL-HOME-007-pillars-carousel.png", "homepage/homepage-interactive/VAL-HOME-007-pillars-carousel-scrolled.png"],
+        "consoleErrors": "none",
+        "network": "GET / -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-HOME-008",
+      "title": "Testimonials carousel renders",
+      "status": "pass",
+      "steps": [
+        { "action": "Scroll to testimonials section", "expected": "Customer testimonial cards in horizontal scrollable carousel", "observed": "Section displays 'Client Reviews' heading with 3 testimonial cards. Each has 5-star rating, review text in quotes, and customer name (Jasmine R., Marcus T., Alicia M.)" },
+        { "action": "Verify carousel is scrollable", "expected": "Scrollable container with navigation", "observed": "Scrollable container confirmed (scrollWidth: 1172 > clientWidth: 1152) with 2 navigation buttons (Previous/Next slide)" }
+      ],
+      "evidence": {
+        "screenshots": ["homepage/homepage-interactive/VAL-HOME-008-testimonials.png"],
+        "consoleErrors": "none",
+        "network": "GET / -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-HOME-009",
+      "title": "Newsletter signup form works",
+      "status": "pass",
+      "steps": [
+        { "action": "Scroll to newsletter section", "expected": "Email input and Sign Up button visible", "observed": "Newsletter section displays 'STAY CONNECTED' heading, email input field, and 'SIGN UP' button" },
+        { "action": "Click SIGN UP with empty email field", "expected": "Error message shown", "observed": "Error message 'Please enter a valid email address' displayed in red below input, input border turned red" },
+        { "action": "Fill email with 'test@example.com' and click SIGN UP", "expected": "Success message shown", "observed": "Success message 'Thank you for signing up! We'll be in touch soon.' displayed, form replaced by confirmation text" }
+      ],
+      "evidence": {
+        "screenshots": ["homepage/homepage-interactive/VAL-HOME-009-newsletter-empty-error.png", "homepage/homepage-interactive/VAL-HOME-009-newsletter-success.png"],
+        "consoleErrors": "none",
+        "network": "GET / -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-HOME-010",
+      "title": "Homepage responsive layout",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to homepage at 1280px desktop width", "expected": "Desktop layout renders correctly", "observed": "Homepage renders with horizontal hero layout, 4-column editorial grid, and horizontal carousels at 1280px viewport" },
+        { "action": "Review Hero.tsx for responsive classes", "expected": "flex-col on mobile, flex-row on desktop", "observed": "Hero uses 'flex flex-col lg:flex-row'. Mobile image has 'lg:hidden', desktop image has 'hidden lg:block'. Text area uses 'w-full lg:w-1/2'" },
+        { "action": "Review EditorialCards.tsx for responsive grid", "expected": "Single column on mobile", "observed": "EditorialCards uses 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' — collapses to single column on mobile" },
+        { "action": "Review ProductCarousel.tsx for responsive breakpoints", "expected": "Touch-scrollable on mobile", "observed": "Carousel component uses breakpoints: mobile=1.3 slides, 480px=2.2 slides, 768px=3 slides, 1024px=4 slides — touch-scrollable by default" },
+        { "action": "Review BrandFeature.tsx for responsive classes", "expected": "Stacks vertically on mobile", "observed": "BrandFeature uses 'flex flex-col lg:flex-row' — stacks vertically on mobile" }
+      ],
+      "evidence": {
+        "screenshots": ["homepage/homepage-interactive/VAL-HOME-010-homepage-desktop.png"],
+        "consoleErrors": "none",
+        "network": "GET / -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-HOME-011",
+      "title": "Homepage CTA buttons navigate correctly",
+      "status": "pass",
+      "steps": [
+        { "action": "Click hero CTA 'EXPLORE PLANS'", "expected": "Navigate to /meal-plans", "observed": "Navigated to http://localhost:3000/meal-plans — page loaded successfully" },
+        { "action": "Click category card 'SHOP'", "expected": "Navigate to /shop", "observed": "Navigated to http://localhost:3000/shop — page loaded successfully" },
+        { "action": "Click brand feature CTA 'LEARN MORE'", "expected": "Navigate to /about", "observed": "Navigated to http://localhost:3000/about — page loaded successfully" },
+        { "action": "Click first editorial 'Read More' card", "expected": "Navigate to blog article", "observed": "Navigated to http://localhost:3000/blog/healing-power-of-soul-food — page loaded successfully" },
+        { "action": "Verify all editorial cards have correct hrefs", "expected": "All 4 cards link to blog articles", "observed": "All 4 editorial cards link to /blog/healing-power-of-soul-food, /blog/5-adaptogens-you-should-know, /blog/meal-prep-sunday-ritual, /blog/rainbow-bowl-recipe" }
+      ],
+      "evidence": {
+        "screenshots": ["homepage/homepage-interactive/VAL-HOME-011-cta-meal-plans.png", "homepage/homepage-interactive/VAL-HOME-011-cta-about.png", "homepage/homepage-interactive/VAL-HOME-011-cta-blog-article.png"],
+        "consoleErrors": "none",
+        "network": "GET /meal-plans -> 200, GET /shop -> 200, GET /about -> 200, GET /blog/healing-power-of-soul-food -> 200"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 6 assertions: 6 passed, 0 failed. All homepage interactive elements (press logos, philosophy pillars carousel, testimonials carousel, newsletter form validation/submission, responsive CSS classes, and CTA navigation) are working correctly."
+}

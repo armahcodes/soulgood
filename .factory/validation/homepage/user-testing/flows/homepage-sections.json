@@ -1,0 +1,105 @@
+{
+  "groupId": "homepage-sections",
+  "testedAt": "2026-04-05T22:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "browserSessionId": "94c73c8b4973__sections",
+    "sharedState": "none - site is read-only with hardcoded data"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-HOME-001",
+      "title": "Hero section renders correctly",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to http://localhost:3000", "expected": "Homepage loads", "observed": "Homepage loaded successfully with 200 status" },
+        { "action": "Inspect hero section at 1280x720 viewport", "expected": "50/50 split layout with copy on left, image on right", "observed": "50/50 split layout rendered correctly. Left side: 'NOURISH YOUR SOUL' eyebrow, 'Food Made With Intention' headline, body text about Chef Kyla, and 'EXPLORE PLANS' CTA button. Right side: lifestyle food image." },
+        { "action": "Review Hero.tsx for mobile responsive CSS classes", "expected": "Hero stacks vertically on mobile with image on top", "observed": "Confirmed: flex-col lg:flex-row layout, mobile image with lg:hidden, desktop image with hidden lg:block. Mobile layout stacks image above text." }
+      ],
+      "evidence": {
+        "screenshots": [
+          "homepage/homepage-sections/VAL-HOME-001-hero-desktop.png"
+        ],
+        "consoleErrors": "none",
+        "network": "GET / -> 200",
+        "mobileVerification": "CSS class review confirmed responsive layout: flex-col lg:flex-row, separate mobile image (lg:hidden) and desktop image (hidden lg:block)"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-HOME-002",
+      "title": "Category navigation cards display",
+      "status": "pass",
+      "steps": [
+        { "action": "Scroll down below hero section", "expected": "Horizontal category cards with images and labels", "observed": "Three category cards displayed in a row: 'MEAL PLANS', 'SHOP', 'EXPERIENCES' - each with a lifestyle image and label overlay" },
+        { "action": "Verify card content via snapshot", "expected": "Cards have images and labels linking to relevant pages", "observed": "Cards confirmed via DOM snapshot: MEAL PLANS, SHOP, EXPERIENCES - each is a link with image and label" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "homepage/homepage-sections/VAL-HOME-002-category-cards.png"
+        ],
+        "consoleErrors": "none",
+        "network": "N/A - same page scroll"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-HOME-003",
+      "title": "Product/plan carousel functions",
+      "status": "pass",
+      "steps": [
+        { "action": "Scroll to product carousel section", "expected": "Product cards with image, name, price, and rating displayed", "observed": "Carousel section with 'CHEF KYLA'S KITCHEN' eyebrow and 'Your Wellness Essentials' heading. Cards show: Performance Fuel ($254, 5 stars, MEAL PLAN badge), Full Alignment Fuel ($322, 4+ stars, MEAL PLAN badge), Soul Seasoning Blend ($18, 5 stars, BEST SELLER badge), Green Vitality Juice ($12, 5 stars, BEST SELLER badge)" },
+        { "action": "Verify carousel navigation arrows exist", "expected": "Previous and Next slide buttons present", "observed": "DOM snapshot confirmed 'Previous slide' and 'Next slide' buttons. 7 total products in carousel: Performance Fuel, Full Alignment Fuel, Soul Seasoning Blend, Green Vitality Juice, Heritage Hot Sauce, The Wellness Bundle, Turmeric Ginger Elixir" },
+        { "action": "Click Next slide button", "expected": "Carousel scrolls to show different products", "observed": "Next slide button clicked successfully, carousel navigation arrows (< and >) visible on left and right edges of carousel" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "homepage/homepage-sections/VAL-HOME-003-carousel-initial.png",
+          "homepage/homepage-sections/VAL-HOME-003-carousel-scrolled.png"
+        ],
+        "consoleErrors": "none",
+        "network": "N/A - client-side carousel interaction"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-HOME-004",
+      "title": "Brand feature section renders",
+      "status": "pass",
+      "steps": [
+        { "action": "Scroll to brand feature section", "expected": "Split-layout with lifestyle image on one side and brand copy with CTA on other", "observed": "50/50 split layout: Left side has a lifestyle food image (bowl with vegetables, avocado). Right side on cream background has 'THE SOUL GOOD PHILOSOPHY' eyebrow, 'Healing Through Food' headline, two paragraphs about Chef Kyla's philosophy, and 'LEARN MORE >' CTA link." }
+      ],
+      "evidence": {
+        "screenshots": [
+          "homepage/homepage-sections/VAL-HOME-004-brand-feature.png",
+          "homepage/homepage-sections/VAL-HOME-004-brand-feature-full.png"
+        ],
+        "consoleErrors": "none",
+        "network": "N/A - same page scroll"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-HOME-005",
+      "title": "Editorial/blog preview cards display",
+      "status": "pass",
+      "steps": [
+        { "action": "Scroll to editorial section", "expected": "Four editorial/blog cards in a row with category, title, excerpt, and Read More link", "observed": "Section with 'FROM THE KITCHEN' eyebrow and 'Recommended Reading' heading. Four cards displayed in a row: (1) Soul Food Heritage - 'The Healing Power of Soul Food' with excerpt and READ MORE, (2) Nutrition - '5 Adaptogens You Should Know About' with excerpt and READ MORE, (3) Wellness - 'The Sunday Meal Prep Ritual' with excerpt and READ MORE, (4) Recipes - 'Chef Kyla's Rainbow Power Bowl' with excerpt and READ MORE" },
+        { "action": "Verify cards link to blog articles", "expected": "Each card links to a blog article page", "observed": "DOM snapshot confirmed all four cards are links containing blog article paths. Each card element is a complete link wrapping image, category label, title, excerpt, and READ MORE text." }
+      ],
+      "evidence": {
+        "screenshots": [
+          "homepage/homepage-sections/VAL-HOME-005-editorial-cards.png",
+          "homepage/homepage-sections/VAL-HOME-005-editorial-cards-full.png"
+        ],
+        "consoleErrors": "none",
+        "network": "N/A - same page scroll"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 5 assertions: 5 passed, 0 failed. All homepage sections render correctly - hero with 50/50 split layout, category navigation cards, product carousel with functional navigation arrows, brand feature section with lifestyle image and CTA, and editorial cards with category labels, titles, excerpts, and Read More links."
+}
