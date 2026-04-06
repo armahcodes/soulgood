@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/lib/cart-context";
 import { AnnouncementBar } from "./AnnouncementBar";
 import { SecondaryNav } from "./SecondaryNav";
 import { MainNav } from "./MainNav";
@@ -11,7 +12,7 @@ import { MobileMenu } from "./MobileMenu";
 
 export function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { isCartOpen, openCart, closeCart } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -36,7 +37,7 @@ export function Header() {
         <div className="relative">
           <MainNav
             onSearchOpen={() => setIsSearchOpen(true)}
-            onCartOpen={() => setIsCartOpen(true)}
+            onCartOpen={openCart}
             onMobileMenuOpen={() => setIsMobileMenuOpen(true)}
           />
           <SearchOverlay
@@ -49,7 +50,7 @@ export function Header() {
       {/* Overlays outside of header for proper z-index stacking */}
       <CartSlideIn
         isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
+        onClose={closeCart}
       />
       <MobileMenu
         isOpen={isMobileMenuOpen}
