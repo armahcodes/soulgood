@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -19,6 +20,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       as = "button",
       href,
       children,
+      onClick,
       ...props
     },
     ref
@@ -49,15 +51,34 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
 
     if (as === "a" && href) {
+      // Use Next.js Link for internal routes (SPA client-side routing)
+      if (href.startsWith("/") || href.startsWith("#")) {
+        return (
+          <Link
+            href={href}
+            className={classes}
+            onClick={onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>}
+          >
+            {children}
+          </Link>
+        );
+      }
+      // Use plain <a> for external URLs
       return (
-        <a href={href} className={classes}>
+        <a
+          href={href}
+          className={classes}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>}
+        >
           {children}
         </a>
       );
     }
 
     return (
-      <button ref={ref} className={classes} {...props}>
+      <button ref={ref} className={classes} onClick={onClick} {...props}>
         {children}
       </button>
     );

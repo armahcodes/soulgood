@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 
 export function Hero() {
@@ -33,9 +32,7 @@ export function Hero() {
             functional nutrition. Made with intention. Seasoned with love.
           </p>
           <div>
-            <Link href="/meal-plans">
-              <Button size="lg">EXPLORE PLANS</Button>
-            </Link>
+            <Button as="a" href="/meal-plans" size="lg">EXPLORE PLANS</Button>
           </div>
         </div>
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { X, Plus, Minus, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -87,11 +86,9 @@ export function CartSlideIn({ isOpen, onClose }: CartSlideInProps) {
               <p className="font-body text-sm text-black/40 mb-6">
                 Add items to your cart to see them here.
               </p>
-              <Link href="/shop" onClick={onClose}>
-                <Button variant="secondary" size="sm">
-                  Continue Shopping
-                </Button>
-              </Link>
+              <Button as="a" href="/shop" variant="secondary" size="sm" onClick={onClose}>
+                Continue Shopping
+              </Button>
             </div>
           ) : (
             <ul className="space-y-6">
@@ -178,9 +175,7 @@ export function CartSlideIn({ isOpen, onClose }: CartSlideInProps) {
                 ${subtotal.toFixed(2)}
               </span>
             </div>
-            <Link href="/cart" onClick={onClose} className="block mb-3">
-              <Button className="w-full">View Cart</Button>
-            </Link>
+            <Button as="a" href="/cart" className="w-full mb-3" onClick={onClose}>View Cart</Button>
             <button
               onClick={() => {
                 // TODO: Backend Integration - Navigate to checkout
