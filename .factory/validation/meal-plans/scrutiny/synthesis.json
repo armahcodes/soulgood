@@ -1,0 +1,55 @@
+{
+  "milestone": "meal-plans",
+  "round": 1,
+  "status": "pass",
+  "validatorsRun": {
+    "typecheck": { "passed": true, "command": "npx tsc --noEmit", "exitCode": 0 },
+    "lint": { "passed": true, "command": "pnpm lint", "exitCode": 0 },
+    "build": { "passed": true, "command": "pnpm build", "exitCode": 0 }
+  },
+  "reviewsSummary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "failedFeatures": []
+  },
+  "blockingIssues": [],
+  "appliedUpdates": [],
+  "suggestedGuidanceUpdates": [
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Clarify the Button as='a' convention: note that this pattern uses a raw <a> tag (not Next.js Link) which causes full page reloads on internal navigation. For CTA buttons linking to internal routes, consider recommending workers wrap Button with Next.js Link or update the Button component to use Link internally when as='a' and href starts with '/'. Until fixed, this is a known trade-off.",
+      "evidence": "Features meal-plans-comparison (MealPlansHeroBanner, PlanComparisonCards, MealPlansCTA), meal-plan-detail-pages (PlanDetailContent lines 200, 217, 238), and meal-plan-order-configurator all use Button as='a' for internal route CTAs, causing full-page reloads. Meanwhile layout components (MainNav, Footer, MobileMenu) use Next.js Link directly.",
+      "isSystemic": true
+    },
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Add a nuance to the 'Use React Hook Form for all forms' convention: distinguish between data-submission forms (contact, newsletter, catering inquiry) where RHF + Zod is appropriate, and multi-step wizard/configurator UIs where plain React state management is more practical and maintainable.",
+      "evidence": "Feature meal-plan-order-configurator uses useState for a 7-step wizard with complex interdependent state (plan tier, subscription type, day count, dietary prefs, add-ons). Using RHF for this would be unnecessarily complex. The convention was written with simple submission forms in mind.",
+      "isSystemic": true
+    },
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Clarify that the '3:4 aspect ratio on #F7F7F7 background' rule applies specifically to product catalog/shop cards. Food photography, editorial images, and meal images should use 4:3 (landscape) ratio, which is the established pattern across CategoryNav, EditorialCards, and WeeklyMenuContent.",
+      "evidence": "WeeklyMenuContent uses 4:3 for meal photos, CategoryNav uses 4:3, EditorialCards uses 4:3, while ProductCarousel correctly uses 3:4 for product cards. The current wording 'Product images: 3:4 aspect ratio' is ambiguous — it could mean 'images of products' or 'all images in the product/site'.",
+      "isSystemic": true
+    },
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Add guidance on keeping large static content sections as server components: when a page is primarily static content with only a small interactive element (like a placeholder button with onClick), extract the interactive bit into its own tiny client component rather than making the entire page client-rendered.",
+      "evidence": "Feature weekly-menu-page has 'use client' on the entire WeeklyMenuContent (130+ lines of static content) solely because of a single alert() placeholder onClick handler. Isolating the button into a small client component would reduce the client bundle.",
+      "isSystemic": false
+    }
+  ],
+  "rejectedObservations": [
+    {
+      "observation": "Workers use plain <a> tags in sidebar/nav for internal route links (not Button, not Link).",
+      "reason": "duplicate - This is a subset of the Button as='a' / internal navigation systemic issue already captured in suggestedGuidanceUpdates. The root cause is the same: lack of clarity on when to use Next.js Link for internal routes."
+    },
+    {
+      "observation": "Worker defined TypeScript interfaces (OrderState, AddOn) locally in the component file instead of in src/lib/types.ts.",
+      "reason": "ambiguous - The convention says 'Define interfaces for all data types in src/lib/types.ts' which is reasonable for shared/domain types. But component-internal state shapes that are never imported elsewhere (OrderState, AddOn) have a reasonable argument for co-location. This is a judgment call, not a clear convention violation that needs a guidance update."
+    }
+  ],
+  "previousRound": null
+}

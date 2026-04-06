@@ -1,0 +1,45 @@
+{
+  "featureId": "meal-plans-comparison",
+  "reviewedAt": "2026-04-06T02:15:00.000Z",
+  "commitId": "a3354dc",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "The meal-plans comparison page at /meal-plans is well-implemented and covers all feature requirements. The page includes: (1) a left sidebar with COMPARE PLANS, PERFORMANCE FUEL, FULL ALIGNMENT FUEL, WEEKLY MENU, and BLOG links, (2) a hero promo banner with image and promotional copy, (3) side-by-side comparison cards for Performance Fuel (Tier 1) and Full Alignment Fuel (Tier 2) showing plan names, descriptions, what's included lists, pricing, and EXPLORE PLAN CTA buttons, (4) a 3-step How It Works section with Lucide icons, (5) delivery area info showing LA neighborhoods and schedule options, and (6) a CTA to start ordering. Mobile responsiveness is handled via Tailwind classes: sidebar hides at mobile and a horizontal scrollable top nav appears, cards stack vertically. Code follows the project's design system (zero border-radius, correct font classes, correct color tokens, section-padding utility). Data is properly sourced from MEAL_PLANS and DELIVERY_AREAS constants. TypeScript compilation, lint, and build all pass.",
+    "issues": [
+      {
+        "file": "src/components/meal-plans/MealPlansContent.tsx",
+        "line": 12,
+        "severity": "non_blocking",
+        "description": "The `isActive` field in SIDEBAR_LINKS objects is defined but never read — active state is managed by the `activeSidebarLink` useState hook instead. This is dead data that adds confusion. The `SidebarLink` interface in MealPlansSidebar.tsx also declares `isActive: boolean` but the property is unused inside the component."
+      },
+      {
+        "file": "src/components/meal-plans/MealPlansSidebar.tsx",
+        "line": 30,
+        "severity": "non_blocking",
+        "description": "Sidebar and mobile nav use plain `<a>` tags for internal links (e.g., /meal-plans/performance-fuel, /menu, /blog). While AGENTS.md prescribes `<Button as='a' href=...>` over `<Link><Button>`, the Button component's `as='a'` path renders a raw `<a>` tag rather than Next.js `<Link>`, causing full page reloads on navigation. The rest of the codebase (layout, sections) uses Next.js Link for internal navigation. This is a project-level issue in the Button component and a pattern inconsistency, not specific to this feature."
+      },
+      {
+        "file": "src/components/meal-plans/MealPlansContent.tsx",
+        "line": 33,
+        "severity": "non_blocking",
+        "description": "Mobile top nav links for PERFORMANCE FUEL, FULL ALIGNMENT FUEL, WEEKLY MENU, BLOG use plain `<a>` tags which navigate to other routes. These should ideally use Next.js Link for SPA-style navigation, but this is consistent with the sidebar approach used throughout the feature."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "The AGENTS.md convention 'Prefer <Button as=\"a\" href=\"/path\"> over nesting <Link><Button>' leads workers to use plain <a> tags for CTA buttons, since the Button component's `as='a'` branch renders a raw HTML `<a>` rather than a Next.js `<Link>`. This means all CTA-style links across the site cause full page reloads instead of client-side navigation. The convention either needs updating to clarify when to use Link vs Button-as-anchor, or the Button component should wrap with Next.js Link internally when `as='a'`.",
+      "evidence": "src/components/ui/Button.tsx lines 55-60 show the `as='a'` path rendering `<a href={href}>` directly. All meal-plans components use this pattern: MealPlansHeroBanner.tsx:33, PlanComparisonCards.tsx:84, MealPlansCTA.tsx:17. Meanwhile layout components (MainNav, Footer, MobileMenu) use next/link for the same kind of internal links."
+    },
+    {
+      "area": "conventions",
+      "observation": "Worker used plain <a> tags in the MealPlansSidebar and mobile nav for internal route links (not wrapped in Next.js Link). AGENTS.md doesn't explicitly state that non-Button anchor elements for internal routes should use Next.js Link. This gap could lead future workers to also use raw <a> for internal navigation in similar sidebar/nav patterns.",
+      "evidence": "src/components/meal-plans/MealPlansSidebar.tsx:30 and MealPlansContent.tsx:33 use `<a href={link.href}>` for links to /meal-plans/performance-fuel, /menu, /blog — all internal routes."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "The meal-plans comparison page is a solid, complete implementation that meets all feature requirements. It has proper sidebar navigation, hero banner, side-by-side plan comparison cards with descriptions/pricing/CTAs, How It Works section with 3 steps, delivery area info with neighborhoods and schedule options, and a bottom CTA. Mobile responsiveness is properly handled via Tailwind responsive classes. No blocking issues found. Three non-blocking issues identified: unused `isActive` property in sidebar link data, and plain `<a>` tags instead of Next.js `<Link>` for internal navigation (a project-wide pattern issue stemming from the Button component's implementation and a gap in AGENTS.md conventions). Code quality, TypeScript types, and design system compliance are all good."
+}
