@@ -6,3 +6,4 @@ export { HowItWorks } from "./HowItWorks";
 export { DeliveryAreaInfo } from "./DeliveryAreaInfo";
 export { MealPlansCTA } from "./MealPlansCTA";
 export { PlanDetailContent } from "./PlanDetailContent";
+export { OrderConfigurator } from "./OrderConfigurator";
