@@ -551,12 +551,132 @@ export const BLOG_POSTS: BlogPost[] = [
     excerpt:
       "A vibrant, nutrient-dense bowl featuring seasonal vegetables, ancient grains, and our signature Soul Seasoning.",
     content:
-      "This Rainbow Power Bowl is one of our most requested recipes. It's a celebration of color, flavor, and nutrition — everything Soul Good stands for. Each ingredient is chosen for both its taste and its healing properties...",
+      "This Rainbow Power Bowl is one of our most requested recipes. It's a celebration of color, flavor, and nutrition — everything Soul Good stands for. Each ingredient is chosen for both its taste and its healing properties.\n\n## The Foundation: Ancient Grains\n\nWe start with a base of organic quinoa and farro — two ancient grains that provide complete protein, fiber, and a satisfying chewy texture. These grains have nourished civilizations for thousands of years, and they're the perfect canvas for our rainbow of vegetables.\n\n## Building the Rainbow\n\nThe key to this bowl is color diversity. Each color represents different phytonutrients:\n\n- **Red**: Roasted beets and cherry tomatoes — rich in lycopene and betalains\n- **Orange**: Roasted sweet potato and shaved carrots — loaded with beta-carotene\n- **Yellow**: Turmeric-roasted cauliflower — anti-inflammatory powerhouse\n- **Green**: Massaged kale and edamame — iron, calcium, and plant protein\n- **Purple**: Shaved purple cabbage and blackberries — anthocyanins for brain health\n\n## The Soul Seasoning Tahini Dressing\n\nOur signature dressing brings everything together: creamy tahini, lemon juice, garlic, and our proprietary Soul Seasoning blend. It's the secret ingredient that makes this bowl uniquely Soul Good.\n\n## Instructions\n\n1. Cook quinoa and farro according to package directions\n2. Roast vegetables at 400°F for 25 minutes with olive oil and Soul Seasoning\n3. Massage kale with lemon juice and a pinch of salt\n4. Whisk together tahini dressing ingredients\n5. Assemble bowls with grains, roasted vegetables, fresh toppings, and dressing\n6. Garnish with microgreens and hemp seeds\n\nServe immediately and enjoy the full spectrum of flavor and nutrition.",
     category: "recipes",
     image:
       "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&h=500&fit=crop",
     author: "Chef Kyla",
     date: "2025-02-20",
+    readTime: "4 min read",
+  },
+  {
+    id: "blog-5",
+    slug: "gut-health-and-fermented-foods",
+    title: "Gut Health: The Power of Fermented Foods",
+    excerpt:
+      "Why fermented foods are a cornerstone of the Soul Good philosophy and how they can transform your digestion.",
+    content:
+      "Your gut is often called your 'second brain' — and for good reason. The trillions of microorganisms living in your digestive tract influence everything from mood to immunity. At Soul Good, fermented foods are a cornerstone of our approach to holistic wellness.\n\n## Why Fermentation Matters\n\nFermentation is one of humanity's oldest food preservation techniques. Long before refrigeration, cultures around the world discovered that fermenting foods not only extended their shelf life but also enhanced their nutritional value. The process creates beneficial probiotics, increases bioavailability of nutrients, and develops complex flavors.\n\n## Our Favorite Ferments\n\n- **Kimchi**: A Korean staple rich in vitamins A, B, and C\n- **Sauerkraut**: Traditional lacto-fermented cabbage packed with probiotics\n- **Miso**: A Japanese fermented soybean paste with deep umami flavor\n- **Kombucha**: Fermented tea that supports digestive health\n\n## How We Use Fermentation at Soul Good\n\nMany of our meal plans incorporate fermented elements — from house-made pickled vegetables to miso-glazed proteins. These ingredients don't just add flavor; they support your microbiome with every bite.",
+    category: "nutrition",
+    image:
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800&h=500&fit=crop",
+    author: "Chef Kyla",
+    date: "2025-02-12",
+    readTime: "6 min read",
+  },
+  {
+    id: "blog-6",
+    slug: "southern-greens-superfood",
+    title: "Southern Greens: The Original Superfood",
+    excerpt:
+      "Collard greens, mustard greens, and turnip greens — the overlooked superfoods of Southern cuisine.",
+    content:
+      "Long before kale became a wellness buzzword, Black Southern cooks were building meals around nutrient-dense greens. Collards, mustard greens, and turnip greens are foundational to soul food — and they're packed with more vitamins, minerals, and phytonutrients than most modern 'superfoods.'\n\n## The Nutritional Powerhouse\n\nCollard greens alone provide exceptional amounts of vitamins K, A, and C, plus calcium, manganese, and fiber. When prepared the traditional way — slow-braised with aromatics — the 'pot liquor' (the cooking liquid) becomes a mineral-rich broth that our ancestors knew to never throw away.\n\n## Reclaiming Our Food Heritage\n\nAt Soul Good, we honor these traditions. Our greens are prepared with the same love and patience as our grandmothers used, but we've updated the technique: less sodium, no processed meats, and organic produce from local farms.\n\n## Chef Kyla's Tips for Perfect Greens\n\n1. Wash greens at least three times in cold water\n2. Remove the thick center stems for more tender texture\n3. Build flavor with smoked onion, garlic, and apple cider vinegar\n4. Low and slow is the key — simmer for at least 45 minutes\n5. Season with our Soul Seasoning blend for the perfect finish",
+    category: "soul-food-heritage",
+    image:
+      "https://images.unsplash.com/photo-1574316071802-0d684efa7bf5?w=800&h=500&fit=crop",
+    author: "Chef Kyla",
+    date: "2025-02-05",
+    readTime: "5 min read",
+  },
+  {
+    id: "blog-7",
+    slug: "mindful-eating-practice",
+    title: "The Art of Mindful Eating",
+    excerpt:
+      "How slowing down at the table can improve your digestion, reduce stress, and deepen your relationship with food.",
+    content:
+      "In our fast-paced world, most of us eat on autopilot — at our desks, in our cars, scrolling our phones. At Soul Good, we believe eating should be a mindful practice. When you slow down and truly experience your food, everything changes.\n\n## What Is Mindful Eating?\n\nMindful eating is the practice of bringing full attention to the experience of eating. It means noticing the colors, textures, aromas, and flavors of your food. It means chewing slowly and savoring each bite. It means listening to your body's hunger and fullness cues.\n\n## Benefits of Mindful Eating\n\n- **Better digestion**: Eating slowly allows your body to properly break down food\n- **Reduced stress**: Mealtime becomes a moment of calm in a busy day\n- **Greater satisfaction**: You feel more nourished with less food\n- **Emotional awareness**: You begin to notice the difference between physical hunger and emotional eating\n\n## How to Start\n\n1. Set your table intentionally — even if it's just for yourself\n2. Take three deep breaths before your first bite\n3. Put your fork down between bites\n4. Notice the flavors and textures as you chew\n5. Express gratitude for the hands that prepared your meal",
+    category: "wellness",
+    image:
+      "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&h=500&fit=crop",
+    author: "Chef Kyla",
+    date: "2025-01-28",
+    readTime: "5 min read",
+  },
+  {
+    id: "blog-8",
+    slug: "spicy-sweet-potato-soup",
+    title: "Spicy Sweet Potato & Coconut Soup",
+    excerpt:
+      "A warming, nourishing soup recipe that blends Southern comfort with tropical flavors and anti-inflammatory spices.",
+    content:
+      "When the weather calls for something warm and comforting, this Spicy Sweet Potato & Coconut Soup delivers on every level. It's one of Chef Kyla's signature recipes that perfectly embodies the Soul Good philosophy: deeply satisfying, nutritionally dense, and made with intention.\n\n## Ingredients\n\n- 3 large sweet potatoes, peeled and diced\n- 1 can full-fat coconut milk\n- 1 yellow onion, diced\n- 3 cloves garlic, minced\n- 1 tablespoon fresh ginger, grated\n- 1 teaspoon turmeric\n- ½ teaspoon cayenne pepper\n- 4 cups vegetable broth\n- Soul Seasoning to taste\n- Coconut cream and cilantro for garnish\n\n## Instructions\n\n1. Sauté onion in olive oil until translucent\n2. Add garlic, ginger, turmeric, and cayenne — cook until fragrant\n3. Add sweet potatoes and broth, bring to a boil\n4. Simmer 20 minutes until potatoes are tender\n5. Blend until smooth, stir in coconut milk\n6. Season with Soul Seasoning, salt, and pepper\n7. Serve with a swirl of coconut cream and fresh cilantro\n\nThis soup keeps beautifully for 4 days in the refrigerator and freezes well for up to 3 months.",
+    category: "recipes",
+    image:
+      "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&h=500&fit=crop",
+    author: "Chef Kyla",
+    date: "2025-01-20",
+    readTime: "4 min read",
+  },
+  {
+    id: "blog-9",
+    slug: "anti-inflammatory-pantry",
+    title: "Building an Anti-Inflammatory Pantry",
+    excerpt:
+      "Stock your kitchen with these essential anti-inflammatory ingredients and transform your everyday cooking.",
+    content:
+      "Chronic inflammation is at the root of many modern health challenges — from joint pain and fatigue to more serious conditions. The good news? Your kitchen can be your first line of defense. Here's how to build an anti-inflammatory pantry that supports healing with every meal.\n\n## The Essential Spices\n\n- **Turmeric**: The gold standard of anti-inflammatory spices\n- **Ginger**: Reduces inflammation and supports digestion\n- **Cinnamon**: Helps regulate blood sugar and reduce swelling\n- **Black pepper**: Enhances turmeric absorption by 2,000%\n\n## Healthy Fats\n\n- Extra virgin olive oil\n- Avocado and avocado oil\n- Raw nuts and seeds (walnuts, flaxseeds, chia seeds)\n- Coconut oil for high-heat cooking\n\n## Healing Staples\n\n- Bone broth or vegetable broth\n- Apple cider vinegar (raw, with the mother)\n- Raw honey and manuka honey\n- Green tea and herbal teas\n\nAt Soul Good, every ingredient in our meal plans is chosen with anti-inflammatory benefits in mind. When you eat with intention, your body responds with vitality.",
+    category: "nutrition",
+    image:
+      "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=800&h=500&fit=crop",
+    author: "Chef Kyla",
+    date: "2025-01-12",
+    readTime: "6 min read",
+  },
+  {
+    id: "blog-10",
+    slug: "history-of-gumbo",
+    title: "The Rich History of Gumbo",
+    excerpt:
+      "From West Africa to the American South — tracing the cultural journey of one of soul food's most iconic dishes.",
+    content:
+      "Gumbo is more than a dish — it's a story of resilience, cultural fusion, and community. Its origins trace back to West Africa, where okra-based soups were a dietary staple. As enslaved Africans were brought to the American South, they carried these culinary traditions with them, adapting and evolving them with local ingredients.\n\n## A Melting Pot in a Pot\n\nGumbo is unique in that it reflects the cultural diversity of the Gulf Coast: West African okra, French roux technique, Native American filé powder, and Spanish sofrito influences all converge in a single bowl. It's the ultimate expression of culinary fusion born from necessity and creativity.\n\n## Chef Kyla's Approach\n\nAt Soul Good, our gumbo honors every thread of this rich tapestry. We use organic vegetables, sustainably sourced proteins, and our signature Soul Seasoning blend to create a version that's both deeply traditional and nutritionally conscious.\n\n## Why Heritage Matters\n\nUnderstanding where our food comes from connects us to something larger than ourselves. When you sit down to a bowl of gumbo, you're participating in a centuries-old tradition of nourishment, survival, and celebration.",
+    category: "soul-food-heritage",
+    image:
+      "https://images.unsplash.com/photo-1534939561126-855b8675edd7?w=800&h=500&fit=crop",
+    author: "Chef Kyla",
+    date: "2025-01-05",
+    readTime: "7 min read",
+  },
+  {
+    id: "blog-11",
+    slug: "morning-wellness-routine",
+    title: "Chef Kyla's Morning Wellness Routine",
+    excerpt:
+      "Start your day with intention — from warm lemon water to a gratitude practice, here's how Chef Kyla begins each morning.",
+    content:
+      "How you start your morning sets the tone for your entire day. Over the years, I've developed a morning routine that grounds me, energizes me, and prepares me for the creative demands of the Soul Good kitchen.\n\n## 5:30 AM — Warm Lemon Water\n\nBefore anything else, I drink a full glass of warm water with fresh lemon juice. This simple practice kickstarts digestion, hydrates the body, and provides a dose of vitamin C.\n\n## 5:45 AM — Movement\n\nI do 20 minutes of yoga or stretching. Nothing intense — just enough to wake up my body and connect with my breath.\n\n## 6:15 AM — Gratitude Practice\n\nI write three things I'm grateful for in my journal. This practice has transformed my mindset and keeps me focused on abundance rather than scarcity.\n\n## 6:30 AM — Nourishing Breakfast\n\nI prepare a simple, nutrient-dense breakfast: usually a smoothie bowl with berries, greens, hemp seeds, and our Soul Good granola, or avocado toast on sourdough with everything seasoning.\n\n## 7:00 AM — Set Daily Intention\n\nBefore heading to the kitchen, I set one clear intention for the day. It might be 'cook with joy' or 'listen more than I speak.' This single practice brings focus and purpose to everything that follows.",
+    category: "wellness",
+    image:
+      "https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=800&h=500&fit=crop",
+    author: "Chef Kyla",
+    date: "2024-12-28",
+    readTime: "5 min read",
+  },
+  {
+    id: "blog-12",
+    slug: "herb-crusted-salmon",
+    title: "Herb-Crusted Salmon with Citrus Glaze",
+    excerpt:
+      "A restaurant-quality salmon dish you can make at home in 30 minutes — packed with omega-3s and fresh herb flavor.",
+    content:
+      "This Herb-Crusted Salmon is a Soul Good staple. It's elegant enough for a dinner party but simple enough for a weeknight meal. The combination of fresh herbs, Dijon mustard, and bright citrus glaze creates layers of flavor that complement the rich, buttery salmon.\n\n## Ingredients\n\n- 4 wild-caught salmon fillets (6 oz each)\n- 2 tablespoons Dijon mustard\n- 1 cup fresh herbs (parsley, dill, chives), finely chopped\n- ½ cup panko breadcrumbs\n- Zest of 1 lemon and 1 orange\n- 2 tablespoons olive oil\n- Soul Seasoning to taste\n\n## For the Citrus Glaze\n\n- ¼ cup fresh orange juice\n- 2 tablespoons fresh lemon juice\n- 1 tablespoon raw honey\n- 1 teaspoon Dijon mustard\n\n## Instructions\n\n1. Preheat oven to 425°F\n2. Mix herbs, panko, citrus zest, and olive oil\n3. Brush salmon with Dijon mustard and season with Soul Seasoning\n4. Press herb mixture onto each fillet\n5. Bake for 12-15 minutes until crust is golden\n6. Meanwhile, simmer glaze ingredients until reduced by half\n7. Drizzle glaze over salmon and serve with roasted vegetables\n\nPair with our Rainbow Power Bowl for a complete, balanced meal.",
+    category: "recipes",
+    image:
+      "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=800&h=500&fit=crop",
+    author: "Chef Kyla",
+    date: "2024-12-20",
     readTime: "4 min read",
   },
 ];
@@ -1079,6 +1199,71 @@ export const RECIPES: Recipe[] = [
     servings: 2,
     difficulty: "easy",
     category: "mains",
+  },
+  {
+    id: "recipe-5",
+    slug: "sweet-potato-coconut-soup",
+    title: "Sweet Potato & Coconut Soup",
+    description:
+      "A warming, anti-inflammatory soup with roasted sweet potatoes, coconut milk, and ginger.",
+    image:
+      "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&h=500&fit=crop",
+    prepTime: "40 min",
+    servings: 4,
+    difficulty: "easy",
+    category: "soups",
+  },
+  {
+    id: "recipe-6",
+    slug: "herb-crusted-salmon",
+    title: "Herb-Crusted Salmon",
+    description:
+      "Wild-caught salmon with a fresh herb crust and bright citrus glaze. Packed with omega-3s.",
+    image:
+      "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=800&h=500&fit=crop",
+    prepTime: "30 min",
+    servings: 4,
+    difficulty: "medium",
+    category: "mains",
+  },
+  {
+    id: "recipe-7",
+    slug: "berry-smoothie-bowl",
+    title: "Berry Adaptogen Smoothie Bowl",
+    description:
+      "A creamy smoothie bowl loaded with antioxidant-rich berries, ashwagandha, and crunchy toppings.",
+    image:
+      "https://images.unsplash.com/photo-1590301157890-4810ed352733?w=800&h=500&fit=crop",
+    prepTime: "10 min",
+    servings: 1,
+    difficulty: "easy",
+    category: "bowls",
+  },
+  {
+    id: "recipe-8",
+    slug: "jerk-cauliflower-bites",
+    title: "Jerk Cauliflower Bites",
+    description:
+      "Crispy roasted cauliflower tossed in a homemade jerk seasoning with cooling tahini dip.",
+    image:
+      "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=800&h=500&fit=crop",
+    prepTime: "35 min",
+    servings: 4,
+    difficulty: "medium",
+    category: "snacks",
+  },
+  {
+    id: "recipe-9",
+    slug: "green-detox-juice",
+    title: "Green Detox Juice",
+    description:
+      "A refreshing cold-pressed juice with kale, cucumber, apple, lemon, and ginger for daily detox.",
+    image:
+      "https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=800&h=500&fit=crop",
+    prepTime: "15 min",
+    servings: 2,
+    difficulty: "easy",
+    category: "drinks",
   },
 ];
 
