@@ -70,7 +70,7 @@ export function RecipesContent() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
             {filteredRecipes.map((recipe) => (
               <article key={recipe.id} className="group">
-                <Link href={`/blog/${recipe.slug}`} className="block">
+                <Link href={`/recipes/${recipe.slug}`} className="block">
                   {/* Recipe Image */}
                   <div className="relative aspect-[4/3] overflow-hidden bg-gray-light mb-4">
                     <Image

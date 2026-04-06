@@ -146,9 +146,12 @@ export interface Recipe {
   description: string;
   image: string;
   prepTime: string;
+  cookTime: string;
   servings: number;
   difficulty: "easy" | "medium" | "advanced";
   category: string;
+  ingredients: string[];
+  instructions: string[];
 }
 
 export interface NavLink {
