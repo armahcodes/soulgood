@@ -4,6 +4,9 @@ import { ProductCarousel } from "@/components/sections/ProductCarousel";
 import { BrandFeature } from "@/components/sections/BrandFeature";
 import { EditorialCards } from "@/components/sections/EditorialCards";
 import { PressLogos } from "@/components/sections/PressLogos";
+import { PhilosophyPillars } from "@/components/sections/PhilosophyPillars";
+import { Testimonials } from "@/components/sections/Testimonials";
+import { Newsletter } from "@/components/sections/Newsletter";
 
 export default function HomePage() {
   return (
@@ -25,6 +28,15 @@ export default function HomePage() {
 
       {/* 6. Press Logos - horizontal row with quotes */}
       <PressLogos />
+
+      {/* 7. Philosophy Pillars - Swiper carousel of pillar cards */}
+      <PhilosophyPillars />
+
+      {/* 8. Testimonials - horizontal scrollable review cards */}
+      <Testimonials />
+
+      {/* 9. Newsletter Signup - email input with validation */}
+      <Newsletter />
     </main>
   );
 }
