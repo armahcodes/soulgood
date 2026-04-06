@@ -5,7 +5,6 @@ import {
   useContext,
   useState,
   useCallback,
-  useSyncExternalStore,
   useEffect,
   type ReactNode,
 } from "react";
@@ -28,39 +27,22 @@ const CartContext = createContext<CartContextValue | undefined>(undefined);
 
 const CART_STORAGE_KEY = "soulgood-cart";
 
-// Use useSyncExternalStore for SSR-safe localStorage reading
-let listeners: Array<() => void> = [];
-function subscribe(listener: () => void) {
-  listeners = [...listeners, listener];
-  return () => {
-    listeners = listeners.filter((l) => l !== listener);
-  };
-}
-function getSnapshot(): string {
-  return localStorage.getItem(CART_STORAGE_KEY) || "[]";
-}
-function getServerSnapshot(): string {
-  return "[]";
+function loadCartFromStorage(): CartItem[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const stored = localStorage.getItem(CART_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const storedCartJson = useSyncExternalStore(
-    subscribe,
-    getSnapshot,
-    getServerSnapshot
-  );
-  const [items, setItems] = useState<CartItem[]>(() => {
-    try {
-      return JSON.parse(storedCartJson);
-    } catch {
-      return [];
-    }
-  });
+  const [items, setItems] = useState<CartItem[]>(loadCartFromStorage);
 
   // Persist to localStorage on change
   useEffect(() => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
-    listeners.forEach((l) => l());
   }, [items]);
 
   const addItem = useCallback((product: Product, quantity = 1) => {
