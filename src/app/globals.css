@@ -130,3 +130,39 @@ a {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
+
+/* --- Modal Animations --- */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Swiper Overrides --- */
+
+.swiper-pagination-bullet {
+  background-color: var(--color-border) !important;
+  opacity: 1 !important;
+  border-radius: 0 !important;
+  width: 8px !important;
+  height: 8px !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: var(--color-primary) !important;
+}
