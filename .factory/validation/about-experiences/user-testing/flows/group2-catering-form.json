@@ -1,0 +1,61 @@
+{
+  "groupId": "group2-catering-form",
+  "testedAt": "2026-04-05T00:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "sessionId": "5955096a040b__g2",
+    "notes": "Read-only site with hardcoded data, no shared mutable state"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-ABOUT-003",
+      "title": "Catering inquiry form has all fields and validates",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to http://localhost:3000/catering", "expected": "Catering page loads with form", "observed": "Catering page loaded with 'Private Chef & Catering' hero and 'Catering Inquiry' form section" },
+        { "action": "Take screenshot of empty form to verify all fields", "expected": "All required fields present: name, number of guests, budget, date/time, location, event type, dietary restrictions, cuisine preferences, service type", "observed": "All fields confirmed present: Name, Email, Phone, Number of Guests, Budget Range (dropdown with Under $5K, $5K-$10K, $10K-$20K, $20K+), Event Type (dropdown with Sit-Down Dinner Party, Catering, Tray-Passed Hors d'Oeuvres, Corporate Event), Event Date (date picker), Event Time (time picker), Location, Dietary & Allergy Restrictions (checkboxes: Vegan, Vegetarian, Gluten-Free, Nut Allergy, Shellfish Allergy, Other), Cuisine Preferences (textarea), Service Type (dropdown with Buffet, Tray-Passed, Sit-Down), Additional Notes (textarea)" },
+        { "action": "Click SUBMIT INQUIRY without filling any fields", "expected": "Validation errors shown for required fields", "observed": "Validation errors displayed: 'Name is required', 'Please enter a valid email address', 'Phone number is required', 'Enter a valid, expected number of guests (min)', 'Please select a budget range', 'Please select an event type', 'Event date is required', 'Event time is required', 'Location is required'" },
+        { "action": "Fill all required fields with test data", "expected": "Fields populated without errors", "observed": "All fields filled: Name='John Test', Email='john@test.com', Phone='310-555-1234', Guests=50, Budget='$5K-$10K', Event Type='Sit-Down Dinner Party', Date='06/15/2026', Time='07:00 PM', Location='Beverly Hills, CA', Gluten-Free=checked, Cuisine Preferences='Southern comfort food with modern twists', Service Type='Sit-Down'" },
+        { "action": "Take screenshot of filled form", "expected": "Form shown with all fields populated, no validation errors", "observed": "Form displayed with all fields properly filled, no validation errors visible" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "about-experiences/about-experiences-group2/VAL-ABOUT-003-catering-form-empty.png",
+          "about-experiences/about-experiences-group2/VAL-ABOUT-003-catering-form-errors.png",
+          "about-experiences/about-experiences-group2/VAL-ABOUT-003-catering-form-filled.png"
+        ],
+        "consoleErrors": "none",
+        "network": "No network requests - client-side form with hardcoded data"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-ABOUT-004",
+      "title": "Catering form submission shows confirmation",
+      "status": "pass",
+      "steps": [
+        { "action": "Click SUBMIT INQUIRY with all required fields filled", "expected": "Success/confirmation message displayed", "observed": "Form replaced by success state showing green checkmark icon, heading 'Thank You for Your Inquiry', and message 'We've received your catering request. Chef Kyla or a member of our team will be in touch within 24-48 hours to discuss your event.'" },
+        { "action": "Take screenshot of confirmation message", "expected": "Screenshot shows confirmation UI", "observed": "Screenshot captured showing the success confirmation state with checkmark, heading, and descriptive message" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "about-experiences/about-experiences-group2/VAL-ABOUT-004-catering-form-success.png"
+        ],
+        "consoleErrors": "none",
+        "network": "Form submission logs to console - no API calls (as designed)"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [
+    {
+      "description": "Native HTML select dropdowns could not be set via agent-browser 'select' command (timed out). Required using JavaScript eval to set values and dispatch change events.",
+      "resolved": true,
+      "resolution": "Used agent-browser eval to set select element values directly via JavaScript and dispatch change events",
+      "affectedAssertions": ["VAL-ABOUT-003"]
+    }
+  ],
+  "blockers": [],
+  "summary": "Tested 2 assertions: 2 passed. VAL-ABOUT-003 confirmed all required catering form fields are present (name, email, phone, number of guests, budget range, event type, event date, event time, location, dietary restrictions, cuisine preferences, service type) and validation errors appear for all required fields when submitting empty. VAL-ABOUT-004 confirmed that submitting the filled form shows a 'Thank You for Your Inquiry' success confirmation message."
+}

@@ -60,6 +60,7 @@ All pages are accessible via the Next.js App Router:
 - agent-browser viewport is fixed at 1280x720, cannot resize to exact 375px or 1440px
 - Unsplash images may occasionally fail to load — this is not a test failure
 - First page load may be slow due to Next.js compilation in dev mode
+- Native HTML `<select>` dropdowns may timeout with `agent-browser select` command; use JavaScript `eval` to set values and dispatch change events instead
 
 ## Validation Concurrency
 

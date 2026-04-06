@@ -1,0 +1,73 @@
+{
+  "groupId": "group3-cannabis-community-testimonials",
+  "testedAt": "2026-04-05T22:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "sessionId": "5955096a040b__g3",
+    "notes": "Read-only site with hardcoded data, no shared mutable state"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-ABOUT-005",
+      "title": "Cannabis Chef page exists and is separate",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to http://localhost:3000/cannabis-chef", "expected": "Dedicated cannabis chef page loads", "observed": "Page loaded with title 'Chef Kyla x Cannabis | Soul Good'" },
+        { "action": "Take full-page screenshot", "expected": "Screenshot captured", "observed": "Screenshot saved successfully" },
+        { "action": "Verify cannabis chef content", "expected": "Page displays content about Chef Kyla's cannabis chef background", "observed": "Page contains hero ('Chef Kyla x Cannabis'), 'A Cannabis Chef's Story' section, 'Infused Dining Experiences', 'Kyla's Taste' legacy section, and 'The Cannabis Dining Philosophy' with 4 principles (Precision Dosing, Culinary Excellence, Plant Respect, Safe & Welcoming)" },
+        { "action": "Verify separate dedicated page", "expected": "This is a standalone page, not a section on another page", "observed": "Page is at /cannabis-chef with its own URL, title, hero, and multiple distinct sections — confirmed separate from /about" },
+        { "action": "Check footer link accessibility", "expected": "Cannabis Chef link present in footer navigation", "observed": "Footer 'Learn' column contains 'Cannabis Chef' link pointing to /cannabis-chef" },
+        { "action": "Check console errors", "expected": "No console errors", "observed": "No console errors" }
+      ],
+      "evidence": {
+        "screenshots": ["about-experiences/about-experiences-group3/VAL-ABOUT-005-cannabis-chef-page.png"],
+        "consoleErrors": "none",
+        "network": "GET /cannabis-chef -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-ABOUT-006",
+      "title": "Community section renders",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to http://localhost:3000/community", "expected": "Community page loads", "observed": "Page loaded with title 'Community | Soul Good'" },
+        { "action": "Take full-page screenshot", "expected": "Screenshot captured", "observed": "Screenshot saved successfully" },
+        { "action": "Verify community involvement content", "expected": "Page displays information about community involvement", "observed": "Page contains hero ('Nourishing Our Neighborhoods'), 'Food Is a Right, Not a Privilege' section about food desert inequity, 'By the Numbers' impact stats (200+ families fed weekly, 1000+ hydroponic kits, 3 partner farms, 50+ workshops)" },
+        { "action": "Verify events/initiatives content", "expected": "Information about events and initiatives displayed", "observed": "'Our Initiatives' section with 4 programs: Farms in Watts, Wellness Center in Compton, Hydroponic Plant Distribution, Food Desert Relief — each with descriptions and stats" },
+        { "action": "Verify ways to connect", "expected": "Ways to get involved/connect are displayed", "observed": "'Ways to Get Involved' section with 4 options: Volunteer, Donate, Partner, Spread the Word. CTA section with 'Contact Us' and 'Meet Chef Kyla' links" },
+        { "action": "Check console errors", "expected": "No console errors", "observed": "No console errors" }
+      ],
+      "evidence": {
+        "screenshots": ["about-experiences/about-experiences-group3/VAL-ABOUT-006-community-page.png"],
+        "consoleErrors": "none",
+        "network": "GET /community -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-ABOUT-007",
+      "title": "Testimonials/reviews display",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to http://localhost:3000/testimonials", "expected": "Testimonials page loads", "observed": "Page loaded with title 'Testimonials | Soul Good'" },
+        { "action": "Take full-page screenshot", "expected": "Screenshot captured", "observed": "Screenshot saved successfully" },
+        { "action": "Verify review text displayed", "expected": "Customer review text is visible", "observed": "12 testimonials displayed with full review text in quotes, covering meal prep, events, and catering experiences" },
+        { "action": "Verify customer names", "expected": "Customer names shown with reviews", "observed": "Each review shows customer name (e.g., Jasmine R., Marcus T., Alicia M., David & Nina L., etc.)" },
+        { "action": "Verify star ratings", "expected": "Star ratings visible on testimonials", "observed": "5-star ratings displayed above each review card as terracotta-colored star icons" },
+        { "action": "Verify category filters", "expected": "Category filtering available", "observed": "Filter buttons present: All Reviews, Meal Prep, Events, Catering — with '12 Reviews' count displayed" },
+        { "action": "Check console errors", "expected": "No console errors", "observed": "No console errors" }
+      ],
+      "evidence": {
+        "screenshots": ["about-experiences/about-experiences-group3/VAL-ABOUT-007-testimonials-page.png"],
+        "consoleErrors": "none",
+        "network": "GET /testimonials -> 200"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 3 assertions: 3 passed, 0 failed. All three pages (cannabis-chef, community, testimonials) load correctly as separate dedicated pages with rich content, proper navigation links in the footer, and zero console errors."
+}

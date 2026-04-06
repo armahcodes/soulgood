@@ -1,0 +1,62 @@
+{
+  "groupId": "group1-about-experiences",
+  "testedAt": "2026-04-05T22:00:00Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "sessionId": "5955096a040b__g1",
+    "note": "Read-only site with hardcoded data, no shared mutable state"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-ABOUT-001",
+      "title": "Chef Kyla's Story page renders",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to http://localhost:3000/about", "expected": "About page loads", "observed": "Page loaded with title 'Meet Chef Kyla | Soul Good'" },
+        { "action": "Verify hero section", "expected": "Hero with eyebrow text, heading, and description", "observed": "Hero section present with eyebrow 'THE WOMAN BEHIND THE MISSION', heading 'Meet Chef Kyla', descriptive paragraph, and hero image of Chef Kyla" },
+        { "action": "Verify transformation narrative", "expected": "Story about Chef Kyla's transformation", "observed": "'From Struggle to Purpose' section with detailed narrative about health transformation, including obesity, hypertension reversal, and food-as-medicine journey" },
+        { "action": "Verify credentials - culinary school", "expected": "Culinary education credential listed", "observed": "'Culinary Education' section describing classical training at premier culinary institution with specialization in Southern and soul food" },
+        { "action": "Verify credentials - nutrition certification", "expected": "Nutrition certification listed", "observed": "'Nutrition Certification' section describing certified nutrition specialist with expertise in functional nutrition and anti-inflammatory protocols" },
+        { "action": "Verify credentials - speaking engagements", "expected": "Speaking engagements listed", "observed": "'Speaking & Education' section describing wellness conferences, food festivals, and community event speaking" },
+        { "action": "Verify philosophy sections", "expected": "Philosophy pillars displayed", "observed": "'Southern Soul Food Meets Functional Healing Nutrition' section with 5 pillars: Ancestral Wisdom, Nutrient Density, Eat the Rainbow, Functional Ingredients, Intentional Preparation" },
+        { "action": "Take full-page screenshot", "expected": "Screenshot captured", "observed": "Full-page desktop screenshot saved" },
+        { "action": "Verify mobile responsiveness via CSS classes", "expected": "Responsive breakpoint classes present", "observed": "Component uses md: and lg: breakpoints for typography, grid layouts (grid-cols-1 md:grid-cols-2, sm:grid-cols-2 lg:grid-cols-5), and spacing" },
+        { "action": "Check console errors", "expected": "No console errors", "observed": "No console errors" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "about-experiences/about-experiences-group1/VAL-ABOUT-001-about-page-desktop.png"
+        ],
+        "consoleErrors": "none",
+        "network": "GET /about -> 200",
+        "mobileVerification": "CSS class review confirms responsive breakpoints (md:, lg:, sm:) for typography sizing, grid layouts, and spacing. Per AGENTS.md, agent-browser viewport is fixed at 1280x720 so mobile verification is done via CSS class review."
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-ABOUT-002",
+      "title": "Experiences & Events page renders",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to http://localhost:3000/experiences", "expected": "Experiences page loads", "observed": "Page loaded with title 'Experiences & Events | Soul Good'" },
+        { "action": "Verify pop-up dinners information", "expected": "Pop-up dinner details displayed", "observed": "'Pop-Up Dinners by Chef Kyla' section with description of Tastemakers signature series, including guest count (40-50), price range ($120-$200), and event details" },
+        { "action": "Verify upcoming events with dates and tickets", "expected": "Events with dates and ticket links", "observed": "Two upcoming events displayed: (1) 'Tastemakers: Spring Awakening Dinner' - April 17, 2025, 7:00 PM, $165/person with GET TICKETS link; (2) 'Tastemakers: Soul & Fire' - May 15, 2025, 6:30 PM, $195/person with GET TICKETS link" },
+        { "action": "Verify photo gallery from past events", "expected": "Gallery of past event photos", "observed": "'Moments from the Table' section with 6 photos from past events: Heritage Table (Feb 2025), Plated Course (Dec 2024), Chef Kyla in Action (Nov 2024), Cocktail Pairings (Oct 2024), Dessert Course (Sep 2024), Communal Table (Aug 2024)" },
+        { "action": "Take full-page screenshot", "expected": "Screenshot captured", "observed": "Full-page screenshot saved" },
+        { "action": "Check console errors", "expected": "No console errors", "observed": "No console errors" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "about-experiences/about-experiences-group1/VAL-ABOUT-002-experiences-page.png"
+        ],
+        "consoleErrors": "none",
+        "network": "GET /experiences -> 200"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 2 assertions: 2 passed. VAL-ABOUT-001 (Chef Kyla's Story page) renders with hero, transformation narrative, all 3 required credentials (culinary school, nutrition certification, speaking engagements), and 5 philosophy pillars. VAL-ABOUT-002 (Experiences & Events page) renders with pop-up dinner information, 2 upcoming events with dates/pricing/tickets, and a 6-image past events photo gallery."
+}
