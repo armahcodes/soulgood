@@ -1,0 +1,37 @@
+{
+  "milestone": "polish",
+  "round": 1,
+  "status": "pass",
+  "validatorsRun": {
+    "test": { "passed": true, "command": "pnpm build", "exitCode": 0 },
+    "typecheck": { "passed": true, "command": "npx tsc --noEmit", "exitCode": 0 },
+    "lint": { "passed": true, "command": "pnpm lint", "exitCode": 0 }
+  },
+  "reviewsSummary": {
+    "total": 2,
+    "passed": 2,
+    "failed": 0,
+    "failedFeatures": []
+  },
+  "blockingIssues": [],
+  "appliedUpdates": [],
+  "suggestedGuidanceUpdates": [
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Expand the 'CTA Link Buttons' section to document the Button component's internal vs external URL branching: href starting with '/' or '#' uses Next.js Link for SPA routing, while other URLs use plain <a> with target='_blank' and rel='noopener noreferrer'. Note that this means internal links cannot be opened in a new tab via the Button component without additional props.",
+      "evidence": "Feature navigation-wiring-and-links commit ba97f33 introduced branching logic in src/components/ui/Button.tsx:57-77. Current AGENTS.md only says 'Prefer <Button as=\"a\" href=\"/path\"> over nesting <Link><Button>'.",
+      "isSystemic": false
+    }
+  ],
+  "rejectedObservations": [
+    {
+      "observation": "Agent-browser viewport limitation means responsive testing at 375px/768px/1024px/1440px was done via CSS class review rather than visual testing.",
+      "reason": "already-documented — AGENTS.md 'agent-browser viewport limitation' section already documents this constraint and the workaround."
+    },
+    {
+      "observation": "Next.js Image component defaults to lazy loading automatically, so explicit loading='lazy' props are unnecessary.",
+      "reason": "ambiguous — Standard framework knowledge that doesn't warrant documentation in project-specific files."
+    }
+  ],
+  "previousRound": null
+}

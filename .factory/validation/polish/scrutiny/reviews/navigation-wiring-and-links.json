@@ -1,0 +1,34 @@
+{
+  "featureId": "navigation-wiring-and-links",
+  "reviewedAt": "2026-04-06T06:10:00.000Z",
+  "commitId": "ba97f33",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "The implementation correctly fixes the Button component to use Next.js Link for internal routes (href starting with '/' or '#') instead of plain <a> tags, enabling SPA client-side routing site-wide. External URLs correctly fall through to plain <a> with target='_blank' and rel='noopener noreferrer'. The CartSlideIn and Hero components are cleaned up to remove the nested Link>Button antipattern, replacing them with the proper Button as='a' pattern. The onClick prop is forwarded through to Link/a elements for use cases like closing the cart slide-in. A grep confirms no remaining Link>Button antipatterns exist in the codebase, and all ~20 existing as='a' usages point to internal routes that will benefit from SPA routing. Build, typecheck, and lint all pass. Interactive verification confirmed all 23 routes return 200, Learn dropdown shows correct items, cart persists across navigation, and newsletter works.",
+    "issues": [
+      {
+        "file": "src/components/ui/Button.tsx",
+        "line": 62,
+        "severity": "non_blocking",
+        "description": "The onClick type cast uses 'as unknown as React.MouseEventHandler<HTMLAnchorElement>' which is a double-cast through unknown. This works but is fragile. A cleaner approach would be to broaden the ButtonProps interface to accept React.MouseEventHandler<HTMLElement> for onClick, or use a union type for the component's own onClick prop. Low risk since the actual event objects are compatible between button and anchor elements."
+      },
+      {
+        "file": "src/components/ui/Button.tsx",
+        "line": 57,
+        "severity": "non_blocking",
+        "description": "The forwardRef 'ref' parameter and '...props' rest spread are only applied to the <button> branch. When as='a', ref is silently dropped and extra props (e.g., data-testid, id, aria-label) are not forwarded to the Link or <a> element. This is a pre-existing design limitation not introduced by this commit, and currently no callers pass ref or extra props with as='a'. Worth noting for future maintainability."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "AGENTS.md documents the 'Button as=\"a\"' pattern but doesn't explain the internal vs external URL handling behavior introduced by this commit. Developers should know that href starting with '/' or '#' gets Next.js Link (SPA routing) while other URLs get plain <a> with target='_blank'. This implicit branching could surprise someone who wants an internal link to open in a new tab.",
+      "evidence": "src/components/ui/Button.tsx:57-77 — branching logic; AGENTS.md ### CTA Link Buttons section only says 'Prefer <Button as=\"a\" href=\"/path\"> over nesting <Link><Button>'"
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "PASS. The Button component correctly implements SPA client-side routing for internal links while falling back to plain <a> for external URLs. The nested Link>Button antipattern is fully eliminated from Hero and CartSlideIn. All 23 routes verified working, no 404s. Two non-blocking issues noted: (1) onClick type cast through 'unknown' is functional but fragile, (2) ref and extra props are not forwarded in the Link/a branches (pre-existing limitation, no current callers affected). The AGENTS.md convention about Button as='a' could be enriched to document the internal vs external URL behavior."
+}
