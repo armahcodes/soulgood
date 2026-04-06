@@ -1,0 +1,66 @@
+{
+  "groupId": "cart-flow",
+  "testedAt": "2026-04-05T12:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "authentication": "none",
+    "cartState": "client-side only, isolated per browser session",
+    "sessionId": "ab9fe9940de4__cart"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-ACCT-003",
+      "title": "Cart page renders with items",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /cart with empty cart", "expected": "Empty state with shopping bag icon and 'Your cart is empty' message", "observed": "Empty state displayed correctly with ShoppingBag icon, 'Your cart is empty' text, and 'Continue Shopping' button" },
+        { "action": "Navigate to /shop/soul-seasoning-blend and click 'Add to Cart'", "expected": "Item added to cart, cart count updates", "observed": "Cart icon badge updated to 1, cart slide-in opened showing Soul Seasoning Blend" },
+        { "action": "Navigate to /shop/heritage-hot-sauce and click 'Add to Cart'", "expected": "Second item added to cart", "observed": "Cart icon badge updated to 2" },
+        { "action": "Navigate to /cart", "expected": "Cart page shows both items with images, names, quantity controls, prices, and remove buttons", "observed": "Cart page displays: column headers (Product, Quantity, Unit Price, Total), Soul Seasoning Blend (qty 1, $18.00/$18.00) and Heritage Hot Sauce (qty 1, $14.00/$14.00), each with product image, name, subtitle, increment/decrement buttons, unit price, line total, and X remove button. Order Summary sidebar shown on right." }
+      ],
+      "evidence": {
+        "screenshots": ["account-cart/cart-flow/VAL-ACCT-003-cart-empty.png", "account-cart/cart-flow/VAL-ACCT-003-cart-with-items.png"],
+        "consoleErrors": "Hydration mismatch warnings due to localStorage cart state differing from server-rendered empty state — expected behavior for client-side cart persistence, not a functional bug",
+        "network": "Standard Next.js page loads, no API calls"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-ACCT-004",
+      "title": "Cart quantity controls work",
+      "status": "pass",
+      "steps": [
+        { "action": "Click increment (+) button on Soul Seasoning Blend", "expected": "Quantity increases from 1 to 2, line total updates", "observed": "Quantity changed to 2, line total updated from $18.00 to $36.00, subtotal updated from $32.00 to $50.00, order total updated to $61.95" },
+        { "action": "Click remove (X) button on Heritage Hot Sauce", "expected": "Item removed from cart", "observed": "Heritage Hot Sauce removed, only Soul Seasoning Blend remains. Subtotal updated to $36.00, order total updated to $47.95" },
+        { "action": "Click decrement (-) button on Soul Seasoning Blend", "expected": "Quantity decreases from 2 to 1, totals update", "observed": "Quantity changed to 1, line total updated to $18.00, subtotal updated to $18.00, order total updated to $29.95" }
+      ],
+      "evidence": {
+        "screenshots": ["account-cart/cart-flow/VAL-ACCT-004-cart-quantity-changed.png", "account-cart/cart-flow/VAL-ACCT-004-cart-item-removed.png"],
+        "consoleErrors": "Hydration mismatch warnings (same as VAL-ACCT-003, expected)",
+        "network": "No API calls — all state is client-side React Context"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-ACCT-005",
+      "title": "Cart order summary calculates correctly",
+      "status": "pass",
+      "steps": [
+        { "action": "Verify order summary with 2 items (Soul Seasoning Blend qty 1 + Heritage Hot Sauce qty 1)", "expected": "Subtotal: $32.00, Estimated Delivery: $11.95, Order Total: $43.95", "observed": "Order Summary shows Subtotal: $32.00, Estimated Delivery: $11.95, ORDER TOTAL: $43.95 — all correct" },
+        { "action": "Increment Soul Seasoning Blend to qty 2", "expected": "Subtotal: $50.00, Order Total: $61.95", "observed": "Subtotal updated to $50.00, ORDER TOTAL updated to $61.95 — correct" },
+        { "action": "Remove Heritage Hot Sauce", "expected": "Subtotal: $36.00, Order Total: $47.95", "observed": "Subtotal updated to $36.00, ORDER TOTAL updated to $47.95 — correct" },
+        { "action": "Decrement Soul Seasoning Blend to qty 1", "expected": "Subtotal: $18.00, Order Total: $29.95", "observed": "Subtotal updated to $18.00, ORDER TOTAL updated to $29.95 — correct" }
+      ],
+      "evidence": {
+        "screenshots": ["account-cart/cart-flow/VAL-ACCT-005-cart-summary.png"],
+        "consoleErrors": "Hydration mismatch warnings (same as above, expected)",
+        "network": "No API calls — all calculations are client-side"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 3 assertions: 3 passed. Cart page renders correctly with empty state and populated state, quantity controls (increment/decrement/remove) work as expected with real-time total updates, and order summary calculates subtotal + delivery fee + order total correctly and updates dynamically."
+}

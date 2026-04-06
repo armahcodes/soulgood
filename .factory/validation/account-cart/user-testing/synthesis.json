@@ -1,0 +1,26 @@
+{
+  "milestone": "account-cart",
+  "round": 1,
+  "status": "pass",
+  "assertionsSummary": {
+    "total": 9,
+    "passed": 9,
+    "failed": 0,
+    "blocked": 0
+  },
+  "passedAssertions": [
+    "VAL-ACCT-001",
+    "VAL-ACCT-002",
+    "VAL-ACCT-003",
+    "VAL-ACCT-004",
+    "VAL-ACCT-005",
+    "VAL-ACCT-006",
+    "VAL-UTIL-001",
+    "VAL-UTIL-002",
+    "VAL-UTIL-003"
+  ],
+  "failedAssertions": [],
+  "blockedAssertions": [],
+  "appliedUpdates": [],
+  "previousRound": null
+}

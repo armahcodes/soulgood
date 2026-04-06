@@ -1,0 +1,54 @@
+{
+  "groupId": "account-auth",
+  "testedAt": "2026-04-05T20:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "authentication": "none — all data is hardcoded",
+    "cartState": "client-side only, isolated per browser session",
+    "sharedMutableState": "none"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-ACCT-001",
+      "title": "Login page renders with tabbed form",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /account/login", "expected": "Account login page displayed with tabbed form", "observed": "Page loaded with 'Welcome Back' heading, LOGIN and REGISTER tabs visible" },
+        { "action": "Verify Login tab is active by default", "expected": "Login tab selected with Email and Password fields", "observed": "LOGIN tab active with underline, EMAIL field, PASSWORD field, FORGOT PASSWORD? link, and SIGN IN button displayed" },
+        { "action": "Click REGISTER tab", "expected": "Register tab shows registration form fields", "observed": "REGISTER tab activated showing FIRST NAME, LAST NAME, EMAIL, PASSWORD, CONFIRM PASSWORD fields, and CREATE ACCOUNT button" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "account-cart/account-auth/VAL-ACCT-001-login-tab.png",
+          "account-cart/account-auth/VAL-ACCT-001-login-tab-full.png",
+          "account-cart/account-auth/VAL-ACCT-001-register-tab.png"
+        ],
+        "consoleErrors": "none",
+        "network": "GET /account/login -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-ACCT-002",
+      "title": "Login form validates",
+      "status": "pass",
+      "steps": [
+        { "action": "Click SIGN IN with empty fields", "expected": "Validation errors shown for email and password", "observed": "Red-bordered email field with 'Email is required' error, red-underlined password field with 'Password is required' error" },
+        { "action": "Fill email with invalid value 'notanemail' and submit", "expected": "Validation error for invalid email format", "observed": "'Please enter a valid email address' error shown under email field, 'Password is required' still shown for empty password" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "account-cart/account-auth/VAL-ACCT-002-login-validation-errors.png",
+          "account-cart/account-auth/VAL-ACCT-002-invalid-email-error.png"
+        ],
+        "consoleErrors": "none",
+        "network": "No network requests — validation is client-side"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 2 assertions: 2 passed. VAL-ACCT-001 confirmed login page renders with tabbed form (Login/Register tabs with appropriate fields). VAL-ACCT-002 confirmed login form validates email (required + format) and password (required) with visible error messages."
+}

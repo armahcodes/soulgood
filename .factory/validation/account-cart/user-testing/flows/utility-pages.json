@@ -1,0 +1,85 @@
+{
+  "groupId": "utility-pages",
+  "testedAt": "2026-04-05T12:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "authentication": "none",
+    "sharedState": "none — all data hardcoded, static content pages"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-ACCT-006",
+      "title": "Gift card page renders",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /gift-card", "expected": "Gift card page displayed", "observed": "Gift card page displayed with 'Gift Cards' eyebrow, 'Give the Gift of Soul Good' heading, and descriptive text" },
+        { "action": "Check value selection options", "expected": "Gift card value selection buttons", "observed": "Value buttons displayed: $50, $100 (selected/black), $150, $200, Custom" },
+        { "action": "Scroll down to check recipient form", "expected": "Recipient form fields", "observed": "Recipient Details section with Recipient Name, Recipient Email, Your Name, and Personal Message (optional) fields" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "account-cart/utility-pages/VAL-ACCT-006-gift-card-page.png",
+          "account-cart/utility-pages/VAL-ACCT-006-gift-card-page-form.png"
+        ],
+        "consoleErrors": "none",
+        "network": "GET /gift-card -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-UTIL-001",
+      "title": "Privacy policy page renders",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /privacy", "expected": "Privacy policy page displayed", "observed": "Privacy policy page displayed with 'LEGAL' eyebrow, 'Privacy Policy' heading, 'Last updated: January 1, 2025' date" },
+        { "action": "Check formatted legal text", "expected": "Formatted legal content with sections", "observed": "Section '1. Information Collection' with formatted paragraph text about data collection practices" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "account-cart/utility-pages/VAL-UTIL-001-privacy-page.png"
+        ],
+        "consoleErrors": "none",
+        "network": "GET /privacy -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-UTIL-002",
+      "title": "Terms page renders",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /terms", "expected": "Terms and conditions page displayed", "observed": "Terms page displayed with 'LEGAL' eyebrow, 'Terms & Conditions' heading, 'Last updated: January 1, 2025' date" },
+        { "action": "Check formatted legal text", "expected": "Formatted legal content with sections", "observed": "Section '1. Acceptance of Terms' with formatted paragraph text about agreeing to terms and conditions" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "account-cart/utility-pages/VAL-UTIL-002-terms-page.png"
+        ],
+        "consoleErrors": "none",
+        "network": "GET /terms -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-UTIL-003",
+      "title": "Podcast coming soon page renders",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /podcast", "expected": "Podcast coming soon page displayed", "observed": "Podcast page displayed with 'PODCAST' eyebrow, 'Coming Soon' heading, descriptive text about Chef Kyla's podcast" },
+        { "action": "Check branding elements", "expected": "Appropriate branding and coming soon messaging", "observed": "Soul Good branded header, microphone icon in terracotta color, 'The Soul Good Podcast' section below hero" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "account-cart/utility-pages/VAL-UTIL-003-podcast-coming-soon.png"
+        ],
+        "consoleErrors": "none",
+        "network": "GET /podcast -> 200"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 4 assertions: 4 passed, 0 failed. All utility pages (gift card, privacy policy, terms & conditions, podcast coming soon) render correctly with proper content, formatting, and Soul Good branding. No console errors detected."
+}
