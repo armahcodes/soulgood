@@ -29,7 +29,7 @@ export function RecipeDetailContent({ recipe }: RecipeDetailContentProps) {
   const relatedRecipes = [...sameCategoryRecipes, ...otherRecipes].slice(0, 3);
 
   return (
-    <main>
+    <main className="flex-1">
       {/* Back Link */}
       <div className="section-padding max-container !pb-0">
         <Link

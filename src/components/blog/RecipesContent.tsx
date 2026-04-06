@@ -32,7 +32,7 @@ export function RecipesContent() {
   }, [activeCategory]);
 
   return (
-    <main>
+    <main className="flex-1">
       <section className="section-padding max-container">
         {/* Page Header */}
         <div className="mb-12 text-center">

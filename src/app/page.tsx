@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
 import { CategoryNav } from "@/components/sections/CategoryNav";
 import { ProductCarousel } from "@/components/sections/ProductCarousel";
@@ -7,6 +8,17 @@ import { PressLogos } from "@/components/sections/PressLogos";
 import { PhilosophyPillars } from "@/components/sections/PhilosophyPillars";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Newsletter } from "@/components/sections/Newsletter";
+
+export const metadata: Metadata = {
+  title: "Soul Good | Made with Intention. Seasoned with Love.",
+  description:
+    "Premium wellness food by Chef Kyla — Southern soul food meets functional healing nutrition. Chef-crafted meal plans delivered to your door in Los Angeles.",
+  openGraph: {
+    title: "Soul Good | Made with Intention. Seasoned with Love.",
+    description:
+      "Premium wellness food by Chef Kyla — Southern soul food meets functional healing nutrition. Chef-crafted meal plans delivered to your door in Los Angeles.",
+  },
+};
 
 export default function HomePage() {
   return (

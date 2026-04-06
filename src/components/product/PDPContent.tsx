@@ -15,7 +15,7 @@ interface PDPContentProps {
 
 export function PDPContent({ product, relatedProducts }: PDPContentProps) {
   return (
-    <div>
+    <main className="flex-1">
       {/* Breadcrumb */}
       <nav
         aria-label="Breadcrumb"
@@ -67,6 +67,6 @@ export function PDPContent({ product, relatedProducts }: PDPContentProps) {
 
       {/* Related Products */}
       <RelatedProducts products={relatedProducts} />
-    </div>
+    </main>
   );
 }

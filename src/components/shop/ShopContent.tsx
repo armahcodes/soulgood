@@ -47,7 +47,7 @@ export function ShopContent() {
   }, [activeCategory, activeSort]);
 
   return (
-    <main>
+    <main className="flex-1">
       {/* Page Header + Filters + Product Grid */}
       <section className="section-padding max-container">
         <div className="mb-8">

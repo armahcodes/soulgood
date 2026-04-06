@@ -132,7 +132,7 @@ export function BlogArticleContent({
   relatedPosts,
 }: BlogArticleContentProps) {
   return (
-    <main>
+    <main className="flex-1">
       {/* Article Header */}
       <section className="section-padding max-container">
         <div className="max-w-3xl mx-auto text-center mb-10">
