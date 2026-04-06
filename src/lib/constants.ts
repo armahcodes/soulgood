@@ -768,6 +768,62 @@ export const FAQS: FAQ[] = [
       "Yes! Chef Kyla offers private chef services and catering for events of all sizes. Visit our Catering page to submit an inquiry.",
     category: "general",
   },
+  {
+    id: "faq-13",
+    question: "How do I switch between meal plan tiers?",
+    answer:
+      "You can upgrade or downgrade your plan at any time through your account dashboard. Changes take effect on your next delivery cycle. If you switch mid-week, your current week's plan will be fulfilled as scheduled.",
+    category: "meal-plans",
+  },
+  {
+    id: "faq-14",
+    question: "Can I customize my meals?",
+    answer:
+      "While individual meal customization is not available, you can set dietary preferences and restrictions when ordering. Chef Kyla designs each week's menu to accommodate a variety of needs while maintaining the highest quality and flavor.",
+    category: "meal-plans",
+  },
+  {
+    id: "faq-15",
+    question: "How are meals packaged for delivery?",
+    answer:
+      "Meals arrive in insulated, eco-friendly packaging with ice packs to ensure freshness. Each meal is individually labeled with the dish name, ingredients, and reheating instructions.",
+    category: "delivery",
+  },
+  {
+    id: "faq-16",
+    question: "What if I'm not home during delivery?",
+    answer:
+      "No worries — our packaging keeps meals fresh for several hours. You can also leave delivery instructions (gate code, safe spot, etc.) in your account settings to ensure a smooth drop-off.",
+    category: "delivery",
+  },
+  {
+    id: "faq-17",
+    question: "Can I skip a week of my subscription?",
+    answer:
+      "Absolutely. You can skip, pause, or reschedule deliveries through your account dashboard. Just make changes by Thursday at midnight for the following week.",
+    category: "subscription",
+  },
+  {
+    id: "faq-18",
+    question: "What happens if I cancel my subscription?",
+    answer:
+      "You can cancel anytime with no penalties or fees. Your current week's delivery will still be fulfilled. You can always re-subscribe later at the current subscription rate.",
+    category: "subscription",
+  },
+  {
+    id: "faq-19",
+    question: "Are your ingredients organic?",
+    answer:
+      "We prioritize organic, locally sourced ingredients whenever possible. Chef Kyla works with trusted local farms and suppliers to ensure the highest quality produce, proteins, and superfoods in every meal.",
+    category: "dietary",
+  },
+  {
+    id: "faq-20",
+    question: "Do you label all allergens in your meals?",
+    answer:
+      "Yes. Every meal is clearly labeled with a full ingredient list and common allergen warnings. If you have severe allergies, please reach out to our team directly for personalized guidance.",
+    category: "dietary",
+  },
 ];
 
 /* --- Testimonials --- */
