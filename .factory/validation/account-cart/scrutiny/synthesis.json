@@ -1,0 +1,55 @@
+{
+  "milestone": "account-cart",
+  "round": 1,
+  "status": "pass",
+  "validatorsRun": {
+    "test": { "passed": true, "command": "pnpm build", "exitCode": 0 },
+    "typecheck": { "passed": true, "command": "npx tsc --noEmit", "exitCode": 0 },
+    "lint": { "passed": true, "command": "pnpm lint", "exitCode": 0 }
+  },
+  "reviewsSummary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "failedFeatures": []
+  },
+  "blockingIssues": [],
+  "appliedUpdates": [
+    {
+      "target": "library",
+      "description": "Added known dev-mode CartContext hydration mismatch behavior to architecture.md Cart State Management section",
+      "sourceFeature": "cart-page"
+    }
+  ],
+  "suggestedGuidanceUpdates": [
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Update the Forms (React Hook Form + Zod v4) section to either remove the 'Do NOT also add RHF validate prop' instruction or align the codebase with it. Currently all forms in the codebase (Newsletter.tsx, ContactContent.tsx, AccountLoginContent.tsx, GiftCardContent.tsx, PodcastContent.tsx) use both RHF validate prop AND Zod safeParse in onSubmit, contradicting the documented convention. Workers consistently follow the code pattern rather than the text instruction.",
+      "evidence": "All 3 reviewers flagged this: account-login-register review (line 103), gift-card-and-utility-pages review (lines 290, 133). AGENTS.md references Newsletter.tsx as the pattern, but Newsletter.tsx itself uses dual validation.",
+      "isSystemic": true
+    },
+    {
+      "target": "skills",
+      "suggestion": "Update frontend-worker skill's manual verification step to clarify that mobile-width (375px) verification should be done via CSS class review (checking responsive classes like lg:hidden, md:flex) rather than agent-browser screenshots, since agent-browser always opens at 1280x720 and cannot change viewport width.",
+      "evidence": "gift-card-and-utility-pages reviewer noted skill says 'Take screenshots at 375px' but AGENTS.md already clarifies agent-browser viewport limitation. Workers handle this correctly but skill text is misleading.",
+      "isSystemic": true
+    },
+    {
+      "target": "skills",
+      "suggestion": "Add tip to frontend-worker skill: when using agent-browser, prefer snapshot + @ref clicking over text-based click selectors, as text selectors can time out on certain button elements.",
+      "evidence": "cart-page worker's skillFeedback suggested this based on experience with button click timeouts during verification.",
+      "isSystemic": false
+    }
+  ],
+  "rejectedObservations": [
+    {
+      "observation": "Inconsistent Input component usage across forms (some use <Input> component, Newsletter uses raw <input>)",
+      "reason": "Not systemic enough to warrant a convention change. Newsletter.tsx is a simple inline form with different styling needs. The Input component is the correct choice for full page forms."
+    },
+    {
+      "observation": "Button as=\"a\" renders plain <a> tag instead of Next.js Link for internal routes, causing full page reloads",
+      "reason": "Already planned fix — the 'navigation-wiring-and-links' feature in the polish milestone explicitly includes 'Fix the Button component's as=a pattern to use Next.js Link for internal routes'. No action needed now."
+    }
+  ],
+  "previousRound": null
+}

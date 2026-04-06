@@ -65,6 +65,7 @@ Each page is composed of **section components** that follow a consistent pattern
 - State persisted to localStorage for cross-page persistence
 - Cart slide-in panel component reads from context
 - Cart page reads from context
+- **Known dev-mode behavior**: CartContext uses a lazy `useState` initializer that reads localStorage on mount. In Next.js dev mode, this causes a harmless hydration mismatch warning (server renders empty cart, client reads localStorage). This is expected and does not affect production builds.
 
 ### Routing Structure
 All routes use Next.js App Router file-based routing under `src/app/`:
