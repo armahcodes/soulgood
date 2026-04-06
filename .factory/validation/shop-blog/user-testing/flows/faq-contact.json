@@ -1,0 +1,89 @@
+{
+  "groupId": "faq-contact",
+  "testedAt": "2026-04-05T23:45:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "sessionId": "71592c299f34__faq",
+    "notes": "No shared mutable state — all data is hardcoded, cart is client-side per session"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-FAQ-001",
+      "title": "FAQ page renders with categories and accordions",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /faq", "expected": "FAQ page loads with title and content", "observed": "FAQ page loaded with 'FAQ | Soul Good' title" },
+        { "action": "Scroll to see categories sidebar", "expected": "Category navigation visible (General, Meal Plans, Delivery, Subscription, Dietary)", "observed": "All 5 category buttons visible in sidebar: General, Meal Plans, Delivery, Subscription, Dietary" },
+        { "action": "Verify accordion Q&A sections present", "expected": "Accordion questions displayed for each category", "observed": "Multiple accordion questions visible across all categories (e.g., 'What is Soul Good?', 'Who is Chef Kyla?', 'Where do you deliver?')" },
+        { "action": "Click 'Delivery' category button", "expected": "Delivery category highlighted, delivery questions shown", "observed": "Delivery category highlighted with terracotta accent, page scrolled to delivery section with 4 delivery questions" },
+        { "action": "Click 'Where do you deliver?' accordion", "expected": "Answer expands below the question", "observed": "Answer expanded: 'We deliver throughout the Greater Los Angeles area — from Long Beach to Malibu, the Valley to DTLA, and everywhere in between.' Arrow icon rotated to indicate expanded state" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "shop-blog/faq-contact/VAL-FAQ-001-faq-page.png",
+          "shop-blog/faq-contact/VAL-FAQ-001-faq-categories.png",
+          "shop-blog/faq-contact/VAL-FAQ-001-faq-category-delivery.png",
+          "shop-blog/faq-contact/VAL-FAQ-001-faq-expanded.png"
+        ],
+        "consoleErrors": "none",
+        "network": "GET /faq -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-FAQ-002",
+      "title": "Contact page renders with form",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /contact", "expected": "Contact page loads", "observed": "Contact page loaded with 'Contact | Soul Good' title and 'Get In Touch' hero section" },
+        { "action": "Check form fields", "expected": "Name, email, subject, and message fields present", "observed": "All fields present: Name (text input), Email (text input), Subject (select dropdown with options: General, Meal Plans, Catering, Events, Other), Message (textarea)" },
+        { "action": "Check submit button", "expected": "Submit button visible", "observed": "'SEND MESSAGE' button visible below the form" },
+        { "action": "Check contact information sidebar", "expected": "Contact info displayed", "observed": "Contact information section with email (contact@soulgood.com), social links (Instagram, TikTok, YouTube), and business hours" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "shop-blog/faq-contact/VAL-FAQ-002-contact-page.png",
+          "shop-blog/faq-contact/VAL-FAQ-002-contact-form.png",
+          "shop-blog/faq-contact/VAL-FAQ-002-contact-submit-btn.png"
+        ],
+        "consoleErrors": "none",
+        "network": "GET /contact -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-FAQ-003",
+      "title": "Contact form validates and shows confirmation",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /contact and click SEND MESSAGE with empty fields", "expected": "Validation errors shown for required fields", "observed": "Validation errors displayed: 'Name is required' (red border + text), 'Email is required' (red underline + text), 'Please select a subject' (red underline + text), 'Message is required' (implied, below viewport)" },
+        { "action": "Fill name field with 'Test User'", "expected": "Field populated", "observed": "Name field filled with 'Test User'" },
+        { "action": "Fill email field with 'test@example.com'", "expected": "Field populated", "observed": "Email field filled with 'test@example.com'" },
+        { "action": "Set subject to 'General' via JavaScript (native select timeout workaround)", "expected": "Subject selected", "observed": "Subject set to 'General'" },
+        { "action": "Fill message field with test text", "expected": "Field populated", "observed": "Message field filled with 'This is a test message for validation.'" },
+        { "action": "Click SEND MESSAGE", "expected": "Success/confirmation message shown", "observed": "Success message displayed: envelope icon, 'Message Sent!' heading, 'Thank you for reaching out. We'll get back to you within 24-48 hours.' text, and 'SEND ANOTHER MESSAGE' button" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "shop-blog/faq-contact/VAL-FAQ-003-contact-errors.png",
+          "shop-blog/faq-contact/VAL-FAQ-003-contact-errors-full.png",
+          "shop-blog/faq-contact/VAL-FAQ-003-contact-success2.png"
+        ],
+        "consoleErrors": "none",
+        "network": "No API calls (form logs to console)"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [
+    {
+      "description": "Native HTML <select> dropdown times out with agent-browser 'select' command as documented in AGENTS.md. Required JavaScript eval workaround to set subject field value.",
+      "resolved": true,
+      "resolution": "Used JavaScript eval with nativeSetter and dispatchEvent to set select value to 'General' and trigger change event",
+      "affectedAssertions": ["VAL-FAQ-003"]
+    }
+  ],
+  "blockers": [],
+  "summary": "Tested 3 assertions: 3 passed. FAQ page correctly displays category navigation and accordion Q&A with expand/collapse behavior. Contact page has all required form fields (name, email, subject, message) and submit button. Contact form validates required fields with clear error messages and shows a success confirmation after valid submission."
+}

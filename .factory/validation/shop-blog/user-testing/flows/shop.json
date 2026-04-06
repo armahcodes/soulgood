@@ -1,0 +1,116 @@
+{
+  "groupId": "shop",
+  "testedAt": "2026-04-05T12:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "sessionId": "71592c299f34__shop",
+    "notes": "Next.js dev server on port 3000, cart is client-side per session, all data hardcoded"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-SHOP-001",
+      "title": "Shop listing page renders with product grid",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /shop", "expected": "Shop page loads with product grid", "observed": "Shop page loads with 'Shop All' heading, category filters (All, Seasonings, Juices, Bundles), sort dropdown, and 6 products displayed" },
+        { "action": "Verify 3-column grid at desktop width", "expected": "Products displayed in 3-column grid", "observed": "Products displayed in 3-column grid (1280px viewport). CSS confirms grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" },
+        { "action": "Verify product card content", "expected": "Cards show image (3:4 ratio), name, price, and rating", "observed": "Each card shows product image in 3:4 aspect ratio on light gray background, uppercase product name, subtitle, star rating with review count, and price" },
+        { "action": "Verify mobile responsiveness via CSS review", "expected": "Grid collapses to 1 column on mobile", "observed": "CSS uses grid-cols-1 (mobile), sm:grid-cols-2 (tablet), lg:grid-cols-3 (desktop) — confirmed responsive" }
+      ],
+      "evidence": {
+        "screenshots": ["shop-blog/shop/VAL-SHOP-001-shop-grid-desktop.png", "shop-blog/shop/VAL-SHOP-001-shop-grid-desktop-scrolled.png"],
+        "consoleErrors": "none",
+        "network": "GET /shop -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-SHOP-002",
+      "title": "Product card hover shows image swap",
+      "status": "pass",
+      "steps": [
+        { "action": "View product card default state", "expected": "Primary product image displayed", "observed": "Green Vitality Juice shows primary image (green juice glass with fruits)" },
+        { "action": "Hover over first product card", "expected": "Image swaps to secondary image", "observed": "Image smoothly transitions (opacity fade, 500ms) to secondary image (jar/bottle image). Component uses onMouseEnter/onMouseLeave with React state to toggle opacity between primary and secondary images" },
+        { "action": "Verify hover implementation", "expected": "Secondary image exists and swaps on hover", "observed": "ProductCard.tsx confirms: isHovered state toggles opacity-0/opacity-100 on primary and secondary images with 500ms transition and cubic-bezier easing" }
+      ],
+      "evidence": {
+        "screenshots": ["shop-blog/shop/VAL-SHOP-002-before-hover.png", "shop-blog/shop/VAL-SHOP-002-product-card-hover.png"],
+        "consoleErrors": "none",
+        "network": "N/A"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-SHOP-003",
+      "title": "Product detail page renders",
+      "status": "pass",
+      "steps": [
+        { "action": "Click on Green Vitality Juice product card", "expected": "PDP loads at /shop/green-vitality-juice", "observed": "PDP loads successfully with full product details" },
+        { "action": "Verify image gallery with thumbnails", "expected": "Main image with thumbnail selectors", "observed": "Large main image displayed with 2 thumbnail buttons below ('View image 1 of 2', 'View image 2 of 2')" },
+        { "action": "Verify product name, subtitle, rating", "expected": "Product name, subtitle, star rating visible", "observed": "'GREEN VITALITY JUICE' title, 'Cold-pressed daily greens' subtitle, 5-star rating with '89 reviews' link" },
+        { "action": "Verify price and subscription toggle", "expected": "Subscribe & Save and One-Time Purchase options with prices", "observed": "Subscribe & Save 15% ($10.20) and One-Time Purchase ($12.00) toggle options displayed" },
+        { "action": "Verify Add to Cart button", "expected": "'Add to Cart' button present", "observed": "Black 'ADD TO CART' button displayed with quantity controls (decrease/increase)" },
+        { "action": "Verify accordion sections", "expected": "Accordion sections for product details", "observed": "Three accordion sections: Benefits, How to Use, Ingredients — all collapsed by default" },
+        { "action": "Verify mobile responsiveness via CSS review", "expected": "Layout stacks vertically on mobile", "observed": "PDPContent.tsx uses grid-cols-1 lg:grid-cols-2 — confirmed responsive stacking" }
+      ],
+      "evidence": {
+        "screenshots": ["shop-blog/shop/VAL-SHOP-003-pdp-desktop.png", "shop-blog/shop/VAL-SHOP-003-pdp-desktop-top.png", "shop-blog/shop/VAL-SHOP-003-pdp-desktop-full-top.png"],
+        "consoleErrors": "none",
+        "network": "GET /shop/green-vitality-juice -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-SHOP-004",
+      "title": "Product detail accordions expand/collapse",
+      "status": "pass",
+      "steps": [
+        { "action": "View accordions in collapsed state", "expected": "All accordion sections collapsed with down chevrons", "observed": "Benefits, How to Use, Ingredients all collapsed with down chevron icons" },
+        { "action": "Click Benefits accordion header", "expected": "Benefits section expands with content", "observed": "Benefits section expanded smoothly, header text turned terracotta color with up chevron, content displayed: '100% cold-pressed. Rich in vitamins A, C, and K. Supports immune function and digestion.'" },
+        { "action": "Click Benefits accordion header again", "expected": "Benefits section collapses", "observed": "Benefits section collapsed, returning to original state" }
+      ],
+      "evidence": {
+        "screenshots": ["shop-blog/shop/VAL-SHOP-004-accordion-collapsed.png", "shop-blog/shop/VAL-SHOP-004-accordion-expanded.png"],
+        "consoleErrors": "none",
+        "network": "N/A"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-SHOP-005",
+      "title": "Add to cart updates cart count",
+      "status": "pass",
+      "steps": [
+        { "action": "Verify initial cart state", "expected": "Cart badge shows 0 items", "observed": "Cart button labeled 'Open cart, 0 items'" },
+        { "action": "Click ADD TO CART button", "expected": "Cart count updates and cart slide-in opens", "observed": "Cart button updated to 'Open cart, 1 items', cart slide-in panel opened from right side with backdrop blur" },
+        { "action": "Verify cart slide-in contents", "expected": "Cart shows added product with details", "observed": "Cart panel shows 'YOUR CART (1)', Green Vitality Juice with image, $12.00 price, quantity controls, remove button, SUBTOTAL: $12.00, VIEW CART and CHECKOUT buttons" }
+      ],
+      "evidence": {
+        "screenshots": ["shop-blog/shop/VAL-SHOP-005-cart-updated.png"],
+        "consoleErrors": "none",
+        "network": "N/A (client-side cart state)"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-SHOP-006",
+      "title": "Product badges display correctly",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /shop and view product cards", "expected": "Product badges visible on applicable products", "observed": "Badges displayed on product cards: 'BEST SELLER' on Green Vitality Juice, 'BEST SELLER' on Soul Seasoning Blend, 'BUNDLE & SAVE' on The Wellness Bundle, 'COMING SOON' on Adaptogen Energy Bites" },
+        { "action": "Verify badge styling", "expected": "Badges in brand accent color", "observed": "Badges use bg-primary (terracotta #C65D3E) with white text, uppercase 10px font, 0.08em letter-spacing — confirmed via Badge.tsx component" },
+        { "action": "Verify badge positioning", "expected": "Badges positioned on product images", "observed": "Badges positioned at top-left of product card images (absolute top-3 left-3)" }
+      ],
+      "evidence": {
+        "screenshots": ["shop-blog/shop/VAL-SHOP-006-product-badges.png", "shop-blog/shop/VAL-SHOP-006-product-badges-row2.png"],
+        "consoleErrors": "none",
+        "network": "N/A"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 6 assertions: 6 passed, 0 failed. All shop page features working correctly — product grid layout, hover image swap, PDP with gallery/accordions/subscribe toggle, add to cart with slide-in panel, and product badges."
+}

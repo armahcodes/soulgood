@@ -1,0 +1,82 @@
+{
+  "groupId": "blog",
+  "testedAt": "2026-04-05T12:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "sessionId": "71592c299f34__blog",
+    "notes": "Next.js dev server on port 3000, no shared mutable state, all data hardcoded"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-BLOG-001",
+      "title": "Blog listing page renders with article grid",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /blog", "expected": "Blog listing page loads", "observed": "Blog listing page loaded with title 'From the Kitchen'" },
+        { "action": "Check for article cards", "expected": "Article cards with images, category labels, titles, excerpts, and Read More links", "observed": "Article cards displayed in 3-column grid with images, category labels (SOUL FOOD HERITAGE, NUTRITION, WELLNESS, RECIPES), titles, excerpts, date/read time metadata, and 'READ MORE >' links" },
+        { "action": "Check console errors", "expected": "No errors", "observed": "No console errors" }
+      ],
+      "evidence": {
+        "screenshots": ["shop-blog/blog/VAL-BLOG-001-blog-listing.png", "shop-blog/blog/VAL-BLOG-001-blog-listing-scrolled.png"],
+        "consoleErrors": "none",
+        "network": "GET /blog -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-BLOG-002",
+      "title": "Blog category filter works",
+      "status": "pass",
+      "steps": [
+        { "action": "Verify category filter tabs are present", "expected": "Category tabs displayed (All, Recipes, Wellness, Soul Food Heritage, Nutrition)", "observed": "All five category tabs displayed with 'All' initially active (filled style)" },
+        { "action": "Click 'Recipes' category tab", "expected": "Articles filtered to show only Recipes category", "observed": "'Recipes' tab became active (filled style), displayed articles filtered to only show Recipes category articles: 'Chef Kyla's Rainbow Power Bowl', 'Spicy Sweet Potato & Coconut Soup', 'Herb-Crusted Salmon with Citrus Glaze' — all labeled RECIPES" },
+        { "action": "Check console errors", "expected": "No errors", "observed": "No console errors" }
+      ],
+      "evidence": {
+        "screenshots": ["shop-blog/blog/VAL-BLOG-002-blog-filtered-recipes.png", "shop-blog/blog/VAL-BLOG-002-blog-filtered-scrolled.png"],
+        "consoleErrors": "none",
+        "network": "Client-side filtering, no additional network requests"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-BLOG-003",
+      "title": "Blog article page renders",
+      "status": "pass",
+      "steps": [
+        { "action": "Click on 'Chef Kyla's Rainbow Power Bowl' article from blog listing", "expected": "Navigate to individual article page", "observed": "Navigated to article detail page successfully" },
+        { "action": "Verify article header elements", "expected": "Article title, category, author, hero image displayed", "observed": "Displayed: category label 'RECIPES' in terracotta, title 'Chef Kyla's Rainbow Power Bowl', author 'By Chef Kyla', date 'February 19, 2025', read time '4 min read', and large hero image of the power bowl" },
+        { "action": "Scroll down to verify rich text content", "expected": "Rich text content with paragraphs and headings", "observed": "Rich text body content displayed with paragraph text and subheading 'The Foundation: Ancient Grains'" },
+        { "action": "Verify related articles section", "expected": "Related articles displayed", "observed": "'Related Articles' section at bottom with 3 article cards" },
+        { "action": "Check console errors", "expected": "No errors", "observed": "No console errors" }
+      ],
+      "evidence": {
+        "screenshots": ["shop-blog/blog/VAL-BLOG-003-blog-article-header.png", "shop-blog/blog/VAL-BLOG-003-blog-article-content.png", "shop-blog/blog/VAL-BLOG-003-blog-article-top.png"],
+        "consoleErrors": "none",
+        "network": "GET /blog/[slug] -> 200"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-BLOG-004",
+      "title": "Recipes section renders",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /recipes", "expected": "Recipes page loads", "observed": "Recipes page loaded with title 'Recipes' and subtitle text" },
+        { "action": "Check for recipe cards", "expected": "Recipe cards with images, titles, and links to recipe detail pages", "observed": "9 recipe cards displayed in 3-column grid with images, difficulty badges (EASY/MEDIUM), category labels (BOWLS, DRINKS, MAINS, SOUPS, SNACKS), titles, descriptions, and metadata (prep time, servings, difficulty). All cards are links to detail pages." },
+        { "action": "Click on 'Rainbow Power Bowl' recipe card", "expected": "Navigate to recipe detail page", "observed": "Recipe detail page loaded successfully showing description, prep/cook time, servings, difficulty badge, and hero image" },
+        { "action": "Check console errors", "expected": "No errors", "observed": "No console errors" }
+      ],
+      "evidence": {
+        "screenshots": ["shop-blog/blog/VAL-BLOG-004-recipes-section-top.png", "shop-blog/blog/VAL-BLOG-004-recipes-section-cards.png", "shop-blog/blog/VAL-BLOG-004-recipe-detail.png"],
+        "consoleErrors": "none",
+        "network": "GET /recipes -> 200, GET /recipes/[slug] -> 200"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 4 assertions: 4 passed, 0 failed. Blog listing page renders article cards correctly with all required elements. Category filtering works (tested Recipes filter). Blog article detail pages display title, category, author, hero image, and rich text content. Recipes section displays recipe cards with images, titles, metadata, and working links to detail pages."
+}

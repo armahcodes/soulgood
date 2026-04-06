@@ -1,0 +1,30 @@
+{
+  "milestone": "shop-blog",
+  "round": 1,
+  "status": "pass",
+  "assertionsSummary": {
+    "total": 13,
+    "passed": 13,
+    "failed": 0,
+    "blocked": 0
+  },
+  "passedAssertions": [
+    "VAL-SHOP-001",
+    "VAL-SHOP-002",
+    "VAL-SHOP-003",
+    "VAL-SHOP-004",
+    "VAL-SHOP-005",
+    "VAL-SHOP-006",
+    "VAL-BLOG-001",
+    "VAL-BLOG-002",
+    "VAL-BLOG-003",
+    "VAL-BLOG-004",
+    "VAL-FAQ-001",
+    "VAL-FAQ-002",
+    "VAL-FAQ-003"
+  ],
+  "failedAssertions": [],
+  "blockedAssertions": [],
+  "appliedUpdates": [],
+  "previousRound": null
+}
