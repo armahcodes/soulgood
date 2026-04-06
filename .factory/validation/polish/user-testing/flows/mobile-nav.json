@@ -1,0 +1,93 @@
+{
+  "groupId": "mobile-nav",
+  "testedAt": "2026-04-05T00:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "agentBrowserSession": "8d2f0c3a1f1e__mobile",
+    "viewport": "1280x720 (fixed, cannot resize)",
+    "mobileTestingApproach": "CSS class review + DOM inspection + source code verification (per AGENTS.md guidance)"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-CROSS-004",
+      "title": "Mobile full-site navigation",
+      "status": "pass",
+      "steps": [
+        {
+          "action": "Navigate to http://localhost:3000",
+          "expected": "Homepage loads correctly",
+          "observed": "Homepage loaded with title 'Soul Good | Made with Intention. Seasoned with Love.'"
+        },
+        {
+          "action": "Verify hamburger button exists with lg:hidden class",
+          "expected": "Hamburger button present in DOM, hidden at desktop via lg:hidden CSS class",
+          "observed": "Hamburger button exists with classes 'lg:hidden p-1 hover:bg-cream transition-colors duration-300', computedDisplay is 'none' at 1280px"
+        },
+        {
+          "action": "Verify mobile menu panel exists with lg:hidden class and proper ARIA",
+          "expected": "Mobile menu panel in DOM with role=dialog, aria-modal=true, lg:hidden class",
+          "observed": "Panel exists with role='dialog', aria-modal='true', classes include 'lg:hidden' and '-translate-x-full' (off-screen when closed)"
+        },
+        {
+          "action": "Verify all major page links present in mobile menu",
+          "expected": "Links for Meal Plans, Shop, About, Experiences, Blog, FAQ, Contact, Account/Sign In",
+          "observed": "All 8 primary links found: MEAL PLANS (/meal-plans), SHOP (/shop), ABOUT (/about), EXPERIENCES (/experiences), BLOG (/blog), FAQ (/faq), CONTACT (/contact), Sign In (/account/login)"
+        },
+        {
+          "action": "Verify secondary navigation links in mobile menu",
+          "expected": "Weekly Menu, Learn section (About Chef Kyla, Blog, Podcast, Our Philosophy), Sign In",
+          "observed": "All secondary links present: Weekly Menu (/menu), About Chef Kyla (/about), Blog (/blog), Podcast (/podcast), Our Philosophy (/about#philosophy), Sign In (/account/login). Total 14 links in menu."
+        },
+        {
+          "action": "Force mobile menu open via DOM manipulation and take screenshot",
+          "expected": "Mobile menu renders with all navigation links visible",
+          "observed": "Mobile menu rendered correctly showing all primary links (MEAL PLANS, SHOP, ABOUT, EXPERIENCES, BLOG, FAQ, CONTACT) and secondary links (WEEKLY MENU, LEARN > ABOUT CHEF KYLA, BLOG, PODCAST, OUR PHILOSOPHY, SIGN IN)"
+        },
+        {
+          "action": "Navigate to each major page linked from mobile menu",
+          "expected": "All pages load without errors",
+          "observed": "All pages loaded successfully: Meal Plans ('Compare Meal Plans | Soul Good'), Shop ('Shop All | Soul Good'), About ('Meet Chef Kyla | Soul Good'), Experiences ('Experiences & Events | Soul Good'), Blog ('Blog | From the Kitchen | Soul Good'), FAQ ('FAQ | Soul Good'), Contact ('Contact | Soul Good'), Account ('Account | Soul Good')"
+        },
+        {
+          "action": "Check console errors across all pages",
+          "expected": "No console errors",
+          "observed": "No console errors detected on any page"
+        }
+      ],
+      "evidence": {
+        "screenshots": [
+          "polish/mobile-nav/VAL-CROSS-004-desktop-reference.png",
+          "polish/mobile-nav/VAL-CROSS-004-mobile-menu-open.png",
+          "polish/mobile-nav/VAL-CROSS-004-mobile-menu-scrolled.png",
+          "polish/mobile-nav/VAL-CROSS-004-page-meal-plans.png",
+          "polish/mobile-nav/VAL-CROSS-004-page-shop.png",
+          "polish/mobile-nav/VAL-CROSS-004-page-about.png",
+          "polish/mobile-nav/VAL-CROSS-004-page-experiences.png",
+          "polish/mobile-nav/VAL-CROSS-004-page-blog.png",
+          "polish/mobile-nav/VAL-CROSS-004-page-faq.png",
+          "polish/mobile-nav/VAL-CROSS-004-page-contact.png",
+          "polish/mobile-nav/VAL-CROSS-004-page-account.png"
+        ],
+        "consoleErrors": "none",
+        "network": "All pages returned 200 OK",
+        "codeReview": {
+          "mobileMenuComponent": "src/components/layout/MobileMenu.tsx - renders NAV_LINKS and SECONDARY_NAV_LINKS with lg:hidden CSS class for mobile-only visibility",
+          "hamburgerButton": "src/components/layout/MainNav.tsx - hamburger button with lg:hidden class, onClick opens MobileMenu",
+          "navLinks": "src/lib/constants.ts - NAV_LINKS contains 7 primary links (Meal Plans, Shop, About, Experiences, Blog, FAQ, Contact), SECONDARY_NAV_LINKS contains Weekly Menu, Learn dropdown (4 sub-items), Sign In"
+        }
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [
+    {
+      "description": "agent-browser viewport is fixed at 1280x720, cannot resize to 375px mobile width. Mobile menu testing required DOM manipulation to force the menu visible and CSS class review to verify responsive behavior.",
+      "resolved": true,
+      "resolution": "Used JavaScript eval to force mobile menu visible for screenshots, verified lg:hidden CSS classes ensure proper mobile/desktop behavior, and confirmed all link hrefs are correct via DOM inspection.",
+      "affectedAssertions": ["VAL-CROSS-004"]
+    }
+  ],
+  "blockers": [],
+  "summary": "Tested 1 assertion: 1 passed. VAL-CROSS-004 (Mobile full-site navigation) verified via CSS class review and DOM inspection per AGENTS.md guidance. The mobile menu component contains all 14 navigation links covering all major pages. Hamburger button and menu panel both use lg:hidden for proper mobile-only visibility. All 8 target pages load successfully without console errors."
+}

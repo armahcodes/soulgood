@@ -1,0 +1,77 @@
+{
+  "groupId": "forms-flow",
+  "testedAt": "2026-04-05T20:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "session": "8d2f0c3a1f1e__forms",
+    "viewport": "1280x720",
+    "noDatabase": true,
+    "noSharedMutableState": true
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-CROSS-005",
+      "title": "Newsletter signup from any page",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to http://localhost:3000 (homepage)", "expected": "Homepage loads", "observed": "Homepage loaded successfully" },
+        { "action": "Scroll to footer area", "expected": "Footer with newsletter form visible", "observed": "Footer newsletter form present with email input and Sign Up button" },
+        { "action": "Click Sign Up with empty email", "expected": "Validation error message shown", "observed": "Red error text 'Please enter a valid email address' displayed" },
+        { "action": "Fill email 'testuser@example.com' and click Sign Up", "expected": "Success message shown", "observed": "Green success text 'Thank you for signing up!' displayed" },
+        { "action": "Navigate to /about page", "expected": "About page loads", "observed": "About page loaded successfully" },
+        { "action": "Scroll to footer, check newsletter form presence", "expected": "Newsletter form present on about page footer", "observed": "Newsletter form with email input and Sign Up button present" },
+        { "action": "Fill email 'about-page-test@example.com' and submit", "expected": "Success message shown on second page", "observed": "Green success text 'Thank you for signing up!' displayed on about page" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "polish/forms-flow/VAL-CROSS-005-homepage-empty-submit.png",
+          "polish/forms-flow/VAL-CROSS-005-homepage-newsletter-success.png",
+          "polish/forms-flow/VAL-CROSS-005-about-newsletter-success.png"
+        ],
+        "consoleErrors": "none",
+        "network": "No network errors observed"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-CROSS-007",
+      "title": "Catering inquiry to confirmation",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to http://localhost:3000/catering", "expected": "Catering inquiry form displayed", "observed": "Catering Inquiry page loaded with full form" },
+        { "action": "Fill Name: 'Jane Smith'", "expected": "Name field populated", "observed": "Name field populated" },
+        { "action": "Fill Email: 'jane@example.com'", "expected": "Email field populated", "observed": "Email field populated" },
+        { "action": "Fill Phone: '310-555-1234'", "expected": "Phone field populated", "observed": "Phone field populated" },
+        { "action": "Fill Number of Guests: 50", "expected": "Guests field populated", "observed": "Guests field shows 50" },
+        { "action": "Set Budget Range via JS eval to '$5K-$10K'", "expected": "Budget dropdown set", "observed": "Budget Range shows '$5K – $10K'" },
+        { "action": "Set Event Type via JS eval to 'Sit-Down Dinner Party'", "expected": "Event type dropdown set", "observed": "Event Type shows 'Sit-Down Dinner Party'" },
+        { "action": "Fill Event Date: '2025-06-15'", "expected": "Date field populated", "observed": "Date shows 06/15/2025" },
+        { "action": "Fill Event Time: '18:00'", "expected": "Time field populated", "observed": "Time shows 06:00 PM" },
+        { "action": "Fill Location: 'Los Angeles, CA'", "expected": "Location field populated", "observed": "Location field shows 'Los Angeles, CA'" },
+        { "action": "Set Service Type via JS eval to 'Buffet'", "expected": "Service type dropdown set", "observed": "Service Type shows 'Buffet'" },
+        { "action": "Click SUBMIT INQUIRY button", "expected": "Confirmation message displayed", "observed": "Page shows 'Thank You for Your Inquiry' with checkmark icon and message about 24-48 hour follow-up" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "polish/forms-flow/VAL-CROSS-007-catering-form-filled.png",
+          "polish/forms-flow/VAL-CROSS-007-catering-form-filled-top.png",
+          "polish/forms-flow/VAL-CROSS-007-catering-confirmation-top.png"
+        ],
+        "consoleErrors": "none",
+        "network": "No network errors observed"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [
+    {
+      "description": "Native HTML <select> dropdowns required JavaScript eval to set values reliably, as documented in the task instructions",
+      "resolved": true,
+      "resolution": "Used JavaScript eval to set select values and dispatch change events",
+      "affectedAssertions": ["VAL-CROSS-007"]
+    }
+  ],
+  "blockers": [],
+  "summary": "Tested 2 assertions: 2 passed. VAL-CROSS-005: Newsletter signup form is present in footer on both homepage and about page, validates empty email (shows error), and accepts valid email (shows success). VAL-CROSS-007: Catering inquiry form accepts all required fields and shows a clear 'Thank You for Your Inquiry' confirmation page after submission."
+}

@@ -1,0 +1,154 @@
+{
+  "groupId": "nav-routing",
+  "testedAt": "2026-04-05T23:45:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "session": "8d2f0c3a1f1e__nav",
+    "viewport": "1280x720",
+    "database": "none",
+    "sharedState": "none - all data hardcoded"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-NAV-004",
+      "title": "Navigation links route to correct pages",
+      "status": "pass",
+      "steps": [
+        {
+          "action": "Click MEAL PLANS link in header nav",
+          "expected": "Navigate to /meal-plans",
+          "observed": "Navigated to http://localhost:3000/meal-plans, page loaded correctly"
+        },
+        {
+          "action": "Click SHOP link in header nav",
+          "expected": "Navigate to /shop",
+          "observed": "Navigated to http://localhost:3000/shop, page loaded correctly"
+        },
+        {
+          "action": "Click About Chef Kyla link in Learn dropdown (secondary nav)",
+          "expected": "Navigate to /about",
+          "observed": "Navigated to http://localhost:3000/about, page loaded correctly"
+        },
+        {
+          "action": "Click EXPERIENCES category card link on homepage",
+          "expected": "Navigate to /experiences",
+          "observed": "Navigated to http://localhost:3000/experiences, page loaded correctly"
+        },
+        {
+          "action": "Click Blog link in footer nav",
+          "expected": "Navigate to /blog",
+          "observed": "Navigated to http://localhost:3000/blog, page loaded correctly"
+        },
+        {
+          "action": "Click FAQ link in footer nav",
+          "expected": "Navigate to /faq",
+          "observed": "Navigated to http://localhost:3000/faq, page loaded correctly"
+        },
+        {
+          "action": "Click Contact Us link in footer nav",
+          "expected": "Navigate to /contact",
+          "observed": "Navigated to http://localhost:3000/contact, page loaded correctly"
+        }
+      ],
+      "evidence": {
+        "screenshots": [
+          "polish/nav-routing/VAL-NAV-004-meal-plans.png",
+          "polish/nav-routing/VAL-NAV-004-shop.png",
+          "polish/nav-routing/VAL-NAV-004-about.png",
+          "polish/nav-routing/VAL-NAV-004-experiences.png",
+          "polish/nav-routing/VAL-NAV-004-blog.png",
+          "polish/nav-routing/VAL-NAV-004-faq.png",
+          "polish/nav-routing/VAL-NAV-004-contact.png"
+        ],
+        "consoleErrors": "none",
+        "network": "All pages loaded with 200 status, no 404 errors"
+      },
+      "issues": null
+    },
+    {
+      "id": "VAL-CROSS-003",
+      "title": "Full site navigation path",
+      "status": "pass",
+      "steps": [
+        {
+          "action": "Start on homepage at http://localhost:3000",
+          "expected": "Homepage loads correctly",
+          "observed": "Homepage loaded with all sections visible"
+        },
+        {
+          "action": "Click MEAL PLANS link in header main nav",
+          "expected": "Navigate to /meal-plans without 404",
+          "observed": "Navigated to http://localhost:3000/meal-plans, page loaded correctly"
+        },
+        {
+          "action": "Click SHOP link in header main nav",
+          "expected": "Navigate to /shop without 404",
+          "observed": "Navigated to http://localhost:3000/shop, page loaded correctly"
+        },
+        {
+          "action": "Open Learn dropdown in secondary nav, click About Chef Kyla",
+          "expected": "Navigate to /about without 404",
+          "observed": "Navigated to http://localhost:3000/about, page loaded correctly"
+        },
+        {
+          "action": "Click SOUL GOOD logo to return to homepage, then click EXPERIENCES category card link",
+          "expected": "Navigate to /experiences without 404",
+          "observed": "Navigated to http://localhost:3000/experiences, page loaded correctly"
+        },
+        {
+          "action": "Open Learn dropdown in secondary nav, click Blog",
+          "expected": "Navigate to /blog without 404",
+          "observed": "Navigated to http://localhost:3000/blog, page loaded correctly"
+        },
+        {
+          "action": "Scroll to footer, click FAQ link",
+          "expected": "Navigate to /faq without 404",
+          "observed": "Navigated to http://localhost:3000/faq, page loaded correctly"
+        },
+        {
+          "action": "Scroll to footer, click Contact Us link",
+          "expected": "Navigate to /contact without 404",
+          "observed": "Navigated to http://localhost:3000/contact, page loaded correctly"
+        },
+        {
+          "action": "Click Sign In link in secondary nav header",
+          "expected": "Navigate to /account/login without 404",
+          "observed": "Navigated to http://localhost:3000/account/login, page loaded correctly"
+        }
+      ],
+      "evidence": {
+        "screenshots": [
+          "polish/nav-routing/VAL-CROSS-003-homepage.png",
+          "polish/nav-routing/VAL-CROSS-003-meal-plans.png",
+          "polish/nav-routing/VAL-CROSS-003-shop.png",
+          "polish/nav-routing/VAL-CROSS-003-about.png",
+          "polish/nav-routing/VAL-CROSS-003-experiences.png",
+          "polish/nav-routing/VAL-CROSS-003-blog.png",
+          "polish/nav-routing/VAL-CROSS-003-faq.png",
+          "polish/nav-routing/VAL-CROSS-003-contact.png",
+          "polish/nav-routing/VAL-CROSS-003-account.png"
+        ],
+        "consoleErrors": "none",
+        "network": "All pages loaded successfully, no 404 errors or broken links encountered"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [
+    {
+      "description": "The 'Experiences' page is not linked in the header or footer navigation. It is only accessible via a category card on the homepage or by navigating directly to /experiences. Users on other pages cannot reach Experiences without first returning to the homepage.",
+      "resolved": true,
+      "resolution": "Navigated back to homepage via logo click, then used the EXPERIENCES category card link to reach /experiences",
+      "affectedAssertions": ["VAL-NAV-004", "VAL-CROSS-003"]
+    },
+    {
+      "description": "The 'About Chef Kyla' link appears in the Learn dropdown in the secondary nav bar, and also in the footer, causing duplicate elements. When using agent-browser click by ref, the duplicate refs require using JS eval with a specific CSS selector scoped to the secondary navigation to click the correct one.",
+      "resolved": true,
+      "resolution": "Used document.querySelector with nav[aria-label='Secondary navigation'] scope to target the correct About link",
+      "affectedAssertions": ["VAL-NAV-004", "VAL-CROSS-003"]
+    }
+  ],
+  "blockers": [],
+  "summary": "Tested 2 assertions: 2 passed. All 7 main navigation targets (Meal Plans, Shop, About, Experiences, Blog, FAQ, Contact) route correctly without 404 errors or console errors. Full site navigation path from homepage to all 8 major sections (including Account/Login) completed successfully using header, secondary nav, footer, and homepage category links. No broken links found."
+}

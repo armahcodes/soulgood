@@ -1,0 +1,54 @@
+{
+  "groupId": "homepage-mealplan-flow",
+  "testedAt": "2026-04-05T22:00:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "agentBrowserSession": "8d2f0c3a1f1e__mealflow",
+    "viewport": "1280x720",
+    "dataMode": "hardcoded, no shared mutable state"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "VAL-CROSS-001",
+      "title": "Homepage to meal plan ordering flow",
+      "status": "pass",
+      "steps": [
+        {
+          "action": "Navigate to http://localhost:3000 (homepage)",
+          "expected": "Homepage loads with hero section and CTA button",
+          "observed": "Homepage loaded with hero section showing 'Food Made With Intention' headline, body copy, and 'EXPLORE PLANS' CTA button. 50/50 split layout with lifestyle image on right."
+        },
+        {
+          "action": "Click 'EXPLORE PLANS' hero CTA",
+          "expected": "Navigate to /meal-plans page",
+          "observed": "Navigated to http://localhost:3000/meal-plans. Meal plans comparison page loaded with sidebar navigation, hero banner with 'START YOUR PLAN' CTA, and 'Compare Meal Plans' section."
+        },
+        {
+          "action": "Click 'EXPLORE PLAN' on Performance Fuel card",
+          "expected": "Navigate to plan detail page",
+          "observed": "Navigated to http://localhost:3000/meal-plans/performance-fuel. Plan detail page loaded with hero image, 'Performance Fuel' title, 'Nourishment by Design' section, subscription/one-time toggle, pricing, and 'START YOUR PLAN' CTA."
+        },
+        {
+          "action": "Click 'START YOUR PLAN' CTA on plan detail page",
+          "expected": "Navigate to /meal-plans/order (order configurator) showing step 1",
+          "observed": "Navigated to http://localhost:3000/meal-plans/order?plan=performance-fuel&days=3&type=subscription. Order configurator loaded with 7-step progress bar, Step 1 'Choose Your Plan' displayed, Performance Fuel pre-selected with checkmark."
+        }
+      ],
+      "evidence": {
+        "screenshots": [
+          "polish/homepage-mealplan-flow/VAL-CROSS-001-homepage.png",
+          "polish/homepage-mealplan-flow/VAL-CROSS-001-meal-plans.png",
+          "polish/homepage-mealplan-flow/VAL-CROSS-001-plan-detail.png",
+          "polish/homepage-mealplan-flow/VAL-CROSS-001-configurator-step1.png"
+        ],
+        "consoleErrors": "none",
+        "network": "All page navigations loaded successfully (200)"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 1 assertion: 1 passed. VAL-CROSS-001 homepage-to-mealplan flow works end-to-end — hero CTA navigates to meal plans, plan card navigates to detail page, and Start Your Plan CTA opens the order configurator at step 1 with correct pre-selections."
+}
