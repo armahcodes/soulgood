@@ -80,6 +80,7 @@ export const FOOTER_LINKS = {
     { label: "Contact Us", href: "/contact" },
     { label: "Catering", href: "/catering" },
     { label: "Community", href: "/community" },
+    { label: "Testimonials", href: "/testimonials" },
     { label: "Gift Cards", href: "/gift-card" },
   ],
   legal: [
@@ -693,6 +694,48 @@ export const TESTIMONIALS: Testimonial[] = [
     text: "The Full Alignment plan is a game changer. The snacks are just as thoughtful as the meals, and the juice is the best I've ever had. Period.",
     rating: 4,
     category: "meal-prep",
+  },
+  {
+    id: "test-7",
+    name: "Shanice P.",
+    text: "Chef Kyla catered our company wellness retreat and every single plate was perfection. She even customized the menu around our team's dietary needs. Truly above and beyond.",
+    rating: 5,
+    category: "catering",
+  },
+  {
+    id: "test-8",
+    name: "Jordan K.",
+    text: "The Soul & Fire pop-up was the best dining experience I've had in LA. Open-fire cooking, incredible cocktails, and Chef Kyla's energy brought the whole night together.",
+    rating: 5,
+    category: "events",
+  },
+  {
+    id: "test-9",
+    name: "Renee & Andre W.",
+    text: "We hired Chef Kyla for our wedding rehearsal dinner. The menu was a love letter to Southern cuisine — our families couldn't stop raving. Absolute magic.",
+    rating: 5,
+    category: "catering",
+  },
+  {
+    id: "test-10",
+    name: "Derek S.",
+    text: "Three months on Performance Fuel and I feel like a different person. My trainer noticed the difference before I did. The juices alone are worth it.",
+    rating: 5,
+    category: "meal-prep",
+  },
+  {
+    id: "test-11",
+    name: "Monica G.",
+    text: "Attended the Heritage Table dinner and left feeling so connected — to the food, the history, and the community. Chef Kyla is building something special.",
+    rating: 5,
+    category: "events",
+  },
+  {
+    id: "test-12",
+    name: "Brandon M.",
+    text: "Had Chef Kyla cater a birthday dinner for 30 guests. The jerk cauliflower steak was the star of the night. Multiple guests asked for her contact information.",
+    rating: 4,
+    category: "catering",
   },
 ];
 
