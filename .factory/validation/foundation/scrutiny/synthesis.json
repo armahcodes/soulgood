@@ -1,0 +1,134 @@
+{
+  "milestone": "foundation",
+  "round": 1,
+  "status": "pass",
+  "validatorsRun": {
+    "test": { "passed": true, "command": "npx tsc --noEmit", "exitCode": 0, "note": "No unit test suite configured; typecheck used as primary validator" },
+    "typecheck": { "passed": true, "command": "npx tsc --noEmit", "exitCode": 0 },
+    "lint": { "passed": true, "command": "pnpm lint", "exitCode": 0 },
+    "build": { "passed": true, "command": "pnpm build", "exitCode": 0 }
+  },
+  "reviewsSummary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "failedFeatures": []
+  },
+  "blockingIssues": [],
+  "nonBlockingIssues": [
+    {
+      "featureId": "foundation-project-setup",
+      "severity": "non_blocking",
+      "description": "Leftover create-next-app boilerplate SVGs in public/ (file.svg, globe.svg, next.svg, vercel.svg, window.svg)"
+    },
+    {
+      "featureId": "foundation-project-setup",
+      "severity": "non_blocking",
+      "description": "Color tokens use generic names (primary, accent) rather than descriptive names (terracotta, olive). AGENTS.md references 'bg-terracotta' but actual classes are 'bg-primary'."
+    },
+    {
+      "featureId": "foundation-project-setup",
+      "severity": "non_blocking",
+      "description": "Global * { border-radius: 0 !important } is aggressive; may conflict with third-party library styling"
+    },
+    {
+      "featureId": "foundation-ui-components",
+      "severity": "non_blocking",
+      "description": "Input component lacks textarea variant (only supports <input> elements)"
+    },
+    {
+      "featureId": "foundation-ui-components",
+      "severity": "non_blocking",
+      "description": "Button as='a' variant uses raw <a> instead of Next.js Link (no client-side navigation)"
+    },
+    {
+      "featureId": "foundation-ui-components",
+      "severity": "non_blocking",
+      "description": "Accordion content is limited to plain text strings, not ReactNode"
+    },
+    {
+      "featureId": "foundation-ui-components",
+      "severity": "non_blocking",
+      "description": "UI test page (src/app/ui-test/page.tsx) committed - should be cleaned up before production"
+    },
+    {
+      "featureId": "foundation-header-footer",
+      "severity": "non_blocking",
+      "description": "MainNav shows only MEAL PLANS and SHOP at desktop; About, Experiences, Blog links are only in MobileMenu (inaccessible at desktop widths via main nav)"
+    },
+    {
+      "featureId": "foundation-header-footer",
+      "severity": "non_blocking",
+      "description": "No account/user icon in main nav right side (Sign In only in SecondaryNav)"
+    },
+    {
+      "featureId": "foundation-header-footer",
+      "severity": "non_blocking",
+      "description": "Facebook social icon missing from footer (only Instagram, TikTok, YouTube present)"
+    },
+    {
+      "featureId": "foundation-header-footer",
+      "severity": "non_blocking",
+      "description": "Footer column names differ from spec (implemented: Meal Plans, Learn, Information, Stay Connected vs spec: Company, Help, Programs, Connect)"
+    },
+    {
+      "featureId": "foundation-header-footer",
+      "severity": "non_blocking",
+      "description": "Header uses box-shadow on scroll (shadow-[0_1px_0_0_...]) which technically violates 'no box-shadows' convention, though functionally it's a 1px border-like indicator"
+    }
+  ],
+  "appliedUpdates": [],
+  "suggestedGuidanceUpdates": [
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Update Tailwind CSS color class references to match actual token names. Replace 'bg-terracotta, text-burnt-sienna' references with actual class names: bg-primary (#C65D3E terracotta), text-primary-dark (#A0522D burnt sienna), bg-accent (#6B7F3E olive), bg-cream, bg-offwhite, bg-light. Workers currently may guess wrong class names.",
+      "evidence": "AGENTS.md says 'Reference colors as var(--color-*) or Tailwind classes like bg-terracotta, text-burnt-sienna, etc.' but globals.css @theme defines --color-primary, --color-primary-dark, --color-accent. foundation-project-setup review flagged this.",
+      "isSystemic": true
+    },
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Clarify the 'no box-shadows' design rule to allow 1px border-like shadows for scroll indicators on sticky elements, or recommend using border-bottom instead. Current rule is ambiguous for functional UI indicators.",
+      "evidence": "foundation-header-footer worker used shadow-[0_1px_0_0_var(--color-border)] on sticky header. Reviewer noted this technically violates the convention but is functionally a border, not decorative shadow.",
+      "isSystemic": false
+    },
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Add convention about test/demo pages: workers should NOT commit test pages (like /ui-test) to the main codebase. Either remove after verification or use a gitignored directory.",
+      "evidence": "foundation-ui-components worker committed src/app/ui-test/page.tsx for visual verification. This page will appear in production builds. No existing convention addresses this.",
+      "isSystemic": true
+    },
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Document the desktop navigation architecture decision: MainNav intentionally shows only MEAL PLANS and SHOP links. Other pages (About, Experiences, Blog, FAQ, Contact) are accessible via SecondaryNav Learn dropdown and footer. This is a deliberate design choice, not a bug.",
+      "evidence": "foundation-header-footer review flagged that MainNav filters to only MEAL PLANS and SHOP. Feature description specified a fuller nav but worker made a design simplification.",
+      "isSystemic": false
+    },
+    {
+      "target": "skills",
+      "suggestion": "Update frontend-worker skill: remove references to 'tailwind.config.ts' in preconditions. Tailwind v4 uses @theme directive in CSS (src/app/globals.css), not a separate config file.",
+      "evidence": "foundation-project-setup worker noted this in skillFeedback. The skill references tailwind.config.ts but this project uses Tailwind v4 with @theme in globals.css.",
+      "isSystemic": true
+    },
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Resolve conflicting information about agent-browser viewport capabilities. One worker (foundation-ui-components) successfully used 'agent-browser set viewport 375 812' for mobile testing, while another worker (foundation-header-footer) confirmed it doesn't work. Investigate and document the correct capability.",
+      "evidence": "foundation-ui-components review says worker successfully changed viewport. foundation-header-footer review says viewport changes don't work. AGENTS.md currently says viewport changes are not supported.",
+      "isSystemic": true
+    }
+  ],
+  "rejectedObservations": [
+    {
+      "observation": "src/styles/ directory is unused (globals.css lives in src/app/globals.css per App Router convention)",
+      "reason": "already-documented: architecture.md documents that styling is in globals.css under src/app/. This is standard Next.js App Router behavior and doesn't need additional documentation."
+    },
+    {
+      "observation": "Worker skill procedure was followed correctly for foundation-ui-components (positive note)",
+      "reason": "Not actionable - this is a positive observation, not a change recommendation."
+    },
+    {
+      "observation": "No services.yaml file found in .factory/",
+      "reason": "Incorrect observation - .factory/services.yaml exists and is properly configured with web service on port 3000, install/dev/build/typecheck/lint commands."
+    }
+  ],
+  "previousRound": null
+}
