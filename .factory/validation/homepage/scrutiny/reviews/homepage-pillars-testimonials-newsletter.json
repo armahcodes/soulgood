@@ -1,0 +1,45 @@
+{
+  "featureId": "homepage-pillars-testimonials-newsletter",
+  "reviewedAt": "2026-04-06T02:00:00.000Z",
+  "commitId": "0e6c27d",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "All three sections (PhilosophyPillars, Testimonials, Newsletter) are well-implemented, following AGENTS.md conventions consistently. The PhilosophyPillars section uses the shared Carousel component with proper Swiper breakpoints, Next.js Image with data-placeholder, and all 5 pillar cards with READ MORE links pointing to /about#philosophy. The Testimonials section renders star ratings via the Rating component, italic serif quotes in blockquote elements, and customer names with proper uppercase styling on a cream background. The Newsletter section correctly implements React Hook Form with manual Zod v4 validation (per AGENTS.md guidance), email error/success states, and a clean underline-style input. Design system compliance is strong: zero border-radius (enforced globally), no box-shadows, correct section-padding/max-container usage, proper font families (heading serif for headlines, body serif for quotes/body text, sans-serif for labels), correct color tokens (text-primary, bg-cream, bg-cream-dark, text-accent), uppercase labels with 0.06em letter-spacing, and 0.7s cubic-bezier transitions on interactive elements. TypeScript compiles cleanly with no errors.",
+    "issues": [
+      {
+        "file": "src/components/sections/Newsletter.tsx",
+        "line": 50,
+        "severity": "non_blocking",
+        "description": "Dual validation: The form uses both React Hook Form's `validate` prop (via handleValidation on register) AND manual Zod safeParse in the onSubmit handler. Since RHF's handleSubmit won't call onSubmit if validate fails, the Zod validation in onSubmit is redundant. Not harmful (defense in depth), but creates a potentially confusing pattern since AGENTS.md references this file as the established form pattern."
+      },
+      {
+        "file": "src/components/sections/Newsletter.tsx",
+        "line": 58,
+        "severity": "non_blocking",
+        "description": "The 'STAY CONNECTED' headline uses tracking-[0.16em] while AGENTS.md specifies 0.06em for labels/buttons. Other label-text elements use tracking-[0.06em] or tracking-widest. This is a minor design inconsistency — may be intentional for visual hierarchy but deviates from the standard."
+      },
+      {
+        "file": "src/components/sections/Testimonials.tsx",
+        "line": 44,
+        "severity": "non_blocking",
+        "description": "The feature description specifies 'italic serif quote text' — implementation uses font-body (Lora serif) with italic class, which is correct. However, font-body is the body font, not the heading serif (Playfair Display). This is arguably the right choice since Lora is more readable for quote body text, but worth noting as a design decision."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "Newsletter.tsx establishes a dual-validation form pattern (React Hook Form validate + manual Zod safeParse in onSubmit) that is referenced by AGENTS.md as the 'established pattern'. Future workers may replicate the redundant validation. Consider clarifying in AGENTS.md whether the RHF validate prop OR the onSubmit safeParse should be used, not both.",
+      "evidence": "src/components/sections/Newsletter.tsx:32-48 (onSubmit with safeParse) and line 88 (register with validate: handleValidation). AGENTS.md line 'See src/components/sections/Newsletter.tsx for the established pattern'."
+    },
+    {
+      "area": "conventions",
+      "observation": "There's inconsistency in letter-spacing across label-text elements. The CSS utility class .label-text uses 0.06em, but some components override with tracking-widest (0.1em) or tracking-[0.16em]. No documented guidance on when to deviate from the standard 0.06em letter-spacing.",
+      "evidence": "src/components/sections/Newsletter.tsx:58 uses tracking-[0.16em], PhilosophyPillars.tsx:14 uses tracking-widest alongside label-text class which already sets 0.06em, while other components use tracking-[0.06em] directly."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "PhilosophyPillars, Testimonials, and Newsletter sections pass review. All three components are well-structured, follow the project's design system (zero border-radius, correct colors, serif/sans-serif typography, section padding), use appropriate data from constants, and integrate cleanly into the homepage. The Newsletter form correctly avoids zodResolver() per AGENTS.md guidance for Zod v4 compatibility. Two minor non-blocking issues: redundant dual validation in Newsletter (harmless but potentially confusing as a reference pattern) and a small letter-spacing deviation in the STAY CONNECTED headline. TypeScript compiles cleanly."
+}

@@ -1,0 +1,94 @@
+{
+  "milestone": "homepage",
+  "round": 1,
+  "status": "pass",
+  "validatorsRun": {
+    "test": {
+      "passed": true,
+      "command": "pnpm build",
+      "exitCode": 0,
+      "note": "No unit test suite configured; build serves as primary validation"
+    },
+    "typecheck": {
+      "passed": true,
+      "command": "npx tsc --noEmit",
+      "exitCode": 0
+    },
+    "lint": {
+      "passed": true,
+      "command": "pnpm lint",
+      "exitCode": 0
+    }
+  },
+  "reviewsSummary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "failedFeatures": []
+  },
+  "blockingIssues": [],
+  "nonBlockingIssues": [
+    {
+      "featureId": "homepage-hero-and-categories",
+      "severity": "non_blocking",
+      "description": "Hero CTA nests <Button> inside <Link>, creating semantically invalid <a><button> HTML. Button component supports as='a' prop as an alternative. Functionally correct."
+    },
+    {
+      "featureId": "homepage-hero-and-categories",
+      "severity": "non_blocking",
+      "description": "ProductCarouselItem interface defined locally in component file instead of src/lib/types.ts per convention. Acceptable for component-local interfaces."
+    },
+    {
+      "featureId": "homepage-brand-editorial-press",
+      "severity": "non_blocking",
+      "description": "BrandFeature uses max-container without section-padding, applying padding manually to content side only. Correct for split-layout but undocumented pattern."
+    },
+    {
+      "featureId": "homepage-pillars-testimonials-newsletter",
+      "severity": "non_blocking",
+      "description": "Newsletter has dual validation: both React Hook Form validate prop AND manual Zod safeParse in onSubmit. Redundant but harmless (defense in depth). Potentially confusing since AGENTS.md references this file as the established pattern."
+    },
+    {
+      "featureId": "homepage-pillars-testimonials-newsletter",
+      "severity": "non_blocking",
+      "description": "STAY CONNECTED headline uses tracking-[0.16em] while standard label-text is 0.06em. Minor design inconsistency."
+    },
+    {
+      "featureId": "homepage-pillars-testimonials-newsletter",
+      "severity": "non_blocking",
+      "description": "Testimonials uses font-body (Lora) for italic quote text. Correct choice for readability over Playfair Display heading font."
+    }
+  ],
+  "appliedUpdates": [],
+  "suggestedGuidanceUpdates": [
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Add convention: For CTA link buttons, prefer <Button as='a' href='...'> over <Link><Button>. The latter nests interactive elements (<a><button>), which is semantically invalid HTML. The Button component's as='a' prop renders a single <a> tag with button styling.",
+      "evidence": "src/components/sections/Hero.tsx:37-39 uses <Link href='/meal-plans'><Button size='lg'>. The Button component (src/components/ui/Button.tsx:56-60) supports as='a' and href props.",
+      "isSystemic": false
+    },
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Add convention under Design System: Split-layout sections (image + copy) should use max-container without section-padding. Apply padding manually to the content side only, so the image can extend edge-to-edge. This differs from standard sections which use both max-container and section-padding.",
+      "evidence": "src/components/sections/BrandFeature.tsx:6 and src/components/sections/Hero.tsx:7 both follow this pattern consistently. Two separate workers independently used the same approach.",
+      "isSystemic": true
+    },
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Clarify the Newsletter form pattern reference: AGENTS.md says 'See Newsletter.tsx for the established pattern' for Zod v4 forms. The current Newsletter uses BOTH RHF validate prop AND manual safeParse in onSubmit, which is redundant. Recommend clarifying that future forms should use ONLY the manual safeParse in onSubmit (the Zod v4 pattern), not the additional RHF validate prop.",
+      "evidence": "src/components/sections/Newsletter.tsx:32-48 (onSubmit safeParse) and line 88 (register with validate). Future workers may replicate the dual validation unnecessarily.",
+      "isSystemic": true
+    }
+  ],
+  "rejectedObservations": [
+    {
+      "observation": "Letter-spacing inconsistency: tracking-[0.16em] on STAY CONNECTED vs standard 0.06em label-text",
+      "reason": "This is a minor visual hierarchy decision by the worker for a section headline versus a UI label. The 0.06em standard applies to labels/buttons/nav per AGENTS.md. Section headlines may reasonably use different spacing for visual impact. Not systemic — only one instance."
+    },
+    {
+      "observation": "Testimonials uses font-body (Lora) instead of font-heading (Playfair Display) for italic quotes",
+      "reason": "This is the correct design choice. Lora is more readable at body text sizes for longer quote text. Font-heading (Playfair Display) is for headlines. The worker made the right call."
+    }
+  ],
+  "previousRound": null
+}
