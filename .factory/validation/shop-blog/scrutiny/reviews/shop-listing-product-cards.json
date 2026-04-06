@@ -1,0 +1,34 @@
+{
+  "featureId": "shop-listing-product-cards",
+  "reviewedAt": "2026-04-06T04:15:00.000Z",
+  "commitId": "e3536fd",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "Well-structured implementation of the shop listing page. Four files created: page.tsx (server component with SEO metadata), ShopContent.tsx (client component with filter/sort state management), ProductCard.tsx (card with hover image swap), ShopFilters.tsx (category buttons + sort dropdown). Code follows project conventions: zero border-radius, proper Tailwind usage, Next.js Image component with data-placeholder, cn() utility for conditional classes, proper TypeScript types, named exports, 'use client' only where needed. Responsive grid (1-col mobile, 2-col tablet, 3-col desktop), proper aspect-[3/4] on #F7F7F7 background, accessible sort label (sr-only), empty state handling, and TODO comments for backend integration. Two non-blocking issues identified.",
+    "issues": [
+      {
+        "file": "src/components/shop/ShopFilters.tsx",
+        "line": 6,
+        "severity": "non_blocking",
+        "description": "ProductCategory type is 'all' | 'seasonings' | 'juices' | 'bundles' but Product.category in types.ts also includes 'snacks'. Product prod-6 (Adaptogen Energy Bites) has category 'snacks' and appears in the 'All' view but cannot be filtered to specifically. The CATEGORIES array omits a 'Snacks' filter button. The feature description only lists 'All, Seasonings, Juices, Bundles' as filter buttons, so this matches spec, but the data mismatch could cause confusion later when more snack products are added."
+      },
+      {
+        "file": "src/components/shop/ProductCard.tsx",
+        "line": 82,
+        "severity": "non_blocking",
+        "description": "Badge component is used without specifying a variant, defaulting to 'default' (bg-primary / terracotta). The feature description says badges should be in 'accent color'. The Badge component has a variant='accent' option (bg-accent / olive green) that could be used. However, the primary color is also a valid brand accent, so this is an ambiguity in the spec rather than a clear bug."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "The Product type includes 'snacks' as a category value, but the shop filter UI only exposes 'seasonings', 'juices', and 'bundles'. This creates a data-UI mismatch where snack products appear in 'All' but have no dedicated filter. As more products are added, this gap will become more visible. AGENTS.md or the feature spec should clarify how to handle product categories that exist in data but aren't surfaced in the shop filters.",
+      "evidence": "src/lib/types.ts line 13: category: 'seasonings' | 'juices' | 'bundles' | 'snacks'; ShopFilters.tsx line 6: ProductCategory = 'all' | 'seasonings' | 'juices' | 'bundles'; constants.ts line 478: prod-6 has category 'snacks'"
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "The shop listing page implementation passes review. All core requirements are met: 3-column responsive grid, category filtering, sort dropdown with three options, product cards with image hover swap, badges, star ratings, prices, and links to /shop/[slug]. Code quality is high — follows established conventions (zero border-radius, no shadows, proper TypeScript, cn() utility, Next.js Image, named exports, server/client split). Two non-blocking issues noted: (1) the 'snacks' category exists in data but has no filter button (matches spec but creates a data-UI gap), and (2) badges use the default primary color variant rather than the accent variant mentioned in the feature description. Neither issue is blocking since the spec itself only lists four filter categories, and the badge color interpretation is ambiguous."
+}
