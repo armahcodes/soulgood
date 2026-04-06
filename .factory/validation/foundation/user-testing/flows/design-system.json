@@ -1,0 +1,100 @@
+{
+  "group": "design-system",
+  "testedAt": "2026-04-05T18:10:00Z",
+  "isolation": {
+    "appUrl": "http://localhost:3000",
+    "session": "e3aa094a28b7__design",
+    "viewport": "1280x720",
+    "sharedState": "none - read-only site with hardcoded data"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": {
+    "VAL-DESIGN-003": {
+      "status": "pass",
+      "reason": "All 48 inspected elements (buttons, cards/containers, inputs, badges/tags, images, accordions) have borderRadius: 0px. A full-page scan of every DOM element ('*') found zero elements with non-zero border-radius. Visual screenshots confirm sharp rectangular corners on all UI components including primary/secondary buttons, input fields, card containers, carousel slides, and footer newsletter input/button.",
+      "evidence": [
+        "foundation/design-system/VAL-DESIGN-003-homepage-overview.png",
+        "foundation/design-system/VAL-DESIGN-003-homepage-scrolled.png",
+        "foundation/design-system/VAL-DESIGN-003-sharp-corners-elements.png",
+        "foundation/design-system/VAL-DESIGN-003-ui-test-full.png"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to http://localhost:3000",
+          "expected": "Homepage loads",
+          "observed": "Homepage loaded successfully"
+        },
+        {
+          "action": "Take screenshot of homepage header/hero area",
+          "expected": "All visible elements have sharp corners",
+          "observed": "All elements show 0px border-radius visually"
+        },
+        {
+          "action": "Scroll down and screenshot footer area",
+          "expected": "Footer elements have sharp corners",
+          "observed": "Footer input, button, and links all have sharp corners"
+        },
+        {
+          "action": "Navigate to /ui-test component library page",
+          "expected": "Component library loads with buttons, cards, badges, inputs",
+          "observed": "UI Component Library page loaded with all component types"
+        },
+        {
+          "action": "JavaScript eval: check borderRadius on buttons, cards, inputs, badges, images (48 elements)",
+          "expected": "All elements have borderRadius: 0px",
+          "observed": "48/48 elements have borderRadius: 0px, 0 violations"
+        },
+        {
+          "action": "JavaScript eval: scan ALL DOM elements for any non-zero borderRadius",
+          "expected": "0 elements with non-zero borderRadius",
+          "observed": "0 elements found with non-zero borderRadius on entire page"
+        }
+      ],
+      "consoleErrors": "none"
+    },
+    "VAL-DESIGN-004": {
+      "status": "pass",
+      "reason": "All button variants match the design system specification. Primary buttons: black background (rgb(0,0,0)), white text (rgb(255,255,255)), 0px border-radius (square corners), uppercase text-transform, letter-spacing ~0.06em (0.84px at 14px font), sans-serif font (Inter), transition-duration 0.7s with cubic-bezier(0.165, 0.84, 0.44, 1). Secondary buttons: transparent background, black text, 1px solid black border (outlined), same transition spec. Link buttons: transparent background, terracotta color (rgb(198,93,62)), underline decoration, same transition spec. Disabled state reduces opacity to 0.5. All sizes (small, default, large) maintain consistent styling.",
+      "evidence": [
+        "foundation/design-system/VAL-DESIGN-004-button-styles.png",
+        "foundation/design-system/VAL-DESIGN-003-ui-test-full.png"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to /ui-test component library page",
+          "expected": "Buttons section displays all variants",
+          "observed": "Buttons section shows Primary Button, Primary Small, Primary Large, Secondary Button, Secondary Small, Link Button, Disabled"
+        },
+        {
+          "action": "JavaScript eval: inspect computed styles of Primary buttons",
+          "expected": "Black bg, white text, square corners, uppercase, 0.06em letter-spacing, sans-serif, 0.7s transition with cubic-bezier(0.165, 0.84, 0.44, 1)",
+          "observed": "backgroundColor: rgb(0,0,0), color: rgb(255,255,255), borderRadius: 0px, textTransform: uppercase, letterSpacing: 0.84px (0.06em at 14px), fontFamily: Inter (sans-serif), transitionDuration: 0.7s, transitionTimingFunction: cubic-bezier(0.165, 0.84, 0.44, 1)"
+        },
+        {
+          "action": "JavaScript eval: inspect computed styles of Secondary buttons",
+          "expected": "Transparent bg, black text, 1px solid black border (outlined), same transitions",
+          "observed": "backgroundColor: rgba(0,0,0,0), color: rgb(0,0,0), border: 1px solid rgb(0,0,0), transitionDuration: 0.7s, transitionTimingFunction: cubic-bezier(0.165, 0.84, 0.44, 1)"
+        },
+        {
+          "action": "JavaScript eval: inspect computed styles of Link button",
+          "expected": "No background, accent color text, underline",
+          "observed": "backgroundColor: transparent, color: rgb(198,93,62) (terracotta), textDecoration: underline, transitionDuration: 0.7s"
+        },
+        {
+          "action": "JavaScript eval: inspect Disabled button",
+          "expected": "Same as primary but reduced opacity",
+          "observed": "Same styling as primary button with opacity: 0.5"
+        },
+        {
+          "action": "Take screenshot of buttons section",
+          "expected": "Visual confirmation of button styles",
+          "observed": "Screenshot shows all button variants with correct visual styles"
+        }
+      ],
+      "consoleErrors": "none"
+    }
+  },
+  "frictions": [],
+  "blockers": [],
+  "summary": "Tested 2 assertions: 2 passed. VAL-DESIGN-003 confirmed zero border-radius on all 48+ elements across the site (buttons, cards, inputs, badges, images, accordions) with a full-page DOM scan finding 0 violations. VAL-DESIGN-004 confirmed all button variants (primary, secondary, link, disabled) match the design system specification for colors, typography, border-radius, and transitions."
+}

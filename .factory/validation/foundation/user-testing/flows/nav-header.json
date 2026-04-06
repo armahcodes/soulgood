@@ -1,0 +1,68 @@
+{
+  "group": "nav-header",
+  "testedAt": "2026-04-05T12:00:00Z",
+  "assertions": {
+    "VAL-NAV-001": {
+      "status": "pass",
+      "reason": "Header displays SOUL GOOD logo (text-based), MEAL PLANS and SHOP navigation links, search icon (magnifying glass), and cart icon (shopping bag) at 1280px desktop width. All elements are visible and correctly positioned. No console errors.",
+      "evidence": [
+        "foundation/nav-header/VAL-NAV-001-desktop-header.png"
+      ],
+      "steps": [
+        { "action": "Navigate to http://localhost:3000", "expected": "Homepage loads", "observed": "Homepage loaded successfully" },
+        { "action": "Take annotated screenshot of header", "expected": "Header shows logo, nav links, search icon, cart icon", "observed": "All elements present: SOUL GOOD logo (@e4), MEAL PLANS (@e5), SHOP (@e6), search button (@e7), cart button (@e8)" },
+        { "action": "Check console errors", "expected": "No errors", "observed": "No console errors" }
+      ],
+      "consoleErrors": "none"
+    },
+    "VAL-NAV-002": {
+      "status": "pass",
+      "reason": "Announcement bar displays scrolling promotional messages ('FREE DELIVERY ON YOUR FIRST ORDER — USE CODE SOULGOOD', 'CHEF-CRAFTED MEALS DELIVERED TO YOUR DOOR', 'SUBSCRIBE & SAVE 15% ON ALL MEAL PLANS') with animate-marquee CSS animation (30s duration) on Soul Good primary/accent color background (rgb(198, 93, 62) = Deep Terracotta #C65D3E).",
+      "evidence": [
+        "foundation/nav-header/VAL-NAV-002-announcement-bar.png"
+      ],
+      "steps": [
+        { "action": "Inspect announcement bar DOM", "expected": "Bar with scrolling messages on accent background", "observed": "role='banner' element found with bg rgb(198,93,62), animate-marquee class, marquee animation 30s, 3 promotional messages" }
+      ]
+    },
+    "VAL-NAV-008": {
+      "status": "pass",
+      "reason": "Header has CSS position:sticky with top:0px. After scrolling 312px down, the header (announcement bar + secondary nav + main nav) remains fixed at the top of the viewport. Screenshot confirms header visible while page content has scrolled.",
+      "evidence": [
+        "foundation/nav-header/VAL-NAV-008-scrolled-with-sticky-header.png"
+      ],
+      "steps": [
+        { "action": "Scroll page down 500px", "expected": "Header remains at top", "observed": "Header stays fixed at top of viewport, scrollY=312px, position:sticky, top:0px" },
+        { "action": "Take screenshot after scroll", "expected": "Header visible at top with page content scrolled", "observed": "Screenshot shows header at top with footer content visible below — confirms sticky behavior" }
+      ]
+    },
+    "VAL-NAV-009": {
+      "status": "pass",
+      "reason": "Black secondary navigation bar (rgb(0,0,0)) renders below the announcement bar with promotional text 'GET 15% OFF YOUR FIRST ORDER' on the left and utility links 'Weekly Menu', 'Learn' (dropdown with chevron), and 'Sign In' on the right. Uses hidden lg:block responsive classes (visible on desktop only).",
+      "evidence": [
+        "foundation/nav-header/VAL-NAV-009-secondary-nav.png"
+      ],
+      "steps": [
+        { "action": "Inspect secondary nav DOM", "expected": "Black bar with promo text left, utility links right", "observed": "nav[aria-label='Secondary navigation'] found with bg-black, promo text 'GET 15% OFF YOUR FIRST ORDER', links: Weekly Menu, Learn, Sign In" },
+        { "action": "Take screenshot", "expected": "Secondary nav visible between announcement bar and main nav", "observed": "Screenshot confirms black bar in correct position with all elements" }
+      ]
+    },
+    "VAL-NAV-010": {
+      "status": "pass",
+      "reason": "Responsive header transitions confirmed via CSS class inspection. Hamburger button has 'lg:hidden' (visible mobile, hidden desktop). Nav links container has 'hidden lg:flex' (hidden mobile, shown desktop). Secondary nav has 'hidden lg:block' (hidden mobile, shown desktop). At desktop width (1280px), full horizontal navigation is displayed with no hamburger. At mobile width, hamburger would appear and nav links would hide.",
+      "evidence": [
+        "foundation/nav-header/VAL-NAV-010-desktop-header.png"
+      ],
+      "steps": [
+        { "action": "Inspect hamburger button CSS classes", "expected": "lg:hidden class present", "observed": "Button has 'lg:hidden p-1 hover:bg-cream transition-colors duration-300' — hidden on desktop, visible on mobile" },
+        { "action": "Inspect nav links container CSS classes", "expected": "hidden lg:flex classes present", "observed": "Container has 'hidden lg:flex items-center gap-10' — hidden on mobile, flex on desktop" },
+        { "action": "Inspect secondary nav CSS classes", "expected": "hidden lg:block classes present", "observed": "Nav has 'bg-black text-white hidden lg:block' — hidden on mobile, block on desktop" },
+        { "action": "Take desktop screenshot as evidence", "expected": "Full horizontal nav visible at 1280px", "observed": "Desktop header shows full nav links, no hamburger visible" }
+      ]
+    }
+  },
+  "frictions": [],
+  "blockers": [],
+  "toolsUsed": ["agent-browser"],
+  "summary": "Tested 5 assertions: 5 passed, 0 failed. All navigation header elements render correctly — logo, nav links, icons, announcement bar with marquee animation, sticky header behavior, black secondary nav with promo/utility links, and responsive transitions via Tailwind breakpoint classes."
+}

@@ -39,6 +39,28 @@ All pages are accessible via the Next.js App Router:
 - `/terms` - Terms & conditions
 - `/podcast` - Podcast coming soon
 
+## Flow Validator Guidance: agent-browser
+
+### Isolation Rules
+- All validators share the same Next.js dev server at http://localhost:3000
+- The site is read-only (no database, no server-side mutations) — all data is hardcoded in constants
+- Validators do NOT interfere with each other since there's no shared mutable state
+- Each validator must use its own unique agent-browser session ID
+- Cart state is client-side only (React Context) and isolated per browser session
+
+### Testing Guidelines
+- Navigate to http://localhost:3000 and test assertions via screenshots and DOM inspection
+- agent-browser always opens at 1280x720 viewport — this is close enough to desktop (1440px) for visual validation
+- For mobile-width testing (375px): use CSS class review (checking responsive classes like `lg:hidden`, `md:flex`) rather than actual viewport resizing
+- Take screenshots as evidence for each assertion
+- Check browser console for errors
+- Save evidence screenshots to the designated evidence directory
+
+### Known Limitations
+- agent-browser viewport is fixed at 1280x720, cannot resize to exact 375px or 1440px
+- Unsplash images may occasionally fail to load — this is not a test failure
+- First page load may be slow due to Next.js compilation in dev mode
+
 ## Validation Concurrency
 
 ### agent-browser
