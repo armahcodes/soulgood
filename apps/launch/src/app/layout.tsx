@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { EB_Garamond } from "next/font/google";
 import { TAGLINE } from "@/lib/brand";
 import "./globals.css";
@@ -9,9 +9,31 @@ const ebGaramond = EB_Garamond({
   variable: "--font-eb-garamond",
 });
 
+const SITE_TITLE = "Soul Good — Find Your Pathway";
+const SITE_DESCRIPTION = `${TAGLINE}. Discover your Soul Good pathway and become a Founding Member of our capped launch cohort.`;
+
 export const metadata: Metadata = {
-  title: "Soul Good — Find Your Pathway",
-  description: `${TAGLINE}. Discover your Soul Good pathway and become a Founding Member.`,
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  applicationName: "Soul Good",
+  openGraph: {
+    type: "website",
+    siteName: "Soul Good",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    // og:image is optional and graceful — none is supplied for the launch.
+  },
+  twitter: {
+    card: "summary",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#2C3A34",
 };
 
 export default function RootLayout({

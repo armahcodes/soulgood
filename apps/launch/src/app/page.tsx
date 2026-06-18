@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
+import { TrustSection } from "@/components/sections/TrustSection";
 import { FOUNDER, TAGLINE } from "@/lib/brand";
 
 export default function Home() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden px-6 py-10 text-center">
+    <main className="relative flex min-h-screen flex-col items-center gap-16 overflow-hidden px-6 py-10 text-center">
       {/* Soft botanical placeholder wash — graceful stand-in for food photography. */}
       <div
         aria-hidden
@@ -20,6 +21,8 @@ export default function Home() {
         style={{ backgroundColor: "var(--color-sage)" }}
       />
 
+      {/* Hero — fills the first fold (QR landing). */}
+      <div className="flex min-h-[calc(100svh-5rem)] w-full flex-col items-center justify-between gap-10">
       {/* Brand mark */}
       <header className="flex w-full flex-col items-center gap-3 pt-4">
         <Logo size={56} className="text-forest" />
@@ -60,6 +63,20 @@ export default function Home() {
             Crafted with care by {FOUNDER}
           </p>
         </div>
+      </section>
+      </div>
+
+      {/* Brand-trust slices: founder story, four pathways, give-back. */}
+      <TrustSection />
+
+      {/* Closing CTA back into the flow. */}
+      <section className="flex w-full max-w-sm flex-col items-center gap-4 pb-4">
+        <p className="font-serif text-2xl leading-tight font-medium text-forest">
+          Ready to find yours?
+        </p>
+        <Button as="a" href="/quiz" size="lg" className="w-full">
+          Find your pathway
+        </Button>
       </section>
     </main>
   );

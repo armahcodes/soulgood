@@ -37,6 +37,7 @@ export function QuestionStep({
         <Header question={question} />
         <textarea
           id={`q-${question.id}`}
+          aria-label={question.prompt}
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}
           rows={3}
@@ -51,7 +52,11 @@ export function QuestionStep({
     return (
       <div className="flex flex-col gap-4">
         <Header question={question} />
-        <div role="radiogroup" className="flex flex-col gap-3">
+        <div
+          role="radiogroup"
+          aria-label={question.prompt}
+          className="flex flex-col gap-3"
+        >
           {question.options?.map((opt) => (
             <OptionButton
               key={opt.value}
@@ -75,7 +80,11 @@ export function QuestionStep({
   return (
     <div className="flex flex-col gap-4">
       <Header question={question} />
-      <div role="group" className="flex flex-col gap-3">
+      <div
+        role="group"
+        aria-label={question.prompt}
+        className="flex flex-col gap-3"
+      >
         {question.options?.map((opt) => {
           const selected = selectedArray.includes(opt.value);
           return (
