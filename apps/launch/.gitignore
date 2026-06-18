@@ -11,6 +11,8 @@
 # env files
 .env.local
 .env*.local
+# re-include the committed template (root .gitignore ignores all .env*)
+!.env.example
 
 # local lead capture (never commit captured lead data)
 /public/leads.local.jsonl
