@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
+import { BrandFooter } from "@/components/ui/BrandFooter";
 import { QuestionStep } from "@/components/quiz/QuestionStep";
 import { QuizProgress } from "@/components/quiz/QuizProgress";
 import { ResultScreen } from "@/components/quiz/ResultScreen";
@@ -143,6 +144,7 @@ function Shell({ children }: { children: React.ReactNode }) {
         </span>
       </header>
       <div className="flex flex-1 flex-col justify-center">{children}</div>
+      <BrandFooter />
     </main>
   );
 }

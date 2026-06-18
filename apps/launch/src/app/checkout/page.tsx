@@ -1,5 +1,6 @@
-import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
+import { BrandFooter } from "@/components/ui/BrandFooter";
+import { ReserveButton } from "@/components/checkout/ReserveButton";
 
 export const metadata = {
   title: "Reserve Your Spot — Soul Good",
@@ -88,13 +89,13 @@ export default function CheckoutPage() {
       </section>
 
       <section className="flex flex-col gap-3 pt-1">
-        <Button as="a" href="/welcome" size="lg" className="w-full">
-          Reserve my spot &amp; continue
-        </Button>
+        <ReserveButton />
         <p className="text-center text-xs leading-relaxed text-forest/55">
           You won&rsquo;t be charged today. We&rsquo;ll see you Friday, June 19.
         </p>
       </section>
+
+      <BrandFooter />
     </main>
   );
 }

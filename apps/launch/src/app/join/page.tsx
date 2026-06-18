@@ -1,4 +1,5 @@
 import { Logo } from "@/components/ui/Logo";
+import { BrandFooter } from "@/components/ui/BrandFooter";
 import { SignupForm } from "@/components/join/SignupForm";
 
 const PLAN_CONTENTS = [
@@ -77,6 +78,8 @@ export default function JoinPage() {
           that reaches further than your table.
         </p>
       </section>
+
+      <BrandFooter />
     </main>
   );
 }
