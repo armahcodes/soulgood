@@ -1,1 +1,38 @@
 @import "tailwindcss";
+
+/*
+ * Soul Good Brand Kit theme (Tailwind v4 CSS-first).
+ * Palette and type are the single source of truth — see lib/brand.ts.
+ * Old superseded tokens (the prior terracotta hex and serif fonts) are intentionally absent.
+ */
+@theme {
+  /* Brand Kit palette */
+  --color-sage: #77916F;
+  --color-forest: #2C3A34;
+  --color-clay: #C17A5E;
+  --color-oat: #F8F3EC;
+  --color-gold: #C9A161;
+  --color-sand: #ECD6BC;
+
+  /* Type: EB Garamond (headlines, via next/font/google) + Arial system stack (body) */
+  --font-serif: var(--font-eb-garamond), Georgia, "Times New Roman", serif;
+  --font-sans: Arial, Helvetica, "Helvetica Neue", sans-serif;
+}
+
+html {
+  /* Prevent horizontal overflow on small (390px) viewports. */
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--color-oat);
+  color: var(--color-forest);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif);
+}
