@@ -70,6 +70,13 @@ export default function QuizPage() {
     );
   }
 
+  // Multi-select and text (reflection) steps can run option-heavy and push the
+  // advance control below the 390x844 fold. For those we pin the Back/Continue
+  // bar to the bottom of the viewport so it stays reachable without hunting,
+  // while the option list scrolls above it. Single-select advances on tap, so it
+  // keeps the simple in-flow Back link with no Continue button.
+  const sticky = question.type !== "single";
+
   return (
     <Shell>
       <div className="flex flex-col gap-6">
@@ -93,8 +100,15 @@ export default function QuizPage() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Single-select advances on tap, so it needs no Continue button. */}
-        <div className="flex items-center justify-between gap-3 pt-2">
+        <div
+          className={
+            sticky
+              ? // Pinned footer: spans to screen edges, sits at the bottom of the
+                // viewport, and reserves bottom padding so the last option clears it.
+                "sticky bottom-0 z-10 -mx-5 mt-2 flex items-center justify-between gap-3 border-t border-forest/10 bg-oat/95 px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur"
+              : "flex items-center justify-between gap-3 pt-2"
+          }
+        >
           <button
             type="button"
             onClick={goBack}
@@ -104,7 +118,7 @@ export default function QuizPage() {
             Back
           </button>
 
-          {question.type !== "single" && (
+          {sticky && (
             <Button
               type="button"
               onClick={goNext}
