@@ -9,7 +9,6 @@ const record: LeadRecord = {
   name: "Jane",
   pathway: "alignment",
   intent: "buyer",
-  plan: "subscription",
   dietary: ["vegan"],
   allergens: ["nuts"],
   foods: ["greens"],

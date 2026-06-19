@@ -19,10 +19,9 @@ afterEach(async () => {
 const lead = {
   email: "a@b.com",
   phone: "3105550134",
-  name: undefined,
+  name: "Jane Guest",
   pathway: "mindful" as const,
   intent: "list" as const,
-  plan: null,
   dietary: [],
   allergens: [],
   foods: [],

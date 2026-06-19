@@ -1,0 +1,107 @@
+<!-- @dsCard group="Patterns" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Four Pathways</title><style>@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&display=swap');:root{
+  --sage:#77916F; --forest:#2C3A34; --clay:#C17A5E;
+  --oat:#F8F3EC; --gold:#C9A161; --sand:#ECD6BC;
+  --background:var(--oat); --foreground:var(--forest);
+  /* alpha helpers used across components (forest/sage/clay on oat) */
+  --forest-75:rgba(44,58,52,.75); --forest-70:rgba(44,58,52,.70); --forest-55:rgba(44,58,52,.55);
+  --forest-40:rgba(44,58,52,.40); --forest-30:rgba(44,58,52,.30); --forest-20:rgba(44,58,52,.20);
+  --forest-15:rgba(44,58,52,.15); --forest-10:rgba(44,58,52,.10);
+  --sage-60:rgba(119,145,111,.60); --sage-20:rgba(119,145,111,.20); --sage-15:rgba(119,145,111,.15);
+  --clay-25:rgba(193,122,94,.25); --clay-10:rgba(193,122,94,.10);
+  --sand-50:rgba(236,214,188,.50); --white-70:rgba(255,255,255,.70);
+  --radius-xl:16px; --radius-2xl:24px; --radius-3xl:32px; --radius-full:9999px;
+  --font-serif:'EB Garamond',Georgia,'Times New Roman',serif;
+  --font-sans:Arial,Helvetica,'Helvetica Neue',sans-serif;
+}*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--background);color:var(--foreground);font-family:var(--font-sans);
+  -webkit-font-smoothing:antialiased;padding:32px;line-height:1.5}
+.wrap{display:flex;flex-direction:column;gap:24px;max-width:840px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+.col{display:flex;flex-direction:column;gap:12px}
+h1{font-family:var(--font-serif);font-size:30px;font-weight:500;letter-spacing:.01em;margin:0;color:var(--forest)}
+h2,h3{font-family:var(--font-serif);font-weight:500;margin:0;color:var(--forest)}
+.sub{color:var(--forest-70);font-size:14px;margin:-12px 0 6px;max-width:64ch}
+.lbl{color:var(--forest-55);font-size:11px;text-transform:uppercase;letter-spacing:.10em;font-weight:600}
+.eyebrow{color:var(--clay);font-size:12px;text-transform:uppercase;letter-spacing:.20em;font-weight:600}
+.section{border-top:1px solid var(--forest-10);padding-top:20px}
+.card{background:var(--white-70);border:1px solid var(--forest-15);border-radius:var(--radius-2xl);padding:24px}
+/* ---- Button ---- */
+.sgbtn{display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-full);
+  font-family:var(--font-sans);font-weight:500;letter-spacing:.02em;cursor:pointer;border:1px solid transparent;
+  transition:background-color .3s ease,color .3s ease;white-space:nowrap;text-decoration:none}
+.sgbtn-primary{background:var(--forest);color:var(--oat)}
+.sgbtn-primary:hover{background:var(--sage)}
+.sgbtn-secondary{background:transparent;color:var(--forest);border-color:var(--forest)}
+.sgbtn-secondary:hover{background:var(--forest);color:var(--oat)}
+.sgbtn-link{background:transparent;color:var(--clay);text-decoration:underline;text-underline-offset:4px;
+  text-decoration-thickness:1px;padding:0;font-size:16px}
+.sgbtn-sm{min-height:44px;padding:10px 20px;font-size:14px}
+.sgbtn-default{min-height:48px;padding:12px 32px;font-size:16px}
+.sgbtn-lg{min-height:52px;padding:16px 40px;font-size:18px}
+.sgbtn:disabled,.sgbtn[aria-disabled]{opacity:.5;pointer-events:none}
+.sgbtn.full{width:100%}
+/* ---- Option (quiz) ---- */
+.opt{display:flex;width:100%;align-items:center;gap:12px;border-radius:var(--radius-2xl);border:1px solid var(--forest-15);
+  background:var(--white-70);color:var(--forest);padding:16px 20px;text-align:left;font-size:16px;line-height:1.35;
+  min-height:56px;transition:border-color .2s,background-color .2s;cursor:pointer;font-family:var(--font-sans)}
+.opt:hover{border-color:var(--sage-60)}
+.opt.selected{border-color:var(--sage);background:var(--sage-15)}
+.opt.disabled{opacity:.4;cursor:not-allowed}
+.opt .marker{margin-top:2px;display:flex;height:20px;width:20px;flex:0 0 auto;align-items:center;justify-content:center;
+  border:2px solid var(--forest-30);background:transparent}
+.opt .marker.radio{border-radius:var(--radius-full)}
+.opt .marker.check{border-radius:6px}
+.opt.selected .marker{border-color:var(--sage);background:var(--sage)}
+.opt .dot{display:block;background:var(--oat)}
+.opt .dot.radio{height:8px;width:8px;border-radius:var(--radius-full)}
+.opt .dot.check{height:10px;width:10px;border-radius:2px}
+/* ---- Inputs ---- */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:14px;font-weight:500;color:var(--forest)}
+.tinput{min-height:48px;border-radius:var(--radius-xl);border:1px solid var(--forest-20);background:var(--oat);
+  padding:0 16px;font-size:16px;color:var(--forest);font-family:var(--font-sans);outline:none}
+.tinput::placeholder{color:var(--forest-40)}
+.tinput:focus{border-color:var(--sage);box-shadow:0 0 0 2px var(--sage-20)}
+.tarea{min-height:96px;border-radius:var(--radius-2xl);border:1px solid var(--forest-15);background:var(--white-70);
+  padding:16px 20px;font-size:16px;color:var(--forest);font-family:var(--font-sans);resize:none;outline:none}
+.tarea:focus{border-color:var(--sage)}
+.err{font-size:14px;color:var(--clay)}
+/* ---- Badge / pill ---- */
+.badge{display:inline-block;width:fit-content;border-radius:var(--radius-full);background:var(--sage-15);
+  color:var(--sage);padding:6px 16px;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.16em}
+</style></head>
+<body><div class="wrap"><h1>Four Pathways</h1><p class="sub">The four Soul Good pathways with their three-word descriptors and supporting lines — the spine of the brand, shown as the landing-page trust slice.</p><div class="col" style="max-width:480px;gap:12px">
+    
+    <div style="display:flex;flex-direction:column;gap:4px;border-radius:var(--radius-2xl);border:1px solid var(--sage-20);background:rgba(248,243,236,.70);padding:20px;text-align:left">
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px">
+        <span style="font-family:var(--font-serif);font-size:19px;font-weight:500;color:var(--forest)">Mindful</span>
+        <span style="font-size:14px;font-weight:500;letter-spacing:.04em;color:var(--sage)">Grounded. Present. Nourishing.</span>
+      </div>
+      <p style="font-size:14px;line-height:1.5;color:var(--forest-70);margin:0">For intentional eating, everyday wellness, and nourishment without overthinking.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;border-radius:var(--radius-2xl);border:1px solid var(--sage-20);background:rgba(248,243,236,.70);padding:20px;text-align:left">
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px">
+        <span style="font-family:var(--font-serif);font-size:19px;font-weight:500;color:var(--forest)">Performance</span>
+        <span style="font-size:14px;font-weight:500;letter-spacing:.04em;color:var(--sage)">Strength. Focus. Momentum.</span>
+      </div>
+      <p style="font-size:14px;line-height:1.5;color:var(--forest-70);margin:0">For active lifestyles, busy schedules, recovery, and sustained energy.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;border-radius:var(--radius-2xl);border:1px solid var(--sage-20);background:rgba(248,243,236,.70);padding:20px;text-align:left">
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px">
+        <span style="font-family:var(--font-serif);font-size:19px;font-weight:500;color:var(--forest)">Detox</span>
+        <span style="font-size:14px;font-weight:500;letter-spacing:.04em;color:var(--sage)">Release. Restore. Renew.</span>
+      </div>
+      <p style="font-size:14px;line-height:1.5;color:var(--forest-70);margin:0">For those seeking hydration, digestive support, lighter nourishment, and a fresh start.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;border-radius:var(--radius-2xl);border:1px solid var(--sage-20);background:rgba(248,243,236,.70);padding:20px;text-align:left">
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px">
+        <span style="font-family:var(--font-serif);font-size:19px;font-weight:500;color:var(--forest)">Alignment</span>
+        <span style="font-size:14px;font-weight:500;letter-spacing:.04em;color:var(--sage)">Balance. Harmony. Personalization.</span>
+      </div>
+      <p style="font-size:14px;line-height:1.5;color:var(--forest-70);margin:0">For those seeking nourishment aligned with their goals, values, and lifestyle.</p>
+    </div>
+  </div></div></body></html>

@@ -9,9 +9,9 @@ const PLAN_CONTENTS = [
 ];
 
 export const metadata = {
-  title: "Become a Founding Member — Soul Good",
+  title: "Preorder Your Spot — Soul Good",
   description:
-    "Join the Founding 50 — a capped launch cohort. $111/week: 5 meals + 5 functional juices, with 1 meal donated each week.",
+    "Preorder the Founding 50 with a $50 deposit to reserve your spot. First delivery sometime in July. $111/week: 5 meals + 5 functional juices, with 1 meal donated each week.",
 };
 
 export default function JoinPage() {
@@ -24,34 +24,40 @@ export default function JoinPage() {
         </span>
       </header>
 
-      {/* Scarcity framing — capped founding cohort */}
+      {/* Scarcity framing — capped founding cohort, preorder */}
       <section className="flex flex-col gap-2">
         <span className="w-fit rounded-full bg-clay/12 px-3 py-1 text-xs font-medium tracking-[0.18em] text-clay uppercase">
-          Founding 50 · Capped cohort
+          Founding 50 · Preorder
         </span>
         <h1 className="text-3xl leading-tight font-medium text-forest">
-          Become a Founding Member
+          Reserve your founding spot
         </h1>
         <p className="max-w-[40ch] text-sm leading-relaxed text-forest/75">
-          Just 50 founding members — be one of the first to eat with intention,
-          every week. Limited by design.
+          A $50 deposit holds your place in the Founding 50 — one of just 50 spots.
+          Your first delivery arrives sometime in July, and we&rsquo;ll notify you
+          when launch is ready to complete your payment.
         </p>
       </section>
 
       {/* Compact $111/week price banner (full plan details below the form). */}
-      <section className="flex items-center justify-between gap-3 rounded-2xl border border-sage/25 bg-sand/30 px-5 py-3">
-        <div className="flex items-baseline gap-1.5">
-          <span className="font-serif text-3xl font-medium text-forest">$111</span>
-          <span className="text-sm text-forest/70">/ week</span>
+      <section className="flex flex-col gap-2 rounded-2xl border border-sage/25 bg-sand/30 px-5 py-3">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-baseline gap-1.5">
+            <span className="font-serif text-3xl font-medium text-forest">$111</span>
+            <span className="text-sm text-forest/70">/ week</span>
+          </div>
+          <span className="text-right text-xs leading-snug text-forest/70">
+            5 meals + 5 juices
+            <br />1 meal donated weekly
+          </span>
         </div>
-        <span className="text-right text-xs leading-snug text-forest/70">
-          5 meals + 5 juices
-          <br />1 meal donated weekly
-        </span>
+        <p className="text-xs leading-relaxed text-forest/60">
+          $111/week is what you&rsquo;ll pay later — today it&rsquo;s just a $50
+          deposit to hold your spot.
+        </p>
       </section>
 
-      {/* Capture form (capture-first: persists before checkout) — plan toggle is
-          the first control so the plan choice is visible without scrolling. */}
+      {/* Capture form (capture-first: persists before checkout). */}
       <section className="flex flex-col gap-4">
         <SignupForm />
       </section>

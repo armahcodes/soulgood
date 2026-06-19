@@ -22,17 +22,17 @@ const phoneSchema = z
   });
 
 /**
- * Zod schema for a captured lead. Email and phone are required (the mission goal
- * is email + phone on file). All quiz-profile fields are optional/defaulted so a
- * deep-linked `/join` submit with no quiz state still captures.
+ * Zod schema for a captured lead. Name, email, and phone are required (the
+ * mission goal is name + email + phone on file). All quiz-profile fields are
+ * optional/defaulted so a deep-linked `/join` submit with no quiz state still
+ * captures.
  */
 export const leadSchema = z.object({
   email: z.email("Enter a valid email").trim().min(1, "Email is required"),
   phone: phoneSchema,
-  name: z.string().trim().min(1).optional(),
+  name: z.string().trim().min(1, "Name is required"),
   pathway: z.enum(PATHWAYS).nullable().default(null),
   intent: z.enum(["buyer", "list"]),
-  plan: z.enum(["subscription", "one-time"]).nullable().default(null),
   dietary: z.array(z.string()).default([]),
   allergens: z.array(z.string()).default([]),
   foods: z.array(z.string()).default([]),

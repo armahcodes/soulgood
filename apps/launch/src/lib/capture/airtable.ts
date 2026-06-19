@@ -11,7 +11,6 @@ function toFields(record: LeadRecord): Record<string, unknown> {
     Name: record.name ?? "",
     Pathway: record.pathway ?? "",
     Intent: record.intent,
-    Plan: record.plan ?? "",
     Dietary: record.dietary.join(", "),
     Allergens: record.allergens.join(", "),
     Foods: record.foods.join(", "),

@@ -50,6 +50,7 @@ describe("POST /api/lead", () => {
   it("persists a valid lead and returns 200 { ok, id }", async () => {
     const res = await POST(
       makeRequest({
+        name: "Jane Guest",
         email: "valid@example.com",
         phone: "3105550134",
         pathway: "detox",

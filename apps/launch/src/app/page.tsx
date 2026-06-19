@@ -1,11 +1,10 @@
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
-import { TrustSection } from "@/components/sections/TrustSection";
 import { FOUNDER, TAGLINE } from "@/lib/brand";
 
 export default function Home() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center gap-16 overflow-hidden px-6 py-10 text-center">
+    <main className="relative flex min-h-screen flex-col items-center justify-center gap-10 overflow-hidden px-6 py-10 text-center">
       {/* Soft botanical placeholder wash — graceful stand-in for food photography. */}
       <div
         aria-hidden
@@ -21,10 +20,8 @@ export default function Home() {
         style={{ backgroundColor: "var(--color-sage)" }}
       />
 
-      {/* Hero — fills the first fold (QR landing). */}
-      <div className="flex min-h-[calc(100svh-5rem)] w-full flex-col items-center justify-between gap-10">
       {/* Brand mark */}
-      <header className="flex w-full flex-col items-center gap-3 pt-4">
+      <header className="flex w-full flex-col items-center gap-3">
         <Logo size={56} className="text-forest" />
         <p className="font-serif text-lg tracking-[0.18em] text-forest uppercase">
           Soul Good
@@ -45,38 +42,14 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Imagery placeholder + CTA */}
-      <section className="flex w-full flex-col items-center gap-8">
-        <div
-          className="flex h-40 w-full max-w-sm items-center justify-center rounded-3xl border border-sage/30"
-          style={{ backgroundColor: "var(--color-sand)" }}
-          aria-hidden
-        >
-          <Logo size={48} className="text-sage/70" title="" />
-        </div>
-
-        <div className="flex w-full max-w-sm flex-col gap-3">
-          <Button as="a" href="/quiz" size="lg" className="w-full">
-            Find your pathway
-          </Button>
-          <p className="text-xs tracking-wide text-forest/60">
-            Crafted with care by {FOUNDER}
-          </p>
-        </div>
-      </section>
-      </div>
-
-      {/* Brand-trust slices: founder story, four pathways, give-back. */}
-      <TrustSection />
-
-      {/* Closing CTA back into the flow. */}
-      <section className="flex w-full max-w-sm flex-col items-center gap-4 pb-4">
-        <p className="font-serif text-2xl leading-tight font-medium text-forest">
-          Ready to find yours?
-        </p>
+      {/* Primary CTA */}
+      <section className="flex w-full max-w-sm flex-col gap-3">
         <Button as="a" href="/quiz" size="lg" className="w-full">
           Find your pathway
         </Button>
+        <p className="text-xs tracking-wide text-forest/60">
+          Crafted with care by {FOUNDER}
+        </p>
       </section>
     </main>
   );

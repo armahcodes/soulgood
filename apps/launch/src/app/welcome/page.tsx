@@ -7,7 +7,7 @@ import { FOUNDER, TAGLINE } from "@/lib/brand";
 export const metadata = {
   title: "You're in — Welcome to Soul Good",
   description:
-    "You joined the Founding 50. Here's what happens next, when your first delivery arrives, and the founders building Soul Good with you.",
+    "You reserved your Founding 50 spot. Here's what happens next, when your first delivery arrives in July, and the founders building Soul Good with you.",
 };
 
 const WHAT_HAPPENS_NEXT = [
@@ -16,8 +16,8 @@ const WHAT_HAPPENS_NEXT = [
     body: "Watch for a welcome text confirming your founding spot and pathway.",
   },
   {
-    title: "Settle up Friday",
-    body: "Complete your full payment in person at the June 19 launch — no deposit, no rush.",
+    title: "Complete your payment when launch is ready",
+    body: "We'll notify you to complete your full payment ($111/week) when launch is ready — sometime in July.",
   },
   {
     title: "Your menu is matched",
@@ -104,11 +104,11 @@ export default function WelcomePage() {
           Your first delivery
         </span>
         <p className="font-serif text-2xl font-medium text-forest">
-          The week of June 23
+          Sometime in July
         </p>
         <p className="max-w-[36ch] text-sm leading-relaxed text-forest/75">
-          Your first box of 5 chef-made meals and 5 functional juices lands the
-          week after the launch. We&rsquo;ll confirm your delivery window by text.
+          Your first box of 5 chef-made meals and 5 functional juices lands
+          sometime in July — we&rsquo;ll confirm your delivery window by text.
         </p>
       </section>
 

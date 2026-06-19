@@ -7,7 +7,6 @@ const validLead = {
   name: "Jane Guest",
   pathway: "detox",
   intent: "buyer",
-  plan: "subscription",
   dietary: ["vegan"],
   allergens: ["peanuts"],
   foods: ["leafy greens"],
@@ -47,6 +46,18 @@ describe("leadSchema", () => {
     expect(result.success).toBe(false);
   });
 
+  it("rejects a missing name", () => {
+    const { name: _omit, ...withoutName } = validLead;
+    void _omit;
+    const result = leadSchema.safeParse(withoutName);
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects an empty name", () => {
+    const result = leadSchema.safeParse({ ...validLead, name: "   " });
+    expect(result.success).toBe(false);
+  });
+
   it("accepts a lenient phone typed on a phone keyboard", () => {
     const result = leadSchema.safeParse({ ...validLead, phone: "310-555-0134" });
     expect(result.success).toBe(true);
@@ -65,6 +76,7 @@ describe("leadSchema", () => {
 
   it("defaults array profile fields to empty arrays", () => {
     const result = leadSchema.safeParse({
+      name: "Jane Guest",
       email: "a@b.com",
       phone: "3105550134",
       intent: "list",
@@ -76,7 +88,6 @@ describe("leadSchema", () => {
       expect(result.data.foods).toEqual([]);
       expect(result.data.priorities).toEqual([]);
       expect(result.data.pathway).toBeNull();
-      expect(result.data.plan).toBeNull();
     }
   });
 });

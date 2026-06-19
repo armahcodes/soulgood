@@ -4,21 +4,15 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/Button";
-import { assembleLead, type JoinFormValues, type Plan } from "@/lib/join-lead";
+import { assembleLead, type JoinFormValues } from "@/lib/join-lead";
 import { leadSchema, type Lead } from "@/lib/lead-schema";
 import { loadPathwayState, type PathwayState } from "@/lib/pathway-state";
 
-/** Validate just the two captured fields against the lead schema's rules. */
-const formFieldSchema = leadSchema.pick({ email: true, phone: true });
-
-const PLANS: { value: Plan; label: string; sublabel: string }[] = [
-  { value: "subscription", label: "Subscription", sublabel: "Auto-renews weekly" },
-  { value: "one-time", label: "One-time", sublabel: "Just this week" },
-];
+/** Validate just the captured fields against the lead schema's rules. */
+const formFieldSchema = leadSchema.pick({ name: true, email: true, phone: true });
 
 export function SignupForm() {
   const router = useRouter();
-  const [plan, setPlan] = useState<Plan>("subscription");
   const [pathwayState, setPathwayState] = useState<PathwayState | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   /** Which intent is currently submitting (so both buttons can show progress). */
@@ -30,7 +24,7 @@ export function SignupForm() {
     formState: { errors },
   } = useForm<JoinFormValues>({
     mode: "onSubmit",
-    defaultValues: { email: "", phone: "" },
+    defaultValues: { name: "", email: "", phone: "" },
   });
 
   // Read the matched pathway + nutrition profile carried from the quiz. Absent on
@@ -50,11 +44,11 @@ export function SignupForm() {
     // Re-validate the captured fields with the schema (defense in depth).
     const fields = formFieldSchema.safeParse(values);
     if (!fields.success) {
-      setSubmitError("Please enter a valid email and phone.");
+      setSubmitError("Please enter your name, a valid email, and phone.");
       return;
     }
 
-    const lead = assembleLead(values, pathwayState, intent, plan);
+    const lead = assembleLead(values, pathwayState, intent);
     setPending(intent);
     try {
       const res = await fetch("/api/lead", {
@@ -79,43 +73,30 @@ export function SignupForm() {
       onSubmit={handleSubmit((values) => submit(values, "buyer"))}
       className="flex flex-col gap-6"
     >
-      {/* Subscription vs one-time toggle */}
-      <fieldset className="flex flex-col gap-2">
-        <legend className="text-sm font-medium tracking-[0.16em] text-clay uppercase">
-          Choose your plan
-        </legend>
-        <div
-          role="radiogroup"
-          aria-label="Plan type"
-          className="grid grid-cols-2 gap-2 rounded-2xl bg-sand/50 p-1.5"
-        >
-          {PLANS.map((p) => {
-            const selected = plan === p.value;
-            return (
-              <button
-                key={p.value}
-                type="button"
-                role="radio"
-                aria-checked={selected}
-                onClick={() => setPlan(p.value)}
-                className={[
-                  "flex min-h-[56px] flex-col items-center justify-center rounded-xl px-3 py-2 text-center transition-colors",
-                  selected
-                    ? "bg-forest text-oat"
-                    : "bg-transparent text-forest/70 hover:bg-oat/60",
-                ].join(" ")}
-              >
-                <span className="text-sm font-medium">{p.label}</span>
-                <span
-                  className={selected ? "text-xs text-oat/75" : "text-xs text-forest/50"}
-                >
-                  {p.sublabel}
-                </span>
-              </button>
-            );
+      {/* Full name (required) */}
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="name" className="text-sm font-medium text-forest">
+          Full name
+        </label>
+        <input
+          id="name"
+          type="text"
+          autoComplete="name"
+          placeholder="Your name"
+          aria-invalid={errors.name ? "true" : undefined}
+          className="min-h-[48px] rounded-xl border border-forest/20 bg-oat px-4 text-base text-forest placeholder:text-forest/40 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/40"
+          {...register("name", {
+            validate: (value) =>
+              formFieldSchema.shape.name.safeParse(value).success ||
+              "Name is required",
           })}
-        </div>
-      </fieldset>
+        />
+        {errors.name && (
+          <p role="alert" className="text-sm text-clay">
+            {errors.name.message}
+          </p>
+        )}
+      </div>
 
       {/* Email */}
       <div className="flex flex-col gap-1.5">
@@ -177,7 +158,7 @@ export function SignupForm() {
 
       <div className="flex flex-col gap-3 pt-1">
         <Button type="submit" size="lg" className="w-full" disabled={pending !== null}>
-          {pending === "buyer" ? "Reserving…" : "Reserve my founding spot"}
+          {pending === "buyer" ? "Reserving…" : "Reserve my spot — $50 deposit"}
         </Button>
         <Button
           type="button"
@@ -186,7 +167,7 @@ export function SignupForm() {
           disabled={pending !== null}
           onClick={handleSubmit((values) => submit(values, "list"))}
         >
-          {pending === "list" ? "Joining…" : "Join the list with your pathway"}
+          {pending === "list" ? "Joining…" : "Just join the list"}
         </Button>
       </div>
     </form>

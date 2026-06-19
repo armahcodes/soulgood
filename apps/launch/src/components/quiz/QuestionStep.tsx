@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import type { QuizQuestion } from "@/lib/quiz";
 import { toggleSelection } from "@/lib/pathway-state";
 import { OptionButton } from "./OptionButton";
+import { Pill } from "./Pill";
 
 type StepValue = string | string[] | undefined;
 
@@ -74,7 +75,7 @@ export function QuestionStep({
     );
   }
 
-  // multi
+  // multi — compact wrap-flowing pills (toggle chips)
   const max = question.maxSelections;
   const atCap = typeof max === "number" && selectedArray.length >= max;
   return (
@@ -83,18 +84,17 @@ export function QuestionStep({
       <div
         role="group"
         aria-label={question.prompt}
-        className="flex flex-col gap-3"
+        className="flex flex-wrap gap-[9px]"
       >
         {question.options?.map((opt) => {
           const selected = selectedArray.includes(opt.value);
           return (
-            <OptionButton
+            <Pill
               key={opt.value}
               label={opt.label}
-              role="checkbox"
               selected={selected}
               disabled={atCap && !selected}
-              onSelect={() =>
+              onToggle={() =>
                 onChange(toggleSelection(selectedArray, opt.value, max))
               }
             />

@@ -17,6 +17,10 @@ export interface PathwayDefinition {
   descriptor: string;
   /** The "For ..." supporting sentence, verbatim. */
   description: string;
+  /** A warm "note" line shown in a card on the results reveal (verbatim brand copy). */
+  note: string;
+  /** A short "taste of what's on your plan" preview — real menu items (™ intact). */
+  dishes: string[];
 }
 
 export const PATHWAY_DEFINITIONS: Record<Pathway, PathwayDefinition> = {
@@ -26,6 +30,13 @@ export const PATHWAY_DEFINITIONS: Record<Pathway, PathwayDefinition> = {
     descriptor: "Grounded. Present. Nourishing.",
     description:
       "For intentional eating, everyday wellness, and nourishment without overthinking.",
+    note: "Clean, balanced plates that ask nothing of you but to slow down and enjoy them.",
+    dishes: [
+      "Glow Bowl™",
+      "Sunday Greens Wrap™",
+      "Chia Glow Overnight Oats™",
+      "Green Goddess Glow™ Smoothie",
+    ],
   },
   performance: {
     id: "performance",
@@ -33,6 +44,13 @@ export const PATHWAY_DEFINITIONS: Record<Pathway, PathwayDefinition> = {
     descriptor: "Strength. Focus. Momentum.",
     description:
       "For active lifestyles, busy schedules, recovery, and sustained energy.",
+    note: "Higher-protein, macro-forward fuel built to keep up with everything you carry.",
+    dishes: [
+      "Performance Power Bowl™",
+      "Turkey Fuel Wrap™",
+      "Salmon Recovery Bowl™",
+      "Golden Energy Smoothie™",
+    ],
   },
   detox: {
     id: "detox",
@@ -40,6 +58,13 @@ export const PATHWAY_DEFINITIONS: Record<Pathway, PathwayDefinition> = {
     descriptor: "Release. Restore. Renew.",
     description:
       "For those seeking hydration, digestive support, lighter nourishment, and a fresh start.",
+    note: "Lighter, hydrating, anti-inflammatory plates that leave you feeling clear and renewed.",
+    dishes: [
+      "Detox Greens Bowl™",
+      "Detox Greens Wrap™",
+      "Green Detox Juice™",
+      "Ginger Lemon Cleanse™",
+    ],
   },
   alignment: {
     id: "alignment",
@@ -47,6 +72,13 @@ export const PATHWAY_DEFINITIONS: Record<Pathway, PathwayDefinition> = {
     descriptor: "Balance. Harmony. Personalization.",
     description:
       "For those seeking nourishment aligned with their goals, values, and lifestyle.",
+    note: "Made-to-order plates tuned to your beliefs, your body, and the way you actually live.",
+    dishes: [
+      "Custom Lifestyle Bowl™",
+      "Plant-Based Wellness Wrap™",
+      "Halal Herb Chicken Wrap™",
+      "Adaptogen Wellness Blend™",
+    ],
   },
 };
 

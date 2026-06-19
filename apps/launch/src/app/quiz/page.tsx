@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
 import { BrandFooter } from "@/components/ui/BrandFooter";
 import { QuestionStep } from "@/components/quiz/QuestionStep";
+import { QuizIntro } from "@/components/quiz/QuizIntro";
 import { QuizProgress } from "@/components/quiz/QuizProgress";
 import { ResultScreen } from "@/components/quiz/ResultScreen";
 import { QUESTIONS, type QuizAnswers } from "@/lib/quiz";
@@ -20,6 +21,8 @@ type StepValue = string | string[] | undefined;
 const TOTAL = QUESTIONS.length;
 
 export default function QuizPage() {
+  /** Whether the guest has passed the "Take a breath" intro into the questions. */
+  const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   /** Animation direction: 1 = forward, -1 = back. */
   const [direction, setDirection] = useState(1);
@@ -45,7 +48,11 @@ export default function QuizPage() {
   }
 
   function goBack() {
-    if (step === 0) return;
+    // From the first question, step back to the Intro threshold screen.
+    if (step === 0) {
+      setStarted(false);
+      return;
+    }
     setDirection(-1);
     setStep((s) => s - 1);
   }
@@ -71,6 +78,28 @@ export default function QuizPage() {
     );
   }
 
+  // "Take a breath" threshold — shown first at /quiz, before any questions.
+  if (!started) {
+    return (
+      <Shell>
+        <motion.div
+          key="intro"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          <QuizIntro
+            onBegin={() => {
+              setDirection(1);
+              setStep(0);
+              setStarted(true);
+            }}
+          />
+        </motion.div>
+      </Shell>
+    );
+  }
+
   // Multi-select and text (reflection) steps can run option-heavy and push the
   // advance control below the 390x844 fold. For those we pin the Back/Continue
   // bar to the bottom of the viewport so it stays reachable without hunting,
@@ -81,7 +110,7 @@ export default function QuizPage() {
   return (
     <Shell>
       <div className="flex flex-col gap-6">
-        <QuizProgress current={step + 1} total={TOTAL} />
+        <QuizProgress current={step + 1} total={TOTAL} onBack={goBack} />
 
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
@@ -101,34 +130,16 @@ export default function QuizPage() {
           </motion.div>
         </AnimatePresence>
 
-        <div
-          className={
-            sticky
-              ? // Pinned footer: spans to screen edges, sits at the bottom of the
-                // viewport, and reserves bottom padding so the last option clears it.
-                "sticky bottom-0 z-10 -mx-5 mt-2 flex items-center justify-between gap-3 border-t border-forest/10 bg-oat/95 px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur"
-              : "flex items-center justify-between gap-3 pt-2"
-          }
-        >
-          <button
-            type="button"
-            onClick={goBack}
-            disabled={step === 0}
-            className="text-sm font-medium text-forest/60 underline-offset-4 hover:underline disabled:opacity-0"
-          >
-            Back
-          </button>
-
-          {sticky && (
-            <Button
-              type="button"
-              onClick={goNext}
-              className="min-w-[8rem]"
-            >
+        {/* Multi/text steps don't auto-advance, so they need a Continue control.
+            Pinned to the bottom of the viewport so it stays in thumb reach while
+            the options scroll above it. Back lives in the header (circular). */}
+        {sticky && (
+          <div className="sticky bottom-0 z-10 -mx-5 mt-2 flex items-center justify-end gap-3 border-t border-forest/10 bg-oat/95 px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur">
+            <Button type="button" onClick={goNext} className="min-w-[8rem]">
               {isLast ? "See my pathway" : "Continue"}
             </Button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </Shell>
   );

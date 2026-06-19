@@ -5,13 +5,13 @@ import { ReserveButton } from "@/components/checkout/ReserveButton";
 export const metadata = {
   title: "Reserve Your Spot — Soul Good",
   description:
-    "Reserve your Founding 50 spot. No payment today — you complete your full payment on Friday at the launch.",
+    "Reserve your Founding 50 spot with a $50 deposit. First delivery sometime in July — we'll notify you when launch is ready to complete your $111/week payment.",
 };
 
-const NEXT_AT_LAUNCH = [
-  "Your spot is held the moment you reserve below — no card needed today.",
-  "On Friday, June 19, you complete your full payment in person at the launch.",
-  "Both subscription and one-time founding plans are settled the same way — full payment Friday, no deposit.",
+const HOW_IT_WORKS = [
+  "Your $50 deposit holds your founding spot in the capped cohort of 50.",
+  "First delivery is sometime in July — we'll confirm your window by text.",
+  "When launch is ready, we'll notify you to complete your full payment ($111/week).",
 ];
 
 export default function CheckoutPage() {
@@ -29,22 +29,23 @@ export default function CheckoutPage() {
           Almost there
         </span>
         <h1 className="text-4xl leading-tight font-medium text-forest">
-          Reserve your founding spot
+          Reserve your spot with a $50 deposit
         </h1>
         <p className="max-w-[40ch] text-base leading-relaxed text-forest/75">
-          Your details are saved. There&rsquo;s nothing to pay right now — Founding
-          50 members settle up <span className="font-medium text-forest">in full
-          on Friday</span> at the launch.
+          Your details are saved. A <span className="font-medium text-forest">$50
+          deposit</span> holds your founding spot. Your first delivery is sometime
+          in July, and we&rsquo;ll notify you when launch is ready to complete your
+          full payment ($111/week).
         </p>
       </section>
 
-      {/* How the full-payment-Friday model works */}
+      {/* How the preorder deposit works */}
       <section className="flex flex-col gap-4 rounded-3xl border border-sage/25 bg-sand/30 p-6">
         <h2 className="font-serif text-xl font-medium text-forest">
-          Full payment Friday
+          How your deposit works
         </h2>
         <ul className="flex flex-col gap-3">
-          {NEXT_AT_LAUNCH.map((item) => (
+          {HOW_IT_WORKS.map((item) => (
             <li
               key={item}
               className="flex items-start gap-2.5 text-sm leading-relaxed text-forest/80"
@@ -56,42 +57,26 @@ export default function CheckoutPage() {
         </ul>
       </section>
 
-      {/*
-        ───────────────────────────────────────────────────────────────────────
-        PAYMENT INTEGRATION SEAM
-        ───────────────────────────────────────────────────────────────────────
-        This is a deliberate, swappable placeholder. No real Square/Stripe widget
-        is mounted for the Friday launch (full payment is collected in person).
-
-        To plug in a payment provider later, replace the placeholder block below
-        with the provider's hosted/embedded widget:
-          • Square  → mount the Web Payments SDK card container here, then call
-                      payments.card() / tokenize() on submit.
-          • Stripe  → render <Elements> + <PaymentElement> here and confirm with
-                      stripe.confirmPayment().
-        On a successful charge, route the buyer forward to `/welcome` (the same
-        destination the reserve CTA uses today). The lead is ALREADY persisted on
-        /join (capture-first), so checkout never gates capture.
-        ───────────────────────────────────────────────────────────────────────
-      */}
+      {/* Secure deposit via Stripe Checkout */}
       <section
-        aria-label="Payment — coming Friday at the launch"
-        className="flex flex-col items-center gap-2 rounded-3xl border border-dashed border-forest/25 bg-oat px-6 py-8 text-center"
+        aria-label="Secure $50 deposit"
+        className="flex flex-col items-center gap-2 rounded-3xl border border-sage/25 bg-oat px-6 py-7 text-center"
       >
-        <Logo size={28} className="text-forest/40" title="" />
+        <Logo size={28} className="text-sage" title="" />
         <p className="text-sm font-medium text-forest">
-          Secure checkout opens at the launch
+          Secure $50 deposit
         </p>
         <p className="max-w-[34ch] text-xs leading-relaxed text-forest/60">
-          Card payment (Square / Stripe) plugs in here when it&rsquo;s ready. For
-          Friday, your spot is reserved now and paid in person.
+          You&rsquo;ll be redirected to Stripe&rsquo;s secure checkout to place
+          your deposit. Only the $50 deposit is charged today.
         </p>
       </section>
 
       <section className="flex flex-col gap-3 pt-1">
         <ReserveButton />
         <p className="text-center text-xs leading-relaxed text-forest/55">
-          You won&rsquo;t be charged today. We&rsquo;ll see you Friday, June 19.
+          Just a $50 deposit today — your $111/week begins when launch is ready
+          in July.
         </p>
       </section>
 

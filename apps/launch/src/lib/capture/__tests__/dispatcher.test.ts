@@ -5,10 +5,9 @@ import type { Lead } from "../../lead-schema";
 const baseLead: Lead = {
   email: "a@b.com",
   phone: "3105550134",
-  name: undefined,
+  name: "Jane Guest",
   pathway: "performance",
   intent: "buyer",
-  plan: "one-time",
   dietary: [],
   allergens: [],
   foods: [],

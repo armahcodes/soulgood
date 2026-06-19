@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&display=swap');
+:root{
+  --sage:#77916F; --forest:#2C3A34; --clay:#C17A5E;
+  --oat:#F8F3EC; --gold:#C9A161; --sand:#ECD6BC;
+  --background:var(--oat); --foreground:var(--forest);
+  /* alpha helpers used across components (forest/sage/clay on oat) */
+  --forest-75:rgba(44,58,52,.75); --forest-70:rgba(44,58,52,.70); --forest-55:rgba(44,58,52,.55);
+  --forest-40:rgba(44,58,52,.40); --forest-30:rgba(44,58,52,.30); --forest-20:rgba(44,58,52,.20);
+  --forest-15:rgba(44,58,52,.15); --forest-10:rgba(44,58,52,.10);
+  --sage-60:rgba(119,145,111,.60); --sage-20:rgba(119,145,111,.20); --sage-15:rgba(119,145,111,.15);
+  --clay-25:rgba(193,122,94,.25); --clay-10:rgba(193,122,94,.10);
+  --sand-50:rgba(236,214,188,.50); --white-70:rgba(255,255,255,.70);
+  --radius-xl:16px; --radius-2xl:24px; --radius-3xl:32px; --radius-full:9999px;
+  --font-serif:'EB Garamond',Georgia,'Times New Roman',serif;
+  --font-sans:Arial,Helvetica,'Helvetica Neue',sans-serif;
+}
