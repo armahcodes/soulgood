@@ -1,6 +1,6 @@
 import type { Lead } from "../lead-schema";
 import { appendLeadToFile } from "./local-file";
-import { sendToAirtable } from "./airtable";
+import { saveLeadToMongo } from "./mongodb";
 
 /** A persisted lead: the validated lead plus a generated id and server-set timestamp. */
 export type LeadRecord = Lead & {
@@ -11,7 +11,7 @@ export type LeadRecord = Lead & {
 /** A read-only environment shape (compatible with `process.env`). */
 export type EnvLike = Record<string, string | undefined>;
 
-export type CaptureAdapter = "airtable" | "local-file";
+export type CaptureAdapter = "mongodb" | "local-file";
 
 export interface CaptureResult {
   id: string;
@@ -20,15 +20,13 @@ export interface CaptureResult {
 
 interface CaptureDeps {
   env?: EnvLike;
-  toAirtable?: (record: LeadRecord, env: EnvLike) => Promise<void>;
+  toMongo?: (record: LeadRecord, env: EnvLike) => Promise<void>;
   toLocalFile?: (record: LeadRecord) => Promise<void>;
 }
 
-/** True only when all three Airtable env vars are present. */
-export function hasAirtableConfig(env: EnvLike = process.env): boolean {
-  return Boolean(
-    env.AIRTABLE_API_KEY && env.AIRTABLE_BASE_ID && env.AIRTABLE_TABLE_NAME,
-  );
+/** True when a MongoDB connection string is configured. */
+export function hasMongoConfig(env: EnvLike = process.env): boolean {
+  return Boolean(env.MONGODB_URI);
 }
 
 function generateId(): string {
@@ -36,16 +34,16 @@ function generateId(): string {
 }
 
 /**
- * Persist a lead. Uses the Airtable adapter only when all three env vars are set;
- * otherwise the local-file adapter. If Airtable throws, logs and falls back to the
- * local file so a lead is NEVER dropped.
+ * Persist a lead. Uses MongoDB when `MONGODB_URI` is set; otherwise the
+ * local-file adapter. If MongoDB throws, logs and falls back to the local file
+ * so a lead is NEVER dropped.
  */
 export async function captureLead(
   lead: Lead,
   deps: CaptureDeps = {},
 ): Promise<CaptureResult> {
   const env = deps.env ?? process.env;
-  const toAirtable = deps.toAirtable ?? sendToAirtable;
+  const toMongo = deps.toMongo ?? saveLeadToMongo;
   const toLocalFile = deps.toLocalFile ?? appendLeadToFile;
 
   const record: LeadRecord = {
@@ -54,13 +52,13 @@ export async function captureLead(
     capturedAt: new Date().toISOString(),
   };
 
-  if (hasAirtableConfig(env)) {
+  if (hasMongoConfig(env)) {
     try {
-      await toAirtable(record, env);
-      return { id: record.id, adapter: "airtable" };
+      await toMongo(record, env);
+      return { id: record.id, adapter: "mongodb" };
     } catch (error) {
       console.error(
-        "[capture] Airtable failed, falling back to local file:",
+        "[capture] MongoDB failed, falling back to local file:",
         error,
       );
     }

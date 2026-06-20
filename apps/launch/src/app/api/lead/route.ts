@@ -10,7 +10,7 @@ export const runtime = "nodejs";
  *
  * - Invalid body → 400 with field errors, NO persistence.
  * - Valid body → captureLead() → 200 { ok: true, id }.
- * - A downstream (Airtable) failure still returns 200 via the local-file fallback;
+ * - A downstream (MongoDB) failure still returns 200 via the local-file fallback;
  *   a lead is never dropped.
  */
 export async function POST(request: Request) {

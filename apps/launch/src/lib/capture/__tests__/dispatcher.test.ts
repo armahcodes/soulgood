@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { captureLead, hasAirtableConfig } from "../index";
+import { captureLead, hasMongoConfig } from "../index";
 import type { Lead } from "../../lead-schema";
 
 const baseLead: Lead = {
@@ -16,55 +16,53 @@ const baseLead: Lead = {
   reflectSoul: undefined,
 };
 
-const fullEnv = {
-  AIRTABLE_API_KEY: "key",
-  AIRTABLE_BASE_ID: "base",
-  AIRTABLE_TABLE_NAME: "Leads",
+const mongoEnv = {
+  MONGODB_URI: "mongodb+srv://user:pass@cluster.example.net/db",
 };
 
-describe("hasAirtableConfig", () => {
-  it("is true only when all three env vars are present", () => {
-    expect(hasAirtableConfig(fullEnv)).toBe(true);
-    expect(hasAirtableConfig({ AIRTABLE_API_KEY: "key" })).toBe(false);
-    expect(hasAirtableConfig({})).toBe(false);
+describe("hasMongoConfig", () => {
+  it("is true only when MONGODB_URI is present", () => {
+    expect(hasMongoConfig(mongoEnv)).toBe(true);
+    expect(hasMongoConfig({ MONGODB_URI: "" })).toBe(false);
+    expect(hasMongoConfig({})).toBe(false);
   });
 });
 
 describe("captureLead adapter selection", () => {
-  it("uses Airtable when all env vars are set", async () => {
-    const toAirtable = vi.fn().mockResolvedValue(undefined);
+  it("uses MongoDB when MONGODB_URI is set", async () => {
+    const toMongo = vi.fn().mockResolvedValue(undefined);
     const toLocalFile = vi.fn().mockResolvedValue(undefined);
 
-    const result = await captureLead(baseLead, { env: fullEnv, toAirtable, toLocalFile });
+    const result = await captureLead(baseLead, { env: mongoEnv, toMongo, toLocalFile });
 
-    expect(toAirtable).toHaveBeenCalledOnce();
+    expect(toMongo).toHaveBeenCalledOnce();
     expect(toLocalFile).not.toHaveBeenCalled();
-    expect(result.adapter).toBe("airtable");
+    expect(result.adapter).toBe("mongodb");
     expect(result.id).toBeTruthy();
   });
 
-  it("uses the local file when env vars are missing", async () => {
-    const toAirtable = vi.fn().mockResolvedValue(undefined);
+  it("uses the local file when MONGODB_URI is missing", async () => {
+    const toMongo = vi.fn().mockResolvedValue(undefined);
     const toLocalFile = vi.fn().mockResolvedValue(undefined);
 
     const result = await captureLead(baseLead, {
       env: {},
-      toAirtable,
+      toMongo,
       toLocalFile,
     });
 
-    expect(toAirtable).not.toHaveBeenCalled();
+    expect(toMongo).not.toHaveBeenCalled();
     expect(toLocalFile).toHaveBeenCalledOnce();
     expect(result.adapter).toBe("local-file");
   });
 
-  it("falls back to the local file when Airtable throws (lead never dropped)", async () => {
-    const toAirtable = vi.fn().mockRejectedValue(new Error("airtable 500"));
+  it("falls back to the local file when MongoDB throws (lead never dropped)", async () => {
+    const toMongo = vi.fn().mockRejectedValue(new Error("mongo down"));
     const toLocalFile = vi.fn().mockResolvedValue(undefined);
 
-    const result = await captureLead(baseLead, { env: fullEnv, toAirtable, toLocalFile });
+    const result = await captureLead(baseLead, { env: mongoEnv, toMongo, toLocalFile });
 
-    expect(toAirtable).toHaveBeenCalledOnce();
+    expect(toMongo).toHaveBeenCalledOnce();
     expect(toLocalFile).toHaveBeenCalledOnce();
     expect(result.adapter).toBe("local-file");
     expect(result.id).toBeTruthy();

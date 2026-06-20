@@ -25,10 +25,8 @@ function makeRequest(body: unknown): Request {
 let before = 0;
 
 beforeEach(async () => {
-  // Ensure no Airtable config so the route uses the local file.
-  delete process.env.AIRTABLE_API_KEY;
-  delete process.env.AIRTABLE_BASE_ID;
-  delete process.env.AIRTABLE_TABLE_NAME;
+  // Ensure no MongoDB config so the route uses the local file.
+  delete process.env.MONGODB_URI;
   before = await lineCount();
 });
 
