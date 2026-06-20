@@ -1,23 +1,21 @@
 /**
  * Soul Good — the real menu.
  *
- * Single source of truth for the Soul Good food menu, transcribed VERBATIM from
- * the official menu collateral (`Soul Good_Menu collection.pdf`). The menu is
- * organized into four pathway COLLECTIONS — Mindful, Performance, Detox, and
- * Alignment — each offering the same four CATEGORIES: Wraps, Bowls, Breakfast &
- * Essentials, and Juices & Hydration.
+ * Single source of truth for the Soul Good food menu on the full website,
+ * transcribed VERBATIM from the official menu collateral
+ * (`Soul Good_Menu collection.pdf`). The menu is organized into four pathway
+ * COLLECTIONS — Mindful, Performance, Detox, and Alignment — each offering the
+ * same four CATEGORIES: Wraps, Bowls, Breakfast & Essentials, and
+ * Juices & Hydration.
  *
  * Item names keep their ™ exactly as printed. Some items carry a parenthetical
  * `note` in the source (e.g. "(extra protein option)") which is preserved here
  * as a separate field so it can be styled distinctly from the dish name.
  *
- * This package is consumed by BOTH Next apps in the monorepo (the launch
- * microsite and the full website) so the menu only ever lives in one place.
- *
- * NOTE: the collection ids intentionally match the launch app's `Pathway` enum
- * (`mindful` | `performance` | `detox` | `alignment`) so a matched quiz pathway
- * maps directly to its menu collection. The source PDF prints "PERFOMANCE" (a
- * typo); the canonical id is `performance` and the display name is "Performance".
+ * NOTE: this data is intentionally kept in sync with the launch microsite's
+ * copy at `apps/launch/src/lib/menu.ts`. The two apps are deployed
+ * independently, so the menu is duplicated rather than shared via a workspace
+ * package to keep each app self-contained.
  */
 
 export type MenuCollectionId =

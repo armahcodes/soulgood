@@ -1,4 +1,4 @@
-import { MENU_COLLECTIONS, type MenuCollectionId } from "@soulgood/menu";
+import { MENU_COLLECTIONS, type MenuCollectionId } from "@/lib/menu";
 
 interface CollectionMenuProps {
   /** Which pathway/collection menu to render. */
@@ -11,7 +11,7 @@ interface CollectionMenuProps {
  * Renders the full, real Soul Good menu for a single pathway collection, grouped
  * by category (Wraps / Bowls / Breakfast & Essentials / Juices & Hydration).
  * Pure presentational — safe to render inside client or server components.
- * Sourced entirely from `@soulgood/menu` (the single source of truth).
+ * Sourced entirely from `@/lib/menu` (the single source of truth).
  */
 export function CollectionMenu({
   collection,

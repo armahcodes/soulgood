@@ -1,4 +1,4 @@
-import { getCollectionPreview } from "@soulgood/menu";
+import { getCollectionPreview } from "./menu";
 import { PATHWAYS, type Pathway } from "./lead-schema";
 
 /**
@@ -10,11 +10,11 @@ import { PATHWAYS, type Pathway } from "./lead-schema";
  * descriptor below preserve the *intended* spelling.
  *
  * The pathway id is identical to its menu collection id, so each pathway maps
- * directly to a collection in `@soulgood/menu` (the single source of truth for
- * the actual menu items). The `dishes` preview below is DERIVED from that menu —
- * it is not hand-maintained — so the result reveal can never drift from the real
- * menu. Use `MENU_COLLECTIONS[pathway]` (from `@soulgood/menu`) to render the
- * full, category-grouped menu.
+ * directly to a collection in `./menu` (the single source of truth for the
+ * actual menu items). The `dishes` preview below is DERIVED from that menu — it
+ * is not hand-maintained — so the result reveal can never drift from the real
+ * menu. Use `MENU_COLLECTIONS[pathway]` (from `@/lib/menu`) to render the full,
+ * category-grouped menu.
  */
 export interface PathwayDefinition {
   /** Canonical enum id used in the lead schema and matching. */
