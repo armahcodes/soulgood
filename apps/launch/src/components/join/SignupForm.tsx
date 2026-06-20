@@ -1,19 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/Button";
 import { assembleLead, type JoinFormValues } from "@/lib/join-lead";
 import { leadSchema, type Lead } from "@/lib/lead-schema";
-import { loadPathwayState, type PathwayState } from "@/lib/pathway-state";
+import { loadPathwayState } from "@/lib/pathway-state";
 
 /** Validate just the captured fields against the lead schema's rules. */
 const formFieldSchema = leadSchema.pick({ name: true, email: true, phone: true });
 
 export function SignupForm() {
   const router = useRouter();
-  const [pathwayState, setPathwayState] = useState<PathwayState | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   /** Which intent is currently submitting (so both buttons can show progress). */
   const [pending, setPending] = useState<Lead["intent"] | null>(null);
@@ -26,12 +25,6 @@ export function SignupForm() {
     mode: "onSubmit",
     defaultValues: { name: "", email: "", phone: "" },
   });
-
-  // Read the matched pathway + nutrition profile carried from the quiz. Absent on
-  // a deep-link to /join — that's fine, the lead just carries pathway: null.
-  useEffect(() => {
-    setPathwayState(loadPathwayState());
-  }, []);
 
   /** Persist the lead, then route. Capture-first: never route before persisting. */
   async function submit(
@@ -48,7 +41,10 @@ export function SignupForm() {
       return;
     }
 
-    const lead = assembleLead(values, pathwayState, intent);
+    // Read the matched pathway + nutrition profile carried from the quiz at
+    // submit time. Absent on a deep-link to /join — that's fine, the lead just
+    // carries pathway: null. (sessionStorage is available in this client handler.)
+    const lead = assembleLead(values, loadPathwayState(), intent);
     setPending(intent);
     try {
       const res = await fetch("/api/lead", {
@@ -59,8 +55,9 @@ export function SignupForm() {
       if (!res.ok) {
         throw new Error(`Capture failed (${res.status})`);
       }
-      // ONLY after the lead is persisted do we navigate.
-      router.push(intent === "buyer" ? "/checkout" : "/welcome");
+      // Capture-first, no charge for now: once the lead is persisted, go straight
+      // to the welcome/confirmation page. (Payment is intentionally disabled.)
+      router.push("/welcome");
     } catch {
       setPending(null);
       setSubmitError("Something went wrong saving your spot. Please try again.");
@@ -158,17 +155,12 @@ export function SignupForm() {
 
       <div className="flex flex-col gap-3 pt-1">
         <Button type="submit" size="lg" className="w-full" disabled={pending !== null}>
-          {pending === "buyer" ? "Reserving…" : "Reserve my spot — $50 deposit"}
+          {pending ? "Reserving…" : "Reserve my spot"}
         </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          className="w-full"
-          disabled={pending !== null}
-          onClick={handleSubmit((values) => submit(values, "list"))}
-        >
-          {pending === "list" ? "Joining…" : "Just join the list"}
-        </Button>
+        <p className="text-center text-xs leading-relaxed text-forest/55">
+          No charge today — just your details. We&rsquo;ll reach out to start your
+          plan.
+        </p>
       </div>
     </form>
   );

@@ -1,3 +1,4 @@
+import { getCollectionPreview } from "@soulgood/menu";
 import { PATHWAYS, type Pathway } from "./lead-schema";
 
 /**
@@ -7,6 +8,13 @@ import { PATHWAYS, type Pathway } from "./lead-schema";
  * NOTE: the PDF prints the title as "PERFOMANCE" (a typo). The canonical enum
  * value is `performance` (see `PATHWAYS` in lead-schema.ts); the display name and
  * descriptor below preserve the *intended* spelling.
+ *
+ * The pathway id is identical to its menu collection id, so each pathway maps
+ * directly to a collection in `@soulgood/menu` (the single source of truth for
+ * the actual menu items). The `dishes` preview below is DERIVED from that menu —
+ * it is not hand-maintained — so the result reveal can never drift from the real
+ * menu. Use `MENU_COLLECTIONS[pathway]` (from `@soulgood/menu`) to render the
+ * full, category-grouped menu.
  */
 export interface PathwayDefinition {
   /** Canonical enum id used in the lead schema and matching. */
@@ -19,7 +27,7 @@ export interface PathwayDefinition {
   description: string;
   /** A warm "note" line shown in a card on the results reveal (verbatim brand copy). */
   note: string;
-  /** A short "taste of what's on your plan" preview — real menu items (™ intact). */
+  /** A short "taste of your plan" preview — DERIVED from the real menu (™ intact). */
   dishes: string[];
 }
 
@@ -31,12 +39,7 @@ export const PATHWAY_DEFINITIONS: Record<Pathway, PathwayDefinition> = {
     description:
       "For intentional eating, everyday wellness, and nourishment without overthinking.",
     note: "Clean, balanced plates that ask nothing of you but to slow down and enjoy them.",
-    dishes: [
-      "Glow Bowl™",
-      "Sunday Greens Wrap™",
-      "Chia Glow Overnight Oats™",
-      "Green Goddess Glow™ Smoothie",
-    ],
+    dishes: getCollectionPreview("mindful"),
   },
   performance: {
     id: "performance",
@@ -45,12 +48,7 @@ export const PATHWAY_DEFINITIONS: Record<Pathway, PathwayDefinition> = {
     description:
       "For active lifestyles, busy schedules, recovery, and sustained energy.",
     note: "Higher-protein, macro-forward fuel built to keep up with everything you carry.",
-    dishes: [
-      "Performance Power Bowl™",
-      "Turkey Fuel Wrap™",
-      "Salmon Recovery Bowl™",
-      "Golden Energy Smoothie™",
-    ],
+    dishes: getCollectionPreview("performance"),
   },
   detox: {
     id: "detox",
@@ -59,12 +57,7 @@ export const PATHWAY_DEFINITIONS: Record<Pathway, PathwayDefinition> = {
     description:
       "For those seeking hydration, digestive support, lighter nourishment, and a fresh start.",
     note: "Lighter, hydrating, anti-inflammatory plates that leave you feeling clear and renewed.",
-    dishes: [
-      "Detox Greens Bowl™",
-      "Detox Greens Wrap™",
-      "Green Detox Juice™",
-      "Ginger Lemon Cleanse™",
-    ],
+    dishes: getCollectionPreview("detox"),
   },
   alignment: {
     id: "alignment",
@@ -73,12 +66,7 @@ export const PATHWAY_DEFINITIONS: Record<Pathway, PathwayDefinition> = {
     description:
       "For those seeking nourishment aligned with their goals, values, and lifestyle.",
     note: "Made-to-order plates tuned to your beliefs, your body, and the way you actually live.",
-    dishes: [
-      "Custom Lifestyle Bowl™",
-      "Plant-Based Wellness Wrap™",
-      "Halal Herb Chicken Wrap™",
-      "Adaptogen Wellness Blend™",
-    ],
+    dishes: getCollectionPreview("alignment"),
   },
 };
 

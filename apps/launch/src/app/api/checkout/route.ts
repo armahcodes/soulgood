@@ -1,19 +1,20 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { PRICING } from "@/lib/brand";
 
 export const runtime = "nodejs";
 
-/** The founding-spot deposit amount, in cents. */
-const DEPOSIT_AMOUNT = 5000;
+/** The first-week order amount, in cents (intro price; $111/week thereafter). */
+const FIRST_WEEK_AMOUNT = PRICING.firstWeekCents;
 
 /**
- * POST /api/checkout — start a Stripe Checkout Session for the $50 founding-spot
- * deposit and return its hosted URL.
+ * POST /api/checkout — start a Stripe Checkout Session for the first-week order
+ * ($88 intro; $111/week thereafter) and return its hosted URL.
  *
  * Graceful degradation: when STRIPE_SECRET_KEY is missing/blank we return
  * { url: null, disabled: true } with HTTP 200 instead of throwing, so the client
- * can route the (already-captured) lead straight to /welcome. The deposit step is
- * skipped but the spot is still reserved. This route NEVER 500s on absent keys.
+ * can route the (already-captured) lead straight to /welcome. The payment step is
+ * skipped but the order is still recorded. This route NEVER 500s on absent keys.
  */
 export async function POST(request: Request) {
   const secretKey = process.env.STRIPE_SECRET_KEY;
@@ -37,9 +38,9 @@ export async function POST(request: Request) {
         quantity: 1,
         price_data: {
           currency: "usd",
-          unit_amount: DEPOSIT_AMOUNT,
+          unit_amount: FIRST_WEEK_AMOUNT,
           product_data: {
-            name: "Soul Good — Founding spot deposit",
+            name: "Soul Good — Your first week (intro)",
           },
         },
       },

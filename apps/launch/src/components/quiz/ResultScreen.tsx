@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
 import { SeedOfLife } from "@/components/ui/SeedOfLife";
+import { CollectionMenu } from "@/components/menu/CollectionMenu";
 import { PATHWAY_DEFINITIONS } from "@/lib/pathways";
 import type { Pathway } from "@/lib/lead-schema";
 
@@ -12,8 +13,8 @@ interface ResultScreenProps {
 
 /**
  * The quiz result: shows the matched pathway name + its three-word descriptor
- * and supporting line (verbatim from the PDF), a warm "note" card, and a "taste
- * of what's on your plan" dish preview, with a CTA forward to /join.
+ * and supporting line (verbatim from the PDF), a warm "note" card, and the full
+ * real menu for the matched pathway grouped by category, with a CTA to /join.
  */
 export function ResultScreen({ pathway }: ResultScreenProps) {
   const def = PATHWAY_DEFINITIONS[pathway];
@@ -41,22 +42,8 @@ export function ResultScreen({ pathway }: ResultScreenProps) {
         <p className="text-[14.5px] leading-relaxed text-forest/75">{def.note}</p>
       </div>
 
-      {/* A taste of what's on your plan — small sand-colored dish pills. */}
-      <div className="flex w-full flex-col items-center gap-2.5">
-        <p className="text-xs font-bold tracking-[0.18em] text-forest/40 uppercase">
-          A taste of what&rsquo;s on your plan
-        </p>
-        <div className="flex flex-wrap justify-center gap-2">
-          {def.dishes.map((dish) => (
-            <span
-              key={dish}
-              className="rounded-full border border-sand bg-sand/50 px-3 py-[7px] text-[13px] text-forest/70"
-            >
-              {dish}
-            </span>
-          ))}
-        </div>
-      </div>
+      {/* The full real menu for the matched pathway, grouped by category. */}
+      <CollectionMenu collection={pathway} eyebrow="What's on your plan" />
 
       <div className="flex w-full max-w-sm flex-col gap-3 pt-2">
         <Button as="a" href="/join" size="lg" className="w-full">

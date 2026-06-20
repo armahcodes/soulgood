@@ -2,7 +2,8 @@ import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { ShareButton } from "@/components/welcome/ShareButton";
 import { PathwayBadge } from "@/components/welcome/PathwayBadge";
-import { FOUNDER, TAGLINE } from "@/lib/brand";
+import { WelcomeMenu } from "@/components/welcome/WelcomeMenu";
+import { FOUNDER, TAGLINE, PRICING } from "@/lib/brand";
 
 export const metadata = {
   title: "You're in — Welcome to Soul Good",
@@ -16,8 +17,8 @@ const WHAT_HAPPENS_NEXT = [
     body: "Watch for a welcome text confirming your founding spot and pathway.",
   },
   {
-    title: "Complete your payment when launch is ready",
-    body: "We'll notify you to complete your full payment ($111/week) when launch is ready — sometime in July.",
+    title: "We'll set up your plan",
+    body: `No charge today. When your plan starts, it's ${PRICING.firstWeek} your first week, then ${PRICING.weekly}/week.`,
   },
   {
     title: "Your menu is matched",
@@ -98,6 +99,9 @@ export default function WelcomePage() {
         </ol>
       </section>
 
+      {/* Your matched menu (full, by category) */}
+      <WelcomeMenu />
+
       {/* First delivery */}
       <section className="flex flex-col gap-2 rounded-3xl border border-clay/25 bg-clay/10 p-6">
         <span className="text-xs font-medium tracking-[0.18em] text-clay uppercase">
@@ -107,8 +111,9 @@ export default function WelcomePage() {
           Sometime in July
         </p>
         <p className="max-w-[36ch] text-sm leading-relaxed text-forest/75">
-          Your first box of 5 chef-made meals and 5 functional juices lands
-          sometime in July — we&rsquo;ll confirm your delivery window by text.
+          Your first box — one meal a day, Monday through Friday, plus 5
+          functional juices — is delivered fresh on Sunday. Your first delivery
+          lands sometime in July; we&rsquo;ll confirm by text.
         </p>
       </section>
 

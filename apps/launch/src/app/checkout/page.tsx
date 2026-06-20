@@ -1,17 +1,18 @@
 import { Logo } from "@/components/ui/Logo";
 import { BrandFooter } from "@/components/ui/BrandFooter";
 import { ReserveButton } from "@/components/checkout/ReserveButton";
+import { PRICING } from "@/lib/brand";
 
 export const metadata = {
-  title: "Reserve Your Spot — Soul Good",
+  title: "Place Your Order — Soul Good",
   description:
-    "Reserve your Founding 50 spot with a $50 deposit. First delivery sometime in July — we'll notify you when launch is ready to complete your $111/week payment.",
+    "Place your first Soul Good order. $88 your first week, then $111/week. One meal a day, Monday–Friday, delivered fresh every Sunday.",
 };
 
 const HOW_IT_WORKS = [
-  "Your $50 deposit holds your founding spot in the capped cohort of 50.",
+  `Your first week is ${PRICING.firstWeek}, then ${PRICING.weekly}/week — cancel anytime.`,
+  "One meal a day, Monday through Friday — delivered fresh every Sunday.",
   "First delivery is sometime in July — we'll confirm your window by text.",
-  "When launch is ready, we'll notify you to complete your full payment ($111/week).",
 ];
 
 export default function CheckoutPage() {
@@ -29,20 +30,22 @@ export default function CheckoutPage() {
           Almost there
         </span>
         <h1 className="text-4xl leading-tight font-medium text-forest">
-          Reserve your spot with a $50 deposit
+          Place your first order
         </h1>
         <p className="max-w-[40ch] text-base leading-relaxed text-forest/75">
-          Your details are saved. A <span className="font-medium text-forest">$50
-          deposit</span> holds your founding spot. Your first delivery is sometime
-          in July, and we&rsquo;ll notify you when launch is ready to complete your
-          full payment ($111/week).
+          Your details are saved. Your first week is{" "}
+          <span className="font-medium text-forest">
+            {PRICING.firstWeek}
+          </span>
+          , then {PRICING.weekly}/week — one meal a day, Monday through Friday,
+          delivered fresh every Sunday.
         </p>
       </section>
 
-      {/* How the preorder deposit works */}
+      {/* How ordering works */}
       <section className="flex flex-col gap-4 rounded-3xl border border-sage/25 bg-sand/30 p-6">
         <h2 className="font-serif text-xl font-medium text-forest">
-          How your deposit works
+          How it works
         </h2>
         <ul className="flex flex-col gap-3">
           {HOW_IT_WORKS.map((item) => (
@@ -57,26 +60,26 @@ export default function CheckoutPage() {
         </ul>
       </section>
 
-      {/* Secure deposit via Stripe Checkout */}
+      {/* Secure checkout via Stripe */}
       <section
-        aria-label="Secure $50 deposit"
+        aria-label="Secure checkout"
         className="flex flex-col items-center gap-2 rounded-3xl border border-sage/25 bg-oat px-6 py-7 text-center"
       >
         <Logo size={28} className="text-sage" title="" />
         <p className="text-sm font-medium text-forest">
-          Secure $50 deposit
+          Secure checkout — {PRICING.firstWeek} first week
         </p>
         <p className="max-w-[34ch] text-xs leading-relaxed text-forest/60">
-          You&rsquo;ll be redirected to Stripe&rsquo;s secure checkout to place
-          your deposit. Only the $50 deposit is charged today.
+          You&rsquo;ll be redirected to Stripe&rsquo;s secure checkout. Your first
+          week is {PRICING.firstWeek}; {PRICING.weekly}/week begins after.
         </p>
       </section>
 
       <section className="flex flex-col gap-3 pt-1">
         <ReserveButton />
         <p className="text-center text-xs leading-relaxed text-forest/55">
-          Just a $50 deposit today — your $111/week begins when launch is ready
-          in July.
+          {PRICING.firstWeek} today for your first week — then {PRICING.weekly}
+          /week. Cancel anytime.
         </p>
       </section>
 

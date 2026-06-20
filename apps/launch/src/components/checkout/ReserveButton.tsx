@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { PRICING } from "@/lib/brand";
 
 /**
- * Reserve CTA for /checkout. Initiates Stripe Checkout for the $50 founding-spot
- * deposit: POSTs to /api/checkout, then redirects to the returned hosted URL.
+ * Order CTA for /checkout. Initiates Stripe Checkout for the first-week order
+ * ($88 intro): POSTs to /api/checkout, then redirects to the returned hosted URL.
  *
  * Graceful fallback: if the route reports the Stripe seam is disabled (blank
  * keys → { url: null, disabled: true }) or the request fails for any reason, we
@@ -29,7 +30,7 @@ export function ReserveButton() {
         window.location.href = data.url;
         return;
       }
-      // Disabled seam or no URL → spot already reserved; continue to welcome.
+      // Disabled seam or no URL → order already recorded; continue to welcome.
       router.push("/welcome");
     } catch {
       router.push("/welcome");
@@ -44,7 +45,9 @@ export function ReserveButton() {
       disabled={pending}
       onClick={reserve}
     >
-      {pending ? "Redirecting…" : "Reserve my spot — $50 deposit"}
+      {pending
+        ? "Redirecting…"
+        : `Place my order — ${PRICING.firstWeek} first week`}
     </Button>
   );
 }
