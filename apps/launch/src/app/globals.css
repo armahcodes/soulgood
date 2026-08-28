@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 /*
- * Soul Good Brand Kit theme (Tailwind v4 CSS-first).
+ * Soul Bowls™ brand theme (Tailwind v4 CSS-first).
  * Palette and type are the single source of truth — see lib/brand.ts.
  * Old superseded tokens (the prior terracotta hex and serif fonts) are intentionally absent.
  */
 @theme {
   /* Brand Kit palette */
-  --color-sage: #77916F;
-  --color-forest: #2C3A34;
-  --color-clay: #C17A5E;
-  --color-oat: #F8F3EC;
-  --color-gold: #C9A161;
-  --color-sand: #ECD6BC;
+  --color-sage: #77916f;
+  --color-forest: #20352f;
+  --color-clay: #d86d45;
+  --color-oat: #fbf7ef;
+  --color-gold: #f3c96b;
+  --color-sand: #ecd6bc;
 
   /* Type: EB Garamond (headlines, via next/font/google) + Arial system stack (body) */
   --font-serif: var(--font-eb-garamond), Georgia, "Times New Roman", serif;
@@ -22,6 +22,7 @@
 html {
   /* Prevent horizontal overflow on small (390px) viewports. */
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -30,9 +31,59 @@ body {
   font-family: var(--font-sans);
 }
 
+::selection {
+  background: var(--color-gold);
+  color: var(--color-forest);
+}
+
 h1,
 h2,
 h3,
 h4 {
   font-family: var(--font-serif);
+}
+
+.legal-copy h2 {
+  margin-bottom: 0.75rem;
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.legal-copy h3 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.legal-copy p,
+.legal-copy li {
+  color: color-mix(in srgb, var(--color-forest) 72%, transparent);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.legal-copy ul,
+.legal-copy ol {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+  padding-left: 1.25rem;
+}
+
+.legal-copy ul {
+  list-style: disc;
+}
+
+.legal-copy ol {
+  list-style: decimal;
+}
+
+.legal-copy a {
+  color: var(--color-clay);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }

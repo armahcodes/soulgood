@@ -1,4 +1,4 @@
-import { FOUNDER, TAGLINE } from "@/lib/brand";
+import { BRAND_NAME, FOUNDER, TAGLINE } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 
 interface BrandFooterProps {
@@ -22,7 +22,7 @@ export function BrandFooter({ className }: BrandFooterProps) {
         {TAGLINE}
       </p>
       <p className="text-xs tracking-wide text-forest/55">
-        Crafted with care by {FOUNDER}
+        {BRAND_NAME} · Crafted by {FOUNDER}
       </p>
     </footer>
   );

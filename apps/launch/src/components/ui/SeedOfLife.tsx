@@ -30,7 +30,7 @@ const INNER_CENTERS: Array<[number, number]> = [
 ];
 
 /**
- * Soul Good "Seed of Life" mark — a central circle ringed by six circles on a
+ * Legacy "Seed of Life" mark — a central circle ringed by six circles on a
  * hex lattice, inside an enclosing boundary circle (radius 2R). Drawn in
  * `currentColor` so callers set color via text color. DISTINCT from `Logo`
  * (ring + leaf): this is the calm sacred-geometry mark used on the quiz Intro
@@ -40,7 +40,7 @@ export function SeedOfLife({
   size = 92,
   className,
   bloom = false,
-  title = "Soul Good",
+  title = "Soul Bowls™",
 }: SeedOfLifeProps) {
   const prefersReduced = useReducedMotion();
   const animate = bloom && !prefersReduced;

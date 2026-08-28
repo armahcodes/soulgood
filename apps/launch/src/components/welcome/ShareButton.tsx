@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 
 const SHARE_URL = "https://soulgood.kitchen";
 const SHARE_TEXT =
-  "I just joined the Soul Good Founding 50 — Nourish • Heal • Thrive. Come eat with intention with me.";
+  "I just joined Soul Bowls™ — five chef-made bowls delivered every week.";
 
 /**
  * Follow/share affordance for the welcome moment. Uses the native Web Share
@@ -19,7 +19,7 @@ export function ShareButton() {
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
         await navigator.share({
-          title: "Soul Good",
+          title: "Soul Bowls™",
           text: SHARE_TEXT,
           url: SHARE_URL,
         });

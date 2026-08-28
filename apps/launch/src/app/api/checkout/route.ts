@@ -1,50 +1,128 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { PRICING } from "@/lib/brand";
+import { BRAND_NAME, LEGAL_VERSION, PRICING } from "@/lib/brand";
 
 export const runtime = "nodejs";
 
-/** The first-week order amount, in cents (intro price; $111/week thereafter). */
-const FIRST_WEEK_AMOUNT = PRICING.firstWeekCents;
+type CheckoutRequest = {
+  acceptedTerms?: unknown;
+  deliveryZip?: unknown;
+  leadId?: unknown;
+};
 
-/**
- * POST /api/checkout — start a Stripe Checkout Session for the first-week order
- * ($88 intro; $111/week thereafter) and return its hosted URL.
- *
- * Graceful degradation: when STRIPE_SECRET_KEY is missing/blank we return
- * { url: null, disabled: true } with HTTP 200 instead of throwing, so the client
- * can route the (already-captured) lead straight to /welcome. The payment step is
- * skipped but the order is still recorded. This route NEVER 500s on absent keys.
- */
-export async function POST(request: Request) {
-  const secretKey = process.env.STRIPE_SECRET_KEY;
+function configuredFeeCents(value: string | undefined): number | null {
+  if (!value || !/^\d+$/.test(value)) return null;
+  const cents = Number(value);
+  return Number.isSafeInteger(cents) && cents > 0 ? cents : null;
+}
 
-  if (!secretKey) {
-    return NextResponse.json({ url: null, disabled: true }, { status: 200 });
+function parseCheckoutRequest(value: unknown):
+  | { acceptedTerms: true; deliveryZip: string; leadId: string }
+  | null {
+  if (!value || typeof value !== "object") return null;
+  const body = value as CheckoutRequest;
+
+  if (
+    body.acceptedTerms !== true ||
+    typeof body.deliveryZip !== "string" ||
+    !/^\d{5}$/.test(body.deliveryZip) ||
+    typeof body.leadId !== "string" ||
+    body.leadId.trim().length === 0 ||
+    body.leadId.length > 200
+  ) {
+    return null;
   }
 
-  // Derive the origin so success/cancel URLs are absolute in any environment.
-  const origin =
-    request.headers.get("origin") ?? new URL(request.url).origin;
+  return {
+    acceptedTerms: true,
+    deliveryZip: body.deliveryZip,
+    leadId: body.leadId.trim(),
+  };
+}
 
-  // Initialize the client lazily — only when the key exists — so build/SSR with
-  // blank keys never crashes.
+/** Start the disclosed weekly subscription after explicit customer consent. */
+export async function POST(request: Request) {
+  const body = await request.json().catch(() => null);
+  const checkout = parseCheckoutRequest(body);
+
+  if (!checkout) {
+    return NextResponse.json(
+      {
+        error:
+          "Checkout requires an eligible delivery ZIP, a saved reservation, and acceptance of the recurring purchase terms.",
+      },
+      { status: 400 },
+    );
+  }
+
+  const deliveryFeeCents = configuredFeeCents(
+    process.env.NEXT_PUBLIC_SOUL_BOWLS_DELIVERY_FEE_CENTS,
+  );
+  const depositCents = configuredFeeCents(
+    process.env.NEXT_PUBLIC_SOUL_BOWLS_CONTAINER_DEPOSIT_CENTS,
+  );
+
+  if (deliveryFeeCents === null || depositCents === null) {
+    return NextResponse.json(
+      { url: null, disabled: true, reason: "fees-unconfigured" },
+      { status: 200 },
+    );
+  }
+
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  if (!secretKey) {
+    return NextResponse.json(
+      { url: null, disabled: true, reason: "stripe-unconfigured" },
+      { status: 200 },
+    );
+  }
+
+  const origin = request.headers.get("origin") ?? new URL(request.url).origin;
+  const acceptedAt = new Date().toISOString();
+  const consentMetadata = {
+    consent: "affirmative",
+    legal_version: LEGAL_VERSION,
+    accepted_at: acceptedAt,
+    delivery_zip: checkout.deliveryZip,
+    lead_id: checkout.leadId,
+  };
+
   const stripe = new Stripe(secretKey);
-
   const session = await stripe.checkout.sessions.create({
-    mode: "payment",
+    mode: "subscription",
+    client_reference_id: checkout.leadId,
     line_items: [
       {
         quantity: 1,
         price_data: {
           currency: "usd",
-          unit_amount: FIRST_WEEK_AMOUNT,
+          unit_amount: PRICING.weeklyCents,
+          recurring: { interval: "week" },
+          product_data: { name: `${BRAND_NAME} — Weekly plan` },
+        },
+      },
+      {
+        quantity: 1,
+        price_data: {
+          currency: "usd",
+          unit_amount: deliveryFeeCents,
+          recurring: { interval: "week" },
+          product_data: { name: `${BRAND_NAME} — Weekly delivery` },
+        },
+      },
+      {
+        quantity: 1,
+        price_data: {
+          currency: "usd",
+          unit_amount: depositCents,
           product_data: {
-            name: "Soul Good — Your first week (intro)",
+            name: `${BRAND_NAME} — Refundable container deposit`,
           },
         },
       },
     ],
+    metadata: consentMetadata,
+    subscription_data: { metadata: consentMetadata },
     success_url: `${origin}/welcome`,
     cancel_url: `${origin}/checkout`,
   });

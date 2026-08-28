@@ -12,7 +12,13 @@ const state: PathwayState = {
   reflectBody: "rest",
 };
 
-const form = { name: " Jane Guest ", email: " a@b.com ", phone: " (310) 555-0134 " };
+const form = {
+  name: " Jane Guest ",
+  email: " a@b.com ",
+  phone: " (310) 555-0134 ",
+  deliveryZip: " 90012 ",
+  deliveryCountyConfirmed: true,
+};
 
 describe("assembleLead", () => {
   it("assembles a buyer lead from sessionStorage state + form", () => {
@@ -20,6 +26,8 @@ describe("assembleLead", () => {
     expect(lead.name).toBe("Jane Guest");
     expect(lead.email).toBe("a@b.com");
     expect(lead.phone).toBe("(310) 555-0134");
+    expect(lead.deliveryZip).toBe("90012");
+    expect(lead.deliveryCountyConfirmed).toBe(true);
     expect(lead.pathway).toBe("detox");
     expect(lead.intent).toBe("buyer");
     expect(lead.dietary).toEqual(["Plant-Based"]);

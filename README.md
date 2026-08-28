@@ -1,11 +1,11 @@
-# Soul Good
+# Soul Bowls™
 
-Chef Kyla's premium wellness food brand — Southern soul food meets functional healing nutrition.
+Five chef-made bowls delivered every Sunday for $55/week.
 
 This repository contains two apps:
 
-- **`apps/launch`** — the **Soul Good launch microsite** (currently the live/deployed site):
-  a mobile-first Pathway Finder quiz → lead capture → confirmation flow for the Founding 50 cohort.
+- **`apps/launch`** — the **Soul Bowls™ launch microsite** (currently the live/deployed site):
+  a focused product landing page → lead capture → confirmation flow.
 - **root (`src/`)** — the **full Soul Good website** (Next.js 16, App Router). It is kept in
   the repo but is **not currently deployed** (hidden). Only the microsite is live.
 
@@ -46,13 +46,13 @@ src/                    # Full Soul Good website (hidden / not deployed)
 └── lib/                # constants, types, and menu.ts (the real menu)
 
 apps/
-└── launch/             # The Soul Good microsite (live)
-    ├── src/app/        # /  /quiz  /join  /welcome  /checkout  + /api/lead, /api/checkout
-    ├── src/components/  # quiz, join, welcome, menu, sections, ui
-    └── src/lib/        # quiz, pathways, lead-schema, brand, capture, and menu.ts (the real menu)
+└── launch/             # The Soul Bowls™ microsite (live)
+    ├── src/app/        # customer flow, legal pages, and API routes
+    ├── src/components/  # signup, checkout, and brand UI
+    └── src/lib/        # lead schema, brand, capture, and legacy menu data
 ```
 
-## The Menu
+## Legacy Menu Data
 
 The real Soul Good menu (transcribed from the official menu collateral) has four pathway
 **collections** — Mindful, Performance, Detox, Alignment — each with **Wraps / Bowls /
@@ -61,35 +61,37 @@ Breakfast & Essentials / Juices & Hydration**.
 Because the two apps deploy independently, each keeps its own self-contained copy of the
 menu data:
 
-- Microsite: `apps/launch/src/lib/menu.ts` (drives the quiz result + welcome screens)
+- Microsite: `apps/launch/src/lib/menu.ts` (preserved legacy source data)
 - Full website: `src/lib/menu.ts` (drives `/menu`)
 
 Keep the two files in sync when the menu changes.
 
 ## Flow & Pricing (microsite)
 
-1. **/quiz** — the Pathway Finder matches a guest to one of the four pathways.
-2. **/join** — captures name, email, and phone (lead capture), then routes to **/welcome**.
-3. **/welcome** — confirmation + the matched pathway's full menu.
+1. **/** — presents the single Soul Bowls™ offer and captures contact and LA County eligibility details.
+2. **/checkout** — discloses every charge and collects affirmative recurring-plan consent.
+3. **/welcome** — confirms the paid reservation and provides retainable plan/cancellation terms.
+4. **/terms**, **/customer-agreement**, and **/cancel** — legal and subscription-management pages.
+3. **/join** redirects to the homepage form; **/quiz** redirects to the homepage.
 
-- **Lead capture only — no payment is charged right now.** The Stripe checkout code
-  (`/checkout`, `/api/checkout`) is left in place but unwired for when ordering opens.
-- Plan pricing (shown for context): **$88 first week, then $111/week** — one meal a day,
-  Monday–Friday (5 meals) + 5 functional juices, delivered fresh every Sunday.
+- Plan pricing: **$55/week** for 5 chef-made bowls, delivered fresh every Sunday.
+- Online payment remains disabled until Stripe and the approved delivery/deposit amounts are configured.
 
 Pricing and plan facts live in `apps/launch/src/lib/brand.ts`.
 
 ## Lead Capture
 
-Leads POST to `/api/lead`. With all three `AIRTABLE_*` env vars set, leads go to Airtable;
-otherwise they fall back to a local JSONL file (and on any Airtable error, so a lead is
-never dropped). See `apps/launch/.env.example`.
+Leads POST to `/api/lead`. With `MONGODB_URI` set, leads go to MongoDB; otherwise
+they fall back to a local JSONL file (and on any MongoDB error, so a lead is never
+dropped). See `apps/launch/.env.example`.
 
 ## Enabling Payments Later
 
-When you're ready to charge: add a **freshly rotated** `STRIPE_SECRET_KEY` to
-`apps/launch/.env.local` (gitignored — never commit it), then re-route the join CTA to
-`/checkout`. `/api/checkout` charges the first-week intro price ($88).
+When you're ready to charge, add a **freshly rotated** `STRIPE_SECRET_KEY` and the
+approved `NEXT_PUBLIC_SOUL_BOWLS_DELIVERY_FEE_CENTS` and
+`NEXT_PUBLIC_SOUL_BOWLS_CONTAINER_DEPOSIT_CENTS` values to `apps/launch/.env.local`
+(gitignored — never commit it). The amounts are whole cents. `/api/checkout` creates
+the recurring base plan and delivery line items plus the one-time refundable deposit.
 
 ## License
 

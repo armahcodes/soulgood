@@ -6,6 +6,8 @@ export interface JoinFormValues {
   name: string;
   email: string;
   phone: string;
+  deliveryZip: string;
+  deliveryCountyConfirmed: boolean;
 }
 
 /**
@@ -24,6 +26,8 @@ export function assembleLead(
     name: form.name.trim(),
     email: form.email.trim(),
     phone: form.phone.trim(),
+    deliveryZip: form.deliveryZip.trim(),
+    deliveryCountyConfirmed: form.deliveryCountyConfirmed as true,
     pathway: state?.pathway ?? null,
     intent,
     dietary: state?.dietary ?? [],

@@ -21,6 +21,11 @@ const phoneSchema = z
     message: "Phone must include a valid number",
   });
 
+const deliveryZipSchema = z
+  .string()
+  .trim()
+  .regex(/^\d{5}$/, "Enter a 5-digit delivery ZIP");
+
 /**
  * Zod schema for a captured lead. Name, email, and phone are required (the
  * mission goal is name + email + phone on file). All quiz-profile fields are
@@ -31,6 +36,10 @@ export const leadSchema = z.object({
   email: z.email("Enter a valid email").trim().min(1, "Email is required"),
   phone: phoneSchema,
   name: z.string().trim().min(1, "Name is required"),
+  deliveryZip: deliveryZipSchema,
+  deliveryCountyConfirmed: z.literal(true, {
+    error: "Confirm that the delivery address is in Los Angeles County",
+  }),
   pathway: z.enum(PATHWAYS).nullable().default(null),
   intent: z.enum(["buyer", "list"]),
   dietary: z.array(z.string()).default([]),

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { EB_Garamond } from "next/font/google";
-import { TAGLINE } from "@/lib/brand";
+import { BRAND_NAME, TAGLINE } from "@/lib/brand";
 import "./globals.css";
 
 const ebGaramond = EB_Garamond({
@@ -9,16 +9,16 @@ const ebGaramond = EB_Garamond({
   variable: "--font-eb-garamond",
 });
 
-const SITE_TITLE = "Soul Good — Find Your Pathway";
-const SITE_DESCRIPTION = `${TAGLINE}. Discover your Soul Good pathway and become a Founding Member of our capped launch cohort.`;
+const SITE_TITLE = `${BRAND_NAME} — Five Chef-Made Bowls for $55/Week`;
+const SITE_DESCRIPTION = `${TAGLINE}. Five fresh, chef-made bowls delivered every Sunday in Los Angeles for $55/week.`;
 
 export const metadata: Metadata = {
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
-  applicationName: "Soul Good",
+  applicationName: BRAND_NAME,
   openGraph: {
     type: "website",
-    siteName: "Soul Good",
+    siteName: BRAND_NAME,
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     // og:image is optional and graceful — none is supplied for the launch.

@@ -1,0 +1,179 @@
+import Link from "next/link";
+import { LegalShell } from "@/components/legal/LegalShell";
+import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, PRICING } from "@/lib/brand";
+
+export const metadata = {
+  title: `Terms of Service — ${BRAND_NAME}`,
+  description: `Terms governing the Soul Bowls™ website and weekly delivery service operated by ${BUSINESS.legalName}.`,
+};
+
+export default function TermsPage() {
+  return (
+    <LegalShell
+      eyebrow={`Effective ${LEGAL_VERSION}`}
+      title="Terms of Service"
+      intro={`These Terms govern your use of Soul Bowls™ and your relationship with ${BUSINESS.legalName}, a California limited liability company.`}
+    >
+      <section>
+        <h2>1. Agreement and operator</h2>
+        <p>
+          Soul Bowls™ is a food subscription and delivery service operated by
+          {` ${BUSINESS.legalName}`} (“Soul Goods,” “we,” “us,” or “our”). By using
+          this website, creating an order, or starting a subscription, you agree
+          to these Terms and, for purchases, the <Link href="/customer-agreement">Customer Agreement</Link>.
+          If you do not agree, do not use the service or place an order.
+        </p>
+      </section>
+
+      <section>
+        <h2>2. Eligibility and service area</h2>
+        <p>
+          You must be at least 18 years old and able to enter a binding contract.
+          Delivery is available only to verified addresses within {BUSINESS.serviceArea}.
+          We may decline, pause, or cancel service when an address is outside the
+          service area, unsafe or inaccessible, or beyond current delivery capacity.
+          If we charge an order and then determine the address is outside our service
+          area, we will cancel that order and return the affected charge.
+        </p>
+      </section>
+
+      <section>
+        <h2>3. Weekly subscription</h2>
+        <p>
+          The standard plan includes five chef-made bowls for {PRICING.weekly} per
+          week. The subscription continues and renews every seven days until you
+          cancel. By starting a plan, you expressly authorize recurring weekly
+          charges at the disclosed price, plus any disclosed delivery charge,
+          refundable container deposit, and government-imposed taxes or fees.
+        </p>
+        <p>
+          You may cancel future renewals online at any time through our <Link href="/cancel">cancellation page</Link>.
+          Cancellation stops future renewals; it does not reverse an order that
+          has already been charged and committed to production.
+        </p>
+      </section>
+
+      <section>
+        <h2>4. Pricing and fees</h2>
+        <p>
+          The weekly food-plan price is {PRICING.weekly}. {FEES.delivery.label}:
+          {` ${FEES.delivery.disclosure}`} {FEES.containerDeposit.label}:
+          {` ${FEES.containerDeposit.disclosure}`} All amounts due for an order
+          will be displayed before payment. We do not add undisclosed handling or
+          service fees.
+        </p>
+        <p>
+          California Redemption Value applies to eligible beverage containers,
+          not food or other non-beverage containers. Any Soul Bowls™ reusable-container
+          deposit is a separate business return program, not CRV.
+        </p>
+      </section>
+
+      <section>
+        <h2>5. Delivery</h2>
+        <p>
+          Weekly deliveries are generally scheduled for Sunday. Delivery windows
+          are estimates and may change because of traffic, weather, building access,
+          safety conditions, or events outside our reasonable control. You are
+          responsible for providing a complete address, access instructions, a safe
+          delivery location, and a working phone number.
+        </p>
+        <p>
+          If no one is available, you authorize us to leave the order in the safest
+          reasonably available location unless you give different instructions.
+          Perishable food should be retrieved promptly and refrigerated. We are not
+          responsible for deterioration after a completed delivery caused by delayed
+          retrieval, incorrect instructions, or unsafe storage.
+        </p>
+      </section>
+
+      <section>
+        <h2>6. Menu changes and availability</h2>
+        <p>
+          Menus rotate and ingredients may change based on seasonality and supply.
+          We may make reasonable substitutions of comparable quality. Website photos
+          and sample menus are illustrative and do not guarantee an exact weekly item.
+        </p>
+      </section>
+
+      <section>
+        <h2>7. Allergies and food safety</h2>
+        <p>
+          Our kitchen handles common allergens, including milk, eggs, fish, shellfish,
+          tree nuts, peanuts, wheat, soy, and sesame. We cannot guarantee an allergen-free
+          environment or prevent all cross-contact. Customers with severe or life-threatening
+          allergies should not order. Ingredient and dietary information is not medical advice.
+        </p>
+      </section>
+
+      <section>
+        <h2>8. No-refund and exchange policy</h2>
+        <p>
+          Because our products are perishable and prepared for a specific delivery,
+          completed orders are final and nonrefundable, including for change of mind,
+          taste preference, missed delivery, or failure to retrieve an order promptly.
+        </p>
+        <p>
+          If an item is missing, incorrect, damaged, or spoiled when delivered, contact
+          us within 24 hours with your order details and, when reasonably available,
+          a photo. After verification, our remedy is an exchange, replacement, or
+          account credit of comparable value at our discretion. Nothing in this policy
+          limits rights that cannot legally be waived.
+        </p>
+      </section>
+
+      <section>
+        <h2>9. Reusable containers</h2>
+        <p>
+          When a reusable-container deposit applies, its amount and return terms are
+          disclosed before payment. Eligible deposits are returned as an account credit
+          or refund after the corresponding containers are returned reasonably clean
+          and undamaged through the return method we provide. Lost, unreturned, or
+          materially damaged containers are not eligible for deposit credit.
+        </p>
+      </section>
+
+      <section>
+        <h2>10. Acceptable use and intellectual property</h2>
+        <p>
+          You may use this site only for lawful personal purposes. The Soul Bowls™ name,
+          logo, recipes, copy, illustrations, photography, and site content belong to
+          {` ${BUSINESS.legalName}`} or its licensors and may not be copied, sold, or
+          commercially exploited without written permission.
+        </p>
+      </section>
+
+      <section>
+        <h2>11. Disclaimers and limitation of liability</h2>
+        <p>
+          To the fullest extent permitted by law, the website and service are provided
+          “as is” and “as available.” We do not guarantee uninterrupted site access,
+          specific health outcomes, or uninterrupted availability of any menu item.
+          Our liability for a claim relating to an order will not exceed the amount
+          paid for the affected order, except where a different limitation is required
+          by law. These Terms do not exclude liability or consumer rights that cannot
+          legally be excluded.
+        </p>
+      </section>
+
+      <section>
+        <h2>12. Governing law</h2>
+        <p>
+          California law governs these Terms. Any dispute not resolved informally will
+          be brought in a court of competent jurisdiction in Los Angeles County,
+          California, subject to any non-waivable right to bring a claim elsewhere or
+          in small claims court.
+        </p>
+      </section>
+
+      <section>
+        <h2>13. Changes and contact</h2>
+        <p>
+          We may update these Terms prospectively. Material subscription changes will
+          be communicated as required by law before they take effect. Questions may be
+          sent to <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.
+        </p>
+      </section>
+    </LegalShell>
+  );
+}

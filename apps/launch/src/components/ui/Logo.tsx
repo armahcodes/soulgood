@@ -9,19 +9,16 @@ interface LogoProps {
 }
 
 /**
- * Soul Good brand mark — an inline, single-color geometric approximation
- * (no logo file is provided). Sacred-geometry / botanical motif: a seed/leaf
- * form cradled within a ring. `currentColor` lets callers set the color via
- * text color (e.g. `text-forest`, `text-oat`). Built to stay legible at small
- * sizes.
+ * Soul Bowls™ brand mark — a simple bowl and rising steam. `currentColor` lets
+ * callers set the color through text color utilities.
  */
-export function Logo({ size = 40, className, title = "Soul Good" }: LogoProps) {
+export function Logo({ size = 40, className, title = "Soul Bowls™" }: LogoProps) {
   const decorative = title === "";
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 48 48"
+      viewBox="0 0 64 64"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={cn("shrink-0", className)}
@@ -30,21 +27,21 @@ export function Logo({ size = 40, className, title = "Soul Good" }: LogoProps) {
       aria-hidden={decorative ? true : undefined}
     >
       {!decorative && <title>{title}</title>}
-      {/* Enclosing ring */}
-      <circle cx="24" cy="24" r="21" stroke="currentColor" strokeWidth="2" />
-      {/* Leaf / seed: two mirrored arcs forming a vesica with a central stem */}
       <path
-        d="M24 9C16 16 16 32 24 39C32 32 32 16 24 9Z"
+        d="M10 29H54C52.5 43.5 43.5 53 32 53S11.5 43.5 10 29Z"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="3"
         strokeLinejoin="round"
       />
       <path
-        d="M24 13V36"
+        d="M8 29H56"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="3"
         strokeLinecap="round"
       />
+      <path d="M22 22C18 18 19 13 23 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+      <path d="M33 22C29 17 30 11 35 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+      <path d="M43 22C40 18 41 14 45 11" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
     </svg>
   );
 }
