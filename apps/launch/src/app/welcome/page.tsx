@@ -6,13 +6,13 @@ import { BRAND_NAME, FEES, formatCents, PLAN, PRICING } from "@/lib/brand";
 
 export const metadata = {
   title: `You're on the list — ${BRAND_NAME}`,
-  description: `Your ${BRAND_NAME} reservation is saved. We'll text you before your first Sunday delivery.`,
+  description: `Your ${BRAND_NAME} reservation is saved. We'll text you before your first Sunday pickup or delivery.`,
 };
 
 const NEXT_STEPS = [
-  "We review your delivery details.",
+  "We review your pickup or delivery details.",
   "We text you to confirm your first week.",
-  `${PLAN.bowlsPerWeek} fresh bowls arrive on ${PLAN.deliveryDay}.`,
+  `${PLAN.bowlsPerWeek} fresh bowls are ready on ${PLAN.deliveryDay}.`,
 ];
 
 export default function WelcomePage() {
@@ -34,10 +34,13 @@ export default function WelcomePage() {
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/68">
           Thanks for reserving Soul Bowls™. We&rsquo;ll text you before your first
-          delivery. The plan stays simple: {PLAN.bowlsPerWeek} bowls, {PRICING.weekly}
-          /week plus {formatCents(FEES.delivery.amountCents)} weekly delivery,
-          delivered {PLAN.deliveryDay}. Your one-time refundable container deposit
-          is {formatCents(FEES.containerDeposit.amountCents)}.
+          pickup or delivery. The plan stays simple: {PLAN.bowlsPerWeek} bowls for
+          {` ${PRICING.weekly}`}/week, with free pickup or $8.88 LA County delivery.
+          Applicable California sales tax is itemized on the checkout receipt. Your
+          one-time refundable container deposit is
+          {FEES.containerDeposit.amountCents === null
+            ? " confirmed separately before containers are issued"
+            : ` ${formatCents(FEES.containerDeposit.amountCents)}`}.
         </p>
 
         <ol className="mt-12 grid w-full gap-3 text-left sm:grid-cols-3">

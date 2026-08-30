@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
-import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, PLAN, PRICING } from "@/lib/brand";
+import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, PLAN, PRICING, TAX } from "@/lib/brand";
 
 export const metadata = {
   title: `Customer Agreement — ${BRAND_NAME}`,
@@ -17,9 +17,10 @@ export default function CustomerAgreementPage() {
       <section className="rounded-3xl bg-gold/25 p-6 sm:p-8">
         <h2>Important recurring-payment terms</h2>
         <ul>
-          <li>{PLAN.bowlsPerWeek} chef-made bowls per weekly delivery.</li>
+          <li>{PLAN.bowlsPerWeek} chef-made bowls per weekly order.</li>
           <li>{PRICING.weekly} charged every seven days until you cancel.</li>
-          <li>Delivery charges and any refundable reusable-container deposit are disclosed before payment.</li>
+          <li>Pickup is free or LA County delivery is $8.88 per week.</li>
+          <li>Applicable sales tax is shown at checkout; any reusable-container deposit is disclosed and collected separately.</li>
           <li>Cancel future renewals online at any time; orders already charged remain final.</li>
           <li>Service is limited to verified addresses in {BUSINESS.serviceArea}.</li>
         </ul>
@@ -28,7 +29,7 @@ export default function CustomerAgreementPage() {
       <section>
         <h2>1. Your weekly order</h2>
         <p>
-          Each renewal purchases one weekly delivery containing {PLAN.bowlsPerWeek}
+          Each renewal purchases one weekly order containing {PLAN.bowlsPerWeek}
           chef-made bowls from the rotating menu. Exact recipes, proteins, sides, and
           ingredients may vary. Reasonable substitutions may be made for seasonal or
           supply reasons.
@@ -50,11 +51,14 @@ export default function CustomerAgreementPage() {
         <h2>3. Charges</h2>
         <p>
           The base plan is {PRICING.weekly} per week. {FEES.delivery.label}:
-          {` ${FEES.delivery.disclosure}`} {FEES.containerDeposit.label}:
-          {` ${FEES.containerDeposit.disclosure}`} Government-imposed taxes or fees,
-          if applicable, are shown separately. The complete amount is displayed before
-          you authorize payment.
+          {` ${FEES.delivery.disclosure}`} Pickup has no fulfillment fee.
+          {` ${FEES.containerDeposit.label}`}:
+          {` ${FEES.containerDeposit.disclosure}`} The container deposit is not part
+          of the Square subscription checkout. Government-imposed taxes or fees, if
+          applicable, are shown separately. The subscription amount is displayed
+          before you authorize payment.
         </p>
+        <p>{TAX.disclosure} Tax is added to the subtotal where required.</p>
       </section>
 
       <section>
@@ -69,9 +73,11 @@ export default function CustomerAgreementPage() {
       </section>
 
       <section>
-        <h2>5. Los Angeles County delivery</h2>
+        <h2>5. Pickup and Los Angeles County delivery</h2>
         <p>
-          You represent that the delivery address is within {BUSINESS.serviceArea} and
+          Sunday pickup has no fulfillment fee; the location and window are confirmed
+          before fulfillment. If you select delivery, you represent that the address is
+          within {BUSINESS.serviceArea} and
           that all address, access, and contact information is accurate. We verify service
           eligibility before activation. You authorize unattended delivery at the safest
           reasonably available location when no recipient is present. If we charge an
@@ -97,7 +103,7 @@ export default function CustomerAgreementPage() {
           incorrect, damaged, or spoiled-on-arrival item, notify us within 24 hours.
           Once verified, the available remedy is an exchange, replacement, or account
           credit of comparable value. Change of mind, personal taste, missed delivery,
-          and delayed retrieval are not eligible.
+          and missed pickup or delivery and delayed retrieval are not eligible.
         </p>
       </section>
 
@@ -106,7 +112,8 @@ export default function CustomerAgreementPage() {
         <p>
           A disclosed reusable-container deposit is refundable or creditable when the
           corresponding containers are returned reasonably clean and undamaged through
-          the provided return process. This business deposit is not California Redemption
+          the provided return process. It is collected separately when reusable containers
+          are issued. This business deposit is not California Redemption
           Value. Food and non-beverage containers are not CRV containers.
         </p>
       </section>

@@ -20,7 +20,7 @@ export const CONTACT = {
 } as const;
 
 /** Version saved with customer consent records. */
-export const LEGAL_VERSION = "2026-08-28";
+export const LEGAL_VERSION = "2026-08-29";
 
 function parseFeeCents(value: string | undefined): number | null {
   if (!value || !/^\d+$/.test(value)) return null;
@@ -45,34 +45,51 @@ export const FOUNDER = "Chef Kyla";
 
 /**
  * Plan pricing — single source of truth for every price shown across the
- * microsite. The plan is a flat $55/week with no introductory-price tier.
+ * microsite. The plan is a flat $88/week with no introductory-price tier.
  */
 export const PRICING = {
   /** Recurring weekly price. */
-  weekly: "$55",
-  /** Weekly price in cents, for the recurring Stripe Checkout line item. */
-  weeklyCents: 5500,
+  weekly: "$88",
+  /** Weekly price in cents, for the recurring Square subscription plan. */
+  weeklyCents: 8800,
 } as const;
 
 /**
- * Delivery and reusable-container charges remain centrally configurable. The
- * amounts must be approved by the business before online payment is activated.
+ * Fulfillment and reusable-container charges shown throughout the experience.
  */
 export const FEES = {
   delivery: {
-    label: "Delivery charge",
-    amountCents: parseFeeCents(
-      process.env.NEXT_PUBLIC_SOUL_BOWLS_DELIVERY_FEE_CENTS,
-    ),
-    disclosure: "Based on the delivery address and route; disclosed before payment.",
+    label: "Los Angeles County delivery",
+    amountCents: 888,
+    disclosure: "$8.88 per weekly delivery within Los Angeles County.",
   },
   containerDeposit: {
     label: "Refundable reusable-container deposit",
     amountCents: parseFeeCents(
       process.env.NEXT_PUBLIC_SOUL_BOWLS_CONTAINER_DEPOSIT_CENTS,
     ),
-    disclosure: "Disclosed before payment and credited when eligible containers are returned.",
+    disclosure: "Disclosed before containers are issued and credited when eligible containers are returned.",
   },
+} as const;
+
+export const FULFILLMENT = {
+  pickup: {
+    label: "Pickup",
+    amountCents: 0,
+    disclosure: "No fulfillment fee. Pickup location and window are confirmed before fulfillment.",
+  },
+  delivery: {
+    label: "LA County delivery",
+    amountCents: FEES.delivery.amountCents,
+    disclosure: FEES.delivery.disclosure,
+  },
+} as const;
+
+export type FulfillmentMethod = keyof typeof FULFILLMENT;
+
+export const TAX = {
+  disclosure:
+    "Applicable California sales tax is calculated from the official CDTFA address rate, verified server-side, and billed by Square.",
 } as const;
 
 /**
@@ -86,7 +103,7 @@ export const PLAN = {
   /** Day boxes are delivered. */
   deliveryDay: "Sunday",
   /** Short fulfillment line. */
-  deliveryNote: "Delivered fresh every Sunday",
+  deliveryNote: "Sunday pickup or LA County delivery",
 } as const;
 
 /**

@@ -15,7 +15,7 @@ export function SiteFooter() {
         <div className="flex flex-col items-start gap-4">
           <Wordmark href="/" className="text-oat" />
           <p className="max-w-sm text-sm leading-relaxed text-oat/55">
-            Chef-made in Los Angeles County. Delivered every Sunday by Soul Goods LLC.
+            Chef-made in Los Angeles County. Sunday pickup or delivery by Soul Goods LLC.
           </p>
         </div>
 

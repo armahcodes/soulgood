@@ -14,7 +14,12 @@ const leadSchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, trim: true, lowercase: true, index: true },
     phone: { type: String, required: true, trim: true },
-    deliveryZip: { type: String, required: true, trim: true },
+    fulfillmentMethod: {
+      type: String,
+      enum: ["pickup", "delivery"],
+      required: true,
+    },
+    deliveryZip: { type: String, trim: true, default: "" },
     deliveryCountyConfirmed: { type: Boolean, required: true },
     pathway: { type: String, enum: [...PATHWAYS, null], default: null },
     intent: { type: String, enum: ["buyer", "list"], required: true },

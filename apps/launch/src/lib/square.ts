@@ -1,0 +1,177 @@
+import { FULFILLMENT, type FulfillmentMethod, PRICING } from "@/lib/brand";
+
+export const SQUARE_API_VERSION = "2026-08-19";
+
+export type CheckoutAddress = {
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: "CA";
+  postalCode: string;
+};
+
+export type TaxQuote = {
+  subtotalCents: number;
+  taxCents: number;
+  totalCents: number;
+  percentage: string;
+  jurisdiction: string;
+  county: "LOS ANGELES";
+};
+
+type Fetcher = typeof fetch;
+
+export class SquareApiError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+    readonly codes: string[],
+  ) {
+    super(message);
+  }
+}
+
+function squareBaseUrl(): string {
+  return process.env.SQUARE_ENVIRONMENT === "production"
+    ? "https://connect.squareup.com"
+    : "https://connect.squareupsandbox.com";
+}
+
+export async function squareRequest<T>(
+  path: string,
+  init: RequestInit = {},
+  fetcher: Fetcher = fetch,
+): Promise<T> {
+  const accessToken = process.env.SQUARE_ACCESS_TOKEN;
+  if (!accessToken) throw new SquareApiError("Square is not configured", 503, []);
+
+  const response = await fetcher(`${squareBaseUrl()}${path}`, {
+    ...init,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+      "Square-Version": SQUARE_API_VERSION,
+      ...init.headers,
+    },
+    cache: "no-store",
+  });
+  const body = (await response.json().catch(() => ({}))) as {
+    errors?: Array<{ code?: string }>;
+  } & T;
+
+  if (!response.ok) {
+    throw new SquareApiError(
+      "Square request failed",
+      response.status,
+      (body.errors ?? []).flatMap((error) => (error.code ? [error.code] : [])),
+    );
+  }
+  return body;
+}
+
+function addressToSquare(address: CheckoutAddress) {
+  return {
+    address_line_1: address.addressLine1,
+    ...(address.addressLine2 ? { address_line_2: address.addressLine2 } : {}),
+    locality: address.city,
+    administrative_district_level_1: address.state,
+    postal_code: address.postalCode,
+    country: "US",
+  };
+}
+
+export { addressToSquare };
+
+async function getPickupAddress(fetcher: Fetcher): Promise<CheckoutAddress> {
+  const locationId = process.env.SQUARE_LOCATION_ID;
+  if (!locationId) throw new Error("Square location is not configured");
+  const body = await squareRequest<{
+    location?: {
+      address?: {
+        address_line_1?: string;
+        address_line_2?: string;
+        locality?: string;
+        administrative_district_level_1?: string;
+        postal_code?: string;
+      };
+    };
+  }>(`/v2/locations/${encodeURIComponent(locationId)}`, {}, fetcher);
+  const address = body.location?.address;
+  if (
+    !address?.address_line_1 ||
+    !address.locality ||
+    address.administrative_district_level_1 !== "CA" ||
+    !address.postal_code
+  ) {
+    throw new Error("The Square pickup location needs a complete California address");
+  }
+  return {
+    addressLine1: address.address_line_1,
+    addressLine2: address.address_line_2 ?? "",
+    city: address.locality,
+    state: "CA",
+    postalCode: address.postal_code,
+  };
+}
+
+async function lookupCaliforniaTax(
+  address: CheckoutAddress,
+  fetcher: Fetcher,
+): Promise<{ rate: number; jurisdiction: string; county: string }> {
+  const params = new URLSearchParams({
+    address: address.addressLine1,
+    city: address.city,
+    zip: address.postalCode,
+  });
+  const response = await fetcher(
+    `https://services.maps.cdtfa.ca.gov/api/taxrate/GetRateByAddress?${params}`,
+    { cache: "no-store" },
+  );
+  const body = (await response.json().catch(() => ({}))) as {
+    taxRateInfo?: Array<{
+      rate?: number;
+      jurisdiction?: string;
+      county?: string;
+    }>;
+  };
+  const result = body.taxRateInfo?.[0];
+  if (!response.ok || !result || typeof result.rate !== "number") {
+    throw new Error("California could not verify that address or calculate its tax rate");
+  }
+  return {
+    rate: result.rate,
+    jurisdiction: result.jurisdiction ?? address.city.toUpperCase(),
+    county: (result.county ?? "").toUpperCase(),
+  };
+}
+
+export async function getTaxQuote(
+  fulfillmentMethod: FulfillmentMethod,
+  deliveryAddress: CheckoutAddress | null,
+  fetcher: Fetcher = fetch,
+): Promise<TaxQuote> {
+  const taxableAddress =
+    fulfillmentMethod === "pickup"
+      ? await getPickupAddress(fetcher)
+      : deliveryAddress;
+  if (!taxableAddress) throw new Error("A delivery address is required");
+
+  const tax = await lookupCaliforniaTax(taxableAddress, fetcher);
+  if (fulfillmentMethod === "delivery" && tax.county !== "LOS ANGELES") {
+    throw new Error("Delivery is currently available only in Los Angeles County");
+  }
+  if (!Number.isFinite(tax.rate) || tax.rate <= 0 || tax.rate >= 0.2) {
+    throw new Error("California returned an invalid tax rate");
+  }
+
+  const subtotalCents = PRICING.weeklyCents + FULFILLMENT[fulfillmentMethod].amountCents;
+  const taxCents = Math.round(subtotalCents * tax.rate);
+  return {
+    subtotalCents,
+    taxCents,
+    totalCents: subtotalCents + taxCents,
+    percentage: (tax.rate * 100).toFixed(4).replace(/0+$/, "").replace(/\.$/, ""),
+    jurisdiction: tax.jurisdiction,
+    county: "LOS ANGELES",
+  };
+}

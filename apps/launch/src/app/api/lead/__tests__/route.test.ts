@@ -51,6 +51,7 @@ describe("POST /api/lead", () => {
         name: "Jane Guest",
         email: "valid@example.com",
         phone: "3105550134",
+        fulfillmentMethod: "delivery",
         deliveryZip: "90012",
         deliveryCountyConfirmed: true,
         pathway: "detox",
@@ -69,6 +70,7 @@ describe("POST /api/lead", () => {
     const last = JSON.parse(contents.trim().split("\n").at(-1)!);
     expect(last.email).toBe("valid@example.com");
     expect(last.phone).toBe("3105550134");
+    expect(last.fulfillmentMethod).toBe("delivery");
     expect(last.deliveryZip).toBe("90012");
     expect(last.pathway).toBe("detox");
     expect(last.id).toBe(json.id);

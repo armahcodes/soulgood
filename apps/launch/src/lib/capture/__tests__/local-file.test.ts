@@ -20,6 +20,7 @@ const lead = {
   email: "a@b.com",
   phone: "3105550134",
   name: "Jane Guest",
+  fulfillmentMethod: "delivery" as const,
   deliveryZip: "90012",
   deliveryCountyConfirmed: true,
   pathway: "mindful" as const,

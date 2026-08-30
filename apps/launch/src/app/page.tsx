@@ -21,7 +21,7 @@ const PLAN_DETAILS = [
   {
     number: "03",
     title: `${PRICING.weekly} per week`,
-    body: "Base-plan price. The delivery charge and one-time refundable container deposit are shown before payment.",
+    body: "Base-plan price. Pickup is free; LA County delivery is $8.88. Tax and the refundable deposit are shown before payment.",
   },
 ];
 
@@ -45,7 +45,7 @@ export default function Home() {
       <section className="mx-auto grid w-full max-w-7xl items-center gap-12 px-5 pt-10 pb-20 sm:px-8 sm:pt-16 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16 lg:px-12 lg:pt-20 lg:pb-28">
         <div className="flex flex-col items-start gap-7">
           <span className="rounded-full bg-gold/55 px-4 py-2 text-xs font-bold tracking-[0.16em] text-forest uppercase">
-            Five bowls · $55/week · LA County
+            Five bowls · $88/week · LA County
           </span>
 
           <div className="flex flex-col gap-5">
@@ -54,8 +54,9 @@ export default function Home() {
             </h1>
             <p className="max-w-[34rem] text-lg leading-relaxed text-forest/72 sm:text-xl">
               Five fresh, chef-made Soul Bowls<sup className="text-[0.5em]">™</sup>{" "}
-              delivered every Sunday. The plan is {PRICING.weekly} a week, plus
-              the disclosed delivery charge and refundable container deposit.
+              ready every Sunday. The plan is {PRICING.weekly} a week with free
+              pickup or $8.88 LA County delivery, plus applicable tax and the
+              disclosed refundable container deposit.
             </p>
           </div>
 
@@ -89,7 +90,8 @@ export default function Home() {
             </div>
             <p className="max-w-xl text-base leading-relaxed text-oat/65 lg:justify-self-end lg:text-lg">
               Soul Bowls™ keeps the offer simple: a week of complete, satisfying
-              bowls delivered at once. The menu changes. The plan does not.
+              bowls ready at once for pickup or delivery. The menu changes. The
+              plan does not.
             </p>
           </div>
 
@@ -129,7 +131,7 @@ export default function Home() {
             </h2>
             <p className="max-w-md text-lg leading-relaxed text-forest/68">
               Share your details to reserve your spot. We&rsquo;ll text you before
-              your first Sunday delivery. No charge today.
+              your first Sunday pickup or delivery. No charge today.
             </p>
 
             <div className="flex items-end gap-3 border-t border-forest/15 pt-6">
@@ -139,8 +141,9 @@ export default function Home() {
               <span className="pb-1 text-sm font-bold text-forest/58">per week</span>
             </div>
             <p className="max-w-md text-sm leading-relaxed text-forest/55">
-              Base-plan price, plus the disclosed weekly delivery charge and a
-              one-time refundable reusable-container deposit.
+              Base-plan price, plus $8.88 if you choose weekly delivery and a
+              one-time refundable reusable-container deposit. Pickup is free;
+              applicable California sales tax is calculated at checkout.
             </p>
           </div>
 
@@ -151,7 +154,7 @@ export default function Home() {
                   Reserve your bowls
                 </p>
                 <p className="mt-1 text-sm text-forest/58">
-                  {PLAN.bowlsPerWeek} bowls · {PLAN.deliveryDay} delivery
+                  {PLAN.bowlsPerWeek} bowls · {PLAN.deliveryNote}
                 </p>
               </div>
               <span className="rounded-full bg-sage/15 px-3 py-1.5 text-xs font-bold text-sage">

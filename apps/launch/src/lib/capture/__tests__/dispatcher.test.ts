@@ -6,6 +6,7 @@ const baseLead: Lead = {
   email: "a@b.com",
   phone: "3105550134",
   name: "Jane Guest",
+  fulfillmentMethod: "delivery",
   deliveryZip: "90012",
   deliveryCountyConfirmed: true,
   pathway: "performance",

@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
-import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, PRICING } from "@/lib/brand";
+import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, PRICING, TAX } from "@/lib/brand";
 
 export const metadata = {
   title: `Terms of Service — ${BRAND_NAME}`,
-  description: `Terms governing the Soul Bowls™ website and weekly delivery service operated by ${BUSINESS.legalName}.`,
+  description: `Terms governing the Soul Bowls™ website and weekly pickup or delivery service operated by ${BUSINESS.legalName}.`,
 };
 
 export default function TermsPage() {
@@ -43,8 +43,8 @@ export default function TermsPage() {
           The standard plan includes five chef-made bowls for {PRICING.weekly} per
           week. The subscription continues and renews every seven days until you
           cancel. By starting a plan, you expressly authorize recurring weekly
-          charges at the disclosed price, plus any disclosed delivery charge,
-          refundable container deposit, and government-imposed taxes or fees.
+          charges at the disclosed price, plus the selected fulfillment charge,
+          any refundable container deposit, and applicable sales tax.
         </p>
         <p>
           You may cancel future renewals online at any time through our <Link href="/cancel">cancellation page</Link>.
@@ -57,10 +57,16 @@ export default function TermsPage() {
         <h2>4. Pricing and fees</h2>
         <p>
           The weekly food-plan price is {PRICING.weekly}. {FEES.delivery.label}:
-          {` ${FEES.delivery.disclosure}`} {FEES.containerDeposit.label}:
-          {` ${FEES.containerDeposit.disclosure}`} All amounts due for an order
-          will be displayed before payment. We do not add undisclosed handling or
-          service fees.
+          {` ${FEES.delivery.disclosure}`} Sunday pickup has no fulfillment fee.
+          {` ${FEES.containerDeposit.label}`}:
+          {` ${FEES.containerDeposit.disclosure}`} Subscription and fulfillment
+          amounts due at checkout will be displayed before payment. We do not add
+          undisclosed handling or service fees.
+        </p>
+        <p>
+          {TAX.disclosure} Tax is added to the displayed subtotal where required.
+          Returnable-container deposits are treated as nontaxable where California
+          law provides, but customers remain responsible for any tax legally due.
         </p>
         <p>
           California Redemption Value applies to eligible beverage containers,
@@ -70,20 +76,22 @@ export default function TermsPage() {
       </section>
 
       <section>
-        <h2>5. Delivery</h2>
+        <h2>5. Pickup and delivery</h2>
         <p>
-          Weekly deliveries are generally scheduled for Sunday. Delivery windows
+          Sunday pickup has no fulfillment fee. We will provide the pickup location
+          and available window before fulfillment. Weekly LA County delivery costs
+          $8.88 and is generally scheduled for Sunday. Pickup and delivery windows
           are estimates and may change because of traffic, weather, building access,
-          safety conditions, or events outside our reasonable control. You are
-          responsible for providing a complete address, access instructions, a safe
-          delivery location, and a working phone number.
+          safety conditions, or events outside our reasonable control.
         </p>
         <p>
-          If no one is available, you authorize us to leave the order in the safest
+          Delivery customers are responsible for providing a complete address, access
+          instructions, a safe delivery location, and a working phone number. If no
+          one is available, you authorize us to leave the order in the safest
           reasonably available location unless you give different instructions.
-          Perishable food should be retrieved promptly and refrigerated. We are not
-          responsible for deterioration after a completed delivery caused by delayed
-          retrieval, incorrect instructions, or unsafe storage.
+          Pickup and delivery orders should be retrieved promptly and refrigerated.
+          We are not responsible for deterioration caused by delayed retrieval,
+          incorrect instructions, or unsafe storage.
         </p>
       </section>
 
@@ -111,7 +119,7 @@ export default function TermsPage() {
         <p>
           Because our products are perishable and prepared for a specific delivery,
           completed orders are final and nonrefundable, including for change of mind,
-          taste preference, missed delivery, or failure to retrieve an order promptly.
+          taste preference, missed pickup or delivery, or failure to retrieve an order promptly.
         </p>
         <p>
           If an item is missing, incorrect, damaged, or spoiled when delivered, contact
@@ -126,7 +134,8 @@ export default function TermsPage() {
         <h2>9. Reusable containers</h2>
         <p>
           When a reusable-container deposit applies, its amount and return terms are
-          disclosed before payment. Eligible deposits are returned as an account credit
+          disclosed before the containers are issued and the deposit is collected
+          separately from the subscription. Eligible deposits are returned as an account credit
           or refund after the corresponding containers are returned reasonably clean
           and undamaged through the return method we provide. Lost, unreturned, or
           materially damaged containers are not eligible for deposit credit.

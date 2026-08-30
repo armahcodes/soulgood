@@ -1,6 +1,6 @@
 # Soul Bowls™
 
-Five chef-made bowls delivered every Sunday for $55/week.
+Five chef-made bowls ready every Sunday for $88/week, with pickup or delivery.
 
 This repository contains two apps:
 
@@ -68,14 +68,16 @@ Keep the two files in sync when the menu changes.
 
 ## Flow & Pricing (microsite)
 
-1. **/** — presents the single Soul Bowls™ offer and captures contact and LA County eligibility details.
+1. **/** — presents the single Soul Bowls™ offer and captures contact, fulfillment preference, and LA County delivery eligibility.
 2. **/checkout** — discloses every charge and collects affirmative recurring-plan consent.
 3. **/welcome** — confirms the paid reservation and provides retainable plan/cancellation terms.
 4. **/terms**, **/customer-agreement**, and **/cancel** — legal and subscription-management pages.
-3. **/join** redirects to the homepage form; **/quiz** redirects to the homepage.
+5. **/join** redirects to the homepage form; **/quiz** redirects to the homepage.
 
-- Plan pricing: **$55/week** for 5 chef-made bowls, delivered fresh every Sunday.
-- Online payment remains disabled until Stripe and the approved delivery/deposit amounts are configured.
+- Plan pricing: **$88/week** for 5 chef-made bowls, ready every Sunday.
+- Sunday pickup: **$0**. Los Angeles County delivery: **$8.88/week**.
+- Applicable California sales tax is looked up by address through CDTFA, shown before consent, revalidated server-side, and passed to Square with the subscription.
+- Online payment remains disabled until the Square application, location, access token, and subscription-plan IDs are configured.
 
 Pricing and plan facts live in `apps/launch/src/lib/brand.ts`.
 
@@ -85,13 +87,20 @@ Leads POST to `/api/lead`. With `MONGODB_URI` set, leads go to MongoDB; otherwis
 they fall back to a local JSONL file (and on any MongoDB error, so a lead is never
 dropped). See `apps/launch/.env.example`.
 
-## Enabling Payments Later
+## Enabling Square Payments
 
-When you're ready to charge, add a **freshly rotated** `STRIPE_SECRET_KEY` and the
-approved `NEXT_PUBLIC_SOUL_BOWLS_DELIVERY_FEE_CENTS` and
-`NEXT_PUBLIC_SOUL_BOWLS_CONTAINER_DEPOSIT_CENTS` values to `apps/launch/.env.local`
-(gitignored — never commit it). The amounts are whole cents. `/api/checkout` creates
-the recurring base plan and delivery line items plus the one-time refundable deposit.
+Create two WEEKLY Square subscription plan variations: **$88 pickup** and
+**$96.88 delivery**. Add `SQUARE_APPLICATION_ID`, `SQUARE_ACCESS_TOKEN`, `SQUARE_LOCATION_ID`,
+`SQUARE_PICKUP_PLAN_VARIATION_ID`, and `SQUARE_DELIVERY_PLAN_VARIATION_ID` to
+`apps/launch/.env.local` (gitignored — never commit it). Set `SQUARE_ENVIRONMENT`
+to `production` only for live credentials. The checkout uses Square Web Payments
+to tokenize the card, stores it on the Square customer with explicit consent, and
+creates a weekly subscription through the Subscriptions API. `/api/tax` uses the
+official CDTFA address service and rejects delivery addresses outside Los Angeles
+County. The server recalculates the rate before sending `tax_percentage` to Square.
+
+Any reusable-container deposit remains outside the recurring plan; it is disclosed
+and collected separately when containers are issued.
 
 ## License
 

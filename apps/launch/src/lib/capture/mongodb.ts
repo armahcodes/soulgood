@@ -17,6 +17,7 @@ export async function saveLeadToMongo(
     name: record.name,
     email: record.email,
     phone: record.phone,
+    fulfillmentMethod: record.fulfillmentMethod,
     deliveryZip: record.deliveryZip,
     deliveryCountyConfirmed: record.deliveryCountyConfirmed,
     pathway: record.pathway ?? null,

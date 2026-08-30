@@ -3,19 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/Button";
 import { assembleLead, type JoinFormValues } from "@/lib/join-lead";
-import { leadSchema, type Lead } from "@/lib/lead-schema";
-
-/** Validate just the captured fields against the lead schema's rules. */
-const formFieldSchema = leadSchema.pick({
-  name: true,
-  email: true,
-  phone: true,
-  deliveryZip: true,
-  deliveryCountyConfirmed: true,
-});
+import { leadFieldSchemas, leadSchema, type Lead } from "@/lib/lead-schema";
 
 const INPUT_CLASS =
   "min-h-[54px] rounded-2xl border border-forest/15 bg-white px-4 text-base text-forest shadow-sm placeholder:text-forest/35 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/25";
@@ -29,6 +20,7 @@ export function SignupForm() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<JoinFormValues>({
     mode: "onSubmit",
@@ -36,6 +28,7 @@ export function SignupForm() {
       name: "",
       email: "",
       phone: "",
+      fulfillmentMethod: "delivery",
       deliveryZip: "",
       deliveryCountyConfirmed: false,
     },
@@ -49,14 +42,18 @@ export function SignupForm() {
     if (pending) return;
     setSubmitError(null);
 
-    // Re-validate the captured fields with the schema (defense in depth).
-    const fields = formFieldSchema.safeParse(values);
+    const lead = assembleLead(values, null, intent);
+    // Re-validate the complete lead, including conditional delivery rules.
+    const fields = leadSchema.safeParse(lead);
     if (!fields.success) {
-      setSubmitError("Complete your contact information and confirm an eligible delivery ZIP.");
+      setSubmitError(
+        values.fulfillmentMethod === "delivery"
+          ? "Complete your contact information and confirm an eligible LA County delivery ZIP."
+          : "Complete your contact information and pickup preference.",
+      );
       return;
     }
 
-    const lead = assembleLead(values, null, intent);
     setPending(intent);
     try {
       const res = await fetch("/api/lead", {
@@ -72,12 +69,25 @@ export function SignupForm() {
         window.sessionStorage.setItem("soulbowls:leadId", result.id);
       }
       window.sessionStorage.setItem("soulbowls:deliveryZip", values.deliveryZip.trim());
-      router.push("/checkout");
+      window.sessionStorage.setItem("soulbowls:fulfillment", values.fulfillmentMethod);
+      const nameParts = values.name.trim().split(/\s+/);
+      window.sessionStorage.setItem(
+        "soulbowls:checkoutContact",
+        JSON.stringify({
+          givenName: nameParts.shift() ?? "",
+          familyName: nameParts.join(" "),
+          email: values.email.trim(),
+          phone: values.phone.trim(),
+        }),
+      );
+      router.push(`/checkout?fulfillment=${values.fulfillmentMethod}`);
     } catch {
       setPending(null);
       setSubmitError("Something went wrong saving your spot. Please try again.");
     }
   }
+
+  const fulfillmentMethod = useWatch({ control, name: "fulfillmentMethod" });
 
   return (
     <form
@@ -99,7 +109,7 @@ export function SignupForm() {
           className={INPUT_CLASS}
           {...register("name", {
             validate: (value) =>
-              formFieldSchema.shape.name.safeParse(value).success ||
+              leadFieldSchemas.name.safeParse(value).success ||
               "Name is required",
           })}
         />
@@ -125,7 +135,7 @@ export function SignupForm() {
           className={INPUT_CLASS}
           {...register("email", {
             validate: (value) =>
-              formFieldSchema.shape.email.safeParse(value).success ||
+              leadFieldSchemas.email.safeParse(value).success ||
               "Enter a valid email",
           })}
         />
@@ -151,7 +161,7 @@ export function SignupForm() {
           className={INPUT_CLASS}
           {...register("phone", {
             validate: (value) =>
-              formFieldSchema.shape.phone.safeParse(value).success ||
+              leadFieldSchemas.phone.safeParse(value).success ||
               "Phone is required",
           })}
         />
@@ -162,51 +172,94 @@ export function SignupForm() {
         )}
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="deliveryZip" className="text-sm font-medium text-forest">
-          Delivery ZIP
+      <fieldset className="flex flex-col gap-2">
+        <legend className="mb-1 text-sm font-medium text-forest">
+          How do you want your bowls?
+        </legend>
+        <label className="flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-forest/12 bg-white p-4 text-sm text-forest/75">
+          <span className="flex items-center gap-3">
+            <input
+              type="radio"
+              value="pickup"
+              className="h-5 w-5 accent-forest"
+              {...register("fulfillmentMethod")}
+            />
+            <span>
+              <strong className="block text-forest">Pickup</strong>
+              Location and Sunday window confirmed before fulfillment
+            </span>
+          </span>
+          <strong className="text-forest">$0</strong>
         </label>
-        <input
-          id="deliveryZip"
-          type="text"
-          inputMode="numeric"
-          autoComplete="postal-code"
-          maxLength={5}
-          placeholder="90012"
-          aria-invalid={errors.deliveryZip ? "true" : undefined}
-          className={INPUT_CLASS}
-          {...register("deliveryZip", {
-            validate: (value) =>
-              formFieldSchema.shape.deliveryZip.safeParse(value).success ||
-              "Enter a 5-digit delivery ZIP",
-          })}
-        />
-        {errors.deliveryZip && (
-          <p role="alert" className="text-sm text-clay">
-            {errors.deliveryZip.message}
-          </p>
-        )}
-      </div>
+        <label className="flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-forest/12 bg-white p-4 text-sm text-forest/75">
+          <span className="flex items-center gap-3">
+            <input
+              type="radio"
+              value="delivery"
+              className="h-5 w-5 accent-forest"
+              {...register("fulfillmentMethod")}
+            />
+            <span>
+              <strong className="block text-forest">LA County delivery</strong>
+              Sunday delivery throughout Los Angeles County
+            </span>
+          </span>
+          <strong className="text-forest">$8.88/wk</strong>
+        </label>
+      </fieldset>
 
-      <div className="flex flex-col gap-1.5">
-        <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-forest/12 bg-sand/25 p-4 text-sm leading-relaxed text-forest/72">
-          <input
-            type="checkbox"
-            className="mt-0.5 h-5 w-5 shrink-0 accent-forest"
-            aria-invalid={errors.deliveryCountyConfirmed ? "true" : undefined}
-            {...register("deliveryCountyConfirmed", {
-              validate: (value) =>
-                value || "Confirm that your delivery address is in Los Angeles County",
-            })}
-          />
-          <span>I confirm my delivery address is in Los Angeles County, California.</span>
-        </label>
-        {errors.deliveryCountyConfirmed && (
-          <p role="alert" className="text-sm text-clay">
-            {errors.deliveryCountyConfirmed.message}
-          </p>
-        )}
-      </div>
+      {fulfillmentMethod === "delivery" && (
+        <>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="deliveryZip" className="text-sm font-medium text-forest">
+              Delivery ZIP
+            </label>
+            <input
+              id="deliveryZip"
+              type="text"
+              inputMode="numeric"
+              autoComplete="postal-code"
+              maxLength={5}
+              placeholder="90012"
+              aria-invalid={errors.deliveryZip ? "true" : undefined}
+              className={INPUT_CLASS}
+              {...register("deliveryZip", {
+                validate: (value) =>
+                  fulfillmentMethod !== "delivery" ||
+                  /^\d{5}$/.test(value.trim()) ||
+                  "Enter a 5-digit delivery ZIP",
+              })}
+            />
+            {errors.deliveryZip && (
+              <p role="alert" className="text-sm text-clay">
+                {errors.deliveryZip.message}
+              </p>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-forest/12 bg-sand/25 p-4 text-sm leading-relaxed text-forest/72">
+              <input
+                type="checkbox"
+                className="mt-0.5 h-5 w-5 shrink-0 accent-forest"
+                aria-invalid={errors.deliveryCountyConfirmed ? "true" : undefined}
+                {...register("deliveryCountyConfirmed", {
+                  validate: (value) =>
+                    fulfillmentMethod !== "delivery" ||
+                    value ||
+                    "Confirm that your delivery address is in Los Angeles County",
+                })}
+              />
+              <span>I confirm my delivery address is in Los Angeles County, California.</span>
+            </label>
+            {errors.deliveryCountyConfirmed && (
+              <p role="alert" className="text-sm text-clay">
+                {errors.deliveryCountyConfirmed.message}
+              </p>
+            )}
+          </div>
+        </>
+      )}
 
       {submitError && (
         <p role="alert" className="text-sm text-clay">

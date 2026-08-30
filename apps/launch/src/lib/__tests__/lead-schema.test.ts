@@ -5,6 +5,7 @@ const validLead = {
   email: "guest@example.com",
   phone: "+1 (310) 555-0134",
   name: "Jane Guest",
+  fulfillmentMethod: "delivery",
   deliveryZip: "90012",
   deliveryCountyConfirmed: true,
   pathway: "detox",
@@ -78,11 +79,23 @@ describe("leadSchema", () => {
     ).toBe(false);
   });
 
+  it("accepts pickup without a delivery ZIP or county confirmation", () => {
+    expect(
+      leadSchema.safeParse({
+        ...validLead,
+        fulfillmentMethod: "pickup",
+        deliveryZip: "",
+        deliveryCountyConfirmed: false,
+      }).success,
+    ).toBe(true);
+  });
+
   it("defaults profile fields to empty arrays", () => {
     const result = leadSchema.safeParse({
       name: "Jane Guest",
       email: "a@b.com",
       phone: "3105550134",
+      fulfillmentMethod: "delivery",
       deliveryZip: "90012",
       deliveryCountyConfirmed: true,
       intent: "list",

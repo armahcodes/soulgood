@@ -44,7 +44,7 @@ export function BowlIllustration() {
           SOUL BOWLS™
         </text>
         <text x="280" y="417" textAnchor="middle" fill="#F8F3EC" fontFamily="Arial, sans-serif" fontSize="15" letterSpacing="3" opacity="0.72">
-          FIVE FOR $55
+          FIVE FOR $88
         </text>
       </svg>
 

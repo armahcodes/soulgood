@@ -16,6 +16,7 @@ const form = {
   name: " Jane Guest ",
   email: " a@b.com ",
   phone: " (310) 555-0134 ",
+  fulfillmentMethod: "delivery" as const,
   deliveryZip: " 90012 ",
   deliveryCountyConfirmed: true,
 };
@@ -26,6 +27,7 @@ describe("assembleLead", () => {
     expect(lead.name).toBe("Jane Guest");
     expect(lead.email).toBe("a@b.com");
     expect(lead.phone).toBe("(310) 555-0134");
+    expect(lead.fulfillmentMethod).toBe("delivery");
     expect(lead.deliveryZip).toBe("90012");
     expect(lead.deliveryCountyConfirmed).toBe(true);
     expect(lead.pathway).toBe("detox");

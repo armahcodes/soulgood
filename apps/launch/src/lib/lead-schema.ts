@@ -24,7 +24,16 @@ const phoneSchema = z
 const deliveryZipSchema = z
   .string()
   .trim()
-  .regex(/^\d{5}$/, "Enter a 5-digit delivery ZIP");
+  .refine((value) => value === "" || /^\d{5}$/.test(value), {
+    message: "Enter a 5-digit delivery ZIP",
+  });
+
+export const leadFieldSchemas = {
+  email: z.email("Enter a valid email").trim().min(1, "Email is required"),
+  phone: phoneSchema,
+  name: z.string().trim().min(1, "Name is required"),
+  deliveryZip: deliveryZipSchema,
+} as const;
 
 /**
  * Zod schema for a captured lead. Name, email, and phone are required (the
@@ -32,23 +41,41 @@ const deliveryZipSchema = z
  * optional/defaulted so a deep-linked `/join` submit with no quiz state still
  * captures.
  */
-export const leadSchema = z.object({
-  email: z.email("Enter a valid email").trim().min(1, "Email is required"),
-  phone: phoneSchema,
-  name: z.string().trim().min(1, "Name is required"),
-  deliveryZip: deliveryZipSchema,
-  deliveryCountyConfirmed: z.literal(true, {
-    error: "Confirm that the delivery address is in Los Angeles County",
-  }),
-  pathway: z.enum(PATHWAYS).nullable().default(null),
-  intent: z.enum(["buyer", "list"]),
-  dietary: z.array(z.string()).default([]),
-  allergens: z.array(z.string()).default([]),
-  foods: z.array(z.string()).default([]),
-  priorities: z.array(z.string()).default([]),
-  reflectBody: z.string().optional(),
-  reflectSoul: z.string().optional(),
-});
+export const leadSchema = z
+  .object({
+    email: leadFieldSchemas.email,
+    phone: leadFieldSchemas.phone,
+    name: leadFieldSchemas.name,
+    fulfillmentMethod: z.enum(["pickup", "delivery"]),
+    deliveryZip: leadFieldSchemas.deliveryZip,
+    deliveryCountyConfirmed: z.boolean(),
+    pathway: z.enum(PATHWAYS).nullable().default(null),
+    intent: z.enum(["buyer", "list"]),
+    dietary: z.array(z.string()).default([]),
+    allergens: z.array(z.string()).default([]),
+    foods: z.array(z.string()).default([]),
+    priorities: z.array(z.string()).default([]),
+    reflectBody: z.string().optional(),
+    reflectSoul: z.string().optional(),
+  })
+  .superRefine((lead, context) => {
+    if (lead.fulfillmentMethod !== "delivery") return;
+
+    if (!/^\d{5}$/.test(lead.deliveryZip)) {
+      context.addIssue({
+        code: "custom",
+        path: ["deliveryZip"],
+        message: "Enter a 5-digit delivery ZIP",
+      });
+    }
+    if (!lead.deliveryCountyConfirmed) {
+      context.addIssue({
+        code: "custom",
+        path: ["deliveryCountyConfirmed"],
+        message: "Confirm that the delivery address is in Los Angeles County",
+      });
+    }
+  });
 
 /** A validated lead (pre-persistence; `id` + `capturedAt` are stamped on capture). */
 export type Lead = z.infer<typeof leadSchema>;
