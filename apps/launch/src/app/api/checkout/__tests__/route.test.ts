@@ -16,7 +16,8 @@ const BOWL_SELECTION = {
   "golden-harvest-bowl": 1,
   "jerk-wellness-bowl": 1,
   "performance-power-bowl": 1,
-  "herb-chicken-nourish-bowl": 1,
+  "herb-chicken-nourish-bowl": 0,
+  "anti-inflammatory-bowl": 1,
 };
 
 function makeRequest(overrides: Record<string, unknown> = {}): Request {
@@ -123,6 +124,21 @@ describe("POST /api/checkout", () => {
     expect(squareFetch).not.toHaveBeenCalled();
   });
 
+  it("rejects a sold-out Herb Chicken selection", async () => {
+    const response = await POST(
+      makeRequest({
+        bowlSelection: {
+          ...BOWL_SELECTION,
+          "anti-inflammatory-bowl": 0,
+          "herb-chicken-nourish-bowl": 1,
+        },
+      }),
+    );
+
+    expect(response.status).toBe(400);
+    expect(squareFetch).not.toHaveBeenCalled();
+  });
+
   it("pauses checkout when Square is not configured", async () => {
     const response = await POST(makeRequest());
 
@@ -186,7 +202,7 @@ describe("POST /api/checkout", () => {
       tax_percentage: "9.75",
       timezone: "America/Los_Angeles",
       source: {
-        name: "Soul Bowls website | glow-bowl:1,golden-harvest-bowl:1,jerk-wellness-bowl:1,performance-power-bowl:1,herb-chicken-nourish-bowl:1",
+        name: "Soul Bowls website | glow-bowl:1,golden-harvest-bowl:1,jerk-wellness-bowl:1,performance-power-bowl:1,herb-chicken-nourish-bowl:0,anti-inflammatory-bowl:1",
       },
     });
   });
@@ -227,7 +243,7 @@ describe("POST /api/checkout", () => {
       customer_id: "customer-123",
       location_id: "location-123",
       reference_id: "lead-123",
-      note: "Soul Bowls website | glow-bowl:1,golden-harvest-bowl:1,jerk-wellness-bowl:1,performance-power-bowl:1,herb-chicken-nourish-bowl:1",
+      note: "Soul Bowls website | glow-bowl:1,golden-harvest-bowl:1,jerk-wellness-bowl:1,performance-power-bowl:1,herb-chicken-nourish-bowl:0,anti-inflammatory-bowl:1",
     });
   });
 

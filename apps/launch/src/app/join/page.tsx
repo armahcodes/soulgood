@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { SignupForm } from "@/components/join/SignupForm";
 import { Wordmark } from "@/components/ui/Wordmark";
-import { CURRENT_BOWLS } from "@/lib/current-offer";
+import { AVAILABLE_BOWLS } from "@/lib/current-offer";
 import { BRAND_NAME, type FulfillmentMethod } from "@/lib/brand";
 
 export const metadata = {
@@ -41,7 +41,7 @@ export default async function JoinPage({
             delivery within Los Angeles County.
           </p>
           <div className="mt-8 grid grid-cols-5 gap-2 border-y border-forest/12 py-5">
-            {CURRENT_BOWLS.map((bowl) => (
+            {AVAILABLE_BOWLS.map((bowl) => (
               <div key={bowl.name} className="relative aspect-[3/4] overflow-hidden bg-sand/30">
                 <Image src={bowl.imagePath} alt="" fill unoptimized sizes="100px" className="object-cover" />
               </div>

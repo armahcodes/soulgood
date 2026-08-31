@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
 import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, PLAN, PRICING, TAX } from "@/lib/brand";
-import { CURRENT_BOWLS, CURRENT_OFFER } from "@/lib/current-offer";
+import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
 
 export const metadata = {
   title: `Customer Agreement — ${BRAND_NAME}`,
@@ -33,7 +33,9 @@ export default function CustomerAgreementPage() {
         <p>
           Each purchase or renewal creates one order containing {PLAN.bowlsPerWeek}
           chef-made Soul Bowls™ in {CURRENT_OFFER.format}. At checkout, you may
-          choose any five from {` ${CURRENT_BOWLS.map((bowl) => bowl.name).join(", ")}`}.
+          choose any five from {` ${AVAILABLE_BOWLS.map((bowl) => bowl.name).join(", ")}`}.
+          Items marked sold out, including
+          {` ${SOLD_OUT_BOWLS.map((bowl) => bowl.name).join(", ")}`}, cannot be selected.
           The confirmed mix applies to the order and, for weekly plans, remains
           attached to the plan unless a later selection-change option is provided. Exact recipes,
           proteins, sides, and ingredients may vary. Reasonable substitutions may be

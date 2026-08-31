@@ -9,6 +9,7 @@ const PRODUCT_IMAGE_PATHS: Record<string, string> = {
   "jerk-wellness-bowl": "products/web/jerk-wellness-bowl.webp",
   "performance-power-bowl": "products/web/performance-power-bowl.webp",
   "herb-chicken-nourish-bowl": "products/web/herb-chicken-nourish-bowl.webp",
+  "anti-inflammatory-bowl": "products/web/anti-inflammatory-bowl.webp",
 };
 
 export async function GET(

@@ -11,6 +11,7 @@ export type BowlServing = "Cold or warm" | "Warm";
 export interface CurrentBowl {
   id: BowlId;
   name: string;
+  available: boolean;
   serving: BowlServing;
   ingredients: string;
   dietary: string[];
@@ -25,6 +26,7 @@ export const BOWL_IDS = [
   "jerk-wellness-bowl",
   "performance-power-bowl",
   "herb-chicken-nourish-bowl",
+  "anti-inflammatory-bowl",
 ] as const;
 
 export type BowlId = (typeof BOWL_IDS)[number];
@@ -33,6 +35,7 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
   {
     id: "glow-bowl",
     name: "Glow Bowl™",
+    available: true,
     serving: "Cold or warm",
     ingredients:
       "Greens, quinoa, cucumber, avocado, herbs, and lemon dressing.",
@@ -43,6 +46,7 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
   {
     id: "golden-harvest-bowl",
     name: "Golden Harvest Bowl™",
+    available: true,
     serving: "Cold or warm",
     ingredients:
       "Roasted sweet potato, carrots, quinoa, chickpeas, greens, and tahini herb dressing.",
@@ -54,6 +58,7 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
   {
     id: "jerk-wellness-bowl",
     name: "Jerk Wellness Bowl™",
+    available: true,
     serving: "Cold or warm",
     ingredients:
       "Jerk chicken, brown rice, roasted vegetables, greens, herbs, and jerk sauce.",
@@ -65,6 +70,7 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
   {
     id: "performance-power-bowl",
     name: "Performance Power Bowl™",
+    available: true,
     serving: "Cold or warm",
     ingredients:
       "Grilled chicken, brown rice, sweet potato, broccoli, herbs, and house dressing.",
@@ -75,6 +81,7 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
   {
     id: "herb-chicken-nourish-bowl",
     name: "Herb Chicken Nourish Bowl™",
+    available: false,
     serving: "Cold or warm",
     ingredients:
       "Herb chicken, quinoa, greens, roasted vegetables, herbs, and light dressing.",
@@ -82,11 +89,25 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
     imagePath: "/api/product-image/herb-chicken-nourish-bowl",
     tone: "bg-gold/26",
   },
+  {
+    id: "anti-inflammatory-bowl",
+    name: "Anti-Inflammatory Bowl™",
+    available: true,
+    serving: "Cold or warm",
+    ingredients:
+      "Turmeric rice, chickpeas, greens, roasted vegetables, herbs, and turmeric dressing.",
+    dietary: ["Plant-forward", "Turmeric-forward"],
+    imagePath: "/api/product-image/anti-inflammatory-bowl",
+    tone: "bg-sage/16",
+  },
 ];
+
+export const AVAILABLE_BOWLS = CURRENT_BOWLS.filter((bowl) => bowl.available);
+export const SOLD_OUT_BOWLS = CURRENT_BOWLS.filter((bowl) => !bowl.available);
 
 export const CURRENT_OFFER = {
   jarSizeOunces: 32,
-  bowlsPerWeek: CURRENT_BOWLS.length,
+  bowlsPerWeek: 5,
   format: "32 oz wide-mouth glass jars",
   storage: "Keep refrigerated and follow the prep and eat-by dates on each jar.",
   coldServing: "Plate and enjoy straight from the refrigerator.",

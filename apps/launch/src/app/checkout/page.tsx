@@ -8,7 +8,7 @@ import {
   PLAN,
   PRICING,
 } from "@/lib/brand";
-import { CURRENT_BOWLS, CURRENT_OFFER } from "@/lib/current-offer";
+import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
 
 export const metadata = {
   title: `Order Soul Bowls™ — ${BRAND_NAME}`,
@@ -17,7 +17,7 @@ export const metadata = {
 
 const PLAN_ITEMS = [
   `${PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls`,
-  "Choose any five from the current lineup",
+  "Choose any five from the available lineup",
   "Prep and eat-by dates on every jar",
   PLAN.deliveryNote,
   "Order once or choose automatic weekly delivery",
@@ -56,7 +56,10 @@ export default async function CheckoutPage({
             </p>
 
             <p className="max-w-lg text-sm leading-relaxed text-forest/55">
-              Available now: {CURRENT_BOWLS.map((bowl) => bowl.name).join(", ")}.
+              Available now: {AVAILABLE_BOWLS.map((bowl) => bowl.name).join(", ")}.
+              {SOLD_OUT_BOWLS.length > 0
+                ? ` Sold out: ${SOLD_OUT_BOWLS.map((bowl) => bowl.name).join(", ")}.`
+                : ""}
               {` ${CURRENT_OFFER.storage}`}
             </p>
 

@@ -7,7 +7,7 @@ import { BowlBuilder } from "@/components/checkout/BowlBuilder";
 import { Button } from "@/components/ui/Button";
 import {
   BOWLS_PER_ORDER,
-  bowlSelectionTotal,
+  bowlSelectionSchema,
   DEFAULT_BOWL_SELECTION,
   parseStoredBowlSelection,
   type BowlSelection,
@@ -183,8 +183,7 @@ export function ReserveButton({
       /^\+?[\d\s().-]{9,}$/.test(contact.phone.trim()),
     [contact],
   );
-  const bowlSelectionComplete =
-    bowlSelectionTotal(bowlSelection) === BOWLS_PER_ORDER;
+  const bowlSelectionComplete = bowlSelectionSchema.safeParse(bowlSelection).success;
 
   function resetQuote(): void {
     setQuote(null);
@@ -564,7 +563,7 @@ export function ReserveButton({
       </div>
 
       <label className="flex items-start gap-3 text-sm leading-relaxed text-forest/72">
-        <input type="checkbox" checked={accepted} disabled={pending || !quote} onChange={(event) => setAccepted(event.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-forest" />
+        <input type="checkbox" checked={accepted} disabled={pending} onChange={(event) => setAccepted(event.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-forest" />
         <span>I authorize Soul Goods LLC to {purchaseType === "weekly" ? "save this card and charge the automatic weekly renewal shown above" : "charge the displayed total once for this order"}. I agree to the <Link href="/terms" className="font-semibold underline underline-offset-2">Terms of Service</Link> and <Link href="/customer-agreement" className="font-semibold underline underline-offset-2">Customer Agreement</Link>.</span>
       </label>
 

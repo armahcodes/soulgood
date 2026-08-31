@@ -3,7 +3,7 @@ import { BOWL_IDS, type BowlId } from "./current-offer";
 
 export const BOWLS_PER_ORDER = 5;
 
-const quantitySchema = z.number().int().min(0).max(BOWLS_PER_ORDER);
+const quantitySchema = z.number().int().min(0).max(2);
 
 export const bowlSelectionDraftSchema = z.strictObject({
   "glow-bowl": quantitySchema,
@@ -11,6 +11,7 @@ export const bowlSelectionDraftSchema = z.strictObject({
   "jerk-wellness-bowl": quantitySchema,
   "performance-power-bowl": quantitySchema,
   "herb-chicken-nourish-bowl": quantitySchema,
+  "anti-inflammatory-bowl": quantitySchema,
 });
 
 export const bowlSelectionSchema = bowlSelectionDraftSchema
@@ -19,6 +20,13 @@ export const bowlSelectionSchema = bowlSelectionDraftSchema
       context.addIssue({
         code: "custom",
         message: `Select exactly ${BOWLS_PER_ORDER} bowls`,
+      });
+    }
+    if (selection["herb-chicken-nourish-bowl"] > 0) {
+      context.addIssue({
+        code: "custom",
+        path: ["herb-chicken-nourish-bowl"],
+        message: "Herb Chicken Nourish Bowl is sold out",
       });
     }
   });
@@ -30,7 +38,8 @@ export const DEFAULT_BOWL_SELECTION: BowlSelection = {
   "golden-harvest-bowl": 1,
   "jerk-wellness-bowl": 1,
   "performance-power-bowl": 1,
-  "herb-chicken-nourish-bowl": 1,
+  "herb-chicken-nourish-bowl": 0,
+  "anti-inflammatory-bowl": 1,
 };
 
 export function bowlSelectionTotal(selection: BowlSelection): number {
@@ -46,7 +55,10 @@ export function parseStoredBowlSelection(value: string | null): BowlSelection | 
   if (!value) return null;
   try {
     const parsed = bowlSelectionDraftSchema.safeParse(JSON.parse(value));
-    return parsed.success ? parsed.data : null;
+    if (!parsed.success) return null;
+    return parsed.data["herb-chicken-nourish-bowl"] === 0
+      ? parsed.data
+      : DEFAULT_BOWL_SELECTION;
   } catch {
     return null;
   }

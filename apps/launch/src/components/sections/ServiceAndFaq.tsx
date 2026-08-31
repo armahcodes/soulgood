@@ -5,7 +5,7 @@ import { CURRENT_OFFER } from "@/lib/current-offer";
 const FAQS = [
   {
     question: "What comes in an order?",
-    answer: `Choose any ${PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls from the current lineup, prepared together for ${PLAN.deliveryDay} pickup or delivery. One of each is preselected for convenience.`,
+    answer: `Choose any ${PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls from the available lineup, prepared together for ${PLAN.deliveryDay} pickup or delivery. One of each available bowl is preselected for convenience.`,
   },
   {
     question: "How do I store and serve the bowls?",

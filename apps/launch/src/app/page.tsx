@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { Wordmark } from "@/components/ui/Wordmark";
-import { CURRENT_BOWLS } from "@/lib/current-offer";
+import { AVAILABLE_BOWLS, CURRENT_BOWLS } from "@/lib/current-offer";
 
 const RITUAL_STEPS = [
   { number: "01", title: "Choose your order", body: "Order once or make it a weekly ritual." },
@@ -92,10 +92,10 @@ export default function Home() {
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10">
             <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">
-              The five in your order
+              Current bowl lineup
             </p>
             <h2 className="mt-4 text-4xl leading-none font-normal tracking-[-0.045em] text-forest sm:text-5xl">
-              Five bowls, made with intention.
+              Five available. One sold out.
             </h2>
           </div>
 
@@ -116,10 +116,15 @@ export default function Home() {
                       sizes="(min-width: 1024px) 50vw, 100vw"
                       className="object-cover object-center transition-transform duration-700 ease-out hover:scale-[1.025]"
                     />
+                    {!bowl.available ? (
+                      <span className="absolute left-4 top-4 bg-forest px-3 py-2 text-xs font-bold tracking-[0.14em] text-oat uppercase">
+                        Sold out
+                      </span>
+                    ) : null}
                   </div>
                   <div className={`relative px-2 py-4 sm:px-8 lg:px-12 ${imageFirst ? "lg:order-2" : "lg:order-1"}`}>
                     <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">
-                      Bowl {String(index + 1).padStart(2, "0")} · {bowl.serving}
+                      {bowl.available ? `Available ${String(index + 1).padStart(2, "0")}` : "Sold out"} · {bowl.serving}
                     </p>
                     <h3 className="mt-3 max-w-[14ch] text-4xl leading-[0.94] font-normal tracking-[-0.035em] text-forest sm:text-5xl">
                       {bowl.name}
@@ -144,7 +149,7 @@ export default function Home() {
             Five bowls. One nourishing order.
           </p>
           <div className="mt-7 grid grid-cols-2 gap-5 sm:grid-cols-5 sm:gap-6">
-            {CURRENT_BOWLS.map((bowl) => (
+            {AVAILABLE_BOWLS.map((bowl) => (
               <figure key={bowl.name} className="min-w-0">
                 <div className="relative aspect-[4/5] overflow-hidden bg-sand/25">
                   <Image
@@ -221,7 +226,7 @@ export default function Home() {
         <p className="mt-2 font-serif text-6xl leading-none tracking-[-0.05em] text-forest sm:text-7xl">$88. Once or weekly.</p>
         <div className="mx-auto mt-4 h-px w-12 bg-clay" />
         <p className="mt-4 text-sm leading-6 text-forest/62">
-          One of each is preselected. Adjust your five, then choose free pickup or
+          One of each available bowl is preselected. Adjust your five, then choose free pickup or
           $8.88 LA County delivery. Applicable tax and any refundable jar deposit are
           shown before payment.
         </p>

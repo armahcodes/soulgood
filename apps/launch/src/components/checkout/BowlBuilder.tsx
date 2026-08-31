@@ -22,10 +22,12 @@ export function BowlBuilder({
 
   function changeQuantity(id: BowlId, amount: -1 | 1): void {
     const nextQuantity = selection[id] + amount;
+    const bowlAvailable = CURRENT_BOWLS.find((bowl) => bowl.id === id)?.available;
     if (
       disabled ||
+      !bowlAvailable ||
       nextQuantity < 0 ||
-      nextQuantity > BOWLS_PER_ORDER ||
+      nextQuantity > 2 ||
       (amount > 0 && total >= BOWLS_PER_ORDER)
     ) {
       return;
@@ -42,7 +44,7 @@ export function BowlBuilder({
               Build your five
             </span>
             <span className="mt-1 block text-sm leading-relaxed text-forest/62">
-              Choose any combination. Every jar is 32 oz.
+              One of each available bowl is preselected. Remove one, then double up on another.
             </span>
           </span>
           <span
@@ -70,9 +72,10 @@ export function BowlBuilder({
           return (
             <article
               key={bowl.id}
-              className={`overflow-hidden border bg-white/65 transition-colors ${
+              data-availability={bowl.available ? "available" : "sold-out"}
+              className={`relative overflow-hidden border bg-white/65 transition-colors ${
                 quantity > 0 ? "border-sage/45" : "border-forest/12"
-              }`}
+              } ${bowl.available ? "" : "opacity-65"}`}
             >
               <div className="grid grid-cols-[88px_1fr] items-stretch sm:grid-cols-[104px_1fr]">
                 <div className={`relative min-h-[118px] ${bowl.tone}`}>
@@ -84,12 +87,22 @@ export function BowlBuilder({
                     className="object-cover"
                     unoptimized
                   />
+                  {!bowl.available ? (
+                    <span className="absolute inset-x-2 top-2 bg-forest px-2 py-1 text-center text-[0.62rem] font-bold tracking-[0.12em] text-oat uppercase">
+                      Sold out
+                    </span>
+                  ) : null}
                 </div>
                 <div className="flex min-w-0 flex-col justify-between gap-3 p-4">
                   <div>
                     <h3 className="font-serif text-lg leading-tight font-semibold text-forest">
                       {bowl.name}
                     </h3>
+                    {!bowl.available ? (
+                      <p className="mt-1 text-xs font-bold tracking-[0.08em] text-clay uppercase">
+                        Currently unavailable
+                      </p>
+                    ) : null}
                     <p className="mt-1 text-xs leading-relaxed text-forest/55">
                       {bowl.dietary.join(" · ")}
                     </p>
@@ -124,7 +137,7 @@ export function BowlBuilder({
                         type="button"
                         aria-label={`Remove one ${bowl.name}`}
                         className="flex h-10 w-10 items-center justify-center text-xl text-forest transition-colors hover:bg-sage/12 disabled:cursor-not-allowed disabled:text-forest/25"
-                        disabled={disabled || quantity === 0}
+                        disabled={disabled || !bowl.available || quantity === 0}
                         onClick={() => changeQuantity(bowl.id, -1)}
                       >
                         <span aria-hidden="true">−</span>
@@ -139,7 +152,12 @@ export function BowlBuilder({
                         type="button"
                         aria-label={`Add one ${bowl.name}`}
                         className="flex h-10 w-10 items-center justify-center text-xl text-forest transition-colors hover:bg-sage/12 disabled:cursor-not-allowed disabled:text-forest/25"
-                        disabled={disabled || total >= BOWLS_PER_ORDER}
+                        disabled={
+                          disabled ||
+                          !bowl.available ||
+                          total >= BOWLS_PER_ORDER ||
+                          quantity >= 2
+                        }
                         onClick={() => changeQuantity(bowl.id, 1)}
                       >
                         <span aria-hidden="true">+</span>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
 import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, PRICING, TAX } from "@/lib/brand";
-import { CURRENT_BOWLS, CURRENT_OFFER } from "@/lib/current-offer";
+import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
 
 export const metadata = {
   title: `Terms of Service — ${BRAND_NAME}`,
@@ -103,7 +103,9 @@ export default function TermsPage() {
         <h2>6. Menu changes and availability</h2>
         <p>
           Customers may choose any five bowls from the current lineup:
-          {` ${CURRENT_BOWLS.map((bowl) => bowl.name).join(", ")}`}. The mix confirmed
+          {` ${AVAILABLE_BOWLS.map((bowl) => bowl.name).join(", ")}`}. Items marked
+          sold out, including {` ${SOLD_OUT_BOWLS.map((bowl) => bowl.name).join(", ")}`},
+          cannot be selected. The mix confirmed
           at checkout applies to the order. Ingredients or builds may change based on
           quality, seasonality, supply, and kitchen capacity. We may make reasonable
           substitutions of comparable quality and will disclose material changes when

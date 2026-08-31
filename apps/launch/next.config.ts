@@ -2,15 +2,15 @@ import type { NextConfig } from "next";
 
 const squareContentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""} https://web.squarecdn.com https://sandbox.web.squarecdn.com`,
-  "frame-src 'self' https://web.squarecdn.com https://sandbox.web.squarecdn.com",
-  "connect-src 'self' https://web.squarecdn.com https://sandbox.web.squarecdn.com https://pci-connect.squareup.com https://pci-connect.squareupsandbox.com https://o160250.ingest.sentry.io",
-  "style-src 'self' 'unsafe-inline' https://web.squarecdn.com https://sandbox.web.squarecdn.com",
-  "font-src 'self' https://square-fonts-production-f.squarecdn.com https://d1g145x70srn7h.cloudfront.net",
-  "img-src 'self' data: blob:",
+  `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""} https://*.squarecdn.com`,
+  "frame-src 'self' https://*.squarecdn.com https://*.visa.com https://*.cardinalcommerce.com",
+  "connect-src 'self' https://*.squarecdn.com https://pci-connect.squareup.com https://pci-connect.squareupsandbox.com https://o160250.ingest.sentry.io",
+  "style-src 'self' 'unsafe-inline' https://*.squarecdn.com",
+  "font-src 'self' https://*.squarecdn.com https://d1g145x70srn7h.cloudfront.net",
+  "img-src 'self' data: blob: https://*.squarecdn.com",
   "object-src 'none'",
   "base-uri 'self'",
-  "form-action 'self'",
+  "form-action 'self' https://*.visa.com https://*.cardinalcommerce.com",
   "frame-ancestors 'none'",
 ].join("; ");
 
