@@ -11,16 +11,16 @@ import {
 import { CURRENT_BOWLS, CURRENT_OFFER } from "@/lib/current-offer";
 
 export const metadata = {
-  title: `Start Your Plan — ${BRAND_NAME}`,
-  description: `${PLAN.bowlsPerWeek} chef-made Soul Bowls™ every ${PLAN.deliveryDay} for ${PRICING.weekly}/week, with pickup or LA County delivery, applicable tax, and a disclosed deposit.`,
+  title: `Order Soul Bowls™ — ${BRAND_NAME}`,
+  description: `Choose ${PLAN.bowlsPerWeek} chef-made Soul Bowls™ as a one-time order or ${PRICING.weekly}/week plan, with pickup or LA County delivery, applicable tax, and a disclosed deposit.`,
 };
 
 const PLAN_ITEMS = [
   `${PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls`,
-  "One of each current recipe",
+  "Choose any five from the current lineup",
   "Prep and eat-by dates on every jar",
   PLAN.deliveryNote,
-  "Pause or cancel future renewals anytime",
+  "Order once or choose automatic weekly delivery",
 ];
 
 export default async function CheckoutPage({
@@ -44,18 +44,19 @@ export default async function CheckoutPage({
         <div className="mx-auto grid w-full max-w-6xl gap-12 px-5 py-12 sm:px-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start lg:gap-16 lg:py-20">
           <section className="flex flex-col gap-6">
             <p className="text-xs font-bold tracking-[0.18em] text-clay uppercase">
-              One simple plan
+              One-time or weekly
             </p>
             <h1 className="max-w-[9ch] text-5xl leading-[0.9] font-normal tracking-[-0.05em] text-forest sm:text-7xl">
               Start your bowl week.
             </h1>
             <p className="max-w-lg text-lg leading-relaxed text-forest/68">
-              Five fresh 32 oz jarred Soul Bowls™ for the week. Choose free Sunday
-              pickup or $8.88 Sunday delivery throughout Los Angeles County.
+              Choose your own five 32 oz jarred Soul Bowls™ for the week, then
+              select free Sunday pickup or $8.88 Sunday delivery throughout Los
+              Angeles County.
             </p>
 
             <p className="max-w-lg text-sm leading-relaxed text-forest/55">
-              This week: {CURRENT_BOWLS.map((bowl) => bowl.name).join(", ")}.
+              Available now: {CURRENT_BOWLS.map((bowl) => bowl.name).join(", ")}.
               {` ${CURRENT_OFFER.storage}`}
             </p>
 
@@ -74,10 +75,10 @@ export default async function CheckoutPage({
           <section className="border border-forest/14 bg-white/35 p-6 sm:p-9">
             <div className="border-b border-forest/10 pb-6">
               <p className="font-serif text-2xl font-semibold text-forest">
-                Weekly Soul Bowls™
+                Soul Bowls™ order
               </p>
               <p className="mt-1 text-sm text-forest/55">
-                {PLAN.bowlsPerWeek} jarred bowls · renews every 7 days
+                One-time or weekly · choose {PLAN.bowlsPerWeek} jars
               </p>
             </div>
 

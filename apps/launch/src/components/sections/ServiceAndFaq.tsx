@@ -4,8 +4,8 @@ import { CURRENT_OFFER } from "@/lib/current-offer";
 
 const FAQS = [
   {
-    question: "What comes in the weekly plan?",
-    answer: `${PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls—one of each current recipe—prepared together for ${PLAN.deliveryDay} pickup or delivery.`,
+    question: "What comes in an order?",
+    answer: `Choose any ${PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls from the current lineup, prepared together for ${PLAN.deliveryDay} pickup or delivery. One of each is preselected for convenience.`,
   },
   {
     question: "How do I store and serve the bowls?",
@@ -13,7 +13,7 @@ const FAQS = [
   },
   {
     question: "Where do you deliver?",
-    answer: `Delivery is $8.88 per week to verified addresses throughout ${BUSINESS.serviceArea}. We confirm eligibility before activating the first delivery.`,
+    answer: `Delivery is $8.88 per order to verified addresses throughout ${BUSINESS.serviceArea}. We confirm eligibility before activating delivery.`,
   },
   {
     question: "Can I pick up my bowls?",
@@ -21,7 +21,7 @@ const FAQS = [
   },
   {
     question: "How does billing work?",
-    answer: `The base plan renews every seven days at ${PRICING.weekly} until canceled. Pickup is free or LA County delivery is $8.88 per week. Applicable sales tax and any refundable reusable-container deposit are disclosed before payment.`,
+    answer: `A one-time order is ${PRICING.oneTime} and does not renew. The weekly plan is ${PRICING.weekly} every seven days until canceled. Pickup is free or LA County delivery is $8.88 per order. Applicable sales tax and any refundable reusable-container deposit are disclosed before payment.`,
   },
   {
     question: "Can I cancel?",
@@ -49,7 +49,7 @@ export function ServiceAndFaq() {
             Local by design.
           </h2>
           <p className="max-w-md text-lg leading-relaxed text-forest/68">
-            Pick up your Sunday bowls at no extra charge, or choose $8.88 weekly
+            Pick up your Sunday bowls at no extra charge, or choose $8.88
             delivery throughout Los Angeles County. Delivery addresses are verified.
           </p>
 
@@ -59,8 +59,8 @@ export function ServiceAndFaq() {
             </p>
             <dl className="grid gap-4 text-sm">
               <div className="flex items-start justify-between gap-6">
-                <dt className="font-bold text-forest">Weekly plan</dt>
-                <dd className="text-right text-forest/65">{PRICING.weekly}</dd>
+                <dt className="font-bold text-forest">Five-bowl order</dt>
+                <dd className="text-right text-forest/65">{PRICING.oneTime} once or weekly</dd>
               </div>
               <div className="flex items-start justify-between gap-6 border-t border-forest/10 pt-4">
                 <dt className="font-bold text-forest">Sunday pickup</dt>
@@ -69,7 +69,7 @@ export function ServiceAndFaq() {
               <div className="flex items-start justify-between gap-6 border-t border-forest/10 pt-4">
                 <dt className="font-bold text-forest">{FEES.delivery.label}</dt>
                 <dd className="max-w-[16rem] text-right text-forest/65">
-                  {formatCents(FEES.delivery.amountCents)} per week
+                  {formatCents(FEES.delivery.amountCents)} per order
                 </dd>
               </div>
               <div className="flex items-start justify-between gap-6 border-t border-forest/10 pt-4">

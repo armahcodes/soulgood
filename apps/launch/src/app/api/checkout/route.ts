@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { BRAND_NAME, LEGAL_VERSION, type FulfillmentMethod } from "@/lib/brand";
+import { bowlSelectionSchema, selectionSourceName } from "@/lib/bowl-selection";
+import {
+  BRAND_NAME,
+  LEGAL_VERSION,
+  type FulfillmentMethod,
+} from "@/lib/brand";
+import { persistCheckoutRecord } from "@/lib/checkout-record";
 import {
   addressToSquare,
   getTaxQuote,
@@ -23,6 +29,7 @@ const requestSchema = z
   .object({
     acceptedTerms: z.literal(true),
     billingAddress: addressSchema,
+    bowlSelection: bowlSelectionSchema,
     contact: z.object({
       givenName: z.string().trim().min(1).max(100),
       familyName: z.string().trim().min(1).max(100),
@@ -33,6 +40,7 @@ const requestSchema = z
     fulfillmentMethod: z.enum(["pickup", "delivery"]),
     idempotencyKey: z.string().uuid(),
     leadId: z.string().trim().min(1).max(200),
+    purchaseType: z.enum(["one-time", "weekly"]),
     sourceId: z.string().min(1).max(16384),
   })
   .superRefine((value, context) => {
@@ -116,7 +124,7 @@ async function findOrCreateCustomer(input: {
   return created.customer;
 }
 
-/** Store the buyer-authorized card and create an immediately billed weekly subscription. */
+/** Complete a one-time payment or create an immediately billed weekly subscription. */
 export async function POST(request: Request) {
   const parsed = requestSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
@@ -137,7 +145,11 @@ export async function POST(request: Request) {
     input.fulfillmentMethod === "delivery"
       ? process.env.SQUARE_DELIVERY_PLAN_VARIATION_ID
       : process.env.SQUARE_PICKUP_PLAN_VARIATION_ID;
-  if (!process.env.SQUARE_ACCESS_TOKEN || !locationId || !planVariationId) {
+  if (
+    !process.env.SQUARE_ACCESS_TOKEN ||
+    !locationId ||
+    (input.purchaseType === "weekly" && !planVariationId)
+  ) {
     return NextResponse.json(
       { disabled: true, reason: "square-unconfigured" },
       { status: 503 },
@@ -160,6 +172,68 @@ export async function POST(request: Request) {
       phone,
     });
 
+    const acceptedAt = new Date().toISOString();
+
+    if (input.purchaseType === "one-time") {
+      const paymentResponse = await squareRequest<{
+        payment?: { id?: string; status?: string; receipt_url?: string };
+      }>("/v2/payments", {
+        method: "POST",
+        body: JSON.stringify({
+          idempotency_key: key(input.idempotencyKey, "payment"),
+          source_id: input.sourceId,
+          amount_money: { amount: quote.totalCents, currency: "USD" },
+          autocomplete: true,
+          customer_id: customer.id,
+          location_id: locationId,
+          reference_id: input.leadId.slice(0, 40),
+          note: selectionSourceName(input.bowlSelection),
+        }),
+      });
+      const payment = paymentResponse.payment;
+      if (!payment?.id) throw new Error("Square did not return a payment");
+
+      let checkoutRecorded = false;
+      try {
+        checkoutRecorded = await persistCheckoutRecord({
+          squareObjectId: payment.id,
+          squareObjectType: "payment",
+          squareCustomerId: customer.id,
+          leadId: input.leadId,
+          purchaseType: input.purchaseType,
+          fulfillmentMethod: input.fulfillmentMethod,
+          bowlSelection: input.bowlSelection,
+          subtotalCents: quote.subtotalCents,
+          taxCents: quote.taxCents,
+          totalCents: quote.totalCents,
+          acceptedAt,
+          legalVersion: LEGAL_VERSION,
+        });
+      } catch (recordError) {
+        console.error("[checkout] Payment completed but internal record failed", {
+          paymentId: payment.id,
+          error: recordError instanceof Error ? recordError.message : "unknown",
+        });
+      }
+
+      return NextResponse.json(
+        {
+          ok: true,
+          purchaseType: input.purchaseType,
+          status: payment.status,
+          paymentId: payment.id,
+          receiptUrl: payment.receipt_url,
+          acceptedAt,
+          legalVersion: LEGAL_VERSION,
+          fulfillmentMethod: input.fulfillmentMethod,
+          bowlSelection: input.bowlSelection,
+          checkoutRecorded,
+          tax: quote,
+        },
+        { status: 200 },
+      );
+    }
+
     const cardResponse = await squareRequest<{ card?: { id?: string } }>("/v2/cards", {
       method: "POST",
       body: JSON.stringify({
@@ -175,7 +249,6 @@ export async function POST(request: Request) {
     cardId = cardResponse.card?.id ?? null;
     if (!cardId) throw new Error("Square did not return a saved card");
 
-    const acceptedAt = new Date().toISOString();
     const subscriptionResponse = await squareRequest<{
       subscription?: { id?: string; status?: string };
     }>("/v2/subscriptions", {
@@ -188,20 +261,46 @@ export async function POST(request: Request) {
         card_id: cardId,
         tax_percentage: quote.percentage,
         timezone: "America/Los_Angeles",
-        source: { name: `${BRAND_NAME} website` },
+        source: { name: selectionSourceName(input.bowlSelection) },
       }),
     });
     const subscription = subscriptionResponse.subscription;
     if (!subscription?.id) throw new Error("Square did not return a subscription");
 
+    let checkoutRecorded = false;
+    try {
+      checkoutRecorded = await persistCheckoutRecord({
+        squareObjectId: subscription.id,
+        squareObjectType: "subscription",
+        squareCustomerId: customer.id,
+        leadId: input.leadId,
+        purchaseType: input.purchaseType,
+        fulfillmentMethod: input.fulfillmentMethod,
+        bowlSelection: input.bowlSelection,
+        subtotalCents: quote.subtotalCents,
+        taxCents: quote.taxCents,
+        totalCents: quote.totalCents,
+        acceptedAt,
+        legalVersion: LEGAL_VERSION,
+      });
+    } catch (recordError) {
+      console.error("[checkout] Subscription created but internal record failed", {
+        subscriptionId: subscription.id,
+        error: recordError instanceof Error ? recordError.message : "unknown",
+      });
+    }
+
     return NextResponse.json(
       {
         ok: true,
+        purchaseType: input.purchaseType,
         status: subscription.status,
         subscriptionId: subscription.id,
         acceptedAt,
         legalVersion: LEGAL_VERSION,
         fulfillmentMethod: input.fulfillmentMethod,
+        bowlSelection: input.bowlSelection,
+        checkoutRecorded,
         tax: quote,
       },
       { status: 200 },
@@ -213,12 +312,17 @@ export async function POST(request: Request) {
       }).catch(() => undefined);
     }
     const codes = error instanceof SquareApiError ? error.codes : [];
-    console.error("[checkout] Square subscription failed", { codes });
+    console.error("[checkout] Square checkout failed", {
+      codes,
+      purchaseType: input.purchaseType,
+    });
     return NextResponse.json(
       {
         error: codes.includes("CARD_DECLINED")
           ? "The card was declined. Try another card or contact your bank."
-          : "Square could not start the weekly plan. No subscription was created.",
+          : input.purchaseType === "weekly"
+            ? "Square could not start the weekly plan. No subscription was created."
+            : "Square could not complete this order. No payment was completed.",
       },
       { status: error instanceof SquareApiError && error.status < 500 ? 422 : 502 },
     );

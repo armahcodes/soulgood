@@ -6,8 +6,8 @@ import { CURRENT_BOWLS } from "@/lib/current-offer";
 import { BRAND_NAME, type FulfillmentMethod } from "@/lib/brand";
 
 export const metadata = {
-  title: `Start Your Week — ${BRAND_NAME}`,
-  description: "Reserve five fresh 32 oz Soul Bowls™ for $88 weekly with pickup or Los Angeles County delivery.",
+  title: `Order Your Bowls — ${BRAND_NAME}`,
+  description: "Reserve five fresh 32 oz Soul Bowls™ for a one-time $88 order or weekly plan with pickup or Los Angeles County delivery.",
 };
 
 export default async function JoinPage({
@@ -31,12 +31,14 @@ export default async function JoinPage({
 
       <div className="mx-auto grid w-full max-w-7xl gap-12 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20 lg:px-12 lg:py-20">
         <section className="lg:sticky lg:top-10 lg:self-start">
-          <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">Start your weekly ritual</p>
+          <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">Order once or weekly</p>
           <h1 className="mt-5 max-w-[10ch] text-6xl leading-[0.86] font-normal tracking-[-0.055em] text-forest sm:text-7xl">
             Your week, nourished.
           </h1>
           <p className="mt-7 max-w-lg text-base leading-7 text-forest/68 sm:text-lg">
-            Reserve five fresh 32 oz Soul Bowls™ for $88 weekly. Choose free Sunday pickup or $8.88 delivery within Los Angeles County.
+            Reserve five fresh 32 oz Soul Bowls™ for $88. At checkout, choose a
+            one-time order or weekly plan, then select free Sunday pickup or $8.88
+            delivery within Los Angeles County.
           </p>
           <div className="mt-8 grid grid-cols-5 gap-2 border-y border-forest/12 py-5">
             {CURRENT_BOWLS.map((bowl) => (
@@ -46,7 +48,7 @@ export default async function JoinPage({
             ))}
           </div>
           <dl className="mt-7 grid grid-cols-3 divide-x divide-forest/12 border-y border-forest/12 py-5 text-center">
-            <div className="px-3"><dt className="text-xs text-forest/52">Weekly</dt><dd className="mt-1 font-serif text-3xl text-forest">$88</dd></div>
+            <div className="px-3"><dt className="text-xs text-forest/52">Order</dt><dd className="mt-1 font-serif text-3xl text-forest">$88</dd></div>
             <div className="px-3"><dt className="text-xs text-forest/52">Bowls</dt><dd className="mt-1 font-serif text-3xl text-forest">5</dd></div>
             <div className="px-3"><dt className="text-xs text-forest/52">Each jar</dt><dd className="mt-1 font-serif text-3xl text-forest">32 oz</dd></div>
           </dl>

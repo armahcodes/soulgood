@@ -5,7 +5,7 @@ import { CURRENT_BOWLS, CURRENT_OFFER } from "@/lib/current-offer";
 
 export const metadata = {
   title: `Terms of Service — ${BRAND_NAME}`,
-  description: `Terms governing the Soul Bowls™ website and weekly pickup or delivery service operated by ${BUSINESS.legalName}.`,
+  description: `Terms governing Soul Bowls™ one-time and weekly pickup or delivery orders operated by ${BUSINESS.legalName}.`,
 };
 
 export default function TermsPage() {
@@ -18,7 +18,7 @@ export default function TermsPage() {
       <section>
         <h2>1. Agreement and operator</h2>
         <p>
-          Soul Bowls™ is a food subscription and delivery service operated by
+          Soul Bowls™ is a food ordering and subscription service operated by
           {` ${BUSINESS.legalName}`} (“Soul Goods,” “we,” “us,” or “our”). By using
           this website, creating an order, or starting a subscription, you agree
           to these Terms and, for purchases, the <Link href="/customer-agreement">Customer Agreement</Link>.
@@ -39,14 +39,15 @@ export default function TermsPage() {
       </section>
 
       <section>
-        <h2>3. Weekly subscription</h2>
+        <h2>3. One-time orders and weekly subscriptions</h2>
         <p>
-          The standard plan includes five chef-made Soul Bowls™ in
-          {` ${CURRENT_OFFER.format}`} for {PRICING.weekly} per week. The subscription
-          continues and renews every seven days until you cancel. By starting a plan,
-          you expressly authorize recurring weekly charges at the disclosed price,
-          plus the selected fulfillment charge, any refundable container deposit,
-          and applicable sales tax.
+          A standard order includes five chef-made Soul Bowls™ in
+          {` ${CURRENT_OFFER.format}`} for {PRICING.oneTime}. At checkout, you may
+          choose a one-time order with no automatic renewal or a weekly subscription
+          at {PRICING.weekly} per week. A weekly subscription continues and renews
+          every seven days until you cancel. By starting a weekly plan, you expressly
+          authorize recurring weekly charges at the disclosed price, plus the selected
+          fulfillment charge and applicable sales tax.
         </p>
         <p>
           You may cancel future renewals online at any time through our <Link href="/cancel">cancellation page</Link>.
@@ -58,12 +59,13 @@ export default function TermsPage() {
       <section>
         <h2>4. Pricing and fees</h2>
         <p>
-          The weekly food-plan price is {PRICING.weekly}. {FEES.delivery.label}:
+          The five-bowl order price is {PRICING.oneTime}, whether purchased once or
+          through the {PRICING.weekly} weekly plan. {FEES.delivery.label}:
           {` ${FEES.delivery.disclosure}`} Sunday pickup has no fulfillment fee.
           {` ${FEES.containerDeposit.label}`}:
-          {` ${FEES.containerDeposit.disclosure}`} Subscription and fulfillment
-          amounts due at checkout will be displayed before payment. We do not add
-          undisclosed handling or service fees.
+          {` ${FEES.containerDeposit.disclosure}`} Order and fulfillment amounts due
+          at checkout will be displayed before payment. We do not add undisclosed
+          handling or service fees.
         </p>
         <p>
           {TAX.disclosure} Tax is added to the displayed subtotal where required.
@@ -81,8 +83,8 @@ export default function TermsPage() {
         <h2>5. Pickup and delivery</h2>
         <p>
           Sunday pickup has no fulfillment fee. We will provide the pickup location
-          and available window before fulfillment. Weekly LA County delivery costs
-          $8.88 and is generally scheduled for Sunday. Pickup and delivery windows
+          and available window before fulfillment. LA County delivery costs
+          $8.88 per order and is generally scheduled for Sunday. Pickup and delivery windows
           are estimates and may change because of traffic, weather, building access,
           safety conditions, or events outside our reasonable control.
         </p>
@@ -100,11 +102,13 @@ export default function TermsPage() {
       <section>
         <h2>6. Menu changes and availability</h2>
         <p>
-          The current standard set is {CURRENT_BOWLS.map((bowl) => bowl.name).join(", ")}.
-          Ingredients or builds may change based on quality, seasonality, supply, and
-          kitchen capacity. We may make reasonable substitutions of comparable quality
-          and will disclose material changes when practical. Website photos are
-          illustrative and do not guarantee exact presentation.
+          Customers may choose any five bowls from the current lineup:
+          {` ${CURRENT_BOWLS.map((bowl) => bowl.name).join(", ")}`}. The mix confirmed
+          at checkout applies to the order. Ingredients or builds may change based on
+          quality, seasonality, supply, and kitchen capacity. We may make reasonable
+          substitutions of comparable quality and will disclose material changes when
+          practical. Website photos are illustrative and do not guarantee exact
+          presentation.
         </p>
       </section>
 
@@ -139,8 +143,8 @@ export default function TermsPage() {
         <p>
           When a reusable-container deposit applies, its amount and return terms are
           disclosed before the containers are issued and the deposit is collected
-          separately from the subscription. Eligible deposits are returned as an account credit
-          or refund after the corresponding containers are returned reasonably clean
+          separately from the order or subscription. Eligible deposits are returned as
+          an account credit or refund after the corresponding containers are returned reasonably clean
           and undamaged through the return method we provide. Lost, unreturned, or
           materially damaged containers are not eligible for deposit credit.
         </p>

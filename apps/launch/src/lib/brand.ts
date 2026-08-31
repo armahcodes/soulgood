@@ -45,14 +45,31 @@ export const FOUNDER = "Chef Kyla";
 
 /**
  * Plan pricing — single source of truth for every price shown across the
- * microsite. The plan is a flat $88/week with no introductory-price tier.
+ * microsite. Five bowls are a flat $88 for one-time and weekly checkout.
  */
 export const PRICING = {
+  /** One-time order price. */
+  oneTime: "$88",
+  /** One-time order price in cents. */
+  oneTimeCents: 8800,
   /** Recurring weekly price. */
   weekly: "$88",
   /** Weekly price in cents, for the recurring Square subscription plan. */
   weeklyCents: 8800,
 } as const;
+
+export const PURCHASE_OPTIONS = {
+  "one-time": {
+    label: "One-time order",
+    disclosure: "One charge. No automatic renewal.",
+  },
+  weekly: {
+    label: "Weekly plan",
+    disclosure: "Renews every 7 days until canceled.",
+  },
+} as const;
+
+export type PurchaseType = keyof typeof PURCHASE_OPTIONS;
 
 /**
  * Fulfillment and reusable-container charges shown throughout the experience.
@@ -61,7 +78,7 @@ export const FEES = {
   delivery: {
     label: "Los Angeles County delivery",
     amountCents: 888,
-    disclosure: "$8.88 per weekly delivery within Los Angeles County.",
+    disclosure: "$8.88 per delivery within Los Angeles County.",
   },
   containerDeposit: {
     label: "Refundable reusable-container deposit",

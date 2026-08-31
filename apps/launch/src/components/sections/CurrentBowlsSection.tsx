@@ -11,12 +11,13 @@ export function CurrentBowlsSection() {
               In your week now
             </p>
             <h2 className="max-w-[11ch] text-5xl leading-[0.94] font-semibold tracking-[-0.045em] text-forest sm:text-6xl">
-              Five bowls. One of each.
+              Five bowls. Your mix.
             </h2>
           </div>
           <p className="max-w-lg text-base leading-relaxed text-forest/65 lg:justify-self-end lg:text-lg">
-            Each week includes the five current Soul Bowls™ below, layered in
-            {` ${CURRENT_OFFER.format}`} and labeled with prep and eat-by dates.
+            Choose any five from the current Soul Bowls™ below. Every selection
+            comes layered in {` ${CURRENT_OFFER.format}`} and labeled with prep and
+            eat-by dates.
           </p>
         </div>
 

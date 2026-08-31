@@ -5,11 +5,11 @@ import { Wordmark } from "@/components/ui/Wordmark";
 import { CURRENT_BOWLS } from "@/lib/current-offer";
 
 const RITUAL_STEPS = [
-  { number: "01", title: "Choose your week", body: "Reserve the five-bowl plan that fits your routine." },
+  { number: "01", title: "Choose your order", body: "Order once or make it a weekly ritual." },
   { number: "02", title: "We prep fresh", body: "Chef-made in Los Angeles with whole ingredients." },
   { number: "03", title: "Pick up or receive", body: "Free pickup or $8.88 delivery in LA County." },
   { number: "04", title: "Nourish your days", body: "Five 32 oz bowls, ready when your week gets full." },
-  { number: "05", title: "Feel good. Repeat.", body: "A simple weekly ritual you can pause or cancel." },
+  { number: "05", title: "Feel good. Repeat.", body: "Come back when you want, or pause and cancel a weekly plan anytime." },
 ] as const;
 
 export default function Home() {
@@ -25,10 +25,10 @@ export default function Home() {
             <a href="#bowls" className="transition-colors hover:text-clay">Soul Bowls™</a>
             <a href="#ritual" className="transition-colors hover:text-clay">Our ritual</a>
             <a href="#fulfillment" className="transition-colors hover:text-clay">Delivery &amp; pickup</a>
-            <a href="#price" className="transition-colors hover:text-clay">The plan</a>
+            <a href="#price" className="transition-colors hover:text-clay">Order</a>
           </nav>
           <Button as="a" href="/join" size="sm" className="hidden sm:inline-flex">
-            Start my week
+            Order my five
           </Button>
         </div>
       </header>
@@ -58,7 +58,7 @@ export default function Home() {
             />
             <div className="relative z-10 max-w-[34rem]">
               <p className="mb-5 text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">
-                Weekly nourishment · Los Angeles
+                One-time or weekly · Los Angeles
               </p>
               <h1 className="text-[clamp(4.6rem,8vw,8.3rem)] leading-[0.76] font-normal tracking-[-0.055em] text-forest">
                 Soul Bowls<sup className="ml-1 text-[0.18em] align-top tracking-normal">™</sup>
@@ -68,11 +68,12 @@ export default function Home() {
               </p>
               <div className="mt-7 h-px w-12 bg-clay" />
               <p className="mt-7 max-w-md text-base leading-7 text-forest/72 sm:text-lg">
-                Five fresh 32 oz bowls for $88 weekly. Choose free pickup or
-                $8.88 Los Angeles County delivery.
+                Five fresh 32 oz bowls for $88—order once or choose weekly. Start
+                with one of each, then adjust your mix at checkout. Choose free
+                pickup or $8.88 Los Angeles County delivery.
               </p>
               <Button as="a" href="/join" size="lg" className="mt-8 min-w-48">
-                Start my week
+                Order my five
               </Button>
             </div>
           </div>
@@ -91,7 +92,7 @@ export default function Home() {
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10">
             <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">
-              The five in your week
+              The five in your order
             </p>
             <h2 className="mt-4 text-4xl leading-none font-normal tracking-[-0.045em] text-forest sm:text-5xl">
               Five bowls, made with intention.
@@ -140,7 +141,7 @@ export default function Home() {
       <section className="relative border-b border-forest/10 bg-oat pb-12 sm:pb-14">
         <div className="mx-auto w-full max-w-6xl px-5 text-center sm:px-8 lg:px-12">
           <p className="font-serif text-3xl text-forest sm:text-4xl">
-            Five bowls. One nourishing week.
+            Five bowls. One nourishing order.
           </p>
           <div className="mt-7 grid grid-cols-2 gap-5 sm:grid-cols-5 sm:gap-6">
             {CURRENT_BOWLS.map((bowl) => (
@@ -167,7 +168,7 @@ export default function Home() {
       <section id="ritual" className="bg-oat py-12 sm:py-14">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="mb-8 text-center">
-            <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">Your weekly ritual</p>
+            <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">Your bowl ritual</p>
             <h2 className="mt-3 text-4xl leading-none font-normal tracking-[-0.04em] text-forest sm:text-5xl">
               From our kitchen to your week.
             </h2>
@@ -196,7 +197,7 @@ export default function Home() {
           </Button>
         </article>
         <article className="relative overflow-hidden bg-clay px-8 py-10 text-oat sm:px-14 lg:px-20">
-          <p className="text-[0.68rem] font-bold tracking-[0.22em] text-oat/72 uppercase">$8.88 per week</p>
+          <p className="text-[0.68rem] font-bold tracking-[0.22em] text-oat/72 uppercase">$8.88 per order</p>
           <h2 className="mt-4 text-5xl font-normal tracking-[-0.04em] sm:text-6xl">Delivery</h2>
           <p className="mt-5 max-w-sm text-base leading-7 text-oat/78">
             Doorstep delivery to verified addresses throughout Los Angeles County, California.
@@ -217,10 +218,12 @@ export default function Home() {
           className="pointer-events-none absolute -left-20 bottom-0 hidden w-56 -rotate-[58deg] opacity-[0.12] md:block"
         />
         <p className="font-serif text-3xl text-forest">Five 32 oz bowls.</p>
-        <p className="mt-2 font-serif text-6xl leading-none tracking-[-0.05em] text-forest sm:text-7xl">$88 weekly.</p>
+        <p className="mt-2 font-serif text-6xl leading-none tracking-[-0.05em] text-forest sm:text-7xl">$88. Once or weekly.</p>
         <div className="mx-auto mt-4 h-px w-12 bg-clay" />
         <p className="mt-4 text-sm leading-6 text-forest/62">
-          Choose free pickup or $8.88 LA County delivery. Applicable tax and any refundable jar deposit are shown before payment.
+          One of each is preselected. Adjust your five, then choose free pickup or
+          $8.88 LA County delivery. Applicable tax and any refundable jar deposit are
+          shown before payment.
         </p>
       </section>
 
@@ -239,10 +242,10 @@ export default function Home() {
             Your week, nourished.
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-base leading-7 text-oat/68">
-            Five thoughtful bowls. One simple weekly rhythm. Made locally and ready for real life.
+            Five thoughtful bowls, once or every week. Made locally and ready for real life.
           </p>
           <Button as="a" href="/join" size="lg" className="mt-6 bg-sage hover:bg-oat hover:text-forest">
-            Start my week
+            Order my five
           </Button>
         </div>
       </section>

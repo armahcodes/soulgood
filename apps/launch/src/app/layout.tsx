@@ -9,8 +9,8 @@ const ebGaramond = EB_Garamond({
   variable: "--font-eb-garamond",
 });
 
-const SITE_TITLE = `${BRAND_NAME} — Five 32 oz Jarred Bowls for $88/Week`;
-const SITE_DESCRIPTION = `${TAGLINE}. Five fresh, chef-made jarred bowls every Sunday for $88/week, with pickup or Los Angeles County delivery.`;
+const SITE_TITLE = `${BRAND_NAME} — Five 32 oz Jarred Bowls for $88`;
+const SITE_DESCRIPTION = `${TAGLINE}. Five fresh, chef-made jarred bowls for $88 one-time or weekly, with pickup or Los Angeles County delivery.`;
 
 export const metadata: Metadata = {
   title: SITE_TITLE,

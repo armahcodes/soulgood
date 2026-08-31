@@ -3,12 +3,13 @@
  *
  * Source: Soul Good - Jar Production.xlsx, "Jar Menu" and "Instructions" tabs.
  * The workbook's $55 pilot price is intentionally not used here; the current
- * customer price remains the canonical $88/week value in brand.ts.
+ * customer price remains the canonical $88 five-bowl value in brand.ts.
  */
 
 export type BowlServing = "Cold or warm" | "Warm";
 
 export interface CurrentBowl {
+  id: BowlId;
   name: string;
   serving: BowlServing;
   ingredients: string;
@@ -18,8 +19,19 @@ export interface CurrentBowl {
   tone: string;
 }
 
+export const BOWL_IDS = [
+  "glow-bowl",
+  "golden-harvest-bowl",
+  "jerk-wellness-bowl",
+  "performance-power-bowl",
+  "herb-chicken-nourish-bowl",
+] as const;
+
+export type BowlId = (typeof BOWL_IDS)[number];
+
 export const CURRENT_BOWLS: CurrentBowl[] = [
   {
+    id: "glow-bowl",
     name: "Glow Bowl™",
     serving: "Cold or warm",
     ingredients:
@@ -29,6 +41,7 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
     tone: "bg-gold/42",
   },
   {
+    id: "golden-harvest-bowl",
     name: "Golden Harvest Bowl™",
     serving: "Cold or warm",
     ingredients:
@@ -39,6 +52,7 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
     tone: "bg-sage/16",
   },
   {
+    id: "jerk-wellness-bowl",
     name: "Jerk Wellness Bowl™",
     serving: "Cold or warm",
     ingredients:
@@ -49,6 +63,7 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
     tone: "bg-clay/16",
   },
   {
+    id: "performance-power-bowl",
     name: "Performance Power Bowl™",
     serving: "Cold or warm",
     ingredients:
@@ -58,6 +73,7 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
     tone: "bg-sand/62",
   },
   {
+    id: "herb-chicken-nourish-bowl",
     name: "Herb Chicken Nourish Bowl™",
     serving: "Cold or warm",
     ingredients:

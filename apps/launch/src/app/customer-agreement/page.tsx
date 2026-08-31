@@ -5,7 +5,7 @@ import { CURRENT_BOWLS, CURRENT_OFFER } from "@/lib/current-offer";
 
 export const metadata = {
   title: `Customer Agreement — ${BRAND_NAME}`,
-  description: `Purchase, delivery, renewal, cancellation, and exchange terms for the ${BRAND_NAME} weekly plan.`,
+  description: `Purchase, delivery, renewal, cancellation, and exchange terms for ${BRAND_NAME} one-time and weekly orders.`,
 };
 
 export default function CustomerAgreementPage() {
@@ -16,11 +16,12 @@ export default function CustomerAgreementPage() {
       intro={`This agreement applies when you reserve, order, or subscribe to Soul Bowls™ from ${BUSINESS.legalName}. Please read it before authorizing payment.`}
     >
       <section className="rounded-3xl bg-gold/25 p-6 sm:p-8">
-        <h2>Important recurring-payment terms</h2>
+        <h2>Important order and recurring-payment terms</h2>
         <ul>
-          <li>{PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls per weekly order.</li>
-          <li>{PRICING.weekly} charged every seven days until you cancel.</li>
-          <li>Pickup is free or LA County delivery is $8.88 per week.</li>
+          <li>{PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls per order.</li>
+          <li>Choose a {PRICING.oneTime} one-time order or a {PRICING.weekly} weekly plan.</li>
+          <li>Only the weekly plan renews and charges every seven days until you cancel.</li>
+          <li>Pickup is free or LA County delivery is $8.88 per order.</li>
           <li>Applicable sales tax is shown at checkout; any reusable-container deposit is disclosed and collected separately.</li>
           <li>Cancel future renewals online at any time; orders already charged remain final.</li>
           <li>Service is limited to verified addresses in {BUSINESS.serviceArea}.</li>
@@ -28,36 +29,40 @@ export default function CustomerAgreementPage() {
       </section>
 
       <section>
-        <h2>1. Your weekly order</h2>
+        <h2>1. Your five-bowl order</h2>
         <p>
-          Each renewal purchases one weekly order containing {PLAN.bowlsPerWeek}
-          chef-made Soul Bowls™ in {CURRENT_OFFER.format}, ordinarily one each of
-          {` ${CURRENT_BOWLS.map((bowl) => bowl.name).join(", ")}`}. Exact recipes,
+          Each purchase or renewal creates one order containing {PLAN.bowlsPerWeek}
+          chef-made Soul Bowls™ in {CURRENT_OFFER.format}. At checkout, you may
+          choose any five from {` ${CURRENT_BOWLS.map((bowl) => bowl.name).join(", ")}`}.
+          The confirmed mix applies to the order and, for weekly plans, remains
+          attached to the plan unless a later selection-change option is provided. Exact recipes,
           proteins, sides, and ingredients may vary. Reasonable substitutions may be
           made for seasonal, quality, or supply reasons.
         </p>
       </section>
 
       <section>
-        <h2>2. Automatic renewal and consent</h2>
+        <h2>2. Payment, automatic renewal, and consent</h2>
         <p>
-          Your plan begins when payment is authorized and renews automatically every
-          seven days until canceled. By checking the consent box at checkout and
-          submitting payment, you expressly agree to the recurring terms and authorize
-          Soul Goods LLC and its payment processor to charge your payment method for
-          each renewal.
+          A one-time order is charged once and does not renew automatically. A weekly
+          plan begins when payment is authorized and renews automatically every seven
+          days until canceled. By checking the consent box at checkout and submitting
+          payment, you authorize Soul Goods LLC and its payment processor to charge the
+          displayed one-time total or, when you choose weekly, the displayed initial
+          and recurring amounts.
         </p>
       </section>
 
       <section>
         <h2>3. Charges</h2>
         <p>
-          The base plan is {PRICING.weekly} per week. {FEES.delivery.label}:
+          The base five-bowl order is {PRICING.oneTime}; the weekly plan is
+          {` ${PRICING.weekly}`} per week. {FEES.delivery.label}:
           {` ${FEES.delivery.disclosure}`} Pickup has no fulfillment fee.
           {` ${FEES.containerDeposit.label}`}:
           {` ${FEES.containerDeposit.disclosure}`} The container deposit is not part
-          of the Square subscription checkout. Government-imposed taxes or fees, if
-          applicable, are shown separately. The subscription amount is displayed
+          of the Square checkout. Government-imposed taxes or fees, if applicable,
+          are shown separately. The order or subscription amount is displayed
           before you authorize payment.
         </p>
         <p>{TAX.disclosure} Tax is added to the subtotal where required.</p>
@@ -66,7 +71,8 @@ export default function CustomerAgreementPage() {
       <section>
         <h2>4. Cancellation</h2>
         <p>
-          You may cancel future automatic renewals immediately through the
+          This section applies only to weekly plans. You may cancel future automatic
+          renewals immediately through the
           {` `}<Link href="/cancel">online cancellation page</Link>. Cancellation does
           not undo an order that was already charged and committed to production.
           We will provide a retainable acknowledgment of the subscription terms and
