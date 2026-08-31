@@ -117,7 +117,7 @@ describe("POST /api/checkout", () => {
       status: "ACTIVE",
       subscriptionId: "subscription-123",
       fulfillmentMethod: "delivery",
-      legalVersion: "2026-08-29",
+      legalVersion: "2026-08-31",
       tax: {
         subtotalCents: 9688,
         taxCents: 945,

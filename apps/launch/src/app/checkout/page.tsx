@@ -4,11 +4,11 @@ import { SiteFooter } from "@/components/ui/SiteFooter";
 import { Wordmark } from "@/components/ui/Wordmark";
 import {
   BRAND_NAME,
-  BUSINESS,
   type FulfillmentMethod,
   PLAN,
   PRICING,
 } from "@/lib/brand";
+import { CURRENT_BOWLS, CURRENT_OFFER } from "@/lib/current-offer";
 
 export const metadata = {
   title: `Start Your Plan — ${BRAND_NAME}`,
@@ -16,10 +16,10 @@ export const metadata = {
 };
 
 const PLAN_ITEMS = [
-  `${PLAN.bowlsPerWeek} chef-made bowls`,
+  `${PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls`,
+  "One of each current recipe",
+  "Prep and eat-by dates on every jar",
   PLAN.deliveryNote,
-  `Delivery throughout ${BUSINESS.serviceArea}`,
-  "A rotating seasonal menu",
   "Pause or cancel future renewals anytime",
 ];
 
@@ -48,8 +48,13 @@ export default async function CheckoutPage({
               Start your bowl week.
             </h1>
             <p className="max-w-lg text-lg leading-relaxed text-forest/68">
-              Five fresh Soul Bowls™ for the week. Choose free Sunday pickup or
-              $8.88 Sunday delivery throughout Los Angeles County.
+              Five fresh 32 oz jarred Soul Bowls™ for the week. Choose free Sunday
+              pickup or $8.88 Sunday delivery throughout Los Angeles County.
+            </p>
+
+            <p className="max-w-lg text-sm leading-relaxed text-forest/55">
+              This week: {CURRENT_BOWLS.map((bowl) => bowl.name).join(", ")}.
+              {` ${CURRENT_OFFER.storage}`}
             </p>
 
             <ul className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -70,7 +75,7 @@ export default async function CheckoutPage({
                 Weekly Soul Bowls™
               </p>
               <p className="mt-1 text-sm text-forest/55">
-                {PLAN.bowlsPerWeek} bowls · renews every 7 days
+                {PLAN.bowlsPerWeek} jarred bowls · renews every 7 days
               </p>
             </div>
 

@@ -1,10 +1,15 @@
 import Link from "next/link";
 import { BUSINESS, FEES, formatCents, PLAN, PRICING, TAX } from "@/lib/brand";
+import { CURRENT_OFFER } from "@/lib/current-offer";
 
 const FAQS = [
   {
     question: "What comes in the weekly plan?",
-    answer: `${PLAN.bowlsPerWeek} chef-made bowls from a rotating seasonal menu, delivered together every ${PLAN.deliveryDay}.`,
+    answer: `${PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls—one of each current recipe—prepared together for ${PLAN.deliveryDay} pickup or delivery.`,
+  },
+  {
+    question: "How do I store and serve the bowls?",
+    answer: `${CURRENT_OFFER.storage} Plate and enjoy cold, or remove the lid, transfer the food to a microwave-safe bowl, and warm before serving.`,
   },
   {
     question: "Where do you deliver?",
@@ -28,7 +33,7 @@ const FAQS = [
   },
   {
     question: "Can you accommodate severe allergies?",
-    answer: "Our kitchen handles major allergens and cannot guarantee against cross-contact. Customers with severe or life-threatening allergies should not order.",
+    answer: "The current line includes sesame, soy, and wheat-related risks, and our kitchen handles other major allergens. We cannot guarantee against cross-contact. Customers with severe or life-threatening allergies should not order.",
   },
 ];
 

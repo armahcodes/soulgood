@@ -1,17 +1,18 @@
-import { BowlIllustration } from "@/components/ui/BowlIllustration";
+import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { SignupForm } from "@/components/join/SignupForm";
-import { SampleBowlsSection } from "@/components/sections/SampleBowlsSection";
+import { CurrentBowlsSection } from "@/components/sections/CurrentBowlsSection";
 import { ServiceAndFaq } from "@/components/sections/ServiceAndFaq";
 import { FOUNDER, PLAN, PRICING } from "@/lib/brand";
+import { CURRENT_BOWLS, CURRENT_OFFER } from "@/lib/current-offer";
 
 const PLAN_DETAILS = [
   {
     number: "01",
-    title: `${PLAN.bowlsPerWeek} chef-made bowls`,
-    body: "A fresh weekly rotation built with grains, greens, vegetables, and satisfying proteins.",
+    title: `${PLAN.bowlsPerWeek} chef-made jarred bowls`,
+    body: `One each of the ${CURRENT_BOWLS.length} current recipes, layered in ${CURRENT_OFFER.format}.`,
   },
   {
     number: "02",
@@ -54,9 +55,9 @@ export default function Home() {
             </h1>
             <p className="max-w-[34rem] text-lg leading-relaxed text-forest/72 sm:text-xl">
               Five fresh, chef-made Soul Bowls<sup className="text-[0.5em]">™</sup>{" "}
-              ready every Sunday. The plan is {PRICING.weekly} a week with free
-              pickup or $8.88 LA County delivery, plus applicable tax and the
-              disclosed refundable container deposit.
+              layered in reusable 32 oz jars and ready every Sunday. The plan is
+              {` ${PRICING.weekly}`} a week with free pickup or $8.88 LA County
+              delivery, plus applicable tax and the disclosed refundable container deposit.
             </p>
           </div>
 
@@ -74,7 +75,22 @@ export default function Home() {
           </p>
         </div>
 
-        <BowlIllustration />
+        <figure className="relative mx-auto w-full max-w-[34rem] overflow-hidden rounded-[2.25rem] bg-gold/25 shadow-[0_28px_90px_rgba(32,53,47,0.16)]">
+          <div className="relative aspect-[4/5]">
+            <Image
+              src={CURRENT_BOWLS[0].imagePath}
+              alt="Glow Bowl™ in a 32 ounce Soul Good jar"
+              fill
+              priority
+              sizes="(min-width: 1024px) 45vw, 92vw"
+              className="object-cover"
+              unoptimized
+            />
+          </div>
+          <figcaption className="absolute right-5 bottom-5 rounded-full bg-oat/90 px-4 py-2 text-xs font-bold tracking-[0.12em] text-forest uppercase shadow-sm backdrop-blur">
+            32 oz · one of five
+          </figcaption>
+        </figure>
       </section>
 
       <section id="plan" className="bg-forest text-oat">
@@ -90,8 +106,8 @@ export default function Home() {
             </div>
             <p className="max-w-xl text-base leading-relaxed text-oat/65 lg:justify-self-end lg:text-lg">
               Soul Bowls™ keeps the offer simple: a week of complete, satisfying
-              bowls ready at once for pickup or delivery. The menu changes. The
-              plan does not.
+              bowls ready at once for pickup or delivery. You receive one of each
+              current recipe, with prep and eat-by dates on every jar.
             </p>
           </div>
 
@@ -116,7 +132,7 @@ export default function Home() {
         </div>
       </section>
 
-      <SampleBowlsSection />
+      <CurrentBowlsSection />
 
       <ServiceAndFaq />
 
@@ -131,7 +147,7 @@ export default function Home() {
             </h2>
             <p className="max-w-md text-lg leading-relaxed text-forest/68">
               Share your details to reserve your spot. We&rsquo;ll text you before
-              your first Sunday pickup or delivery. No charge today.
+              your first Sunday pickup or delivery. No charge on this step.
             </p>
 
             <div className="flex items-end gap-3 border-t border-forest/15 pt-6">
@@ -154,7 +170,7 @@ export default function Home() {
                   Reserve your bowls
                 </p>
                 <p className="mt-1 text-sm text-forest/58">
-                  {PLAN.bowlsPerWeek} bowls · {PLAN.deliveryNote}
+                  {PLAN.bowlsPerWeek} jarred bowls · {PLAN.deliveryNote}
                 </p>
               </div>
               <span className="rounded-full bg-sage/15 px-3 py-1.5 text-xs font-bold text-sage">

@@ -20,7 +20,7 @@ export const CONTACT = {
 } as const;
 
 /** Version saved with customer consent records. */
-export const LEGAL_VERSION = "2026-08-29";
+export const LEGAL_VERSION = "2026-08-31";
 
 function parseFeeCents(value: string | undefined): number | null {
   if (!value || !/^\d+$/.test(value)) return null;
@@ -99,7 +99,7 @@ export const TAX = {
 export const PLAN = {
   bowlsPerWeek: 5,
   /** Human phrasing of the weekly plan. */
-  cadence: "Five chef-made bowls each week",
+  cadence: "Five chef-made 32 oz jarred bowls each week",
   /** Day boxes are delivered. */
   deliveryDay: "Sunday",
   /** Short fulfillment line. */

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
 import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, PLAN, PRICING, TAX } from "@/lib/brand";
+import { CURRENT_BOWLS, CURRENT_OFFER } from "@/lib/current-offer";
 
 export const metadata = {
   title: `Customer Agreement — ${BRAND_NAME}`,
@@ -17,7 +18,7 @@ export default function CustomerAgreementPage() {
       <section className="rounded-3xl bg-gold/25 p-6 sm:p-8">
         <h2>Important recurring-payment terms</h2>
         <ul>
-          <li>{PLAN.bowlsPerWeek} chef-made bowls per weekly order.</li>
+          <li>{PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls per weekly order.</li>
           <li>{PRICING.weekly} charged every seven days until you cancel.</li>
           <li>Pickup is free or LA County delivery is $8.88 per week.</li>
           <li>Applicable sales tax is shown at checkout; any reusable-container deposit is disclosed and collected separately.</li>
@@ -30,9 +31,10 @@ export default function CustomerAgreementPage() {
         <h2>1. Your weekly order</h2>
         <p>
           Each renewal purchases one weekly order containing {PLAN.bowlsPerWeek}
-          chef-made bowls from the rotating menu. Exact recipes, proteins, sides, and
-          ingredients may vary. Reasonable substitutions may be made for seasonal or
-          supply reasons.
+          chef-made Soul Bowls™ in {CURRENT_OFFER.format}, ordinarily one each of
+          {` ${CURRENT_BOWLS.map((bowl) => bowl.name).join(", ")}`}. Exact recipes,
+          proteins, sides, and ingredients may vary. Reasonable substitutions may be
+          made for seasonal, quality, or supply reasons.
         </p>
       </section>
 
@@ -91,8 +93,11 @@ export default function CustomerAgreementPage() {
         <p>
           You are responsible for reviewing available ingredient information, disclosing
           dietary needs, retrieving the delivery promptly, and refrigerating perishable
-          food. Our kitchen handles major allergens and cannot guarantee against cross-contact.
-          Do not order if you have a severe or life-threatening food allergy.
+          food. Keep jars upright at or below 40°F and follow the eat-by date on each lid.
+          Do not microwave a sealed jar. The current line includes sesame, soy, and
+          wheat-related risks, and our kitchen handles other major allergens. We cannot
+          guarantee against cross-contact. Do not order if you have a severe or
+          life-threatening food allergy.
         </p>
       </section>
 

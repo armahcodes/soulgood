@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
 import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, PRICING, TAX } from "@/lib/brand";
+import { CURRENT_BOWLS, CURRENT_OFFER } from "@/lib/current-offer";
 
 export const metadata = {
   title: `Terms of Service — ${BRAND_NAME}`,
@@ -40,11 +41,12 @@ export default function TermsPage() {
       <section>
         <h2>3. Weekly subscription</h2>
         <p>
-          The standard plan includes five chef-made bowls for {PRICING.weekly} per
-          week. The subscription continues and renews every seven days until you
-          cancel. By starting a plan, you expressly authorize recurring weekly
-          charges at the disclosed price, plus the selected fulfillment charge,
-          any refundable container deposit, and applicable sales tax.
+          The standard plan includes five chef-made Soul Bowls™ in
+          {` ${CURRENT_OFFER.format}`} for {PRICING.weekly} per week. The subscription
+          continues and renews every seven days until you cancel. By starting a plan,
+          you expressly authorize recurring weekly charges at the disclosed price,
+          plus the selected fulfillment charge, any refundable container deposit,
+          and applicable sales tax.
         </p>
         <p>
           You may cancel future renewals online at any time through our <Link href="/cancel">cancellation page</Link>.
@@ -98,9 +100,11 @@ export default function TermsPage() {
       <section>
         <h2>6. Menu changes and availability</h2>
         <p>
-          Menus rotate and ingredients may change based on seasonality and supply.
-          We may make reasonable substitutions of comparable quality. Website photos
-          and sample menus are illustrative and do not guarantee an exact weekly item.
+          The current standard set is {CURRENT_BOWLS.map((bowl) => bowl.name).join(", ")}.
+          Ingredients or builds may change based on quality, seasonality, supply, and
+          kitchen capacity. We may make reasonable substitutions of comparable quality
+          and will disclose material changes when practical. Website photos are
+          illustrative and do not guarantee exact presentation.
         </p>
       </section>
 

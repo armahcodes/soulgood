@@ -12,7 +12,7 @@ export const metadata = {
 const NEXT_STEPS = [
   "We review your pickup or delivery details.",
   "We text you to confirm your first week.",
-  `${PLAN.bowlsPerWeek} fresh bowls are ready on ${PLAN.deliveryDay}.`,
+  `${PLAN.bowlsPerWeek} fresh 32 oz jarred bowls are ready on ${PLAN.deliveryDay}.`,
 ];
 
 export default function WelcomePage() {
@@ -34,8 +34,8 @@ export default function WelcomePage() {
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/68">
           Thanks for reserving Soul Bowls™. We&rsquo;ll text you before your first
-          pickup or delivery. The plan stays simple: {PLAN.bowlsPerWeek} bowls for
-          {` ${PRICING.weekly}`}/week, with free pickup or $8.88 LA County delivery.
+          pickup or delivery. The plan stays simple: {PLAN.bowlsPerWeek} 32 oz jarred
+          bowls for {PRICING.weekly}/week, with free pickup or $8.88 LA County delivery.
           Applicable California sales tax is itemized on the checkout receipt. Your
           one-time refundable container deposit is
           {FEES.containerDeposit.amountCents === null
