@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Script from "next/script";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BowlBuilder } from "@/components/checkout/BowlBuilder";
@@ -83,6 +84,7 @@ export function ReserveButton({
   squareEnvironment: "sandbox" | "production";
   squareLocationId: string;
 }) {
+  const router = useRouter();
   const [fulfillmentMethod, setFulfillmentMethod] =
     useState<FulfillmentMethod>(initialFulfillment);
   const [purchaseType, setPurchaseType] = useState<PurchaseType>("one-time");
@@ -373,7 +375,7 @@ export function ReserveButton({
         "soulbowls:confirmedBowlSelection",
         JSON.stringify(bowlSelection),
       );
-      window.location.href = `/welcome?purchased=1&type=${purchaseType}`;
+      router.push(`/welcome?purchased=1&type=${purchaseType}`);
     } catch (checkoutError) {
       setError(
         checkoutError instanceof Error
