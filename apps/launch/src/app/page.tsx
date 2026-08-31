@@ -26,6 +26,7 @@ export default function Home() {
             <a href="#ritual" className="transition-colors hover:text-clay">Our ritual</a>
             <a href="#fulfillment" className="transition-colors hover:text-clay">Delivery &amp; pickup</a>
             <a href="#price" className="transition-colors hover:text-clay">Order</a>
+            <a href="/account" className="transition-colors hover:text-clay">My orders</a>
           </nav>
           <Button as="a" href="/join" size="sm" className="hidden sm:inline-flex">
             Order my five

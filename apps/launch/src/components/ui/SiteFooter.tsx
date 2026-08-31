@@ -3,6 +3,7 @@ import { Wordmark } from "@/components/ui/Wordmark";
 import { CONTACT } from "@/lib/brand";
 
 const LEGAL_LINKS = [
+  { href: "/account", label: "My orders" },
   { href: "/terms", label: "Terms of Service" },
   { href: "/customer-agreement", label: "Customer Agreement" },
   { href: "/cancel", label: "Cancel subscription" },

@@ -21,6 +21,39 @@ export type TaxQuote = {
 
 type Fetcher = typeof fetch;
 
+type TaxQuoteCacheEntry = {
+  expiresAt: number;
+  value: Promise<TaxQuote>;
+};
+
+const TAX_QUOTE_CACHE_TTL_MS = 10 * 60 * 1000;
+const TAX_QUOTE_CACHE_MAX_ENTRIES = 250;
+const globalForSquare = globalThis as typeof globalThis & {
+  _soulGoodTaxQuoteCache?: Map<string, TaxQuoteCacheEntry>;
+};
+
+function taxQuoteCache(): Map<string, TaxQuoteCacheEntry> {
+  globalForSquare._soulGoodTaxQuoteCache ??= new Map();
+  return globalForSquare._soulGoodTaxQuoteCache;
+}
+
+function taxQuoteCacheKey(
+  fulfillmentMethod: FulfillmentMethod,
+  address: CheckoutAddress | null,
+): string {
+  if (!address) return fulfillmentMethod;
+  return [
+    fulfillmentMethod,
+    address.addressLine1,
+    address.addressLine2,
+    address.city,
+    address.state,
+    address.postalCode,
+  ]
+    .map((part) => part.trim().toLowerCase())
+    .join("|");
+}
+
 export class SquareApiError extends Error {
   constructor(
     message: string,
@@ -145,7 +178,7 @@ async function lookupCaliforniaTax(
   };
 }
 
-export async function getTaxQuote(
+async function calculateTaxQuote(
   fulfillmentMethod: FulfillmentMethod,
   deliveryAddress: CheckoutAddress | null,
   fetcher: Fetcher = fetch,
@@ -174,4 +207,34 @@ export async function getTaxQuote(
     jurisdiction: tax.jurisdiction,
     county: "LOS ANGELES",
   };
+}
+
+/**
+ * Reuse a recent verified quote when checkout follows the tax-preview request.
+ * This removes a duplicate CDTFA/Square lookup without trusting client totals.
+ */
+export async function getTaxQuote(
+  fulfillmentMethod: FulfillmentMethod,
+  deliveryAddress: CheckoutAddress | null,
+  fetcher: Fetcher = fetch,
+): Promise<TaxQuote> {
+  if (process.env.NODE_ENV === "test") {
+    return calculateTaxQuote(fulfillmentMethod, deliveryAddress, fetcher);
+  }
+
+  const cache = taxQuoteCache();
+  const key = taxQuoteCacheKey(fulfillmentMethod, deliveryAddress);
+  const now = Date.now();
+  const cached = cache.get(key);
+  if (cached && cached.expiresAt > now) return cached.value;
+  if (cached) cache.delete(key);
+
+  if (cache.size >= TAX_QUOTE_CACHE_MAX_ENTRIES) {
+    cache.delete(cache.keys().next().value as string);
+  }
+
+  const value = calculateTaxQuote(fulfillmentMethod, deliveryAddress, fetcher);
+  cache.set(key, { expiresAt: now + TAX_QUOTE_CACHE_TTL_MS, value });
+  value.catch(() => cache.delete(key));
+  return value;
 }

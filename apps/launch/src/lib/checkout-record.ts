@@ -7,6 +7,8 @@ export type CheckoutRecord = {
   squareObjectId: string;
   squareObjectType: "payment" | "subscription";
   squareCustomerId: string;
+  customerEmail: string;
+  customerName: string;
   leadId: string;
   purchaseType: PurchaseType;
   fulfillmentMethod: FulfillmentMethod;
@@ -14,6 +16,8 @@ export type CheckoutRecord = {
   subtotalCents: number;
   taxCents: number;
   totalCents: number;
+  orderStatus: string;
+  receiptUrl?: string;
   acceptedAt: string;
   legalVersion: string;
 };
@@ -33,9 +37,121 @@ export async function persistCheckoutRecord(record: CheckoutRecord): Promise<boo
       $setOnInsert: {
         ...record,
         acceptedAt: new Date(record.acceptedAt),
+        confirmationEmail: {
+          status: process.env.RESEND_API_KEY ? "pending" : "not-configured",
+          updatedAt: new Date(),
+        },
       },
     },
     { upsert: true, runValidators: true },
   );
   return true;
+}
+
+export async function updateCheckoutConfirmationEmail(
+  squareObjectId: string,
+  result:
+    | { status: "sent"; resendEmailId: string }
+    | { status: "failed"; error: string },
+): Promise<void> {
+  if (!process.env.MONGODB_URI) return;
+  await connectToDatabase();
+  await CheckoutRecordModel.updateOne(
+    { squareObjectId },
+    {
+      $set: {
+        confirmationEmail: {
+          ...result,
+          error: result.status === "failed" ? result.error.slice(0, 500) : undefined,
+          updatedAt: new Date(),
+        },
+      },
+    },
+  );
+}
+
+export type CustomerOrder = {
+  id: string;
+  type: PurchaseType;
+  squareObjectType: "payment" | "subscription";
+  status: string;
+  fulfillmentMethod: FulfillmentMethod;
+  bowlSelection: BowlSelection;
+  subtotalCents: number;
+  taxCents: number;
+  totalCents: number;
+  receiptUrl?: string;
+  cancellationScheduledFor?: string;
+  createdAt: string;
+};
+
+export type OwnedSubscription = {
+  customerEmail: string;
+  customerName: string;
+  cancellationScheduledFor?: string;
+};
+
+export async function getOwnedSubscription(
+  email: string,
+  subscriptionId: string,
+): Promise<OwnedSubscription | null> {
+  if (!process.env.MONGODB_URI) return null;
+  await connectToDatabase();
+  const record = await CheckoutRecordModel.findOne({
+    squareObjectId: subscriptionId,
+    squareObjectType: "subscription",
+    customerEmail: email.trim().toLowerCase(),
+  }).exec();
+
+  if (!record) return null;
+  return {
+    customerEmail: record.customerEmail,
+    customerName: record.customerName,
+    cancellationScheduledFor: record.cancellationScheduledFor || undefined,
+  };
+}
+
+export async function markSubscriptionCancellation(
+  subscriptionId: string,
+  effectiveDate: string,
+  status: string,
+): Promise<void> {
+  await connectToDatabase();
+  await CheckoutRecordModel.updateOne(
+    { squareObjectId: subscriptionId, squareObjectType: "subscription" },
+    {
+      $set: {
+        cancellationScheduledFor: effectiveDate,
+        orderStatus: status,
+      },
+    },
+  );
+}
+
+export async function listCheckoutRecordsForEmail(
+  email: string,
+): Promise<CustomerOrder[]> {
+  if (!process.env.MONGODB_URI) return [];
+  await connectToDatabase();
+  const records = await CheckoutRecordModel.find({
+    customerEmail: email.trim().toLowerCase(),
+  })
+    .sort({ createdAt: -1 })
+    .limit(50)
+    .exec();
+
+  return records.map((record) => ({
+    id: record.squareObjectId,
+    type: record.purchaseType as PurchaseType,
+    squareObjectType: record.squareObjectType,
+    status: record.orderStatus,
+    fulfillmentMethod: record.fulfillmentMethod as FulfillmentMethod,
+    bowlSelection: record.bowlSelection as BowlSelection,
+    subtotalCents: record.subtotalCents,
+    taxCents: record.taxCents,
+    totalCents: record.totalCents,
+    receiptUrl: record.receiptUrl || undefined,
+    cancellationScheduledFor: record.cancellationScheduledFor || undefined,
+    createdAt: ((record.get("createdAt") as Date | undefined) ?? record.acceptedAt).toISOString(),
+  }));
 }

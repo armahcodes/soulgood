@@ -101,6 +101,7 @@ export function ReserveButton({
     useState<CheckoutAddress>(EMPTY_ADDRESS);
   const [billingSameAsDelivery, setBillingSameAsDelivery] = useState(true);
   const [quote, setQuote] = useState<TaxQuote | null>(null);
+  const [taxQuoteToken, setTaxQuoteToken] = useState<string | null>(null);
   const [accepted, setAccepted] = useState(false);
   const [pending, setPending] = useState(false);
   const [quoting, setQuoting] = useState(false);
@@ -187,6 +188,7 @@ export function ReserveButton({
 
   function resetQuote(): void {
     setQuote(null);
+    setTaxQuoteToken(null);
     setAccepted(false);
     setError(null);
   }
@@ -254,14 +256,16 @@ export function ReserveButton({
         }),
       });
       const data = (await response.json().catch(() => null)) as
-        | (TaxQuote & { error?: string })
+        | (TaxQuote & { error?: string; quoteToken?: string | null })
         | null;
       if (!response.ok || !data || typeof data.totalCents !== "number") {
         throw new Error(data?.error ?? "Tax could not be calculated.");
       }
       setQuote(data);
+      setTaxQuoteToken(data.quoteToken || null);
     } catch (quoteError) {
       setQuote(null);
+      setTaxQuoteToken(null);
       setError(
         quoteError instanceof Error ? quoteError.message : "Tax could not be calculated.",
       );
@@ -349,6 +353,7 @@ export function ReserveButton({
           leadId,
           purchaseType,
           sourceId: tokenResult.token,
+          ...(taxQuoteToken ? { taxQuoteToken } : {}),
         }),
       });
       const data = (await response.json().catch(() => null)) as

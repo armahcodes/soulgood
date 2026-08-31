@@ -2,7 +2,7 @@ import mongoose, { type InferSchemaType, type Model } from "mongoose";
 import { BOWL_IDS } from "../current-offer";
 
 const selectionShape = Object.fromEntries(
-  BOWL_IDS.map((id) => [id, { type: Number, required: true, min: 0, max: 5 }]),
+  BOWL_IDS.map((id) => [id, { type: Number, required: true, min: 0, max: 2 }]),
 );
 
 const checkoutRecordSchema = new mongoose.Schema(
@@ -14,6 +14,14 @@ const checkoutRecordSchema = new mongoose.Schema(
       required: true,
     },
     squareCustomerId: { type: String, required: true, index: true },
+    customerEmail: {
+      type: String,
+      required: true,
+      lowercase: true,
+      trim: true,
+      index: true,
+    },
+    customerName: { type: String, required: true, trim: true },
     leadId: { type: String, required: true, index: true },
     purchaseType: {
       type: String,
@@ -29,6 +37,20 @@ const checkoutRecordSchema = new mongoose.Schema(
     subtotalCents: { type: Number, required: true },
     taxCents: { type: Number, required: true },
     totalCents: { type: Number, required: true },
+    orderStatus: { type: String, required: true, trim: true },
+    receiptUrl: { type: String, trim: true },
+    cancellationScheduledFor: { type: String, trim: true },
+    confirmationEmail: {
+      status: {
+        type: String,
+        enum: ["pending", "sent", "failed", "not-configured"],
+        required: true,
+      },
+      resendEmailId: { type: String, trim: true },
+      error: { type: String, trim: true },
+      updatedAt: { type: Date, required: true },
+      _id: false,
+    },
     acceptedAt: { type: Date, required: true },
     legalVersion: { type: String, required: true },
   },

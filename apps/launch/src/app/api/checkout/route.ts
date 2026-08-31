@@ -1,4 +1,7 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
+import { Hono } from "hono";
+import { handle } from "hono/vercel";
+import { timing } from "hono/timing";
 import { z } from "zod";
 import { bowlSelectionSchema, selectionSourceName } from "@/lib/bowl-selection";
 import {
@@ -6,7 +9,11 @@ import {
   LEGAL_VERSION,
   type FulfillmentMethod,
 } from "@/lib/brand";
-import { persistCheckoutRecord } from "@/lib/checkout-record";
+import {
+  persistCheckoutRecord,
+  updateCheckoutConfirmationEmail,
+} from "@/lib/checkout-record";
+import { sendOrderConfirmationEmail } from "@/lib/email";
 import {
   addressToSquare,
   getTaxQuote,
@@ -14,6 +21,7 @@ import {
   squareRequest,
   type CheckoutAddress,
 } from "@/lib/square";
+import { verifyTaxQuoteToken } from "@/lib/tax-quote-token";
 
 export const runtime = "nodejs";
 
@@ -42,6 +50,7 @@ const requestSchema = z
     leadId: z.string().trim().min(1).max(200),
     purchaseType: z.enum(["one-time", "weekly"]),
     sourceId: z.string().min(1).max(16384),
+    taxQuoteToken: z.string().max(4096).optional(),
   })
   .superRefine((value, context) => {
     if (value.fulfillmentMethod === "delivery" && !value.deliveryAddress) {
@@ -67,6 +76,31 @@ function normalizeUsPhone(phone: string): string | null {
 
 function key(base: string, suffix: string, max = 45): string {
   return `${base}-${suffix}`.slice(0, max);
+}
+
+function scheduleOrderConfirmation(
+  input: Parameters<typeof sendOrderConfirmationEmail>[0],
+): void {
+  if (!process.env.RESEND_API_KEY) return;
+  after(async () => {
+    try {
+      const resendEmailId = await sendOrderConfirmationEmail(input);
+      await updateCheckoutConfirmationEmail(input.squareObjectId, {
+        status: "sent",
+        resendEmailId,
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown email error";
+      console.error("[checkout] Order completed but confirmation email failed", {
+        squareObjectId: input.squareObjectId,
+        error: message,
+      });
+      await updateCheckoutConfirmationEmail(input.squareObjectId, {
+        status: "failed",
+        error: message,
+      }).catch(() => undefined);
+    }
+  });
 }
 
 async function findOrCreateCustomer(input: {
@@ -125,7 +159,7 @@ async function findOrCreateCustomer(input: {
 }
 
 /** Complete a one-time payment or create an immediately billed weekly subscription. */
-export async function POST(request: Request) {
+async function handleCheckout(request: Request) {
   const parsed = requestSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json(
@@ -158,10 +192,18 @@ export async function POST(request: Request) {
 
   let cardId: string | null = null;
   try {
-    const quote = await getTaxQuote(
-      input.fulfillmentMethod as FulfillmentMethod,
-      input.deliveryAddress,
-    );
+    const quote =
+      (input.taxQuoteToken
+        ? verifyTaxQuoteToken(
+            input.taxQuoteToken,
+            input.fulfillmentMethod as FulfillmentMethod,
+            input.deliveryAddress,
+          )
+        : null) ??
+      (await getTaxQuote(
+        input.fulfillmentMethod as FulfillmentMethod,
+        input.deliveryAddress,
+      ));
     const customer = await findOrCreateCustomer({
       billingAddress: input.billingAddress,
       email: input.contact.email.toLowerCase(),
@@ -192,6 +234,9 @@ export async function POST(request: Request) {
       });
       const payment = paymentResponse.payment;
       if (!payment?.id) throw new Error("Square did not return a payment");
+      const customerName = `${input.contact.givenName} ${input.contact.familyName}`;
+      const customerEmail = input.contact.email.toLowerCase();
+      const orderStatus = payment.status ?? "COMPLETED";
 
       let checkoutRecorded = false;
       try {
@@ -199,6 +244,8 @@ export async function POST(request: Request) {
           squareObjectId: payment.id,
           squareObjectType: "payment",
           squareCustomerId: customer.id,
+          customerEmail,
+          customerName,
           leadId: input.leadId,
           purchaseType: input.purchaseType,
           fulfillmentMethod: input.fulfillmentMethod,
@@ -206,6 +253,8 @@ export async function POST(request: Request) {
           subtotalCents: quote.subtotalCents,
           taxCents: quote.taxCents,
           totalCents: quote.totalCents,
+          orderStatus,
+          receiptUrl: payment.receipt_url,
           acceptedAt,
           legalVersion: LEGAL_VERSION,
         });
@@ -215,6 +264,19 @@ export async function POST(request: Request) {
           error: recordError instanceof Error ? recordError.message : "unknown",
         });
       }
+
+      scheduleOrderConfirmation({
+        bowlSelection: input.bowlSelection,
+        customerEmail,
+        customerName,
+        fulfillmentMethod: input.fulfillmentMethod,
+        purchaseType: input.purchaseType,
+        receiptUrl: payment.receipt_url,
+        squareObjectId: payment.id,
+        subtotalCents: quote.subtotalCents,
+        taxCents: quote.taxCents,
+        totalCents: quote.totalCents,
+      });
 
       return NextResponse.json(
         {
@@ -266,6 +328,9 @@ export async function POST(request: Request) {
     });
     const subscription = subscriptionResponse.subscription;
     if (!subscription?.id) throw new Error("Square did not return a subscription");
+    const customerName = `${input.contact.givenName} ${input.contact.familyName}`;
+    const customerEmail = input.contact.email.toLowerCase();
+    const orderStatus = subscription.status ?? "ACTIVE";
 
     let checkoutRecorded = false;
     try {
@@ -273,6 +338,8 @@ export async function POST(request: Request) {
         squareObjectId: subscription.id,
         squareObjectType: "subscription",
         squareCustomerId: customer.id,
+        customerEmail,
+        customerName,
         leadId: input.leadId,
         purchaseType: input.purchaseType,
         fulfillmentMethod: input.fulfillmentMethod,
@@ -280,6 +347,7 @@ export async function POST(request: Request) {
         subtotalCents: quote.subtotalCents,
         taxCents: quote.taxCents,
         totalCents: quote.totalCents,
+        orderStatus,
         acceptedAt,
         legalVersion: LEGAL_VERSION,
       });
@@ -289,6 +357,18 @@ export async function POST(request: Request) {
         error: recordError instanceof Error ? recordError.message : "unknown",
       });
     }
+
+    scheduleOrderConfirmation({
+      bowlSelection: input.bowlSelection,
+      customerEmail,
+      customerName,
+      fulfillmentMethod: input.fulfillmentMethod,
+      purchaseType: input.purchaseType,
+      squareObjectId: subscription.id,
+      subtotalCents: quote.subtotalCents,
+      taxCents: quote.taxCents,
+      totalCents: quote.totalCents,
+    });
 
     return NextResponse.json(
       {
@@ -328,3 +408,9 @@ export async function POST(request: Request) {
     );
   }
 }
+
+const checkoutApp = new Hono().basePath("/api");
+checkoutApp.use("*", timing());
+checkoutApp.post("/checkout", (context) => handleCheckout(context.req.raw));
+
+export const POST = handle(checkoutApp);

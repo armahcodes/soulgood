@@ -97,9 +97,10 @@ export default async function WelcomePage({
           )}
         </div>
 
-        <Button as="a" href="/" variant="secondary" className="mt-10">
-          Back to Soul Bowls™
-        </Button>
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          {purchased ? <Button as="a" href="/account">View my orders</Button> : null}
+          <Button as="a" href="/" variant="secondary">Back to Soul Bowls™</Button>
+        </div>
       </section>
     </main>
   );
