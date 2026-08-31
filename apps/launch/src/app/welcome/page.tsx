@@ -17,19 +17,21 @@ const NEXT_STEPS = [
 
 export default function WelcomePage() {
   return (
-    <main className="flex min-h-screen flex-col bg-gold/25">
-      <header className="mx-auto flex w-full max-w-5xl px-5 py-6 sm:px-8">
-        <Wordmark href="/" className="text-forest" />
+    <main className="flex min-h-screen flex-col bg-oat">
+      <header className="border-b border-forest/12">
+        <div className="mx-auto flex min-h-20 w-full max-w-5xl items-center px-5 sm:px-8">
+          <Wordmark href="/" />
+        </div>
       </header>
 
       <section className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-5 py-16 text-center sm:px-8">
-        <div className="mb-8 flex h-20 w-20 items-center justify-center rounded-full bg-forest text-oat">
-          <Logo size={46} title="" />
+        <div className="mb-8 flex h-20 w-20 items-center justify-center bg-forest">
+          <Logo size={46} title="" variant="cream" />
         </div>
         <p className="mb-5 text-xs font-bold tracking-[0.18em] text-clay uppercase">
           You&rsquo;re on the list
         </p>
-        <h1 className="max-w-[11ch] text-5xl leading-[0.94] font-semibold tracking-[-0.05em] text-forest sm:text-7xl">
+        <h1 className="max-w-[11ch] text-5xl leading-[0.94] font-normal tracking-[-0.05em] text-forest sm:text-7xl">
           Your bowls are almost ready.
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/68">
@@ -45,8 +47,8 @@ export default function WelcomePage() {
 
         <ol className="mt-12 grid w-full gap-3 text-left sm:grid-cols-3">
           {NEXT_STEPS.map((step, index) => (
-            <li key={step} className="rounded-2xl bg-oat p-5 shadow-sm">
-              <span className="mb-5 flex h-7 w-7 items-center justify-center rounded-full bg-gold text-xs font-bold text-forest">
+            <li key={step} className="border border-forest/12 bg-white/35 p-5">
+              <span className="mb-5 flex h-7 w-7 items-center justify-center bg-gold text-xs font-bold text-forest">
                 {index + 1}
               </span>
               <p className="text-sm leading-relaxed text-forest/72">{step}</p>
@@ -54,7 +56,7 @@ export default function WelcomePage() {
           ))}
         </ol>
 
-        <div className="mt-8 max-w-2xl rounded-2xl border border-forest/12 bg-oat p-5 text-sm leading-relaxed text-forest/68">
+        <div className="mt-8 max-w-2xl border border-forest/12 bg-white/35 p-5 text-sm leading-relaxed text-forest/68">
           Your plan renews every seven days until canceled. Keep a copy of the{" "}
           <Link href="/customer-agreement" className="font-semibold underline underline-offset-2">
             Customer Agreement

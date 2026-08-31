@@ -37,8 +37,8 @@ export function ResultScreen({ pathway }: ResultScreenProps) {
       </p>
 
       {/* Note card — a warm line cradled by a small leaf mark. */}
-      <div className="flex w-full items-start gap-3 rounded-3xl border border-forest/10 bg-white/70 px-[18px] py-4 text-left">
-        <Logo size={20} className="mt-0.5 shrink-0 text-sage" title="" />
+      <div className="flex w-full items-start gap-3 border border-forest/10 bg-white/70 px-[18px] py-4 text-left">
+        <Logo size={20} className="mt-0.5 shrink-0" title="" variant="sage" />
         <p className="text-[14.5px] leading-relaxed text-forest/75">{def.note}</p>
       </div>
 

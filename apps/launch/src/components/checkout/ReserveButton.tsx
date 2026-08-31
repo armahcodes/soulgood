@@ -44,7 +44,7 @@ declare global {
 }
 
 const INPUT_CLASS =
-  "min-h-[50px] w-full rounded-2xl border border-forest/15 bg-white px-4 text-base text-forest shadow-sm placeholder:text-forest/35 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/25";
+  "min-h-[50px] w-full rounded-none border border-forest/18 bg-white/75 px-4 text-base text-forest placeholder:text-forest/35 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/20";
 
 const EMPTY_ADDRESS: CheckoutAddress = {
   addressLine1: "",
@@ -370,7 +370,7 @@ export function ReserveButton({
         {(Object.keys(FULFILLMENT) as FulfillmentMethod[]).map((method) => {
           const option = FULFILLMENT[method];
           return (
-            <label key={method} className="flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-forest/12 bg-white/60 p-4 text-sm text-forest/72">
+            <label key={method} className="flex cursor-pointer items-center justify-between gap-4 border border-forest/15 bg-white/60 p-4 text-sm text-forest/72 transition-colors hover:border-sage">
               <span className="flex items-center gap-3">
                 <input type="radio" name="fulfillment" checked={fulfillmentMethod === method} disabled={pending} onChange={() => chooseFulfillment(method)} className="h-5 w-5 accent-forest" />
                 <span><strong className="block text-forest">{option.label}</strong>{method === "pickup" ? "Sunday location and window confirmed after checkout" : "Available throughout Los Angeles County"}</span>
@@ -422,12 +422,12 @@ export function ReserveButton({
 
       <div>
         <p className="mb-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">Secure card details</p>
-        <div id="square-card" className="min-h-[90px] rounded-2xl border border-forest/12 bg-white p-3" />
+        <div id="square-card" className="min-h-[90px] border border-forest/15 bg-white p-3" />
         {!configured && <p className="mt-2 text-sm text-clay">Square payment is not configured.</p>}
         {configured && !cardReady && !error && <p className="mt-2 text-xs text-forest/50">Loading Square’s secure card form…</p>}
       </div>
 
-      <div className="rounded-2xl border border-forest/12 bg-white/60 p-4 text-sm leading-relaxed text-forest/72">
+      <div className="border border-forest/15 bg-white/60 p-4 text-sm leading-relaxed text-forest/72">
         <p className="font-bold tracking-[0.08em] text-forest uppercase">Automatic renewal</p>
         <p className="mt-2">Your card will be charged {quote ? formatCents(quote.totalCents) : "the displayed total"} today and every 7 days for the {PRICING.weekly} plan, selected fulfillment, and applicable tax until canceled. Any reusable-container deposit is separate and refundable under the return terms.</p>
       </div>

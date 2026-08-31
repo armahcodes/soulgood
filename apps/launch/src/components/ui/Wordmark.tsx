@@ -1,41 +1,40 @@
+import Image from "next/image";
 import Link from "next/link";
 import { BRAND_NAME } from "@/lib/brand";
 import { cn } from "@/lib/utils";
-import { Logo } from "@/components/ui/Logo";
 
 interface WordmarkProps {
   href?: string;
   className?: string;
-  markClassName?: string;
+  variant?: "full-color" | "cream";
 }
 
-export function Wordmark({
-  href,
-  className,
-  markClassName,
-}: WordmarkProps) {
-  const content = (
-    <>
-      <Logo size={34} className={markClassName} title="" />
-      <span className="font-serif text-xl leading-none font-semibold tracking-[-0.02em]">
-        Soul Bowls<sup className="ml-0.5 text-[0.42em] align-super">™</sup>
-      </span>
-    </>
+export function Wordmark({ href, className, variant = "full-color" }: WordmarkProps) {
+  const image = (
+    <Image
+      src={
+        variant === "cream"
+          ? "/brand/soul-good-horizontal-cream.png"
+          : "/brand/soul-good-horizontal.png"
+      }
+      alt={BRAND_NAME}
+      width={212}
+      height={74}
+      priority
+      sizes="212px"
+      className="h-auto w-[164px] sm:w-[188px]"
+    />
   );
 
-  const classes = cn("inline-flex items-center gap-2.5", className);
+  const classes = cn("inline-flex shrink-0 items-center", className);
 
   if (href) {
     return (
-      <Link href={href} className={classes} aria-label={BRAND_NAME}>
-        {content}
+      <Link href={href} className={classes} aria-label={`${BRAND_NAME} home`}>
+        {image}
       </Link>
     );
   }
 
-  return (
-    <div className={classes} aria-label={BRAND_NAME}>
-      {content}
-    </div>
-  );
+  return <div className={classes}>{image}</div>;
 }

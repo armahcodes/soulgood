@@ -20,7 +20,7 @@ export default function CancelPage() {
       title="Cancel future renewals"
       intro="You can cancel your Soul Bowls™ subscription at any time. Cancellation stops future weekly renewals and does not reverse an order already charged and committed to production."
     >
-      <section className="rounded-3xl bg-gold/25 p-6 sm:p-8">
+      <section className="border border-forest/12 bg-gold/12 p-6 sm:p-8">
         <h2>Send your cancellation request</h2>
         <p>
           The button below opens a preformatted email. Add the name, email, and

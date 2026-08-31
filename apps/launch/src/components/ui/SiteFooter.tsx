@@ -10,10 +10,10 @@ const LEGAL_LINKS = [
 
 export function SiteFooter() {
   return (
-    <footer className="bg-forest text-oat">
-      <div className="mx-auto grid w-full max-w-7xl gap-8 px-5 py-10 sm:px-8 md:grid-cols-[1fr_auto] md:items-end lg:px-12">
+    <footer className="border-t border-oat/12 bg-forest text-oat">
+      <div className="mx-auto grid w-full max-w-7xl gap-8 px-5 py-8 sm:px-8 md:grid-cols-[1fr_auto] md:items-end lg:px-12">
         <div className="flex flex-col items-start gap-4">
-          <Wordmark href="/" className="text-oat" />
+          <Wordmark href="/" variant="cream" />
           <p className="max-w-sm text-sm leading-relaxed text-oat/55">
             Chef-made in Los Angeles County. Sunday pickup or delivery by Soul Goods LLC.
           </p>

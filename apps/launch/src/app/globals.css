@@ -8,10 +8,10 @@
 @theme {
   /* Brand Kit palette */
   --color-sage: #77916f;
-  --color-forest: #20352f;
-  --color-clay: #d86d45;
-  --color-oat: #fbf7ef;
-  --color-gold: #f3c96b;
+  --color-forest: #2c3a34;
+  --color-clay: #c17a5e;
+  --color-oat: #f8f3ec;
+  --color-gold: #c9a161;
   --color-sand: #ecd6bc;
 
   /* Type: EB Garamond (headlines, via next/font/google) + Arial system stack (body) */
@@ -29,6 +29,19 @@ body {
   background-color: var(--color-oat);
   color: var(--color-forest);
   font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+button,
+a,
+input,
+summary {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-clay);
+  outline-offset: 3px;
 }
 
 ::selection {

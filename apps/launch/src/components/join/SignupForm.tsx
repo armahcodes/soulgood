@@ -7,11 +7,12 @@ import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/Button";
 import { assembleLead, type JoinFormValues } from "@/lib/join-lead";
 import { leadFieldSchemas, leadSchema, type Lead } from "@/lib/lead-schema";
+import type { FulfillmentMethod } from "@/lib/brand";
 
 const INPUT_CLASS =
-  "min-h-[54px] rounded-2xl border border-forest/15 bg-white px-4 text-base text-forest shadow-sm placeholder:text-forest/35 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/25";
+  "min-h-[52px] rounded-none border border-forest/18 bg-white/70 px-4 text-base text-forest placeholder:text-forest/35 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/20";
 
-export function SignupForm() {
+export function SignupForm({ initialFulfillment = "delivery" }: { initialFulfillment?: FulfillmentMethod }) {
   const router = useRouter();
   const [submitError, setSubmitError] = useState<string | null>(null);
   /** Which intent is currently submitting (so both buttons can show progress). */
@@ -28,7 +29,7 @@ export function SignupForm() {
       name: "",
       email: "",
       phone: "",
-      fulfillmentMethod: "delivery",
+      fulfillmentMethod: initialFulfillment,
       deliveryZip: "",
       deliveryCountyConfirmed: false,
     },
@@ -176,7 +177,7 @@ export function SignupForm() {
         <legend className="mb-1 text-sm font-medium text-forest">
           How do you want your bowls?
         </legend>
-        <label className="flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-forest/12 bg-white p-4 text-sm text-forest/75">
+        <label className="flex cursor-pointer items-center justify-between gap-4 border border-forest/15 bg-white/70 p-4 text-sm text-forest/75 transition-colors hover:border-sage">
           <span className="flex items-center gap-3">
             <input
               type="radio"
@@ -191,7 +192,7 @@ export function SignupForm() {
           </span>
           <strong className="text-forest">$0</strong>
         </label>
-        <label className="flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-forest/12 bg-white p-4 text-sm text-forest/75">
+        <label className="flex cursor-pointer items-center justify-between gap-4 border border-forest/15 bg-white/70 p-4 text-sm text-forest/75 transition-colors hover:border-sage">
           <span className="flex items-center gap-3">
             <input
               type="radio"
@@ -238,7 +239,7 @@ export function SignupForm() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-forest/12 bg-sand/25 p-4 text-sm leading-relaxed text-forest/72">
+            <label className="flex cursor-pointer items-start gap-3 border border-forest/15 bg-sand/25 p-4 text-sm leading-relaxed text-forest/72">
               <input
                 type="checkbox"
                 className="mt-0.5 h-5 w-5 shrink-0 accent-forest"

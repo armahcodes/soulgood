@@ -34,17 +34,19 @@ export default async function CheckoutPage({
 
   return (
     <>
-      <main className="min-h-screen bg-gold/25">
-        <header className="mx-auto flex w-full max-w-5xl px-5 py-6 sm:px-8">
-          <Wordmark href="/" className="text-forest" />
+      <main className="min-h-screen bg-oat">
+        <header className="border-b border-forest/12">
+          <div className="mx-auto flex min-h-20 w-full max-w-6xl items-center px-5 sm:px-8">
+            <Wordmark href="/" />
+          </div>
         </header>
 
-        <div className="mx-auto grid w-full max-w-5xl gap-8 px-5 py-12 sm:px-8 lg:grid-cols-[1fr_0.9fr] lg:items-start lg:py-20">
+        <div className="mx-auto grid w-full max-w-6xl gap-12 px-5 py-12 sm:px-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start lg:gap-16 lg:py-20">
           <section className="flex flex-col gap-6">
             <p className="text-xs font-bold tracking-[0.18em] text-clay uppercase">
               One simple plan
             </p>
-            <h1 className="max-w-[9ch] text-5xl leading-[0.94] font-semibold tracking-[-0.05em] text-forest sm:text-7xl">
+            <h1 className="max-w-[9ch] text-5xl leading-[0.9] font-normal tracking-[-0.05em] text-forest sm:text-7xl">
               Start your bowl week.
             </h1>
             <p className="max-w-lg text-lg leading-relaxed text-forest/68">
@@ -60,8 +62,8 @@ export default async function CheckoutPage({
             <ul className="mt-3 grid gap-3 sm:grid-cols-2">
               {PLAN_ITEMS.map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-forest/75">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-sage/15 text-sage">
-                    <Logo size={16} title="" />
+                  <span className="flex h-7 w-7 items-center justify-center bg-sage/12">
+                    <Logo size={15} title="" variant="sage" />
                   </span>
                   {item}
                 </li>
@@ -69,7 +71,7 @@ export default async function CheckoutPage({
             </ul>
           </section>
 
-          <section className="rounded-[2rem] bg-oat p-6 shadow-[0_22px_80px_rgba(32,53,47,0.10)] sm:p-8">
+          <section className="border border-forest/14 bg-white/35 p-6 sm:p-9">
             <div className="border-b border-forest/10 pb-6">
               <p className="font-serif text-2xl font-semibold text-forest">
                 Weekly Soul Bowls™

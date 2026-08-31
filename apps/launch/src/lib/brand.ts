@@ -114,13 +114,13 @@ export const PALETTE = {
   /** Sage Ritual */
   sage: "#77916F",
   /** Forest Depth */
-  forest: "#20352F",
+  forest: "#2C3A34",
   /** Clay Essence */
-  clay: "#D86D45",
+  clay: "#C17A5E",
   /** Soft Oat */
-  oat: "#FBF7EF",
+  oat: "#F8F3EC",
   /** Golden Harvest */
-  gold: "#F3C96B",
+  gold: "#C9A161",
   /** Warm Sand */
   sand: "#ECD6BC",
 } as const;
