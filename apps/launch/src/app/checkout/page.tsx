@@ -8,6 +8,7 @@ import {
   PLAN,
   PRICING,
 } from "@/lib/brand";
+import { MAX_BOWLS_PER_ORDER } from "@/lib/bowl-selection";
 import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
 
 export const metadata = {
@@ -81,7 +82,7 @@ export default async function CheckoutPage({
                 Soul Bowls™ order
               </p>
               <p className="mt-1 text-sm text-forest/55">
-                One-time or weekly · 5 to 30 jars
+                One-time or weekly · 5 to {MAX_BOWLS_PER_ORDER} jars
               </p>
             </div>
 

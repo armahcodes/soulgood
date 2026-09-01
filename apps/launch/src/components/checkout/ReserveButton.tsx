@@ -28,6 +28,10 @@ import {
   type PurchaseType,
   TAX,
 } from "@/lib/brand";
+import {
+  LAST_ORDER_STORAGE_KEY,
+  type LastOrderConfirmation,
+} from "@/lib/checkout-session";
 import type { CheckoutAddress, TaxQuote } from "@/lib/square";
 
 type Contact = {
@@ -47,6 +51,23 @@ type SquareCard = {
   attach(selector: string): Promise<void>;
   destroy(): Promise<boolean>;
   tokenize(details: unknown): Promise<SquareTokenResult>;
+};
+
+type CheckoutSuccess = {
+  ok: true;
+  purchaseType: PurchaseType;
+  status: string;
+  paymentId?: string;
+  subscriptionId?: string;
+  orderId?: string;
+  orderTemplateId?: string;
+  receiptUrl?: string;
+  acceptedAt: string;
+  fulfillmentMethod: FulfillmentMethod;
+  mealsPerDay: number;
+  peopleCount: number;
+  bowlSelection: BowlSelection;
+  tax: TaxQuote;
 };
 
 declare global {
@@ -281,7 +302,14 @@ export function ReserveButton({
   }
 
   function updateContact(field: keyof Contact, value: string): void {
-    setContact((current) => ({ ...current, [field]: value }));
+    setContact((current) => {
+      const next = { ...current, [field]: value };
+      window.sessionStorage.setItem(
+        "soulbowls:checkoutContact",
+        JSON.stringify(next),
+      );
+      return next;
+    });
     setError(null);
   }
 
@@ -342,10 +370,10 @@ export function ReserveButton({
 
   async function reserve(): Promise<void> {
     if (pending || !accepted || !quote || !cardRef.current) return;
-    const leadId = window.sessionStorage.getItem("soulbowls:leadId");
+    let leadId = window.sessionStorage.getItem("soulbowls:leadId");
     if (!leadId) {
-      setError("Complete the reservation form before starting payment.");
-      return;
+      leadId = `direct-${crypto.randomUUID()}`;
+      window.sessionStorage.setItem("soulbowls:leadId", leadId);
     }
     if (!bowlSelectionComplete) {
       setError(`Select exactly ${targetBowls} bowls before checkout.`);
@@ -425,23 +453,54 @@ export function ReserveButton({
         }),
       });
       const data = (await response.json().catch(() => null)) as
-        | { ok?: boolean; error?: string; purchaseType?: PurchaseType }
+        | CheckoutSuccess
+        | { ok?: false; error?: string }
         | null;
-      if (!response.ok || !data?.ok) {
-        throw new Error(data?.error ?? "Square could not complete checkout.");
+      if (!response.ok || !data || data.ok !== true) {
+        throw new Error(
+          data && "error" in data && data.error
+            ? data.error
+            : "Square could not complete checkout.",
+        );
       }
+
+      const squareObjectId = data.paymentId || data.subscriptionId;
+      if (!squareObjectId) {
+        throw new Error(
+          "Payment completed, but the confirmation could not be loaded. Check your email or account for the receipt.",
+        );
+      }
+
+      const confirmation: LastOrderConfirmation = {
+        version: 1,
+        purchaseType: data.purchaseType,
+        status: data.status,
+        squareObjectId,
+        squareOrderId: data.orderId || data.orderTemplateId,
+        receiptUrl: data.receiptUrl,
+        acceptedAt: data.acceptedAt,
+        fulfillmentMethod: data.fulfillmentMethod,
+        mealsPerDay: data.mealsPerDay,
+        peopleCount: data.peopleCount,
+        bowlSelection: data.bowlSelection,
+        subtotalCents: data.tax.subtotalCents,
+        taxCents: data.tax.taxCents,
+        totalCents: data.tax.totalCents,
+      };
       window.sessionStorage.setItem(
         purchaseType === "weekly"
           ? "soulbowls:subscriptionStatus"
           : "soulbowls:orderStatus",
         purchaseType === "weekly" ? "active" : "completed",
       );
-      window.sessionStorage.setItem("soulbowls:confirmedPurchaseType", purchaseType);
       window.sessionStorage.setItem(
-        "soulbowls:confirmedBowlSelection",
-        JSON.stringify(bowlSelection),
+        LAST_ORDER_STORAGE_KEY,
+        JSON.stringify(confirmation),
       );
-      router.push(`/welcome?purchased=1&type=${purchaseType}`);
+      // A completed checkout is a terminal step. Replacing the route prevents
+      // the browser Back button from returning to a submitted payment form.
+      window.sessionStorage.removeItem("soulbowls:leadId");
+      router.replace("/welcome?confirmed=1");
     } catch (checkoutError) {
       setError(
         checkoutError instanceof Error
@@ -741,7 +800,7 @@ export function ReserveButton({
 
       <p className="text-xs leading-relaxed text-forest/50">Secure {purchaseType === "weekly" ? "card storage and recurring billing are" : "one-time payment is"} provided by Square. {TAX.disclosure} Reusable-container deposit: {FEES.containerDeposit.amountCents === null ? "confirmed separately" : formatCents(FEES.containerDeposit.amountCents)}.</p>
 
-      {error && <p role="alert" className="text-sm leading-relaxed text-clay">{error} {error.includes("reservation form") && <Link href="/#join" className="font-semibold underline underline-offset-2">Reserve your spot.</Link>}</p>}
+      {error && <p role="alert" className="text-sm leading-relaxed text-clay">{error}</p>}
     </div>
   );
 }

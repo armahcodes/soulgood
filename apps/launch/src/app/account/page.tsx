@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { CancelSubscriptionButton } from "@/components/account/CancelSubscriptionButton";
 import { SignOutButton } from "@/components/auth/SignOutButton";
+import { ReorderButton } from "@/components/checkout/ReorderButton";
 import { Button } from "@/components/ui/Button";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { Wordmark } from "@/components/ui/Wordmark";
@@ -38,7 +39,22 @@ export default async function AccountPage() {
               <h1 className="mt-4 text-5xl leading-none font-normal tracking-[-0.05em] text-forest sm:text-6xl">My orders</h1>
               <p className="mt-4 text-sm text-forest/58">Signed in as {session.user.email}</p>
             </div>
-            <Button as="a" href="/join" variant="secondary">Order another five</Button>
+            {orders[0] ? (
+              <ReorderButton
+                bowlSelection={orders[0].bowlSelection}
+                customerEmail={session.user.email}
+                fulfillmentMethod={orders[0].fulfillmentMethod}
+                mealsPerDay={orders[0].mealsPerDay}
+                peopleCount={orders[0].peopleCount}
+                variant="secondary"
+              >
+                Order again
+              </ReorderButton>
+            ) : (
+              <Button as="a" href="/checkout" variant="secondary">
+                Start an order
+              </Button>
+            )}
           </div>
 
           {orders.length === 0 ? (
@@ -49,7 +65,7 @@ export default async function AccountPage() {
                 verified account email. Older orders placed before accounts launched
                 may need customer-care assistance to link.
               </p>
-              <Button as="a" href="/join" className="mt-7">Choose my five</Button>
+              <Button as="a" href="/checkout" className="mt-7">Start an order</Button>
             </div>
           ) : (
             <div className="mt-10 grid gap-6">
@@ -122,6 +138,26 @@ export default async function AccountPage() {
                             <a href={order.receiptUrl} target="_blank" rel="noopener noreferrer" className="font-semibold text-clay underline underline-offset-4">Square receipt</a>
                           </div>
                         ) : null}
+                        <div className="pt-3 text-right">
+                          <ReorderButton
+                            bowlSelection={order.bowlSelection}
+                            className="w-full sm:w-auto"
+                            customerEmail={session.user.email}
+                            fulfillmentMethod={order.fulfillmentMethod}
+                            mealsPerDay={order.mealsPerDay}
+                            peopleCount={order.peopleCount}
+                            variant="secondary"
+                          >
+                            {order.type === "weekly"
+                              ? "Add this mix once"
+                              : "Order this mix again"}
+                          </ReorderButton>
+                          {order.type === "weekly" ? (
+                            <p className="mt-2 text-xs leading-relaxed text-forest/48">
+                              Opens as a one-time order and does not change your plan.
+                            </p>
+                          ) : null}
+                        </div>
                         {order.type === "weekly" ? (
                           <div className="pt-3 text-right">
                             <CancelSubscriptionButton

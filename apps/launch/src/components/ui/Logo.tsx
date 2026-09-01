@@ -29,7 +29,7 @@ export function Logo({
       height={size}
       sizes={`${size}px`}
       className={cn("h-auto shrink-0 object-contain", className)}
-      style={{ width: size }}
+      style={{ width: size, height: "auto" }}
     />
   );
 }
