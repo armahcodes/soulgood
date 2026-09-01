@@ -2,23 +2,30 @@
 
 import Image from "next/image";
 import {
-  BOWLS_PER_ORDER,
+  bowlsForPlan,
   bowlSelectionTotal,
+  mealSetCount,
   type BowlSelection,
 } from "@/lib/bowl-selection";
 import { CURRENT_BOWLS, type BowlId } from "@/lib/current-offer";
 
 export function BowlBuilder({
   disabled,
+  mealsPerDay,
   onChange,
+  peopleCount,
   selection,
 }: {
   disabled: boolean;
+  mealsPerDay: number;
   onChange: (selection: BowlSelection) => void;
+  peopleCount: number;
   selection: BowlSelection;
 }) {
   const total = bowlSelectionTotal(selection);
-  const complete = total === BOWLS_PER_ORDER;
+  const target = bowlsForPlan(peopleCount, mealsPerDay);
+  const maxPerRecipe = mealSetCount(peopleCount, mealsPerDay) * 2;
+  const complete = total === target;
 
   function changeQuantity(id: BowlId, amount: -1 | 1): void {
     const nextQuantity = selection[id] + amount;
@@ -27,8 +34,8 @@ export function BowlBuilder({
       disabled ||
       !bowlAvailable ||
       nextQuantity < 0 ||
-      nextQuantity > 2 ||
-      (amount > 0 && total >= BOWLS_PER_ORDER)
+      nextQuantity > maxPerRecipe ||
+      (amount > 0 && total >= target)
     ) {
       return;
     }
@@ -41,17 +48,18 @@ export function BowlBuilder({
         <span className="flex items-end justify-between gap-4">
           <span>
             <span className="block text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-              Build your five
+              Build your {target}
             </span>
             <span className="mt-1 block text-sm leading-relaxed text-forest/62">
-              One of each available bowl is preselected. Remove one, then double up on another.
+              We started with one of each available bowl for every five-meal set.
+              Adjust the mix to fit your order.
             </span>
           </span>
           <span
             aria-live="polite"
             className={`shrink-0 text-sm font-bold ${complete ? "text-sage" : "text-clay"}`}
           >
-            {total} of {BOWLS_PER_ORDER}
+            {total} of {target}
           </span>
         </span>
       </legend>
@@ -62,7 +70,7 @@ export function BowlBuilder({
       >
         <div
           className={`h-full rounded-full transition-all ${complete ? "bg-sage" : "bg-clay"}`}
-          style={{ width: `${Math.min(total / BOWLS_PER_ORDER, 1) * 100}%` }}
+          style={{ width: `${Math.min(total / target, 1) * 100}%` }}
         />
       </div>
 
@@ -155,8 +163,8 @@ export function BowlBuilder({
                         disabled={
                           disabled ||
                           !bowl.available ||
-                          total >= BOWLS_PER_ORDER ||
-                          quantity >= 2
+                          total >= target ||
+                          quantity >= maxPerRecipe
                         }
                         onClick={() => changeQuantity(bowl.id, 1)}
                       >
@@ -173,12 +181,12 @@ export function BowlBuilder({
 
       {!complete ? (
         <p role="status" className="text-sm font-semibold text-clay">
-          Select {BOWLS_PER_ORDER - total} more {BOWLS_PER_ORDER - total === 1 ? "bowl" : "bowls"}
+          Select {target - total} more {target - total === 1 ? "bowl" : "bowls"}
           to continue.
         </p>
       ) : (
         <p role="status" className="text-sm font-semibold text-sage">
-          Your five-bowl week is ready.
+          Your {target}-bowl order is ready.
         </p>
       )}
     </fieldset>

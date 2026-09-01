@@ -45,7 +45,7 @@ export const FOUNDER = "Chef Kyla";
 
 /**
  * Plan pricing — single source of truth for every price shown across the
- * microsite. Five bowls are a flat $88 for one-time and weekly checkout.
+ * microsite. Each five-meal set is $88 for one-time and weekly checkout.
  */
 export const PRICING = {
   /** One-time order price. */

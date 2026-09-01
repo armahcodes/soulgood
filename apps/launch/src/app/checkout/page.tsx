@@ -12,12 +12,12 @@ import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-of
 
 export const metadata = {
   title: `Order Soul Bowls™ — ${BRAND_NAME}`,
-  description: `Choose ${PLAN.bowlsPerWeek} chef-made Soul Bowls™ as a one-time order or ${PRICING.weekly}/week plan, with pickup or LA County delivery, applicable tax, and a disclosed deposit.`,
+  description: `Build a five-day Soul Bowls™ plan for one or more people, starting at ${PRICING.weekly}, with pickup or LA County delivery and applicable tax.`,
 };
 
 const PLAN_ITEMS = [
-  `${PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls`,
-  "Choose any five from the available lineup",
+  `Start with ${PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls`,
+  "Scale for more people or 2–3 meals a day",
   "Prep and eat-by dates on every jar",
   PLAN.deliveryNote,
   "Order once or choose automatic weekly delivery",
@@ -50,9 +50,9 @@ export default async function CheckoutPage({
               Start your bowl week.
             </h1>
             <p className="max-w-lg text-lg leading-relaxed text-forest/68">
-              Choose your own five 32 oz jarred Soul Bowls™ for the week, then
-              select free Sunday pickup or $8.88 Sunday delivery throughout Los
-              Angeles County.
+              Build a five-day plan for one person or a household. Choose 1–3
+              meals per person each day, then select free Sunday pickup or $8.88
+              Sunday delivery throughout Los Angeles County.
             </p>
 
             <p className="max-w-lg text-sm leading-relaxed text-forest/55">
@@ -81,7 +81,7 @@ export default async function CheckoutPage({
                 Soul Bowls™ order
               </p>
               <p className="mt-1 text-sm text-forest/55">
-                One-time or weekly · choose {PLAN.bowlsPerWeek} jars
+                One-time or weekly · 5 to 30 jars
               </p>
             </div>
 

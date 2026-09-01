@@ -4,8 +4,14 @@ import { ExchangeUpdateEmail } from "@/emails/ExchangeUpdateEmail";
 import { FulfillmentReminderEmail } from "@/emails/FulfillmentReminderEmail";
 import { OrderConfirmationEmail } from "@/emails/OrderConfirmationEmail";
 import { SubscriptionCancelledEmail } from "@/emails/SubscriptionCancelledEmail";
-import type { BowlSelection } from "./bowl-selection";
-import { formatCents, type FulfillmentMethod, type PurchaseType } from "./brand";
+import { bowlsForPlan, mealSetCount, type BowlSelection } from "./bowl-selection";
+import {
+  formatCents,
+  FULFILLMENT,
+  PRICING,
+  type FulfillmentMethod,
+  type PurchaseType,
+} from "./brand";
 import { CURRENT_BOWLS } from "./current-offer";
 
 const ACCOUNT_URL = "https://www.soulgood.kitchen/account";
@@ -53,6 +59,8 @@ export async function sendOrderConfirmationEmail(input: {
   customerEmail: string;
   customerName: string;
   fulfillmentMethod: FulfillmentMethod;
+  mealsPerDay: number;
+  peopleCount: number;
   purchaseType: PurchaseType;
   receiptUrl?: string;
   squareObjectId: string;
@@ -78,12 +86,18 @@ export async function sendOrderConfirmationEmail(input: {
         <OrderConfirmationEmail
           accountUrl={ACCOUNT_URL}
           bowls={bowls}
+          bowlCount={bowlsForPlan(input.peopleCount, input.mealsPerDay)}
+          bowlSubtotal={formatCents(
+            PRICING.oneTimeCents * mealSetCount(input.peopleCount, input.mealsPerDay),
+          )}
           customerName={input.customerName}
           fulfillment={input.fulfillmentMethod === "delivery" ? "LA County delivery" : "Pickup"}
+          fulfillmentFee={formatCents(FULFILLMENT[input.fulfillmentMethod].amountCents)}
+          mealsPerDay={input.mealsPerDay}
           orderNumber={orderNumber}
+          peopleCount={input.peopleCount}
           purchaseType={input.purchaseType}
           receiptUrl={input.receiptUrl}
-          subtotal={formatCents(input.subtotalCents)}
           tax={formatCents(input.taxCents)}
           total={formatCents(input.totalCents)}
         />

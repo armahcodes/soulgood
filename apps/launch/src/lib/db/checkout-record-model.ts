@@ -1,8 +1,12 @@
 import mongoose, { type InferSchemaType, type Model } from "mongoose";
+import { MAX_MEAL_SETS_PER_ORDER } from "../bowl-selection";
 import { BOWL_IDS } from "../current-offer";
 
 const selectionShape = Object.fromEntries(
-  BOWL_IDS.map((id) => [id, { type: Number, required: true, min: 0, max: 2 }]),
+  BOWL_IDS.map((id) => [
+    id,
+    { type: Number, required: true, min: 0, max: MAX_MEAL_SETS_PER_ORDER * 2 },
+  ]),
 );
 
 const checkoutRecordSchema = new mongoose.Schema(
@@ -28,6 +32,8 @@ const checkoutRecordSchema = new mongoose.Schema(
       enum: ["one-time", "weekly"],
       required: true,
     },
+    peopleCount: { type: Number, required: true, min: 1, max: 6, default: 1 },
+    mealsPerDay: { type: Number, required: true, min: 1, max: 3, default: 1 },
     fulfillmentMethod: {
       type: String,
       enum: ["pickup", "delivery"],

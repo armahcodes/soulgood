@@ -200,11 +200,59 @@ describe("POST /api/checkout", () => {
       customer_id: "customer-123",
       card_id: "card-123",
       tax_percentage: "9.75",
+      price_override_money: { amount: 9688, currency: "USD" },
       timezone: "America/Los_Angeles",
       source: {
-        name: "Soul Bowls website | glow-bowl:1,golden-harvest-bowl:1,jerk-wellness-bowl:1,performance-power-bowl:1,herb-chicken-nourish-bowl:0,anti-inflammatory-bowl:1",
+        name: "Soul Bowls website | people:1,meals:1 | glow-bowl:1,golden-harvest-bowl:1,jerk-wellness-bowl:1,performance-power-bowl:1,herb-chicken-nourish-bowl:0,anti-inflammatory-bowl:1",
       },
     });
+  });
+
+  it("prices a two-meal daily plan for one person as two five-bowl sets", async () => {
+    configureSquare();
+    process.env.SQUARE_ENVIRONMENT = "production";
+    mockSuccessfulDelivery();
+    const doubledSelection = Object.fromEntries(
+      Object.entries(BOWL_SELECTION).map(([id, quantity]) => [id, quantity * 2]),
+    );
+
+    const response = await POST(
+      makeRequest({
+        peopleCount: 1,
+        mealsPerDay: 2,
+        bowlSelection: doubledSelection,
+      }),
+    );
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body).toMatchObject({
+      ok: true,
+      peopleCount: 1,
+      mealsPerDay: 2,
+      tax: {
+        subtotalCents: 18488,
+        taxCents: 1803,
+        totalCents: 20291,
+      },
+    });
+    const subscriptionCall = squareFetch.mock.calls.find(([url]) =>
+      String(url).endsWith("/v2/subscriptions"),
+    );
+    const subscriptionBody = JSON.parse(String(subscriptionCall?.[1]?.body));
+    expect(subscriptionBody).toMatchObject({
+      price_override_money: { amount: 18488, currency: "USD" },
+      source: { name: expect.stringContaining("people:1,meals:2") },
+    });
+  });
+
+  it("rejects order sizes above the six-set online limit", async () => {
+    const response = await POST(
+      makeRequest({ peopleCount: 3, mealsPerDay: 3 }),
+    );
+
+    expect(response.status).toBe(400);
+    expect(squareFetch).not.toHaveBeenCalled();
   });
 
   it("completes a one-time order without storing the card or creating a subscription", async () => {
@@ -243,7 +291,7 @@ describe("POST /api/checkout", () => {
       customer_id: "customer-123",
       location_id: "location-123",
       reference_id: "lead-123",
-      note: "Soul Bowls website | glow-bowl:1,golden-harvest-bowl:1,jerk-wellness-bowl:1,performance-power-bowl:1,herb-chicken-nourish-bowl:0,anti-inflammatory-bowl:1",
+      note: "Soul Bowls website | people:1,meals:1 | glow-bowl:1,golden-harvest-bowl:1,jerk-wellness-bowl:1,performance-power-bowl:1,herb-chicken-nourish-bowl:0,anti-inflammatory-bowl:1",
     });
   });
 

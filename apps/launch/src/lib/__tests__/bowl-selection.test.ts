@@ -1,9 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
   bowlSelectionSchema,
+  bowlSelectionSchemaForPlan,
   bowlSelectionTotal,
+  bowlsForPlan,
   DEFAULT_BOWL_SELECTION,
+  mealSetCount,
   parseStoredBowlSelection,
+  selectionForPlan,
   selectionSourceName,
 } from "../bowl-selection";
 
@@ -11,6 +15,18 @@ describe("bowl selection", () => {
   it("accepts the five-bowl default and counts it", () => {
     expect(bowlSelectionSchema.safeParse(DEFAULT_BOWL_SELECTION).success).toBe(true);
     expect(bowlSelectionTotal(DEFAULT_BOWL_SELECTION)).toBe(5);
+  });
+
+  it("scales a five-day plan by people and daily meals", () => {
+    const selection = selectionForPlan(2, 2);
+
+    expect(mealSetCount(2, 2)).toBe(4);
+    expect(bowlsForPlan(2, 2)).toBe(20);
+    expect(bowlSelectionTotal(selection)).toBe(20);
+    expect(bowlSelectionSchemaForPlan(2, 2).safeParse(selection).success).toBe(
+      true,
+    );
+    expect(bowlSelectionSchema.safeParse(selection).success).toBe(false);
   });
 
   it("allows customers to choose multiples of a recipe", () => {
@@ -65,7 +81,7 @@ describe("bowl selection", () => {
       DEFAULT_BOWL_SELECTION,
     );
     expect(selectionSourceName(DEFAULT_BOWL_SELECTION)).toBe(
-      "Soul Bowls website | glow-bowl:1,golden-harvest-bowl:1,jerk-wellness-bowl:1,performance-power-bowl:1,herb-chicken-nourish-bowl:0,anti-inflammatory-bowl:1",
+      "Soul Bowls website | people:1,meals:1 | glow-bowl:1,golden-harvest-bowl:1,jerk-wellness-bowl:1,performance-power-bowl:1,herb-chicken-nourish-bowl:0,anti-inflammatory-bowl:1",
     );
   });
 

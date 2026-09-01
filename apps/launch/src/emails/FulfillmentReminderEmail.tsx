@@ -15,7 +15,7 @@ export function FulfillmentReminderEmail({
       <Text style={emailStyles.eyebrow}>Sunday bowl ritual</Text>
       <Text style={emailStyles.heading}>Your bowls are almost ready.</Text>
       <Text style={emailStyles.paragraph}>
-        Hi {customerName}, your five fresh Soul Bowls™ are being prepared.
+        Hi {customerName}, your fresh Soul Bowls™ order is being prepared.
       </Text>
       <Text style={emailStyles.paragraph}>{fulfillmentDetails}</Text>
       <Button href={accountUrl} style={emailStyles.button}>View my order</Button>

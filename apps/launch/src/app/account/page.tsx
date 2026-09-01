@@ -71,6 +71,10 @@ export default async function AccountPage() {
                           }).format(new Date(order.createdAt))}
                         </h2>
                         <p className="mt-2 text-xs text-forest/48">Order {order.id.slice(-8).toUpperCase()}</p>
+                        <p className="mt-3 text-sm font-semibold text-forest/65">
+                          {order.peopleCount} {order.peopleCount === 1 ? "person" : "people"}
+                          {" · "}{order.mealsPerDay} {order.mealsPerDay === 1 ? "meal" : "meals"} per person, per day
+                        </p>
                       </div>
                       <div className="sm:text-right">
                         <span className="inline-flex bg-sage/14 px-3 py-2 text-xs font-bold tracking-[0.1em] text-forest uppercase">

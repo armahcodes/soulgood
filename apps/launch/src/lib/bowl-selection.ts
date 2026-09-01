@@ -2,8 +2,15 @@ import { z } from "zod";
 import { BOWL_IDS, type BowlId } from "./current-offer";
 
 export const BOWLS_PER_ORDER = 5;
+export const MAX_PEOPLE_PER_ORDER = 6;
+export const MAX_MEALS_PER_DAY = 3;
+export const MAX_MEAL_SETS_PER_ORDER = 6;
 
-const quantitySchema = z.number().int().min(0).max(2);
+const quantitySchema = z
+  .number()
+  .int()
+  .min(0)
+  .max(MAX_MEAL_SETS_PER_ORDER * 2);
 
 export const bowlSelectionDraftSchema = z.strictObject({
   "glow-bowl": quantitySchema,
@@ -14,12 +21,27 @@ export const bowlSelectionDraftSchema = z.strictObject({
   "anti-inflammatory-bowl": quantitySchema,
 });
 
-export const bowlSelectionSchema = bowlSelectionDraftSchema
-  .superRefine((selection, context) => {
-    if (bowlSelectionTotal(selection) !== BOWLS_PER_ORDER) {
+export type BowlSelection = Record<BowlId, number>;
+
+export function mealSetCount(peopleCount: number, mealsPerDay: number): number {
+  return peopleCount * mealsPerDay;
+}
+
+export function bowlsForPlan(peopleCount: number, mealsPerDay: number): number {
+  return BOWLS_PER_ORDER * mealSetCount(peopleCount, mealsPerDay);
+}
+
+export function bowlSelectionSchemaForPlan(
+  peopleCount: number,
+  mealsPerDay: number,
+) {
+  const target = bowlsForPlan(peopleCount, mealsPerDay);
+  const maxPerRecipe = mealSetCount(peopleCount, mealsPerDay) * 2;
+  return bowlSelectionDraftSchema.superRefine((selection, context) => {
+    if (bowlSelectionTotal(selection) !== target) {
       context.addIssue({
         code: "custom",
-        message: `Select exactly ${BOWLS_PER_ORDER} bowls`,
+        message: `Select exactly ${target} bowls`,
       });
     }
     if (selection["herb-chicken-nourish-bowl"] > 0) {
@@ -29,9 +51,19 @@ export const bowlSelectionSchema = bowlSelectionDraftSchema
         message: "Herb Chicken Nourish Bowl is sold out",
       });
     }
+    for (const id of BOWL_IDS) {
+      if (selection[id] > maxPerRecipe) {
+        context.addIssue({
+          code: "custom",
+          path: [id],
+          message: `Select no more than ${maxPerRecipe} of one bowl`,
+        });
+      }
+    }
   });
+}
 
-export type BowlSelection = Record<BowlId, number>;
+export const bowlSelectionSchema = bowlSelectionSchemaForPlan(1, 1);
 
 export const DEFAULT_BOWL_SELECTION: BowlSelection = {
   "glow-bowl": 1,
@@ -42,13 +74,27 @@ export const DEFAULT_BOWL_SELECTION: BowlSelection = {
   "anti-inflammatory-bowl": 1,
 };
 
+export function selectionForPlan(
+  peopleCount: number,
+  mealsPerDay: number,
+): BowlSelection {
+  const sets = mealSetCount(peopleCount, mealsPerDay);
+  return Object.fromEntries(
+    BOWL_IDS.map((id) => [id, DEFAULT_BOWL_SELECTION[id] * sets]),
+  ) as BowlSelection;
+}
+
 export function bowlSelectionTotal(selection: BowlSelection): number {
   return BOWL_IDS.reduce((total, id) => total + selection[id], 0);
 }
 
-export function selectionSourceName(selection: BowlSelection): string {
+export function selectionSourceName(
+  selection: BowlSelection,
+  peopleCount = 1,
+  mealsPerDay = 1,
+): string {
   const mix = BOWL_IDS.map((id) => `${id}:${selection[id]}`).join(",");
-  return `Soul Bowls website | ${mix}`;
+  return `Soul Bowls website | people:${peopleCount},meals:${mealsPerDay} | ${mix}`;
 }
 
 export function parseStoredBowlSelection(value: string | null): BowlSelection | null {

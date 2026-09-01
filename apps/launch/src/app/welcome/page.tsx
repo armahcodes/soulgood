@@ -3,7 +3,7 @@ import { ConfirmedBowlMix } from "@/components/checkout/ConfirmedBowlMix";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
 import { Wordmark } from "@/components/ui/Wordmark";
-import { BRAND_NAME, FEES, formatCents, PLAN, PRICING } from "@/lib/brand";
+import { BRAND_NAME, FEES, formatCents, PLAN } from "@/lib/brand";
 
 export const metadata = {
   title: `Order confirmed — ${BRAND_NAME}`,
@@ -26,9 +26,9 @@ export default async function WelcomePage({
   const weekly = params.type === "weekly" || params.subscribed === "1";
   const nextSteps = purchased
     ? [
-        `${weekly ? "Your weekly plan" : "Your one-time order"} and five-bowl mix are confirmed.`,
+        `${weekly ? "Your weekly plan" : "Your one-time order"} and selected bowl mix are confirmed.`,
         "We text you to confirm your first Sunday window.",
-        `${PLAN.bowlsPerWeek} fresh 32 oz jarred bowls are prepared for ${PLAN.deliveryDay}.`,
+        `Your fresh 32 oz jarred bowls are prepared for ${PLAN.deliveryDay}.`,
       ]
     : NEXT_STEPS;
 
@@ -48,14 +48,13 @@ export default async function WelcomePage({
           {purchased ? (weekly ? "Weekly plan active" : "Order confirmed") : "You’re on the list"}
         </p>
         <h1 className="max-w-[11ch] text-5xl leading-[0.94] font-normal tracking-[-0.05em] text-forest sm:text-7xl">
-          {purchased ? "Your five are confirmed." : "Your bowls are almost ready."}
+          {purchased ? "Your bowls are confirmed." : "Your bowls are almost ready."}
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/68">
           {purchased ? (weekly ? "Thanks for starting" : "Thanks for ordering") : "Thanks for reserving"}{" "}
           Soul Bowls™. We&rsquo;ll text you before your {weekly ? "first " : ""}
-          pickup or delivery. {weekly ? "The plan" : "This order"} stays simple:
-          {` ${PLAN.bowlsPerWeek}`} 32 oz jarred bowls for {weekly ? `${PRICING.weekly}/week` : PRICING.oneTime},
-          with free pickup or $8.88 LA County delivery.
+          pickup or delivery. Your selected five-day plan, bowl mix, and final
+          amount are saved with the order, with free pickup or $8.88 LA County delivery.
           Applicable California sales tax is itemized on the checkout receipt. Your
           one-time refundable container deposit is
           {FEES.containerDeposit.amountCents === null

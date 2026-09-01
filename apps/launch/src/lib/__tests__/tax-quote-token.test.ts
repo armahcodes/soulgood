@@ -13,9 +13,9 @@ const ADDRESS = {
 };
 
 const QUOTE = {
-  subtotalCents: 9688,
-  taxCents: 945,
-  totalCents: 10633,
+  subtotalCents: 18488,
+  taxCents: 1803,
+  totalCents: 20291,
   percentage: "9.75",
   jurisdiction: "LOS ANGELES",
   county: "LOS ANGELES" as const,
@@ -34,25 +34,32 @@ describe("signed tax quote tokens", () => {
   });
 
   it("round trips a verified quote for the exact address", () => {
-    const token = createTaxQuoteToken(QUOTE, "delivery", ADDRESS);
+    const token = createTaxQuoteToken(QUOTE, "delivery", ADDRESS, 1, 2);
 
     expect(token).toBeTruthy();
-    expect(verifyTaxQuoteToken(token!, "delivery", ADDRESS)).toEqual(QUOTE);
+    expect(verifyTaxQuoteToken(token!, "delivery", ADDRESS, 1, 2)).toEqual(QUOTE);
   });
 
   it("rejects a changed address and a tampered token", () => {
-    const token = createTaxQuoteToken(QUOTE, "delivery", ADDRESS)!;
+    const token = createTaxQuoteToken(QUOTE, "delivery", ADDRESS, 1, 2)!;
 
     expect(
-      verifyTaxQuoteToken(token, "delivery", { ...ADDRESS, postalCode: "90013" }),
+      verifyTaxQuoteToken(
+        token,
+        "delivery",
+        { ...ADDRESS, postalCode: "90013" },
+        1,
+        2,
+      ),
     ).toBeNull();
-    expect(verifyTaxQuoteToken(`${token}x`, "delivery", ADDRESS)).toBeNull();
+    expect(verifyTaxQuoteToken(`${token}x`, "delivery", ADDRESS, 1, 2)).toBeNull();
+    expect(verifyTaxQuoteToken(token, "delivery", ADDRESS, 1, 3)).toBeNull();
   });
 
   it("rejects an expired quote", () => {
-    const token = createTaxQuoteToken(QUOTE, "delivery", ADDRESS)!;
+    const token = createTaxQuoteToken(QUOTE, "delivery", ADDRESS, 1, 2)!;
     vi.advanceTimersByTime(16 * 60 * 1000);
 
-    expect(verifyTaxQuoteToken(token, "delivery", ADDRESS)).toBeNull();
+    expect(verifyTaxQuoteToken(token, "delivery", ADDRESS, 1, 2)).toBeNull();
   });
 });

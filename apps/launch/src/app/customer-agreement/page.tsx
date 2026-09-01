@@ -18,8 +18,8 @@ export default function CustomerAgreementPage() {
       <section className="rounded-3xl bg-gold/25 p-6 sm:p-8">
         <h2>Important order and recurring-payment terms</h2>
         <ul>
-          <li>{PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls per order.</li>
-          <li>Choose a {PRICING.oneTime} one-time order or a {PRICING.weekly} weekly plan.</li>
+          <li>Each five-day meal set contains {PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls.</li>
+          <li>Choose one or more {PRICING.oneTime} meal sets as a one-time order or weekly plan.</li>
           <li>Only the weekly plan renews and charges every seven days until you cancel.</li>
           <li>Pickup is free or LA County delivery is $8.88 per order.</li>
           <li>Applicable sales tax is shown at checkout; any reusable-container deposit is disclosed and collected separately.</li>
@@ -29,11 +29,14 @@ export default function CustomerAgreementPage() {
       </section>
 
       <section>
-        <h2>1. Your five-bowl order</h2>
+        <h2>1. Your five-day order</h2>
         <p>
-          Each purchase or renewal creates one order containing {PLAN.bowlsPerWeek}
-          chef-made Soul Bowls™ in {CURRENT_OFFER.format}. At checkout, you may
-          choose any five from {` ${AVAILABLE_BOWLS.map((bowl) => bowl.name).join(", ")}`}.
+          Each purchase or renewal creates an order made from one or more five-meal
+          sets. Each set contains {PLAN.bowlsPerWeek} chef-made Soul Bowls™ in
+          {` ${CURRENT_OFFER.format}`} and costs {PRICING.oneTime}. The number of
+          bowls equals people × meals per person per day × five days. At checkout,
+          you may choose the displayed quantity from
+          {` ${AVAILABLE_BOWLS.map((bowl) => bowl.name).join(", ")}`}.
           Items marked sold out, including
           {` ${SOLD_OUT_BOWLS.map((bowl) => bowl.name).join(", ")}`}, cannot be selected.
           The confirmed mix applies to the order and, for weekly plans, remains
@@ -58,8 +61,9 @@ export default function CustomerAgreementPage() {
       <section>
         <h2>3. Charges</h2>
         <p>
-          The base five-bowl order is {PRICING.oneTime}; the weekly plan is
-          {` ${PRICING.weekly}`} per week. {FEES.delivery.label}:
+          Each five-meal set is {PRICING.oneTime}. The base order or weekly renewal
+          is that amount multiplied by the number of people and daily meals selected.
+          {` ${FEES.delivery.label}`}:
           {` ${FEES.delivery.disclosure}`} Pickup has no fulfillment fee.
           {` ${FEES.containerDeposit.label}`}:
           {` ${FEES.containerDeposit.disclosure}`} The container deposit is not part

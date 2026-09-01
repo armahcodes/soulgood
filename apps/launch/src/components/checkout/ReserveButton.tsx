@@ -7,10 +7,15 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { BowlBuilder } from "@/components/checkout/BowlBuilder";
 import { Button } from "@/components/ui/Button";
 import {
-  BOWLS_PER_ORDER,
-  bowlSelectionSchema,
+  bowlsForPlan,
+  bowlSelectionSchemaForPlan,
   DEFAULT_BOWL_SELECTION,
+  MAX_MEALS_PER_DAY,
+  MAX_MEAL_SETS_PER_ORDER,
+  MAX_PEOPLE_PER_ORDER,
+  mealSetCount,
   parseStoredBowlSelection,
+  selectionForPlan,
   type BowlSelection,
 } from "@/lib/bowl-selection";
 import {
@@ -88,6 +93,8 @@ export function ReserveButton({
   const [fulfillmentMethod, setFulfillmentMethod] =
     useState<FulfillmentMethod>(initialFulfillment);
   const [purchaseType, setPurchaseType] = useState<PurchaseType>("one-time");
+  const [peopleCount, setPeopleCount] = useState(1);
+  const [mealsPerDay, setMealsPerDay] = useState(1);
   const [bowlSelection, setBowlSelection] = useState<BowlSelection>(
     DEFAULT_BOWL_SELECTION,
   );
@@ -142,12 +149,38 @@ export function ReserveButton({
       const storedSelection = parseStoredBowlSelection(
         window.sessionStorage.getItem("soulbowls:bowlSelection"),
       );
-      if (storedSelection) setBowlSelection(storedSelection);
       const storedPurchaseType = window.sessionStorage.getItem(
         "soulbowls:purchaseType",
       );
       if (storedPurchaseType === "one-time" || storedPurchaseType === "weekly") {
         setPurchaseType(storedPurchaseType);
+      }
+      const storedPeople = Number(
+        window.sessionStorage.getItem("soulbowls:peopleCount") || "1",
+      );
+      const storedMeals = Number(
+        window.sessionStorage.getItem("soulbowls:mealsPerDay") || "1",
+      );
+      const validSize =
+        Number.isInteger(storedPeople) &&
+        storedPeople >= 1 &&
+        storedPeople <= MAX_PEOPLE_PER_ORDER &&
+        Number.isInteger(storedMeals) &&
+        storedMeals >= 1 &&
+        storedMeals <= MAX_MEALS_PER_DAY &&
+        mealSetCount(storedPeople, storedMeals) <= MAX_MEAL_SETS_PER_ORDER;
+      const nextPeople = validSize ? storedPeople : 1;
+      const nextMeals = validSize ? storedMeals : 1;
+      setPeopleCount(nextPeople);
+      setMealsPerDay(nextMeals);
+      if (
+        storedSelection &&
+        bowlSelectionSchemaForPlan(nextPeople, nextMeals).safeParse(storedSelection)
+          .success
+      ) {
+        setBowlSelection(storedSelection);
+      } else {
+        setBowlSelection(selectionForPlan(nextPeople, nextMeals));
       }
     });
     return () => {
@@ -186,7 +219,13 @@ export function ReserveButton({
       /^\+?[\d\s().-]{9,}$/.test(contact.phone.trim()),
     [contact],
   );
-  const bowlSelectionComplete = bowlSelectionSchema.safeParse(bowlSelection).success;
+  const mealSets = mealSetCount(peopleCount, mealsPerDay);
+  const targetBowls = bowlsForPlan(peopleCount, mealsPerDay);
+  const bowlOrderCents = PRICING.oneTimeCents * mealSets;
+  const bowlSelectionComplete = bowlSelectionSchemaForPlan(
+    peopleCount,
+    mealsPerDay,
+  ).safeParse(bowlSelection).success;
 
   function resetQuote(): void {
     setQuote(null);
@@ -206,6 +245,29 @@ export function ReserveButton({
     window.sessionStorage.setItem("soulbowls:purchaseType", type);
     setAccepted(false);
     setError(null);
+  }
+
+  function chooseOrderSize(nextPeople: number, nextMeals: number): void {
+    if (
+      nextPeople < 1 ||
+      nextPeople > MAX_PEOPLE_PER_ORDER ||
+      nextMeals < 1 ||
+      nextMeals > MAX_MEALS_PER_DAY ||
+      mealSetCount(nextPeople, nextMeals) > MAX_MEAL_SETS_PER_ORDER
+    ) {
+      return;
+    }
+    const nextSelection = selectionForPlan(nextPeople, nextMeals);
+    setPeopleCount(nextPeople);
+    setMealsPerDay(nextMeals);
+    setBowlSelection(nextSelection);
+    window.sessionStorage.setItem("soulbowls:peopleCount", String(nextPeople));
+    window.sessionStorage.setItem("soulbowls:mealsPerDay", String(nextMeals));
+    window.sessionStorage.setItem(
+      "soulbowls:bowlSelection",
+      JSON.stringify(nextSelection),
+    );
+    resetQuote();
   }
 
   function updateBowlSelection(selection: BowlSelection): void {
@@ -235,7 +297,7 @@ export function ReserveButton({
 
   async function calculateTotal(): Promise<void> {
     if (!bowlSelectionComplete) {
-      setError(`Select exactly ${BOWLS_PER_ORDER} bowls before calculating the total.`);
+      setError(`Select exactly ${targetBowls} bowls before calculating the total.`);
       return;
     }
     if (
@@ -253,6 +315,8 @@ export function ReserveButton({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fulfillmentMethod,
+          mealsPerDay,
+          peopleCount,
           deliveryAddress:
             fulfillmentMethod === "delivery" ? deliveryAddress : null,
         }),
@@ -284,7 +348,7 @@ export function ReserveButton({
       return;
     }
     if (!bowlSelectionComplete) {
-      setError(`Select exactly ${BOWLS_PER_ORDER} bowls before checkout.`);
+      setError(`Select exactly ${targetBowls} bowls before checkout.`);
       return;
     }
     if (!contactComplete) {
@@ -353,6 +417,8 @@ export function ReserveButton({
           fulfillmentMethod,
           idempotencyKey: crypto.randomUUID(),
           leadId,
+          mealsPerDay,
+          peopleCount,
           purchaseType,
           sourceId: tokenResult.token,
           ...(taxQuoteToken ? { taxQuoteToken } : {}),
@@ -442,6 +508,95 @@ export function ReserveButton({
     <div className="flex flex-col gap-6">
       <Script src={scriptUrl} strategy="afterInteractive" onLoad={() => setSdkLoaded(true)} />
 
+      <fieldset className="grid gap-3 border border-forest/14 bg-gold/10 p-5">
+        <legend className="px-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
+          Who are you feeding?
+        </legend>
+        <div className="flex items-center justify-between gap-5">
+          <div>
+            <p className="font-serif text-2xl text-forest">
+              {peopleCount} {peopleCount === 1 ? "person" : "people"}
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-forest/55">
+              One customer account can cover the whole order.
+            </p>
+          </div>
+          <div className="flex items-center border border-forest/18 bg-oat">
+            <button
+              type="button"
+              aria-label="Remove one person"
+              className="h-11 w-11 text-xl text-forest disabled:text-forest/25"
+              disabled={pending || peopleCount === 1}
+              onClick={() => chooseOrderSize(peopleCount - 1, mealsPerDay)}
+            >
+              −
+            </button>
+            <output
+              aria-label={`${peopleCount} people selected`}
+              className="flex h-11 min-w-11 items-center justify-center border-x border-forest/14 font-bold text-forest"
+            >
+              {peopleCount}
+            </output>
+            <button
+              type="button"
+              aria-label="Add one person"
+              className="h-11 w-11 text-xl text-forest disabled:text-forest/25"
+              disabled={pending || peopleCount === MAX_PEOPLE_PER_ORDER}
+              onClick={() =>
+                chooseOrderSize(
+                  peopleCount + 1,
+                  Math.min(
+                    mealsPerDay,
+                    Math.floor(MAX_MEAL_SETS_PER_ORDER / (peopleCount + 1)),
+                  ),
+                )
+              }
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <div className="border-t border-forest/10 pt-4">
+          <p className="text-xs font-bold tracking-[0.1em] text-forest/55 uppercase">
+            Meals per person, per day
+          </p>
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            {Array.from({ length: MAX_MEALS_PER_DAY }, (_, index) => index + 1).map(
+              (meals) => {
+                const available =
+                  mealSetCount(peopleCount, meals) <= MAX_MEAL_SETS_PER_ORDER;
+                return (
+                  <button
+                    key={meals}
+                    type="button"
+                    disabled={pending || !available}
+                    aria-pressed={mealsPerDay === meals}
+                    onClick={() => chooseOrderSize(peopleCount, meals)}
+                    className={`min-h-14 border px-2 text-sm font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-35 ${
+                      mealsPerDay === meals
+                        ? "border-sage bg-sage/14 text-forest"
+                        : "border-forest/14 bg-white/60 text-forest/65 hover:border-sage"
+                    }`}
+                  >
+                    {meals} {meals === 1 ? "meal" : "meals"}
+                  </button>
+                );
+              },
+            )}
+          </div>
+        </div>
+
+        <p className="border-t border-forest/10 pt-4 text-sm leading-relaxed text-forest/68">
+          <strong className="text-forest">
+            {peopleCount} × {mealsPerDay} × 5 days = {targetBowls} bowls
+          </strong>
+          <span className="mt-1 block">
+            {formatCents(bowlOrderCents)} before fulfillment and California tax.
+          </span>
+        </p>
+      </fieldset>
+
       <fieldset className="grid gap-2">
         <legend className="mb-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
           Choose how to order
@@ -473,7 +628,7 @@ export function ReserveButton({
                       {option.disclosure}
                     </span>
                     <span className="mt-2 block font-bold text-forest">
-                      {type === "weekly" ? PRICING.weekly : PRICING.oneTime}
+                      {formatCents(bowlOrderCents)}
                     </span>
                   </span>
                 </span>
@@ -485,7 +640,9 @@ export function ReserveButton({
 
       <BowlBuilder
         disabled={pending}
+        mealsPerDay={mealsPerDay}
         onChange={updateBowlSelection}
+        peopleCount={peopleCount}
         selection={bowlSelection}
       />
 
@@ -544,10 +701,10 @@ export function ReserveButton({
       </Button>
 
       <dl className="grid gap-3 border-y border-forest/10 py-5 text-sm text-forest/70">
-        <div className="flex justify-between gap-4"><dt>{purchaseType === "weekly" ? "Weekly base plan" : "One-time bowl order"}</dt><dd className="font-semibold text-forest">{purchaseType === "weekly" ? PRICING.weekly : PRICING.oneTime}</dd></div>
+        <div className="flex justify-between gap-4"><dt>{mealSets} five-meal {mealSets === 1 ? "set" : "sets"}<span className="block text-xs text-forest/50">{peopleCount} {peopleCount === 1 ? "person" : "people"} · {mealsPerDay} {mealsPerDay === 1 ? "meal" : "meals"}/day</span></dt><dd className="font-semibold text-forest">{formatCents(bowlOrderCents)}</dd></div>
         <div className="flex justify-between gap-4"><dt>{FULFILLMENT[fulfillmentMethod].label}</dt><dd className="font-semibold text-forest">{formatCents(FULFILLMENT[fulfillmentMethod].amountCents)}</dd></div>
         <div className="flex justify-between gap-4"><dt>California sales tax{quote && <span className="block text-xs text-forest/50">{quote.percentage}% · {quote.jurisdiction}</span>}</dt><dd className="font-semibold text-forest">{quote ? formatCents(quote.taxCents) : "Calculate above"}</dd></div>
-        <div className="flex items-end justify-between gap-4 border-t border-forest/10 pt-4"><dt className="font-semibold text-forest">{purchaseType === "weekly" ? "Weekly charge" : "Total charge"}<span className="block text-xs font-normal text-forest/50">{purchaseType === "weekly" ? "Renews every 7 days until canceled" : "Charged once · no automatic renewal"}</span></dt><dd className="font-serif text-3xl font-semibold text-forest">{quote ? formatCents(quote.totalCents) : formatCents(PRICING.oneTimeCents + FULFILLMENT[fulfillmentMethod].amountCents)}</dd></div>
+        <div className="flex items-end justify-between gap-4 border-t border-forest/10 pt-4"><dt className="font-semibold text-forest">{purchaseType === "weekly" ? "Weekly charge" : "Total charge"}<span className="block text-xs font-normal text-forest/50">{purchaseType === "weekly" ? "Renews every 7 days until canceled" : "Charged once · no automatic renewal"}</span></dt><dd className="font-serif text-3xl font-semibold text-forest">{quote ? formatCents(quote.totalCents) : formatCents(bowlOrderCents + FULFILLMENT[fulfillmentMethod].amountCents)}</dd></div>
       </dl>
 
       <div>
@@ -563,8 +720,8 @@ export function ReserveButton({
         </p>
         <p className="mt-2">
           {purchaseType === "weekly"
-            ? `Your card will be charged ${quote ? formatCents(quote.totalCents) : "the displayed total"} today and every 7 days for the ${PRICING.weekly} plan, selected fulfillment, and applicable tax until canceled.`
-            : `Your card will be charged ${quote ? formatCents(quote.totalCents) : "the displayed total"} once for this five-bowl order, selected fulfillment, and applicable tax. This order does not renew automatically.`}{" "}
+            ? `Your card will be charged ${quote ? formatCents(quote.totalCents) : "the displayed total"} today and every 7 days for ${peopleCount} ${peopleCount === 1 ? "person" : "people"} at ${mealsPerDay} ${mealsPerDay === 1 ? "meal" : "meals"} per day, selected fulfillment, and applicable tax until canceled.`
+            : `Your card will be charged ${quote ? formatCents(quote.totalCents) : "the displayed total"} once for this ${targetBowls}-bowl order, selected fulfillment, and applicable tax. This order does not renew automatically.`}{" "}
           Any reusable-container deposit is separate and refundable under the return terms.
         </p>
       </div>

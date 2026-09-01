@@ -3,7 +3,15 @@ import { Hono } from "hono";
 import { handle } from "hono/vercel";
 import { timing } from "hono/timing";
 import { z } from "zod";
-import { bowlSelectionSchema, selectionSourceName } from "@/lib/bowl-selection";
+import {
+  bowlSelectionDraftSchema,
+  bowlSelectionSchemaForPlan,
+  MAX_MEALS_PER_DAY,
+  MAX_MEAL_SETS_PER_ORDER,
+  MAX_PEOPLE_PER_ORDER,
+  mealSetCount,
+  selectionSourceName,
+} from "@/lib/bowl-selection";
 import {
   BRAND_NAME,
   LEGAL_VERSION,
@@ -37,7 +45,7 @@ const requestSchema = z
   .object({
     acceptedTerms: z.literal(true),
     billingAddress: addressSchema,
-    bowlSelection: bowlSelectionSchema,
+    bowlSelection: bowlSelectionDraftSchema,
     contact: z.object({
       givenName: z.string().trim().min(1).max(100),
       familyName: z.string().trim().min(1).max(100),
@@ -48,6 +56,8 @@ const requestSchema = z
     fulfillmentMethod: z.enum(["pickup", "delivery"]),
     idempotencyKey: z.string().uuid(),
     leadId: z.string().trim().min(1).max(200),
+    mealsPerDay: z.number().int().min(1).max(MAX_MEALS_PER_DAY).default(1),
+    peopleCount: z.number().int().min(1).max(MAX_PEOPLE_PER_ORDER).default(1),
     purchaseType: z.enum(["one-time", "weekly"]),
     sourceId: z.string().min(1).max(16384),
     taxQuoteToken: z.string().max(4096).optional(),
@@ -59,6 +69,29 @@ const requestSchema = z
         path: ["deliveryAddress"],
         message: "Delivery address is required",
       });
+    }
+    if (
+      mealSetCount(value.peopleCount, value.mealsPerDay) >
+      MAX_MEAL_SETS_PER_ORDER
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["peopleCount"],
+        message: "This online order supports up to 30 bowls",
+      });
+    }
+    const selection = bowlSelectionSchemaForPlan(
+      value.peopleCount,
+      value.mealsPerDay,
+    ).safeParse(value.bowlSelection);
+    if (!selection.success) {
+      for (const issue of selection.error.issues) {
+        context.addIssue({
+          code: "custom",
+          path: ["bowlSelection", ...issue.path],
+          message: issue.message,
+        });
+      }
     }
   });
 
@@ -192,17 +225,21 @@ async function handleCheckout(request: Request) {
 
   let cardId: string | null = null;
   try {
+    const mealSets = mealSetCount(input.peopleCount, input.mealsPerDay);
     const quote =
       (input.taxQuoteToken
         ? verifyTaxQuoteToken(
             input.taxQuoteToken,
             input.fulfillmentMethod as FulfillmentMethod,
             input.deliveryAddress,
+            input.peopleCount,
+            input.mealsPerDay,
           )
         : null) ??
       (await getTaxQuote(
         input.fulfillmentMethod as FulfillmentMethod,
         input.deliveryAddress,
+        mealSets,
       ));
     const customer = await findOrCreateCustomer({
       billingAddress: input.billingAddress,
@@ -229,7 +266,11 @@ async function handleCheckout(request: Request) {
           customer_id: customer.id,
           location_id: locationId,
           reference_id: input.leadId.slice(0, 40),
-          note: selectionSourceName(input.bowlSelection),
+          note: selectionSourceName(
+            input.bowlSelection,
+            input.peopleCount,
+            input.mealsPerDay,
+          ),
         }),
       });
       const payment = paymentResponse.payment;
@@ -250,6 +291,8 @@ async function handleCheckout(request: Request) {
           purchaseType: input.purchaseType,
           fulfillmentMethod: input.fulfillmentMethod,
           bowlSelection: input.bowlSelection,
+          mealsPerDay: input.mealsPerDay,
+          peopleCount: input.peopleCount,
           subtotalCents: quote.subtotalCents,
           taxCents: quote.taxCents,
           totalCents: quote.totalCents,
@@ -270,6 +313,8 @@ async function handleCheckout(request: Request) {
         customerEmail,
         customerName,
         fulfillmentMethod: input.fulfillmentMethod,
+        mealsPerDay: input.mealsPerDay,
+        peopleCount: input.peopleCount,
         purchaseType: input.purchaseType,
         receiptUrl: payment.receipt_url,
         squareObjectId: payment.id,
@@ -288,6 +333,8 @@ async function handleCheckout(request: Request) {
           acceptedAt,
           legalVersion: LEGAL_VERSION,
           fulfillmentMethod: input.fulfillmentMethod,
+          mealsPerDay: input.mealsPerDay,
+          peopleCount: input.peopleCount,
           bowlSelection: input.bowlSelection,
           checkoutRecorded,
           tax: quote,
@@ -321,9 +368,19 @@ async function handleCheckout(request: Request) {
         plan_variation_id: planVariationId,
         customer_id: customer.id,
         card_id: cardId,
+        price_override_money: {
+          amount: quote.subtotalCents,
+          currency: "USD",
+        },
         tax_percentage: quote.percentage,
         timezone: "America/Los_Angeles",
-        source: { name: selectionSourceName(input.bowlSelection) },
+        source: {
+          name: selectionSourceName(
+            input.bowlSelection,
+            input.peopleCount,
+            input.mealsPerDay,
+          ),
+        },
       }),
     });
     const subscription = subscriptionResponse.subscription;
@@ -344,6 +401,8 @@ async function handleCheckout(request: Request) {
         purchaseType: input.purchaseType,
         fulfillmentMethod: input.fulfillmentMethod,
         bowlSelection: input.bowlSelection,
+        mealsPerDay: input.mealsPerDay,
+        peopleCount: input.peopleCount,
         subtotalCents: quote.subtotalCents,
         taxCents: quote.taxCents,
         totalCents: quote.totalCents,
@@ -363,6 +422,8 @@ async function handleCheckout(request: Request) {
       customerEmail,
       customerName,
       fulfillmentMethod: input.fulfillmentMethod,
+      mealsPerDay: input.mealsPerDay,
+      peopleCount: input.peopleCount,
       purchaseType: input.purchaseType,
       squareObjectId: subscription.id,
       subtotalCents: quote.subtotalCents,
@@ -379,6 +440,8 @@ async function handleCheckout(request: Request) {
         acceptedAt,
         legalVersion: LEGAL_VERSION,
         fulfillmentMethod: input.fulfillmentMethod,
+        mealsPerDay: input.mealsPerDay,
+        peopleCount: input.peopleCount,
         bowlSelection: input.bowlSelection,
         checkoutRecorded,
         tax: quote,

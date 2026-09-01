@@ -3,6 +3,12 @@ import { Hono } from "hono";
 import { handle } from "hono/vercel";
 import { timing } from "hono/timing";
 import { z } from "zod";
+import {
+  MAX_MEALS_PER_DAY,
+  MAX_MEAL_SETS_PER_ORDER,
+  MAX_PEOPLE_PER_ORDER,
+  mealSetCount,
+} from "@/lib/bowl-selection";
 import { getTaxQuote } from "@/lib/square";
 import { createTaxQuoteToken } from "@/lib/tax-quote-token";
 
@@ -16,13 +22,28 @@ const addressSchema = z.object({
   postalCode: z.string().trim().regex(/^\d{5}$/),
 });
 
+const orderSizeShape = {
+  peopleCount: z.number().int().min(1).max(MAX_PEOPLE_PER_ORDER).default(1),
+  mealsPerDay: z.number().int().min(1).max(MAX_MEALS_PER_DAY).default(1),
+};
+
 const requestSchema = z.discriminatedUnion("fulfillmentMethod", [
-  z.object({ fulfillmentMethod: z.literal("pickup"), deliveryAddress: z.null() }),
+  z.object({
+    fulfillmentMethod: z.literal("pickup"),
+    deliveryAddress: z.null(),
+    ...orderSizeShape,
+  }),
   z.object({
     fulfillmentMethod: z.literal("delivery"),
     deliveryAddress: addressSchema,
+    ...orderSizeShape,
   }),
-]);
+]).refine(
+  (value) =>
+    mealSetCount(value.peopleCount, value.mealsPerDay) <=
+    MAX_MEAL_SETS_PER_ORDER,
+  { message: "This online order supports up to 30 bowls." },
+);
 
 async function handleTaxQuote(request: Request) {
   const parsed = requestSchema.safeParse(await request.json().catch(() => null));
@@ -34,11 +55,14 @@ async function handleTaxQuote(request: Request) {
     const quote = await getTaxQuote(
       parsed.data.fulfillmentMethod,
       parsed.data.deliveryAddress,
+      mealSetCount(parsed.data.peopleCount, parsed.data.mealsPerDay),
     );
     const quoteToken = createTaxQuoteToken(
       quote,
       parsed.data.fulfillmentMethod,
       parsed.data.deliveryAddress,
+      parsed.data.peopleCount,
+      parsed.data.mealsPerDay,
     );
     return NextResponse.json({ ...quote, quoteToken }, { status: 200 });
   } catch (error) {

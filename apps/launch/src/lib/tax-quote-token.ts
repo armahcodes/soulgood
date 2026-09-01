@@ -1,4 +1,10 @@
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
+import {
+  MAX_MEALS_PER_DAY,
+  MAX_MEAL_SETS_PER_ORDER,
+  MAX_PEOPLE_PER_ORDER,
+  mealSetCount,
+} from "./bowl-selection";
 import type { FulfillmentMethod } from "./brand";
 import type { CheckoutAddress, TaxQuote } from "./square";
 
@@ -8,6 +14,8 @@ type TaxQuoteTokenPayload = TaxQuote & {
   addressHash: string;
   expiresAt: number;
   fulfillmentMethod: FulfillmentMethod;
+  mealsPerDay: number;
+  peopleCount: number;
   version: 1;
 };
 
@@ -42,6 +50,14 @@ function validQuote(value: unknown): value is TaxQuoteTokenPayload {
     (quote.fulfillmentMethod === "pickup" || quote.fulfillmentMethod === "delivery") &&
     typeof quote.addressHash === "string" &&
     typeof quote.expiresAt === "number" &&
+    Number.isInteger(quote.mealsPerDay) &&
+    Number.isInteger(quote.peopleCount) &&
+    quote.mealsPerDay! >= 1 &&
+    quote.mealsPerDay! <= MAX_MEALS_PER_DAY &&
+    quote.peopleCount! >= 1 &&
+    quote.peopleCount! <= MAX_PEOPLE_PER_ORDER &&
+    mealSetCount(quote.peopleCount!, quote.mealsPerDay!) <=
+      MAX_MEAL_SETS_PER_ORDER &&
     typeof quote.subtotalCents === "number" &&
     typeof quote.taxCents === "number" &&
     typeof quote.totalCents === "number" &&
@@ -58,6 +74,8 @@ export function createTaxQuoteToken(
   quote: TaxQuote,
   fulfillmentMethod: FulfillmentMethod,
   address: CheckoutAddress | null,
+  peopleCount: number,
+  mealsPerDay: number,
 ): string | null {
   const signingSecret = secret();
   if (!signingSecret) return null;
@@ -66,6 +84,8 @@ export function createTaxQuoteToken(
     addressHash: addressHash(fulfillmentMethod, address),
     expiresAt: Date.now() + TOKEN_TTL_MS,
     fulfillmentMethod,
+    mealsPerDay,
+    peopleCount,
     version: 1,
   };
   const encoded = Buffer.from(JSON.stringify(payload)).toString("base64url");
@@ -79,6 +99,8 @@ export function verifyTaxQuoteToken(
   token: string,
   fulfillmentMethod: FulfillmentMethod,
   address: CheckoutAddress | null,
+  peopleCount: number,
+  mealsPerDay: number,
 ): TaxQuote | null {
   const signingSecret = secret();
   if (!signingSecret) return null;
@@ -101,6 +123,8 @@ export function verifyTaxQuoteToken(
     if (!validQuote(payload)) return null;
     if (payload.expiresAt <= Date.now()) return null;
     if (payload.fulfillmentMethod !== fulfillmentMethod) return null;
+    if (payload.peopleCount !== peopleCount) return null;
+    if (payload.mealsPerDay !== mealsPerDay) return null;
     if (payload.addressHash !== addressHash(fulfillmentMethod, address)) return null;
     return {
       county: payload.county,

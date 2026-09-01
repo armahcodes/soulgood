@@ -11,6 +11,8 @@ export type CheckoutRecord = {
   customerName: string;
   leadId: string;
   purchaseType: PurchaseType;
+  peopleCount: number;
+  mealsPerDay: number;
   fulfillmentMethod: FulfillmentMethod;
   bowlSelection: BowlSelection;
   subtotalCents: number;
@@ -73,6 +75,8 @@ export async function updateCheckoutConfirmationEmail(
 export type CustomerOrder = {
   id: string;
   type: PurchaseType;
+  peopleCount: number;
+  mealsPerDay: number;
   squareObjectType: "payment" | "subscription";
   status: string;
   fulfillmentMethod: FulfillmentMethod;
@@ -143,6 +147,8 @@ export async function listCheckoutRecordsForEmail(
   return records.map((record) => ({
     id: record.squareObjectId,
     type: record.purchaseType as PurchaseType,
+    peopleCount: record.peopleCount || 1,
+    mealsPerDay: record.mealsPerDay || 1,
     squareObjectType: record.squareObjectType,
     status: record.orderStatus,
     fulfillmentMethod: record.fulfillmentMethod as FulfillmentMethod,

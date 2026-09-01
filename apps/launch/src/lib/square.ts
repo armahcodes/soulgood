@@ -40,10 +40,12 @@ function taxQuoteCache(): Map<string, TaxQuoteCacheEntry> {
 function taxQuoteCacheKey(
   fulfillmentMethod: FulfillmentMethod,
   address: CheckoutAddress | null,
+  mealSets: number,
 ): string {
-  if (!address) return fulfillmentMethod;
+  if (!address) return `${fulfillmentMethod}|sets:${mealSets}`;
   return [
     fulfillmentMethod,
+    `sets:${mealSets}`,
     address.addressLine1,
     address.addressLine2,
     address.city,
@@ -181,6 +183,7 @@ async function lookupCaliforniaTax(
 async function calculateTaxQuote(
   fulfillmentMethod: FulfillmentMethod,
   deliveryAddress: CheckoutAddress | null,
+  mealSets: number,
   fetcher: Fetcher = fetch,
 ): Promise<TaxQuote> {
   const taxableAddress =
@@ -197,7 +200,8 @@ async function calculateTaxQuote(
     throw new Error("California returned an invalid tax rate");
   }
 
-  const subtotalCents = PRICING.weeklyCents + FULFILLMENT[fulfillmentMethod].amountCents;
+  const subtotalCents =
+    PRICING.weeklyCents * mealSets + FULFILLMENT[fulfillmentMethod].amountCents;
   const taxCents = Math.round(subtotalCents * tax.rate);
   return {
     subtotalCents,
@@ -216,14 +220,18 @@ async function calculateTaxQuote(
 export async function getTaxQuote(
   fulfillmentMethod: FulfillmentMethod,
   deliveryAddress: CheckoutAddress | null,
+  mealSets = 1,
   fetcher: Fetcher = fetch,
 ): Promise<TaxQuote> {
+  if (!Number.isInteger(mealSets) || mealSets < 1 || mealSets > 6) {
+    throw new Error("This online order supports between 5 and 30 bowls");
+  }
   if (process.env.NODE_ENV === "test") {
-    return calculateTaxQuote(fulfillmentMethod, deliveryAddress, fetcher);
+    return calculateTaxQuote(fulfillmentMethod, deliveryAddress, mealSets, fetcher);
   }
 
   const cache = taxQuoteCache();
-  const key = taxQuoteCacheKey(fulfillmentMethod, deliveryAddress);
+  const key = taxQuoteCacheKey(fulfillmentMethod, deliveryAddress, mealSets);
   const now = Date.now();
   const cached = cache.get(key);
   if (cached && cached.expiresAt > now) return cached.value;
@@ -233,7 +241,12 @@ export async function getTaxQuote(
     cache.delete(cache.keys().next().value as string);
   }
 
-  const value = calculateTaxQuote(fulfillmentMethod, deliveryAddress, fetcher);
+  const value = calculateTaxQuote(
+    fulfillmentMethod,
+    deliveryAddress,
+    mealSets,
+    fetcher,
+  );
   cache.set(key, { expiresAt: now + TAX_QUOTE_CACHE_TTL_MS, value });
   value.catch(() => cache.delete(key));
   return value;

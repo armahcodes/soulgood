@@ -41,11 +41,12 @@ export default function TermsPage() {
       <section>
         <h2>3. One-time orders and weekly subscriptions</h2>
         <p>
-          A standard order includes five chef-made Soul Bowls™ in
-          {` ${CURRENT_OFFER.format}`} for {PRICING.oneTime}. At checkout, you may
-          choose a one-time order with no automatic renewal or a weekly subscription
-          at {PRICING.weekly} per week. A weekly subscription continues and renews
-          every seven days until you cancel. By starting a weekly plan, you expressly
+          A standard five-meal set includes five chef-made Soul Bowls™ in
+          {` ${CURRENT_OFFER.format}`} for {PRICING.oneTime}. You may combine sets
+          for multiple people or multiple daily meals. At checkout, you may choose a
+          one-time order with no automatic renewal or a weekly subscription at the
+          displayed weekly amount. A weekly subscription continues and renews every
+          seven days until you cancel. By starting a weekly plan, you expressly
           authorize recurring weekly charges at the disclosed price, plus the selected
           fulfillment charge and applicable sales tax.
         </p>
@@ -59,8 +60,10 @@ export default function TermsPage() {
       <section>
         <h2>4. Pricing and fees</h2>
         <p>
-          The five-bowl order price is {PRICING.oneTime}, whether purchased once or
-          through the {PRICING.weekly} weekly plan. {FEES.delivery.label}:
+          Each five-meal set is {PRICING.oneTime}, whether purchased once or
+          through a weekly plan. Multi-person and multi-meal orders contain multiple
+          sets, and the displayed base price scales by the number of sets.
+          {` ${FEES.delivery.label}`}:
           {` ${FEES.delivery.disclosure}`} Sunday pickup has no fulfillment fee.
           {` ${FEES.containerDeposit.label}`}:
           {` ${FEES.containerDeposit.disclosure}`} Order and fulfillment amounts due
@@ -102,7 +105,7 @@ export default function TermsPage() {
       <section>
         <h2>6. Menu changes and availability</h2>
         <p>
-          Customers may choose any five bowls from the current lineup:
+          Customers may choose the displayed number of bowls from the current lineup:
           {` ${AVAILABLE_BOWLS.map((bowl) => bowl.name).join(", ")}`}. Items marked
           sold out, including {` ${SOLD_OUT_BOWLS.map((bowl) => bowl.name).join(", ")}`},
           cannot be selected. The mix confirmed

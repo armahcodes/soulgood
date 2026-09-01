@@ -5,24 +5,32 @@ export type EmailBowlSelection = { name: string; quantity: number };
 
 export function OrderConfirmationEmail({
   accountUrl,
+  bowlCount,
+  bowlSubtotal,
   bowls,
   customerName,
   fulfillment,
+  fulfillmentFee,
+  mealsPerDay,
   orderNumber,
+  peopleCount,
   purchaseType,
   receiptUrl,
-  subtotal,
   tax,
   total,
 }: {
   accountUrl: string;
+  bowlCount: number;
+  bowlSubtotal: string;
   bowls: EmailBowlSelection[];
   customerName: string;
   fulfillment: string;
+  fulfillmentFee: string;
+  mealsPerDay: number;
   orderNumber: string;
+  peopleCount: number;
   purchaseType: "one-time" | "weekly";
   receiptUrl?: string;
-  subtotal: string;
   tax: string;
   total: string;
 }) {
@@ -34,13 +42,17 @@ export function OrderConfirmationEmail({
       <Text style={emailStyles.eyebrow}>
         {weekly ? "Weekly plan active" : "Order confirmed"} · {orderNumber}
       </Text>
-      <Text style={emailStyles.heading}>Your five are confirmed.</Text>
+      <Text style={emailStyles.heading}>Your {bowlCount} bowls are confirmed.</Text>
       <Text style={emailStyles.paragraph}>
         Hi {customerName}, thank you for choosing Soul Bowls™. We’ll follow up
         with your Sunday {fulfillment.toLowerCase()} window.
       </Text>
 
       <Section style={emailStyles.panel}>
+        <Text style={emailStyles.label}>
+          {peopleCount} {peopleCount === 1 ? "person" : "people"} · {mealsPerDay}{" "}
+          {mealsPerDay === 1 ? "meal" : "meals"} per person, per day · 5 days
+        </Text>
         <Text style={emailStyles.label}>Your bowl mix</Text>
         {bowls.map((bowl) => (
           <Text key={bowl.name} style={rowStyle}>
@@ -48,8 +60,8 @@ export function OrderConfirmationEmail({
           </Text>
         ))}
         <Hr style={innerDividerStyle} />
-        <Text style={priceRowStyle}>Bowl order <strong>{subtotal}</strong></Text>
-        <Text style={priceRowStyle}>{fulfillment} <strong>{fulfillment === "Pickup" ? "$0.00" : "$8.88"}</strong></Text>
+        <Text style={priceRowStyle}>Bowl order <strong>{bowlSubtotal}</strong></Text>
+        <Text style={priceRowStyle}>{fulfillment} <strong>{fulfillmentFee}</strong></Text>
         <Text style={priceRowStyle}>California sales tax <strong>{tax}</strong></Text>
         <Text style={{ ...emailStyles.label, marginTop: "18px" }}>
           {weekly ? "Weekly charge" : "Total paid"}
