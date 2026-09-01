@@ -6,6 +6,7 @@ import { z } from "zod";
 import {
   bowlSelectionDraftSchema,
   bowlSelectionSchemaForPlan,
+  MAX_BOWLS_PER_ORDER,
   MAX_MEALS_PER_DAY,
   MAX_MEAL_SETS_PER_ORDER,
   MAX_PEOPLE_PER_ORDER,
@@ -79,7 +80,7 @@ const requestSchema = z
       context.addIssue({
         code: "custom",
         path: ["peopleCount"],
-        message: "This online order supports up to 30 bowls",
+        message: `This online order supports up to ${MAX_BOWLS_PER_ORDER} bowls`,
       });
     }
     const selection = bowlSelectionSchemaForPlan(

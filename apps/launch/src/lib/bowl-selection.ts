@@ -4,7 +4,10 @@ import { BOWL_IDS, type BowlId } from "./current-offer";
 export const BOWLS_PER_ORDER = 5;
 export const MAX_PEOPLE_PER_ORDER = 6;
 export const MAX_MEALS_PER_DAY = 3;
-export const MAX_MEAL_SETS_PER_ORDER = 6;
+export const MAX_MEAL_SETS_PER_ORDER =
+  MAX_PEOPLE_PER_ORDER * MAX_MEALS_PER_DAY;
+export const MAX_BOWLS_PER_ORDER =
+  BOWLS_PER_ORDER * MAX_MEAL_SETS_PER_ORDER;
 
 const quantitySchema = z
   .number()

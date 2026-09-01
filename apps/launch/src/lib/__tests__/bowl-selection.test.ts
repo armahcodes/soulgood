@@ -29,6 +29,17 @@ describe("bowl selection", () => {
     expect(bowlSelectionSchema.safeParse(selection).success).toBe(false);
   });
 
+  it("supports three daily meals for every person in a six-person order", () => {
+    const selection = selectionForPlan(6, 3);
+
+    expect(mealSetCount(6, 3)).toBe(18);
+    expect(bowlsForPlan(6, 3)).toBe(90);
+    expect(bowlSelectionTotal(selection)).toBe(90);
+    expect(bowlSelectionSchemaForPlan(6, 3).safeParse(selection).success).toBe(
+      true,
+    );
+  });
+
   it("allows customers to choose multiples of a recipe", () => {
     const mix = {
       ...DEFAULT_BOWL_SELECTION,

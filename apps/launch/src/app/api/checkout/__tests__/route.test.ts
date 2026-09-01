@@ -348,10 +348,49 @@ describe("POST /api/checkout", () => {
     );
   });
 
-  it("rejects order sizes above the six-set online limit", async () => {
-    const response = await POST(
-      makeRequest({ peopleCount: 3, mealsPerDay: 3 }),
+  it("supports three meals per day for every person in a six-person order", async () => {
+    configureSquare();
+    process.env.SQUARE_ENVIRONMENT = "production";
+    mockSuccessfulDelivery();
+    const selection = Object.fromEntries(
+      Object.entries(BOWL_SELECTION).map(([id, quantity]) => [id, quantity * 18]),
     );
+
+    const response = await POST(
+      makeRequest({ peopleCount: 6, mealsPerDay: 3, bowlSelection: selection }),
+    );
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body).toMatchObject({
+      peopleCount: 6,
+      mealsPerDay: 3,
+      tax: {
+        subtotalCents: 159288,
+        taxCents: 15531,
+        totalCents: 174819,
+      },
+    });
+    const orderCall = squareFetch.mock.calls.find(([url]) =>
+      String(url).endsWith("/v2/orders"),
+    );
+    const orderBody = JSON.parse(String(orderCall?.[1]?.body));
+    expect(orderBody.order.metadata).toMatchObject({
+      people_count: "6",
+      meals_per_day: "3",
+    });
+    expect(orderBody.order.line_items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          catalog_object_id: CATALOG_VARIATIONS["glow-bowl"],
+          quantity: "18",
+        }),
+      ]),
+    );
+  });
+
+  it("rejects orders above the six-person online limit", async () => {
+    const response = await POST(makeRequest({ peopleCount: 7, mealsPerDay: 1 }));
 
     expect(response.status).toBe(400);
     expect(squareFetch).not.toHaveBeenCalled();

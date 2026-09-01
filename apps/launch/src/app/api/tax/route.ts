@@ -4,6 +4,7 @@ import { handle } from "hono/vercel";
 import { timing } from "hono/timing";
 import { z } from "zod";
 import {
+  MAX_BOWLS_PER_ORDER,
   MAX_MEALS_PER_DAY,
   MAX_MEAL_SETS_PER_ORDER,
   MAX_PEOPLE_PER_ORDER,
@@ -42,7 +43,7 @@ const requestSchema = z.discriminatedUnion("fulfillmentMethod", [
   (value) =>
     mealSetCount(value.peopleCount, value.mealsPerDay) <=
     MAX_MEAL_SETS_PER_ORDER,
-  { message: "This online order supports up to 30 bowls." },
+  { message: `This online order supports up to ${MAX_BOWLS_PER_ORDER} bowls.` },
 );
 
 async function handleTaxQuote(request: Request) {

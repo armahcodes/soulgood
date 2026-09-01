@@ -1,4 +1,9 @@
-import { bowlSelectionTotal, type BowlSelection } from "@/lib/bowl-selection";
+import {
+  bowlSelectionTotal,
+  MAX_BOWLS_PER_ORDER,
+  MAX_MEAL_SETS_PER_ORDER,
+  type BowlSelection,
+} from "@/lib/bowl-selection";
 import {
   FULFILLMENT,
   LEGAL_VERSION,
@@ -363,8 +368,14 @@ export async function getTaxQuote(
   mealSets = 1,
   fetcher: Fetcher = fetch,
 ): Promise<TaxQuote> {
-  if (!Number.isInteger(mealSets) || mealSets < 1 || mealSets > 6) {
-    throw new Error("This online order supports between 5 and 30 bowls");
+  if (
+    !Number.isInteger(mealSets) ||
+    mealSets < 1 ||
+    mealSets > MAX_MEAL_SETS_PER_ORDER
+  ) {
+    throw new Error(
+      `This online order supports between 5 and ${MAX_BOWLS_PER_ORDER} bowls`,
+    );
   }
   if (process.env.NODE_ENV === "test") {
     return calculateTaxQuote(fulfillmentMethod, deliveryAddress, mealSets, fetcher);
