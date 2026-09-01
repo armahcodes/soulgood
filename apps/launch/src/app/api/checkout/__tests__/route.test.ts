@@ -20,6 +20,15 @@ const BOWL_SELECTION = {
   "anti-inflammatory-bowl": 1,
 };
 
+const CATALOG_VARIATIONS = {
+  "glow-bowl": "variation-glow",
+  "golden-harvest-bowl": "variation-golden-harvest",
+  "jerk-wellness-bowl": "variation-jerk-wellness",
+  "performance-power-bowl": "variation-performance-power",
+  "herb-chicken-nourish-bowl": "variation-herb-chicken",
+  "anti-inflammatory-bowl": "variation-anti-inflammatory",
+};
+
 function makeRequest(overrides: Record<string, unknown> = {}): Request {
   return new Request("https://soulgood.test/api/checkout", {
     method: "POST",
@@ -48,8 +57,19 @@ function makeRequest(overrides: Record<string, unknown> = {}): Request {
 function configureSquare(): void {
   process.env.SQUARE_ACCESS_TOKEN = "square-token-placeholder";
   process.env.SQUARE_LOCATION_ID = "location-123";
-  process.env.SQUARE_PICKUP_PLAN_VARIATION_ID = "pickup-plan-123";
-  process.env.SQUARE_DELIVERY_PLAN_VARIATION_ID = "delivery-plan-123";
+  process.env.SQUARE_GLOW_BOWL_VARIATION_ID = CATALOG_VARIATIONS["glow-bowl"];
+  process.env.SQUARE_GOLDEN_HARVEST_BOWL_VARIATION_ID =
+    CATALOG_VARIATIONS["golden-harvest-bowl"];
+  process.env.SQUARE_JERK_WELLNESS_BOWL_VARIATION_ID =
+    CATALOG_VARIATIONS["jerk-wellness-bowl"];
+  process.env.SQUARE_PERFORMANCE_POWER_BOWL_VARIATION_ID =
+    CATALOG_VARIATIONS["performance-power-bowl"];
+  process.env.SQUARE_HERB_CHICKEN_BOWL_VARIATION_ID =
+    CATALOG_VARIATIONS["herb-chicken-nourish-bowl"];
+  process.env.SQUARE_ANTI_INFLAMMATORY_BOWL_VARIATION_ID =
+    CATALOG_VARIATIONS["anti-inflammatory-bowl"];
+  process.env.SQUARE_SOUL_BOWLS_DELIVERY_VARIATION_ID = "variation-delivery";
+  process.env.SQUARE_WEEKLY_ITEMIZED_PLAN_VARIATION_ID = "itemized-plan-123";
 }
 
 function jsonResponse(body: unknown, status = 200): Response {
@@ -60,7 +80,7 @@ function jsonResponse(body: unknown, status = 200): Response {
 }
 
 function mockSuccessfulDelivery(): void {
-  squareFetch.mockImplementation(async (input) => {
+  squareFetch.mockImplementation(async (input, init) => {
     const url = String(input);
     if (url.startsWith("https://services.maps.cdtfa.ca.gov/")) {
       return jsonResponse({
@@ -72,6 +92,25 @@ function mockSuccessfulDelivery(): void {
     if (url.endsWith("/v2/customers/search")) return jsonResponse({ customers: [] });
     if (url.endsWith("/v2/customers")) {
       return jsonResponse({ customer: { id: "customer-123", version: 0 } });
+    }
+    if (url.endsWith("/v2/orders")) {
+      const request = JSON.parse(String(init?.body));
+      const subtotalCents = request.order.line_items.reduce(
+        (total: number, line: { base_price_money: { amount: number }; quantity: string }) =>
+          total + line.base_price_money.amount * Number(line.quantity),
+        0,
+      );
+      const taxCents = Math.round(
+        subtotalCents * (Number(request.order.taxes[0].percentage) / 100),
+      );
+      return jsonResponse({
+        order: {
+          id: "order-123",
+          version: 1,
+          state: request.order.state,
+          total_money: { amount: subtotalCents + taxCents, currency: "USD" },
+        },
+      });
     }
     if (url.endsWith("/v2/cards")) return jsonResponse({ card: { id: "card-123" } });
     if (url.endsWith("/v2/payments")) {
@@ -96,6 +135,14 @@ describe("POST /api/checkout", () => {
     delete process.env.SQUARE_LOCATION_ID;
     delete process.env.SQUARE_PICKUP_PLAN_VARIATION_ID;
     delete process.env.SQUARE_DELIVERY_PLAN_VARIATION_ID;
+    delete process.env.SQUARE_GLOW_BOWL_VARIATION_ID;
+    delete process.env.SQUARE_GOLDEN_HARVEST_BOWL_VARIATION_ID;
+    delete process.env.SQUARE_JERK_WELLNESS_BOWL_VARIATION_ID;
+    delete process.env.SQUARE_PERFORMANCE_POWER_BOWL_VARIATION_ID;
+    delete process.env.SQUARE_HERB_CHICKEN_BOWL_VARIATION_ID;
+    delete process.env.SQUARE_ANTI_INFLAMMATORY_BOWL_VARIATION_ID;
+    delete process.env.SQUARE_SOUL_BOWLS_DELIVERY_VARIATION_ID;
+    delete process.env.SQUARE_WEEKLY_ITEMIZED_PLAN_VARIATION_ID;
     delete process.env.SQUARE_ENVIRONMENT;
     delete process.env.MONGODB_URI;
     squareFetch.mockReset();
@@ -196,16 +243,59 @@ describe("POST /api/checkout", () => {
     );
     expect(subscription?.body).toMatchObject({
       location_id: "location-123",
-      plan_variation_id: "delivery-plan-123",
+      plan_variation_id: "itemized-plan-123",
       customer_id: "customer-123",
       card_id: "card-123",
-      tax_percentage: "9.75",
-      price_override_money: { amount: 9688, currency: "USD" },
+      phases: [{ ordinal: 0, order_template_id: "order-123" }],
       timezone: "America/Los_Angeles",
       source: {
         name: "Soul Bowls website | people:1,meals:1 | glow-bowl:1,golden-harvest-bowl:1,jerk-wellness-bowl:1,performance-power-bowl:1,herb-chicken-nourish-bowl:0,anti-inflammatory-bowl:1",
       },
     });
+    const order = requests.find((request) => request.url.endsWith("/v2/orders"));
+    expect(order?.body).toMatchObject({
+      order: {
+        customer_id: "customer-123",
+        state: "DRAFT",
+        metadata: {
+          purchase_type: "weekly",
+          fulfillment_method: "delivery",
+          people_count: "1",
+          meals_per_day: "1",
+          jar_size_ounces: "32",
+        },
+        taxes: [{ percentage: "9.75", scope: "ORDER", type: "ADDITIVE" }],
+        fulfillments: [
+          {
+            type: "DELIVERY",
+            state: "PROPOSED",
+            delivery_details: {
+              recipient: {
+                customer_id: "customer-123",
+                display_name: "Avery Jones",
+                email_address: "avery@example.com",
+                phone_number: "+13105550134",
+                address: expect.objectContaining({ postal_code: "90012" }),
+              },
+            },
+          },
+        ],
+      },
+    });
+    expect(order?.body.order.line_items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          catalog_object_id: CATALOG_VARIATIONS["glow-bowl"],
+          quantity: "1",
+          base_price_money: { amount: 1760, currency: "USD" },
+        }),
+        expect.objectContaining({
+          catalog_object_id: "variation-delivery",
+          quantity: "1",
+          base_price_money: { amount: 888, currency: "USD" },
+        }),
+      ]),
+    );
   });
 
   it("prices a two-meal daily plan for one person as two five-bowl sets", async () => {
@@ -241,9 +331,21 @@ describe("POST /api/checkout", () => {
     );
     const subscriptionBody = JSON.parse(String(subscriptionCall?.[1]?.body));
     expect(subscriptionBody).toMatchObject({
-      price_override_money: { amount: 18488, currency: "USD" },
+      phases: [{ ordinal: 0, order_template_id: "order-123" }],
       source: { name: expect.stringContaining("people:1,meals:2") },
     });
+    const orderCall = squareFetch.mock.calls.find(([url]) =>
+      String(url).endsWith("/v2/orders"),
+    );
+    const orderBody = JSON.parse(String(orderCall?.[1]?.body));
+    expect(orderBody.order.line_items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          catalog_object_id: CATALOG_VARIATIONS["glow-bowl"],
+          quantity: "2",
+        }),
+      ]),
+    );
   });
 
   it("rejects order sizes above the six-set online limit", async () => {
@@ -256,8 +358,7 @@ describe("POST /api/checkout", () => {
   });
 
   it("completes a one-time order without storing the card or creating a subscription", async () => {
-    process.env.SQUARE_ACCESS_TOKEN = "square-token-placeholder";
-    process.env.SQUARE_LOCATION_ID = "location-123";
+    configureSquare();
     process.env.SQUARE_ENVIRONMENT = "production";
     mockSuccessfulDelivery();
 
@@ -270,6 +371,7 @@ describe("POST /api/checkout", () => {
       purchaseType: "one-time",
       status: "COMPLETED",
       paymentId: "payment-123",
+      orderId: "order-123",
       receiptUrl: "https://square.test/receipt/payment-123",
       bowlSelection: BOWL_SELECTION,
       tax: { totalCents: 10633 },
@@ -290,7 +392,11 @@ describe("POST /api/checkout", () => {
       autocomplete: true,
       customer_id: "customer-123",
       location_id: "location-123",
+      order_id: "order-123",
       reference_id: "lead-123",
+      buyer_email_address: "avery@example.com",
+      buyer_phone_number: "+13105550134",
+      shipping_address: expect.objectContaining({ postal_code: "90012" }),
       note: "Soul Bowls website | people:1,meals:1 | glow-bowl:1,golden-harvest-bowl:1,jerk-wellness-bowl:1,performance-power-bowl:1,herb-chicken-nourish-bowl:0,anti-inflammatory-bowl:1",
     });
   });
@@ -317,7 +423,7 @@ describe("POST /api/checkout", () => {
   it("disables a newly saved card if subscription creation fails", async () => {
     configureSquare();
     mockSuccessfulDelivery();
-    squareFetch.mockImplementation(async (input) => {
+    squareFetch.mockImplementation(async (input, init) => {
       const url = String(input);
       if (url.startsWith("https://services.maps.cdtfa.ca.gov/")) {
         return jsonResponse({
@@ -328,6 +434,17 @@ describe("POST /api/checkout", () => {
       }
       if (url.endsWith("/v2/customers/search")) return jsonResponse({ customers: [] });
       if (url.endsWith("/v2/customers")) return jsonResponse({ customer: { id: "customer-123" } });
+      if (url.endsWith("/v2/orders")) {
+        const request = JSON.parse(String(init?.body));
+        return jsonResponse({
+          order: {
+            id: "order-123",
+            version: 1,
+            state: request.order.state,
+            total_money: { amount: 10633, currency: "USD" },
+          },
+        });
+      }
       if (url.endsWith("/v2/cards")) return jsonResponse({ card: { id: "card-123" } });
       if (url.endsWith("/v2/subscriptions")) {
         return jsonResponse({ errors: [{ code: "CARD_DECLINED" }] }, 400);

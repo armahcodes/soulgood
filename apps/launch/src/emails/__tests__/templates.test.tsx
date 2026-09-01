@@ -23,6 +23,7 @@ describe("customer email templates", () => {
           { name: "Anti-Inflammatory Bowl™", quantity: 2 },
         ]}
         customerName="Avery Jones"
+        deliveryAddress="123 Main Street, Los Angeles, CA 90012"
         fulfillment="LA County delivery"
         fulfillmentFee="$8.88"
         mealsPerDay={2}
@@ -41,6 +42,7 @@ describe("customer email templates", () => {
     expect(plainText).toContain("Your 10 bowls are confirmed");
     expect(plainText).toContain("2 meals");
     expect(html).toContain("Anti-Inflammatory Bowl");
+    expect(plainText).toContain("123 Main Street, Los Angeles, CA 90012");
     expect(html).toContain("$106.33");
     expect(html).toContain("View my orders");
     expect(html).toContain("Square receipt");

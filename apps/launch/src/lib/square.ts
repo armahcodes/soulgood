@@ -1,4 +1,16 @@
-import { FULFILLMENT, type FulfillmentMethod, PRICING } from "@/lib/brand";
+import { bowlSelectionTotal, type BowlSelection } from "@/lib/bowl-selection";
+import {
+  FULFILLMENT,
+  LEGAL_VERSION,
+  type FulfillmentMethod,
+  PRICING,
+  type PurchaseType,
+} from "@/lib/brand";
+import {
+  BOWL_UNIT_PRICE_CENTS,
+  type SquareCatalogConfig,
+  squareBowlLineItems,
+} from "@/lib/square-catalog";
 
 export const SQUARE_API_VERSION = "2026-08-19";
 
@@ -17,6 +29,13 @@ export type TaxQuote = {
   percentage: string;
   jurisdiction: string;
   county: "LOS ANGELES";
+};
+
+export type ItemizedSquareOrder = {
+  id: string;
+  version: number;
+  state: "DRAFT" | "OPEN";
+  totalCents: number;
 };
 
 type Fetcher = typeof fetch;
@@ -116,6 +135,127 @@ function addressToSquare(address: CheckoutAddress) {
 }
 
 export { addressToSquare };
+
+export async function createItemizedSquareOrder(input: {
+  bowlSelection: BowlSelection;
+  catalog: SquareCatalogConfig;
+  contact: {
+    email: string;
+    familyName: string;
+    givenName: string;
+    phone: string;
+  };
+  customerId: string;
+  deliveryAddress: CheckoutAddress | null;
+  fulfillmentMethod: FulfillmentMethod;
+  idempotencyKey: string;
+  leadId: string;
+  locationId: string;
+  mealsPerDay: number;
+  peopleCount: number;
+  purchaseType: PurchaseType;
+  quote: TaxQuote;
+  state: "DRAFT" | "OPEN";
+}): Promise<ItemizedSquareOrder> {
+  const expectedSubtotal =
+    bowlSelectionTotal(input.bowlSelection) * BOWL_UNIT_PRICE_CENTS +
+    FULFILLMENT[input.fulfillmentMethod].amountCents;
+  if (expectedSubtotal !== input.quote.subtotalCents) {
+    throw new Error("The Square catalog subtotal does not match the checkout quote");
+  }
+
+  const lineItems = squareBowlLineItems(input.bowlSelection, input.catalog);
+  if (input.fulfillmentMethod === "delivery") {
+    if (!input.deliveryAddress) {
+      throw new Error("A delivery address is required for the Square order");
+    }
+    lineItems.push({
+      quantity: "1",
+      catalog_object_id: input.catalog.deliveryVariationId,
+      base_price_money: {
+        amount: FULFILLMENT.delivery.amountCents,
+        currency: "USD",
+      },
+      note: "Los Angeles County delivery · address saved on customer profile",
+    });
+  }
+
+  const fulfillments =
+    input.fulfillmentMethod === "delivery" && input.deliveryAddress
+      ? [
+          {
+            type: "DELIVERY",
+            state: "PROPOSED",
+            delivery_details: {
+              recipient: {
+                customer_id: input.customerId,
+                display_name: `${input.contact.givenName} ${input.contact.familyName}`,
+                email_address: input.contact.email.toLowerCase(),
+                phone_number: input.contact.phone,
+                address: addressToSquare(input.deliveryAddress),
+              },
+              note: "Sunday delivery window confirmed with the customer separately",
+            },
+          },
+        ]
+      : undefined;
+
+  const response = await squareRequest<{
+    order?: {
+      id?: string;
+      version?: number;
+      state?: "DRAFT" | "OPEN";
+      total_money?: { amount?: number };
+    };
+  }>("/v2/orders", {
+    method: "POST",
+    body: JSON.stringify({
+      idempotency_key: input.idempotencyKey,
+      order: {
+        location_id: input.locationId,
+        reference_id: input.leadId.slice(0, 40),
+        customer_id: input.customerId,
+        state: input.state,
+        line_items: lineItems,
+        ...(fulfillments ? { fulfillments } : {}),
+        taxes: [
+          {
+            uid: "california-sales-tax",
+            name: `California sales tax · ${input.quote.jurisdiction}`,
+            type: "ADDITIVE",
+            percentage: input.quote.percentage,
+            scope: "ORDER",
+          },
+        ],
+        metadata: {
+          purchase_type: input.purchaseType,
+          fulfillment_method: input.fulfillmentMethod,
+          people_count: String(input.peopleCount),
+          meals_per_day: String(input.mealsPerDay),
+          jar_size_ounces: "32",
+          legal_version: LEGAL_VERSION,
+        },
+      },
+    }),
+  });
+  const order = response.order;
+  if (
+    !order?.id ||
+    typeof order.version !== "number" ||
+    typeof order.total_money?.amount !== "number"
+  ) {
+    throw new Error("Square did not return a complete itemized order");
+  }
+  if (order.total_money.amount !== input.quote.totalCents) {
+    throw new Error("The Square order total does not match the checkout quote");
+  }
+  return {
+    id: order.id,
+    version: order.version,
+    state: order.state ?? input.state,
+    totalCents: order.total_money.amount,
+  };
+}
 
 async function getPickupAddress(fetcher: Fetcher): Promise<CheckoutAddress> {
   const locationId = process.env.SQUARE_LOCATION_ID;

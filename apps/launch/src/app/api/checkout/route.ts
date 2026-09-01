@@ -24,11 +24,13 @@ import {
 import { sendOrderConfirmationEmail } from "@/lib/email";
 import {
   addressToSquare,
+  createItemizedSquareOrder,
   getTaxQuote,
   SquareApiError,
   squareRequest,
   type CheckoutAddress,
 } from "@/lib/square";
+import { getSquareCatalogConfig } from "@/lib/square-catalog";
 import { verifyTaxQuoteToken } from "@/lib/tax-quote-token";
 
 export const runtime = "nodejs";
@@ -111,6 +113,17 @@ function key(base: string, suffix: string, max = 45): string {
   return `${base}-${suffix}`.slice(0, max);
 }
 
+function formatDeliveryAddress(address: CheckoutAddress | null): string | undefined {
+  if (!address) return undefined;
+  return [
+    address.addressLine1,
+    address.addressLine2,
+    `${address.city}, CA ${address.postalCode}`,
+  ]
+    .filter(Boolean)
+    .join(", ");
+}
+
 function scheduleOrderConfirmation(
   input: Parameters<typeof sendOrderConfirmationEmail>[0],
 ): void {
@@ -137,7 +150,7 @@ function scheduleOrderConfirmation(
 }
 
 async function findOrCreateCustomer(input: {
-  billingAddress: CheckoutAddress;
+  customerAddress: CheckoutAddress;
   email: string;
   familyName: string;
   givenName: string;
@@ -161,7 +174,7 @@ async function findOrCreateCustomer(input: {
     family_name: input.familyName,
     email_address: input.email,
     phone_number: input.phone,
-    address: addressToSquare(input.billingAddress),
+    address: addressToSquare(input.customerAddress),
   };
 
   if (existing) {
@@ -208,14 +221,11 @@ async function handleCheckout(request: Request) {
   }
 
   const locationId = process.env.SQUARE_LOCATION_ID;
-  const planVariationId =
-    input.fulfillmentMethod === "delivery"
-      ? process.env.SQUARE_DELIVERY_PLAN_VARIATION_ID
-      : process.env.SQUARE_PICKUP_PLAN_VARIATION_ID;
+  const catalog = getSquareCatalogConfig();
   if (
     !process.env.SQUARE_ACCESS_TOKEN ||
     !locationId ||
-    (input.purchaseType === "weekly" && !planVariationId)
+    !catalog
   ) {
     return NextResponse.json(
       { disabled: true, reason: "square-unconfigured" },
@@ -224,6 +234,7 @@ async function handleCheckout(request: Request) {
   }
 
   let cardId: string | null = null;
+  let squareOrderId: string | null = null;
   try {
     const mealSets = mealSetCount(input.peopleCount, input.mealsPerDay);
     const quote =
@@ -242,7 +253,7 @@ async function handleCheckout(request: Request) {
         mealSets,
       ));
     const customer = await findOrCreateCustomer({
-      billingAddress: input.billingAddress,
+      customerAddress: input.deliveryAddress ?? input.billingAddress,
       email: input.contact.email.toLowerCase(),
       familyName: input.contact.familyName,
       givenName: input.contact.givenName,
@@ -252,6 +263,23 @@ async function handleCheckout(request: Request) {
     });
 
     const acceptedAt = new Date().toISOString();
+    const itemizedOrder = await createItemizedSquareOrder({
+      bowlSelection: input.bowlSelection,
+      catalog,
+      contact: { ...input.contact, phone },
+      customerId: customer.id,
+      deliveryAddress: input.deliveryAddress,
+      fulfillmentMethod: input.fulfillmentMethod,
+      idempotencyKey: key(input.idempotencyKey, "order", 128),
+      leadId: input.leadId,
+      locationId,
+      mealsPerDay: input.mealsPerDay,
+      peopleCount: input.peopleCount,
+      purchaseType: input.purchaseType,
+      quote,
+      state: input.purchaseType === "weekly" ? "DRAFT" : "OPEN",
+    });
+    squareOrderId = itemizedOrder.id;
 
     if (input.purchaseType === "one-time") {
       const paymentResponse = await squareRequest<{
@@ -265,7 +293,14 @@ async function handleCheckout(request: Request) {
           autocomplete: true,
           customer_id: customer.id,
           location_id: locationId,
+          order_id: itemizedOrder.id,
           reference_id: input.leadId.slice(0, 40),
+          buyer_email_address: input.contact.email.toLowerCase(),
+          buyer_phone_number: phone,
+          billing_address: addressToSquare(input.billingAddress),
+          ...(input.fulfillmentMethod === "delivery" && input.deliveryAddress
+            ? { shipping_address: addressToSquare(input.deliveryAddress) }
+            : {}),
           note: selectionSourceName(
             input.bowlSelection,
             input.peopleCount,
@@ -285,11 +320,13 @@ async function handleCheckout(request: Request) {
           squareObjectId: payment.id,
           squareObjectType: "payment",
           squareCustomerId: customer.id,
+          squareOrderId: itemizedOrder.id,
           customerEmail,
           customerName,
           leadId: input.leadId,
           purchaseType: input.purchaseType,
           fulfillmentMethod: input.fulfillmentMethod,
+          deliveryAddress: input.deliveryAddress ?? undefined,
           bowlSelection: input.bowlSelection,
           mealsPerDay: input.mealsPerDay,
           peopleCount: input.peopleCount,
@@ -304,6 +341,7 @@ async function handleCheckout(request: Request) {
       } catch (recordError) {
         console.error("[checkout] Payment completed but internal record failed", {
           paymentId: payment.id,
+          orderId: itemizedOrder.id,
           error: recordError instanceof Error ? recordError.message : "unknown",
         });
       }
@@ -312,6 +350,7 @@ async function handleCheckout(request: Request) {
         bowlSelection: input.bowlSelection,
         customerEmail,
         customerName,
+        deliveryAddress: formatDeliveryAddress(input.deliveryAddress),
         fulfillmentMethod: input.fulfillmentMethod,
         mealsPerDay: input.mealsPerDay,
         peopleCount: input.peopleCount,
@@ -329,6 +368,7 @@ async function handleCheckout(request: Request) {
           purchaseType: input.purchaseType,
           status: payment.status,
           paymentId: payment.id,
+          orderId: itemizedOrder.id,
           receiptUrl: payment.receipt_url,
           acceptedAt,
           legalVersion: LEGAL_VERSION,
@@ -365,14 +405,10 @@ async function handleCheckout(request: Request) {
       body: JSON.stringify({
         idempotency_key: key(input.idempotencyKey, "subscription", 128),
         location_id: locationId,
-        plan_variation_id: planVariationId,
+        plan_variation_id: catalog.weeklyPlanVariationId,
         customer_id: customer.id,
         card_id: cardId,
-        price_override_money: {
-          amount: quote.subtotalCents,
-          currency: "USD",
-        },
-        tax_percentage: quote.percentage,
+        phases: [{ ordinal: 0, order_template_id: itemizedOrder.id }],
         timezone: "America/Los_Angeles",
         source: {
           name: selectionSourceName(
@@ -395,11 +431,13 @@ async function handleCheckout(request: Request) {
         squareObjectId: subscription.id,
         squareObjectType: "subscription",
         squareCustomerId: customer.id,
+        squareOrderId: itemizedOrder.id,
         customerEmail,
         customerName,
         leadId: input.leadId,
         purchaseType: input.purchaseType,
         fulfillmentMethod: input.fulfillmentMethod,
+        deliveryAddress: input.deliveryAddress ?? undefined,
         bowlSelection: input.bowlSelection,
         mealsPerDay: input.mealsPerDay,
         peopleCount: input.peopleCount,
@@ -413,6 +451,7 @@ async function handleCheckout(request: Request) {
     } catch (recordError) {
       console.error("[checkout] Subscription created but internal record failed", {
         subscriptionId: subscription.id,
+        orderTemplateId: itemizedOrder.id,
         error: recordError instanceof Error ? recordError.message : "unknown",
       });
     }
@@ -421,6 +460,7 @@ async function handleCheckout(request: Request) {
       bowlSelection: input.bowlSelection,
       customerEmail,
       customerName,
+      deliveryAddress: formatDeliveryAddress(input.deliveryAddress),
       fulfillmentMethod: input.fulfillmentMethod,
       mealsPerDay: input.mealsPerDay,
       peopleCount: input.peopleCount,
@@ -437,6 +477,7 @@ async function handleCheckout(request: Request) {
         purchaseType: input.purchaseType,
         status: subscription.status,
         subscriptionId: subscription.id,
+        orderTemplateId: itemizedOrder.id,
         acceptedAt,
         legalVersion: LEGAL_VERSION,
         fulfillmentMethod: input.fulfillmentMethod,
@@ -458,6 +499,7 @@ async function handleCheckout(request: Request) {
     console.error("[checkout] Square checkout failed", {
       codes,
       purchaseType: input.purchaseType,
+      squareOrderId,
     });
     return NextResponse.json(
       {

@@ -58,6 +58,7 @@ export async function sendOrderConfirmationEmail(input: {
   bowlSelection: BowlSelection;
   customerEmail: string;
   customerName: string;
+  deliveryAddress?: string;
   fulfillmentMethod: FulfillmentMethod;
   mealsPerDay: number;
   peopleCount: number;
@@ -91,6 +92,7 @@ export async function sendOrderConfirmationEmail(input: {
             PRICING.oneTimeCents * mealSetCount(input.peopleCount, input.mealsPerDay),
           )}
           customerName={input.customerName}
+          deliveryAddress={input.deliveryAddress}
           fulfillment={input.fulfillmentMethod === "delivery" ? "LA County delivery" : "Pickup"}
           fulfillmentFee={formatCents(FULFILLMENT[input.fulfillmentMethod].amountCents)}
           mealsPerDay={input.mealsPerDay}

@@ -17,6 +17,7 @@ const checkoutRecordSchema = new mongoose.Schema(
       enum: ["payment", "subscription"],
       required: true,
     },
+    squareOrderId: { type: String, trim: true, index: true },
     squareCustomerId: { type: String, required: true, index: true },
     customerEmail: {
       type: String,
@@ -38,6 +39,14 @@ const checkoutRecordSchema = new mongoose.Schema(
       type: String,
       enum: ["pickup", "delivery"],
       required: true,
+    },
+    deliveryAddress: {
+      addressLine1: { type: String, trim: true, maxlength: 200 },
+      addressLine2: { type: String, trim: true, maxlength: 200 },
+      city: { type: String, trim: true, maxlength: 100 },
+      state: { type: String, enum: ["CA"] },
+      postalCode: { type: String, trim: true, match: /^\d{5}$/ },
+      _id: false,
     },
     bowlSelection: { type: selectionShape, required: true, _id: false },
     subtotalCents: { type: Number, required: true },

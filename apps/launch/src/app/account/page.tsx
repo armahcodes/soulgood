@@ -97,7 +97,24 @@ export default async function AccountPage() {
                         </ul>
                       </div>
                       <dl className="grid content-start gap-3 text-sm text-forest/62">
-                        <div className="flex justify-between gap-4"><dt>Fulfillment</dt><dd className="font-semibold text-forest">{order.fulfillmentMethod === "delivery" ? "LA County delivery" : "Pickup"}</dd></div>
+                        <div className="flex justify-between gap-4">
+                          <dt>Fulfillment</dt>
+                          <dd className="max-w-[70%] text-right font-semibold text-forest">
+                            {order.fulfillmentMethod === "delivery"
+                              ? "LA County delivery"
+                              : "Pickup"}
+                            {order.deliveryAddress ? (
+                              <span className="mt-1 block text-xs font-normal leading-relaxed text-forest/52">
+                                {order.deliveryAddress.addressLine1}
+                                {order.deliveryAddress.addressLine2
+                                  ? `, ${order.deliveryAddress.addressLine2}`
+                                  : ""}
+                                <br />
+                                {order.deliveryAddress.city}, CA {order.deliveryAddress.postalCode}
+                              </span>
+                            ) : null}
+                          </dd>
+                        </div>
                         <div className="flex justify-between gap-4"><dt>Subtotal</dt><dd>{formatCents(order.subtotalCents)}</dd></div>
                         <div className="flex justify-between gap-4"><dt>Sales tax</dt><dd>{formatCents(order.taxCents)}</dd></div>
                         {order.receiptUrl ? (

@@ -9,6 +9,7 @@ export function OrderConfirmationEmail({
   bowlSubtotal,
   bowls,
   customerName,
+  deliveryAddress,
   fulfillment,
   fulfillmentFee,
   mealsPerDay,
@@ -24,6 +25,7 @@ export function OrderConfirmationEmail({
   bowlSubtotal: string;
   bowls: EmailBowlSelection[];
   customerName: string;
+  deliveryAddress?: string;
   fulfillment: string;
   fulfillmentFee: string;
   mealsPerDay: number;
@@ -62,6 +64,9 @@ export function OrderConfirmationEmail({
         <Hr style={innerDividerStyle} />
         <Text style={priceRowStyle}>Bowl order <strong>{bowlSubtotal}</strong></Text>
         <Text style={priceRowStyle}>{fulfillment} <strong>{fulfillmentFee}</strong></Text>
+        {deliveryAddress ? (
+          <Text style={addressStyle}>Delivering to {deliveryAddress}</Text>
+        ) : null}
         <Text style={priceRowStyle}>California sales tax <strong>{tax}</strong></Text>
         <Text style={{ ...emailStyles.label, marginTop: "18px" }}>
           {weekly ? "Weekly charge" : "Total paid"}
@@ -95,6 +100,7 @@ const rowStyle = {
   margin: "10px 0",
 };
 const priceRowStyle = { ...rowStyle, margin: "7px 0" };
+const addressStyle = { ...emailStyles.muted, margin: "4px 0 12px" };
 const innerDividerStyle = { borderColor: "#ECD6BC", margin: "18px 0" };
 const ctaSectionStyle = { padding: "28px 0 24px", textAlign: "left" as const };
 const receiptLinkStyle = { color: "#C17A5E", textDecoration: "underline" };

@@ -2,10 +2,12 @@ import type { BowlSelection } from "./bowl-selection";
 import type { FulfillmentMethod, PurchaseType } from "./brand";
 import { CheckoutRecordModel } from "./db/checkout-record-model";
 import { connectToDatabase } from "./db/mongoose";
+import type { CheckoutAddress } from "./square";
 
 export type CheckoutRecord = {
   squareObjectId: string;
   squareObjectType: "payment" | "subscription";
+  squareOrderId?: string;
   squareCustomerId: string;
   customerEmail: string;
   customerName: string;
@@ -14,6 +16,7 @@ export type CheckoutRecord = {
   peopleCount: number;
   mealsPerDay: number;
   fulfillmentMethod: FulfillmentMethod;
+  deliveryAddress?: CheckoutAddress;
   bowlSelection: BowlSelection;
   subtotalCents: number;
   taxCents: number;
@@ -74,12 +77,14 @@ export async function updateCheckoutConfirmationEmail(
 
 export type CustomerOrder = {
   id: string;
+  squareOrderId?: string;
   type: PurchaseType;
   peopleCount: number;
   mealsPerDay: number;
   squareObjectType: "payment" | "subscription";
   status: string;
   fulfillmentMethod: FulfillmentMethod;
+  deliveryAddress?: CheckoutAddress;
   bowlSelection: BowlSelection;
   subtotalCents: number;
   taxCents: number;
@@ -144,20 +149,38 @@ export async function listCheckoutRecordsForEmail(
     .limit(50)
     .exec();
 
-  return records.map((record) => ({
-    id: record.squareObjectId,
-    type: record.purchaseType as PurchaseType,
-    peopleCount: record.peopleCount || 1,
-    mealsPerDay: record.mealsPerDay || 1,
-    squareObjectType: record.squareObjectType,
-    status: record.orderStatus,
-    fulfillmentMethod: record.fulfillmentMethod as FulfillmentMethod,
-    bowlSelection: record.bowlSelection as BowlSelection,
-    subtotalCents: record.subtotalCents,
-    taxCents: record.taxCents,
-    totalCents: record.totalCents,
-    receiptUrl: record.receiptUrl || undefined,
-    cancellationScheduledFor: record.cancellationScheduledFor || undefined,
-    createdAt: ((record.get("createdAt") as Date | undefined) ?? record.acceptedAt).toISOString(),
-  }));
+  return records.map((record) => {
+    const savedAddress = record.deliveryAddress;
+    const deliveryAddress: CheckoutAddress | undefined =
+      savedAddress?.addressLine1 && savedAddress.city && savedAddress.postalCode
+        ? {
+            addressLine1: savedAddress.addressLine1,
+            addressLine2: savedAddress.addressLine2 || "",
+            city: savedAddress.city,
+            state: "CA",
+            postalCode: savedAddress.postalCode,
+          }
+        : undefined;
+
+    return {
+      id: record.squareObjectId,
+      squareOrderId: record.squareOrderId || undefined,
+      type: record.purchaseType as PurchaseType,
+      peopleCount: record.peopleCount || 1,
+      mealsPerDay: record.mealsPerDay || 1,
+      squareObjectType: record.squareObjectType,
+      status: record.orderStatus,
+      fulfillmentMethod: record.fulfillmentMethod as FulfillmentMethod,
+      deliveryAddress,
+      bowlSelection: record.bowlSelection as BowlSelection,
+      subtotalCents: record.subtotalCents,
+      taxCents: record.taxCents,
+      totalCents: record.totalCents,
+      receiptUrl: record.receiptUrl || undefined,
+      cancellationScheduledFor: record.cancellationScheduledFor || undefined,
+      createdAt: (
+        (record.get("createdAt") as Date | undefined) ?? record.acceptedAt
+      ).toISOString(),
+    };
+  });
 }
