@@ -115,3 +115,21 @@ h4 {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
+
+.apple-pay-button {
+  -webkit-appearance: -apple-pay-button;
+  -apple-pay-button-style: black;
+  -apple-pay-button-type: buy;
+  appearance: none;
+  width: 100%;
+  min-height: 48px;
+  border: 0;
+  border-radius: 0;
+  background: #000;
+  cursor: pointer;
+}
+
+.apple-pay-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}

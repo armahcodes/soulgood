@@ -60,12 +60,21 @@ const requestSchema = z
     idempotencyKey: z.string().uuid(),
     leadId: z.string().trim().min(1).max(200),
     mealsPerDay: z.number().int().min(1).max(MAX_MEALS_PER_DAY).default(1),
+    paymentMethod: z.enum(["card", "apple-pay", "google-pay"]).default("card"),
     peopleCount: z.number().int().min(1).max(MAX_PEOPLE_PER_ORDER).default(1),
     purchaseType: z.enum(["one-time", "weekly"]),
     sourceId: z.string().min(1).max(16384),
     taxQuoteToken: z.string().max(4096).optional(),
+    verificationToken: z.string().min(1).max(16384).optional(),
   })
   .superRefine((value, context) => {
+    if (value.purchaseType === "weekly" && value.paymentMethod !== "card") {
+      context.addIssue({
+        code: "custom",
+        path: ["paymentMethod"],
+        message: "Weekly plans require a card payment method",
+      });
+    }
     if (value.fulfillmentMethod === "delivery" && !value.deliveryAddress) {
       context.addIssue({
         code: "custom",
@@ -290,6 +299,9 @@ async function handleCheckout(request: Request) {
         body: JSON.stringify({
           idempotency_key: key(input.idempotencyKey, "payment"),
           source_id: input.sourceId,
+          ...(input.verificationToken
+            ? { verification_token: input.verificationToken }
+            : {}),
           amount_money: { amount: quote.totalCents, currency: "USD" },
           autocomplete: true,
           customer_id: customer.id,

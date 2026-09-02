@@ -53,6 +53,42 @@ type SquareCard = {
   tokenize(details: unknown): Promise<SquareTokenResult>;
 };
 
+type SquareWallet = {
+  destroy(): Promise<boolean>;
+  tokenize(): Promise<SquareTokenResult>;
+};
+
+type SquareGooglePay = SquareWallet & {
+  attach(
+    selector: string,
+    options?: {
+      buttonBorderType?: "no_border" | "default_border";
+      buttonColor?: "black" | "white" | "default";
+      buttonRadius?: number;
+      buttonSizeMode?: "static" | "fill";
+      buttonType?: "long" | "short";
+    },
+  ): Promise<void>;
+};
+
+type SquarePaymentRequest = object;
+
+type SquarePayments = {
+  applePay(request: SquarePaymentRequest): Promise<SquareWallet>;
+  card(): Promise<SquareCard>;
+  googlePay(request: SquarePaymentRequest): Promise<SquareGooglePay>;
+  paymentRequest(options: {
+    countryCode: "US";
+    currencyCode: "USD";
+    lineItems: Array<{ amount: string; label: string }>;
+    total: { amount: string; label: string };
+  }): SquarePaymentRequest;
+  verifyBuyer(
+    sourceId: string,
+    details: unknown,
+  ): Promise<{ status?: string; token?: string } | null>;
+};
+
 type CheckoutSuccess = {
   ok: true;
   purchaseType: PurchaseType;
@@ -73,9 +109,7 @@ type CheckoutSuccess = {
 declare global {
   interface Window {
     Square?: {
-      payments(applicationId: string, locationId: string): {
-        card(): Promise<SquareCard>;
-      };
+      payments(applicationId: string, locationId: string): SquarePayments;
     };
   }
 }
@@ -137,8 +171,13 @@ export function ReserveButton({
   const [quoting, setQuoting] = useState(false);
   const [sdkLoaded, setSdkLoaded] = useState(false);
   const [cardReady, setCardReady] = useState(false);
+  const [applePayReady, setApplePayReady] = useState(false);
+  const [googlePayReady, setGooglePayReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const cardRef = useRef<SquareCard | null>(null);
+  const applePayRef = useRef<SquareWallet | null>(null);
+  const googlePayRef = useRef<SquareGooglePay | null>(null);
+  const walletPaymentsRef = useRef<SquarePayments | null>(null);
   const errorRef = useRef<HTMLParagraphElement | null>(null);
   const configured = Boolean(squareApplicationId && squareLocationId);
   const effectiveBillingAddress =
@@ -233,6 +272,113 @@ export function ReserveButton({
     };
   }, [configured, sdkLoaded, squareApplicationId, squareLocationId]);
 
+  useEffect(() => {
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled) return;
+      setApplePayReady(false);
+      setGooglePayReady(false);
+    });
+    applePayRef.current = null;
+    googlePayRef.current = null;
+    walletPaymentsRef.current = null;
+
+    if (
+      !sdkLoaded ||
+      !configured ||
+      !window.Square ||
+      !quote ||
+      purchaseType !== "one-time"
+    ) {
+      return;
+    }
+
+    let applePay: SquareWallet | null = null;
+    let googlePay: SquareGooglePay | null = null;
+
+    void (async () => {
+      const payments = window.Square!.payments(
+        squareApplicationId,
+        squareLocationId,
+      );
+      walletPaymentsRef.current = payments;
+      const bowlsAmount = PRICING.oneTimeCents * mealSetCount(peopleCount, mealsPerDay);
+      const fulfillmentAmount = FULFILLMENT[fulfillmentMethod].amountCents;
+      const paymentRequestOptions = {
+        countryCode: "US" as const,
+        currencyCode: "USD" as const,
+        lineItems: [
+          { amount: (bowlsAmount / 100).toFixed(2), label: "Soul Bowls™" },
+          {
+            amount: (fulfillmentAmount / 100).toFixed(2),
+            label: FULFILLMENT[fulfillmentMethod].label,
+          },
+          {
+            amount: (quote.taxCents / 100).toFixed(2),
+            label: "California sales tax",
+          },
+        ],
+        total: {
+          amount: (quote.totalCents / 100).toFixed(2),
+          label: "Soul Goods LLC",
+        },
+      };
+
+      try {
+        applePay = await payments.applePay(
+          payments.paymentRequest(paymentRequestOptions),
+        );
+        if (!cancelled) {
+          applePayRef.current = applePay;
+          setApplePayReady(true);
+        }
+      } catch {
+        // Apple Pay is only exposed when the browser, device, wallet, and
+        // registered HTTPS domain all support it.
+      }
+
+      try {
+        googlePay = await payments.googlePay(
+          payments.paymentRequest(paymentRequestOptions),
+        );
+        await googlePay.attach("#google-pay-button", {
+          buttonBorderType: "no_border",
+          buttonColor: "black",
+          buttonRadius: 0,
+          buttonSizeMode: "fill",
+          buttonType: "long",
+        });
+        if (!cancelled) {
+          googlePayRef.current = googlePay;
+          setGooglePayReady(true);
+        }
+      } catch {
+        // Unsupported Google Pay environments fall back to the card form.
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      walletPaymentsRef.current = null;
+      applePayRef.current = null;
+      googlePayRef.current = null;
+      setApplePayReady(false);
+      setGooglePayReady(false);
+      if (applePay) void applePay.destroy().catch(() => false);
+      if (googlePay) void googlePay.destroy().catch(() => false);
+    };
+  }, [
+    configured,
+    fulfillmentMethod,
+    mealsPerDay,
+    peopleCount,
+    purchaseType,
+    quote,
+    sdkLoaded,
+    squareApplicationId,
+    squareLocationId,
+  ]);
+
   const contactComplete = useMemo(
     () =>
       contact.givenName.trim() &&
@@ -248,6 +394,14 @@ export function ReserveButton({
     peopleCount,
     mealsPerDay,
   ).safeParse(bowlSelection).success;
+  const walletPaymentReady = Boolean(
+    accepted &&
+      quote &&
+      contactComplete &&
+      bowlSelectionComplete &&
+      addressIsComplete(effectiveBillingAddress) &&
+      (fulfillmentMethod !== "delivery" || addressIsComplete(deliveryAddress)),
+  );
 
   function resetQuote(): void {
     setQuote(null);
@@ -377,47 +531,140 @@ export function ReserveButton({
     }
   }
 
-  async function reserve(): Promise<void> {
-    if (pending || !accepted || !quote || !cardRef.current) return;
+  function validatePaymentDetails(): boolean {
+    if (!accepted || !quote) {
+      reportError("Calculate the total and accept the terms before paying.");
+      return false;
+    }
+    if (!bowlSelectionComplete) {
+      reportError(`Select exactly ${targetBowls} bowls before checkout.`);
+      return false;
+    }
+    if (!contactComplete) {
+      reportError("Enter your full name, email, and US phone number.");
+      return false;
+    }
+    if (!addressIsComplete(effectiveBillingAddress)) {
+      reportError("Enter the complete billing address for the payment method.");
+      return false;
+    }
+    if (fulfillmentMethod === "delivery" && !addressIsComplete(deliveryAddress)) {
+      reportError("Enter the complete delivery address.");
+      return false;
+    }
+    return true;
+  }
+
+  function billingContactDetails() {
+    return {
+      givenName: contact.givenName,
+      familyName: contact.familyName,
+      email: contact.email,
+      phone: contact.phone,
+      addressLines: [
+        effectiveBillingAddress.addressLine1,
+        effectiveBillingAddress.addressLine2,
+      ].filter(Boolean),
+      city: effectiveBillingAddress.city,
+      state: effectiveBillingAddress.state,
+      postalCode: effectiveBillingAddress.postalCode,
+      countryCode: "US",
+    };
+  }
+
+  async function submitCheckout(
+    sourceId: string,
+    verificationToken?: string,
+    paymentMethod: "card" | "apple-pay" | "google-pay" = "card",
+  ): Promise<void> {
     let leadId = window.sessionStorage.getItem("soulbowls:leadId");
     if (!leadId) {
       leadId = `direct-${crypto.randomUUID()}`;
       window.sessionStorage.setItem("soulbowls:leadId", leadId);
     }
-    if (!bowlSelectionComplete) {
-      reportError(`Select exactly ${targetBowls} bowls before checkout.`);
-      return;
+
+    const response = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        acceptedTerms: true,
+        billingAddress: effectiveBillingAddress,
+        bowlSelection,
+        contact,
+        deliveryAddress:
+          fulfillmentMethod === "delivery" ? deliveryAddress : null,
+        fulfillmentMethod,
+        idempotencyKey: crypto.randomUUID(),
+        leadId,
+        mealsPerDay,
+        paymentMethod,
+        peopleCount,
+        purchaseType,
+        sourceId,
+        ...(taxQuoteToken ? { taxQuoteToken } : {}),
+        ...(verificationToken ? { verificationToken } : {}),
+      }),
+    });
+    const data = (await response.json().catch(() => null)) as
+      | CheckoutSuccess
+      | { ok?: false; error?: string }
+      | null;
+    if (!response.ok || !data || data.ok !== true) {
+      throw new Error(
+        data && "error" in data && data.error
+          ? data.error
+          : "Square could not complete checkout.",
+      );
     }
-    if (!contactComplete) {
-      reportError("Enter your full name, email, and US phone number.");
-      return;
+
+    const squareObjectId = data.paymentId || data.subscriptionId;
+    if (!squareObjectId) {
+      throw new Error(
+        "Payment completed, but the confirmation could not be loaded. Check your email or account for the receipt.",
+      );
     }
-    if (!addressIsComplete(effectiveBillingAddress)) {
-      reportError("Enter the complete billing address for the card.");
-      return;
-    }
-    if (fulfillmentMethod === "delivery" && !addressIsComplete(deliveryAddress)) {
-      reportError("Enter the complete delivery address.");
-      return;
-    }
+
+    const confirmation: LastOrderConfirmation = {
+      version: 1,
+      purchaseType: data.purchaseType,
+      status: data.status,
+      squareObjectId,
+      squareOrderId: data.orderId || data.orderTemplateId,
+      receiptUrl: data.receiptUrl,
+      acceptedAt: data.acceptedAt,
+      fulfillmentMethod: data.fulfillmentMethod,
+      mealsPerDay: data.mealsPerDay,
+      peopleCount: data.peopleCount,
+      bowlSelection: data.bowlSelection,
+      subtotalCents: data.tax.subtotalCents,
+      taxCents: data.tax.taxCents,
+      totalCents: data.tax.totalCents,
+    };
+    window.sessionStorage.setItem(
+      purchaseType === "weekly"
+        ? "soulbowls:subscriptionStatus"
+        : "soulbowls:orderStatus",
+      purchaseType === "weekly" ? "active" : "completed",
+    );
+    window.sessionStorage.setItem(
+      LAST_ORDER_STORAGE_KEY,
+      JSON.stringify(confirmation),
+    );
+    // A completed checkout is a terminal step. Replacing the route prevents
+    // the browser Back button from returning to a submitted payment form.
+    window.sessionStorage.removeItem("soulbowls:leadId");
+    router.replace("/welcome?confirmed=1");
+  }
+
+  async function reserve(): Promise<void> {
+    if (pending || !cardRef.current || !validatePaymentDetails()) return;
+    const currentQuote = quote;
+    if (!currentQuote) return;
 
     setPending(true);
     setError(null);
     try {
-      const billingContact = {
-        givenName: contact.givenName,
-        familyName: contact.familyName,
-        email: contact.email,
-        phone: contact.phone,
-        addressLines: [
-          effectiveBillingAddress.addressLine1,
-          effectiveBillingAddress.addressLine2,
-        ].filter(Boolean),
-        city: effectiveBillingAddress.city,
-        state: effectiveBillingAddress.state,
-        postalCode: effectiveBillingAddress.postalCode,
-        countryCode: "US",
-      };
+      const billingContact = billingContactDetails();
       const verificationDetails =
         purchaseType === "weekly"
           ? {
@@ -427,7 +674,7 @@ export function ReserveButton({
               sellerKeyedIn: false,
             }
           : {
-              amount: (quote.totalCents / 100).toFixed(2),
+              amount: (currentQuote.totalCents / 100).toFixed(2),
               billingContact,
               currencyCode: "USD",
               intent: "CHARGE",
@@ -440,81 +687,56 @@ export function ReserveButton({
           tokenResult.errors?.[0]?.message ?? "Check the card details and try again.",
         );
       }
-
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          acceptedTerms: true,
-          billingAddress: effectiveBillingAddress,
-          bowlSelection,
-          contact,
-          deliveryAddress:
-            fulfillmentMethod === "delivery" ? deliveryAddress : null,
-          fulfillmentMethod,
-          idempotencyKey: crypto.randomUUID(),
-          leadId,
-          mealsPerDay,
-          peopleCount,
-          purchaseType,
-          sourceId: tokenResult.token,
-          ...(taxQuoteToken ? { taxQuoteToken } : {}),
-        }),
-      });
-      const data = (await response.json().catch(() => null)) as
-        | CheckoutSuccess
-        | { ok?: false; error?: string }
-        | null;
-      if (!response.ok || !data || data.ok !== true) {
-        throw new Error(
-          data && "error" in data && data.error
-            ? data.error
-            : "Square could not complete checkout.",
-        );
-      }
-
-      const squareObjectId = data.paymentId || data.subscriptionId;
-      if (!squareObjectId) {
-        throw new Error(
-          "Payment completed, but the confirmation could not be loaded. Check your email or account for the receipt.",
-        );
-      }
-
-      const confirmation: LastOrderConfirmation = {
-        version: 1,
-        purchaseType: data.purchaseType,
-        status: data.status,
-        squareObjectId,
-        squareOrderId: data.orderId || data.orderTemplateId,
-        receiptUrl: data.receiptUrl,
-        acceptedAt: data.acceptedAt,
-        fulfillmentMethod: data.fulfillmentMethod,
-        mealsPerDay: data.mealsPerDay,
-        peopleCount: data.peopleCount,
-        bowlSelection: data.bowlSelection,
-        subtotalCents: data.tax.subtotalCents,
-        taxCents: data.tax.taxCents,
-        totalCents: data.tax.totalCents,
-      };
-      window.sessionStorage.setItem(
-        purchaseType === "weekly"
-          ? "soulbowls:subscriptionStatus"
-          : "soulbowls:orderStatus",
-        purchaseType === "weekly" ? "active" : "completed",
-      );
-      window.sessionStorage.setItem(
-        LAST_ORDER_STORAGE_KEY,
-        JSON.stringify(confirmation),
-      );
-      // A completed checkout is a terminal step. Replacing the route prevents
-      // the browser Back button from returning to a submitted payment form.
-      window.sessionStorage.removeItem("soulbowls:leadId");
-      router.replace("/welcome?confirmed=1");
+      await submitCheckout(tokenResult.token);
     } catch (checkoutError) {
       reportError(
         checkoutError instanceof Error
           ? checkoutError.message
           : "Square could not complete checkout.",
+      );
+    } finally {
+      setPending(false);
+    }
+  }
+
+  async function payWithWallet(method: "apple-pay" | "google-pay"): Promise<void> {
+    const wallet = method === "apple-pay" ? applePayRef.current : googlePayRef.current;
+    const payments = walletPaymentsRef.current;
+    if (
+      pending ||
+      purchaseType !== "one-time" ||
+      !wallet ||
+      !payments ||
+      !validatePaymentDetails()
+    ) {
+      return;
+    }
+
+    setPending(true);
+    setError(null);
+    try {
+      // Square and Apple require wallet tokenization to begin directly from
+      // the customer's click, before any network or other asynchronous work.
+      const tokenResult = await wallet.tokenize();
+      if (tokenResult.status !== "OK" || !tokenResult.token) {
+        throw new Error(
+          tokenResult.errors?.[0]?.message ??
+            `${method === "apple-pay" ? "Apple Pay" : "Google Pay"} could not authorize this payment.`,
+        );
+      }
+
+      const verification = await payments.verifyBuyer(tokenResult.token, {
+        amount: (quote!.totalCents / 100).toFixed(2),
+        billingContact: billingContactDetails(),
+        currencyCode: "USD",
+        intent: "CHARGE",
+      });
+      await submitCheckout(tokenResult.token, verification?.token, method);
+    } catch (checkoutError) {
+      reportError(
+        checkoutError instanceof Error
+          ? checkoutError.message
+          : `${method === "apple-pay" ? "Apple Pay" : "Google Pay"} could not complete checkout.`,
       );
     } finally {
       setPending(false);
@@ -755,14 +977,14 @@ export function ReserveButton({
           {renderAddressFields("delivery")}
           <label className="flex items-center gap-3 text-sm text-forest/72">
             <input type="checkbox" className="h-5 w-5 accent-forest" checked={billingSameAsDelivery} onChange={(event) => { setBillingSameAsDelivery(event.target.checked); resetQuote(); }} />
-            Use this as the card billing address
+            Use this as the billing address
           </label>
         </fieldset>
       )}
 
       {(fulfillmentMethod === "pickup" || !billingSameAsDelivery) && (
         <fieldset className="grid gap-3">
-          <legend className="mb-1 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">Card billing address</legend>
+          <legend className="mb-1 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">Billing address</legend>
           {renderAddressFields("billing")}
         </fieldset>
       )}
@@ -794,7 +1016,7 @@ export function ReserveButton({
       </dl>
 
       <div>
-        <p className="mb-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">Step 5 · Secure card details</p>
+        <p className="mb-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">Step 5 · Secure payment</p>
         <div id="square-card" className="min-h-[90px] border border-forest/15 bg-white p-3" />
         {!configured && <p className="mt-2 text-sm text-clay">Square payment is not configured.</p>}
         {configured && !cardReady && !error && <p className="mt-2 text-xs text-forest/50">Loading Square’s secure card form…</p>}
@@ -807,25 +1029,74 @@ export function ReserveButton({
         <p className="mt-2">
           {purchaseType === "weekly"
             ? `Your card will be charged ${quote ? formatCents(quote.totalCents) : "the displayed total"} today and every 7 days for ${peopleCount} ${peopleCount === 1 ? "person" : "people"} at ${mealsPerDay} ${mealsPerDay === 1 ? "meal" : "meals"} per day, selected fulfillment, and applicable tax until canceled.`
-            : `Your card will be charged ${quote ? formatCents(quote.totalCents) : "the displayed total"} once for this ${targetBowls}-bowl order, selected fulfillment, and applicable tax. This order does not renew automatically.`}{" "}
+            : `Your selected payment method will be charged ${quote ? formatCents(quote.totalCents) : "the displayed total"} once for this ${targetBowls}-bowl order, selected fulfillment, and applicable tax. This order does not renew automatically.`}{" "}
           Any reusable-container deposit is separate and refundable under the return terms.
         </p>
       </div>
 
       <label className="flex items-start gap-3 text-sm leading-relaxed text-forest/72">
         <input type="checkbox" checked={accepted} disabled={pending} onChange={(event) => setAccepted(event.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-forest" />
-        <span>I authorize Soul Goods LLC to {purchaseType === "weekly" ? "save this card and charge the automatic weekly renewal shown above" : "charge the displayed total once for this order"}. I agree to the <Link href="/terms" className="font-semibold underline underline-offset-2">Terms of Service</Link> and <Link href="/customer-agreement" className="font-semibold underline underline-offset-2">Customer Agreement</Link>.</span>
+        <span>I authorize Soul Goods LLC to {purchaseType === "weekly" ? "save this card and charge the automatic weekly renewal shown above" : "charge the displayed total once using my selected payment method"}. I agree to the <Link href="/terms" className="font-semibold underline underline-offset-2">Terms of Service</Link> and <Link href="/customer-agreement" className="font-semibold underline underline-offset-2">Customer Agreement</Link>.</span>
       </label>
+
+      {purchaseType === "one-time" ? (
+        <div
+          className={applePayReady || googlePayReady ? "grid gap-3" : "hidden"}
+          aria-label="Express checkout options"
+        >
+          <div className="flex items-center gap-3" aria-hidden="true">
+            <span className="h-px flex-1 bg-forest/12" />
+            <span className="text-xs font-bold tracking-[0.1em] text-forest/50 uppercase">
+              Express checkout
+            </span>
+            <span className="h-px flex-1 bg-forest/12" />
+          </div>
+          <div className={applePayReady ? "block" : "hidden"}>
+            {applePayReady ? (
+              <button
+                type="button"
+                aria-label="Buy with Apple Pay"
+                className="apple-pay-button"
+                disabled={pending || !walletPaymentReady}
+                onClick={() => void payWithWallet("apple-pay")}
+              />
+            ) : null}
+          </div>
+          <div
+            className={googlePayReady ? "min-h-12" : "hidden"}
+            aria-hidden={!googlePayReady}
+            onClick={() => void payWithWallet("google-pay")}
+            style={
+              pending || !walletPaymentReady
+                ? { opacity: 0.45, pointerEvents: "none" }
+                : undefined
+            }
+          >
+            <div id="google-pay-button" className="min-h-12 w-full" />
+          </div>
+          {!walletPaymentReady ? (
+            <p className="text-center text-xs leading-relaxed text-forest/55">
+              Complete your details, calculate the total, and accept the terms to use
+              express checkout.
+            </p>
+          ) : null}
+        </div>
+      ) : (
+        <p className="border border-forest/12 bg-white/55 px-4 py-3 text-xs leading-relaxed text-forest/60">
+          Weekly plans require a card because Apple Pay and Google Pay cannot be saved
+          for automatic renewal through Square.
+        </p>
+      )}
 
       <Button type="button" size="lg" className="w-full" disabled={pending || !accepted || !quote || !cardReady || !bowlSelectionComplete} onClick={reserve}>
         {pending
           ? purchaseType === "weekly"
             ? "Starting your weekly plan…"
             : "Placing your order…"
-          : `${purchaseType === "weekly" ? "Start weekly Soul Bowls™" : "Place one-time order"}${quote ? ` — ${formatCents(quote.totalCents)}` : ""}`}
+          : `${purchaseType === "weekly" ? "Start weekly Soul Bowls™" : "Pay by card"}${quote ? ` — ${formatCents(quote.totalCents)}` : ""}`}
       </Button>
 
-      <p className="text-xs leading-relaxed text-forest/50">Secure {purchaseType === "weekly" ? "card storage and recurring billing are" : "one-time payment is"} provided by Square. {TAX.disclosure} Reusable-container deposit: {FEES.containerDeposit.amountCents === null ? "confirmed separately" : formatCents(FEES.containerDeposit.amountCents)}.</p>
+      <p className="text-xs leading-relaxed text-forest/50">Secure {purchaseType === "weekly" ? "card storage and recurring billing are" : "card and digital-wallet payments are"} provided by Square. Wallet availability depends on your browser, device, and saved payment setup. {TAX.disclosure} Reusable-container deposit: {FEES.containerDeposit.amountCents === null ? "confirmed separately" : formatCents(FEES.containerDeposit.amountCents)}.</p>
 
     </div>
   );

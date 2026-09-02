@@ -160,6 +160,15 @@ describe("POST /api/checkout", () => {
     expect(squareFetch).not.toHaveBeenCalled();
   });
 
+  it("rejects digital wallets for automatic weekly renewals", async () => {
+    const response = await POST(
+      makeRequest({ paymentMethod: "apple-pay", verificationToken: "wallet-token" }),
+    );
+
+    expect(response.status).toBe(400);
+    expect(squareFetch).not.toHaveBeenCalled();
+  });
+
   it("rejects a mix that does not contain exactly five bowls", async () => {
     const response = await POST(
       makeRequest({
@@ -401,7 +410,13 @@ describe("POST /api/checkout", () => {
     process.env.SQUARE_ENVIRONMENT = "production";
     mockSuccessfulDelivery();
 
-    const response = await POST(makeRequest({ purchaseType: "one-time" }));
+    const response = await POST(
+      makeRequest({
+        purchaseType: "one-time",
+        paymentMethod: "apple-pay",
+        verificationToken: "buyer-verification-token",
+      }),
+    );
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -427,6 +442,7 @@ describe("POST /api/checkout", () => {
     const payment = requests.find((request) => request.url.endsWith("/v2/payments"));
     expect(payment?.body).toMatchObject({
       source_id: "cnon:card-token",
+      verification_token: "buyer-verification-token",
       amount_money: { amount: 10633, currency: "USD" },
       autocomplete: true,
       customer_id: "customer-123",
