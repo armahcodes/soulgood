@@ -173,6 +173,7 @@ export function ReserveButton({
   const [cardReady, setCardReady] = useState(false);
   const [applePayReady, setApplePayReady] = useState(false);
   const [googlePayReady, setGooglePayReady] = useState(false);
+  const [walletCheckComplete, setWalletCheckComplete] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const cardRef = useRef<SquareCard | null>(null);
   const applePayRef = useRef<SquareWallet | null>(null);
@@ -278,6 +279,7 @@ export function ReserveButton({
       if (cancelled) return;
       setApplePayReady(false);
       setGooglePayReady(false);
+      setWalletCheckComplete(false);
     });
     applePayRef.current = null;
     googlePayRef.current = null;
@@ -341,19 +343,30 @@ export function ReserveButton({
         googlePay = await payments.googlePay(
           payments.paymentRequest(paymentRequestOptions),
         );
-        await googlePay.attach("#google-pay-button", {
-          buttonBorderType: "no_border",
-          buttonColor: "black",
-          buttonRadius: 0,
-          buttonSizeMode: "fill",
-          buttonType: "long",
-        });
         if (!cancelled) {
           googlePayRef.current = googlePay;
           setGooglePayReady(true);
+          await new Promise<void>((resolve) => {
+            window.requestAnimationFrame(() => resolve());
+          });
+          if (!cancelled) {
+            await googlePay.attach("#google-pay-button", {
+              buttonBorderType: "no_border",
+              buttonColor: "black",
+              buttonRadius: 0,
+              buttonSizeMode: "fill",
+              buttonType: "long",
+            });
+          }
         }
       } catch {
+        if (!cancelled) {
+          googlePayRef.current = null;
+          setGooglePayReady(false);
+        }
         // Unsupported Google Pay environments fall back to the card form.
+      } finally {
+        if (!cancelled) setWalletCheckComplete(true);
       }
     })();
 
@@ -364,6 +377,7 @@ export function ReserveButton({
       googlePayRef.current = null;
       setApplePayReady(false);
       setGooglePayReady(false);
+      setWalletCheckComplete(false);
       if (applePay) void applePay.destroy().catch(() => false);
       if (googlePay) void googlePay.destroy().catch(() => false);
     };
@@ -483,7 +497,11 @@ export function ReserveButton({
   ): void {
     const setter = target === "billing" ? setBillingAddress : setDeliveryAddress;
     setter((current) => ({ ...current, [field]: value }));
-    resetQuote();
+    if (target === "delivery") {
+      resetQuote();
+    } else {
+      setError(null);
+    }
   }
 
   async function calculateTotal(): Promise<void> {
@@ -975,9 +993,23 @@ export function ReserveButton({
         <fieldset className="grid gap-3">
           <legend className="mb-1 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">LA County delivery address</legend>
           {renderAddressFields("delivery")}
-          <label className="flex items-center gap-3 text-sm text-forest/72">
-            <input type="checkbox" className="h-5 w-5 accent-forest" checked={billingSameAsDelivery} onChange={(event) => { setBillingSameAsDelivery(event.target.checked); resetQuote(); }} />
-            Use this as the billing address
+          <label className="flex items-start gap-3 border border-forest/12 bg-white/55 p-4 text-sm text-forest/72">
+            <input
+              type="checkbox"
+              className="mt-0.5 h-5 w-5 shrink-0 accent-forest"
+              checked={!billingSameAsDelivery}
+              onChange={(event) => {
+                setBillingSameAsDelivery(!event.target.checked);
+                setError(null);
+              }}
+            />
+            <span>
+              <strong className="block text-forest">Use a different billing address</strong>
+              <span className="mt-1 block text-xs leading-relaxed text-forest/55">
+                Select this when the payment method is billed somewhere other than the
+                delivery address.
+              </span>
+            </span>
           </label>
         </fieldset>
       )}
@@ -1041,7 +1073,7 @@ export function ReserveButton({
 
       {purchaseType === "one-time" ? (
         <div
-          className={applePayReady || googlePayReady ? "grid gap-3" : "hidden"}
+          className="grid gap-3 border border-forest/12 bg-white/55 p-4"
           aria-label="Express checkout options"
         >
           <div className="flex items-center gap-3" aria-hidden="true">
@@ -1074,7 +1106,20 @@ export function ReserveButton({
           >
             <div id="google-pay-button" className="min-h-12 w-full" />
           </div>
-          {!walletPaymentReady ? (
+          {!quote ? (
+            <p className="text-center text-xs leading-relaxed text-forest/55">
+              Calculate your total to check this device for Apple Pay or Google Pay.
+            </p>
+          ) : !walletCheckComplete ? (
+            <p className="text-center text-xs leading-relaxed text-forest/55">
+              Checking this device for Apple Pay and Google Pay…
+            </p>
+          ) : !applePayReady && !googlePayReady ? (
+            <p className="text-center text-xs leading-relaxed text-forest/60">
+              No digital wallet is available in this browser. Use Safari with Apple Pay
+              or a supported browser with Google Pay configured, or continue by card.
+            </p>
+          ) : !walletPaymentReady ? (
             <p className="text-center text-xs leading-relaxed text-forest/55">
               Complete your details, calculate the total, and accept the terms to use
               express checkout.
