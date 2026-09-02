@@ -7,7 +7,13 @@ import {
   mealSetCount,
   type BowlSelection,
 } from "@/lib/bowl-selection";
-import { CURRENT_BOWLS, type BowlId } from "@/lib/current-offer";
+import {
+  AVAILABLE_BOWLS,
+  SOLD_OUT_BOWLS,
+  type BowlId,
+} from "@/lib/current-offer";
+
+const DISPLAY_BOWLS = [...AVAILABLE_BOWLS, ...SOLD_OUT_BOWLS];
 
 export function BowlBuilder({
   disabled,
@@ -29,7 +35,7 @@ export function BowlBuilder({
 
   function changeQuantity(id: BowlId, amount: -1 | 1): void {
     const nextQuantity = selection[id] + amount;
-    const bowlAvailable = CURRENT_BOWLS.find((bowl) => bowl.id === id)?.available;
+    const bowlAvailable = DISPLAY_BOWLS.find((bowl) => bowl.id === id)?.available;
     if (
       disabled ||
       !bowlAvailable ||
@@ -48,7 +54,7 @@ export function BowlBuilder({
         <span className="flex items-end justify-between gap-4">
           <span>
             <span className="block text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-              Build your {target}
+              Step 2 · Build your {target}
             </span>
             <span className="mt-1 block text-sm leading-relaxed text-forest/62">
               We started with one of each available bowl for every five-meal set.
@@ -75,7 +81,7 @@ export function BowlBuilder({
       </div>
 
       <div className="grid gap-3">
-        {CURRENT_BOWLS.map((bowl) => {
+        {DISPLAY_BOWLS.map((bowl) => {
           const quantity = selection[bowl.id];
           return (
             <article
@@ -116,8 +122,8 @@ export function BowlBuilder({
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between gap-3">
-                    <details className="group min-w-0">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <details className="group min-w-[6rem] flex-1">
                       <summary className="cursor-pointer list-none text-xs font-bold text-forest underline decoration-forest/25 underline-offset-4">
                         Learn more
                       </summary>

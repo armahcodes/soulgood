@@ -38,7 +38,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     // Sizes keep primary/secondary controls at ≥44px tall (thumb targets).
     const sizes = {
-      sm: "min-h-[42px] px-5 py-2.5",
+      sm: "min-h-[44px] px-5 py-2.5",
       default: "min-h-[48px] px-8 py-3",
       lg: "min-h-[52px] px-9 py-4",
     };

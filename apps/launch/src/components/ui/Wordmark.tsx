@@ -22,7 +22,7 @@ export function Wordmark({ href, className, variant = "full-color" }: WordmarkPr
       height={74}
       priority
       sizes="212px"
-      className="h-auto w-[164px] sm:w-[188px]"
+      className="h-auto w-[148px] sm:w-[188px]"
     />
   );
 

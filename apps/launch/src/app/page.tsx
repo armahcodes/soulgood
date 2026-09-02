@@ -1,8 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { Wordmark } from "@/components/ui/Wordmark";
-import { AVAILABLE_BOWLS, CURRENT_BOWLS } from "@/lib/current-offer";
+import { AVAILABLE_BOWLS, CURRENT_BOWLS, SOLD_OUT_BOWLS } from "@/lib/current-offer";
 
 const RITUAL_STEPS = [
   { number: "01", title: "Choose your order", body: "Order once or make it a weekly ritual." },
@@ -11,6 +12,8 @@ const RITUAL_STEPS = [
   { number: "04", title: "Nourish your days", body: "Five 32 oz bowls, ready when your week gets full." },
   { number: "05", title: "Feel good. Repeat.", body: "Come back when you want, or pause and cancel a weekly plan anytime." },
 ] as const;
+
+const DISPLAY_BOWLS = [...AVAILABLE_BOWLS, ...SOLD_OUT_BOWLS];
 
 export default function Home() {
   return (
@@ -28,15 +31,24 @@ export default function Home() {
             <a href="#price" className="transition-colors hover:text-clay">Order</a>
             <a href="/account" className="transition-colors hover:text-clay">My orders</a>
           </nav>
-          <Button as="a" href="/join" size="sm" className="hidden sm:inline-flex">
-            Order my five
-          </Button>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/account"
+              className="hidden text-[0.68rem] font-bold tracking-[0.08em] text-forest/68 uppercase transition-colors hover:text-clay sm:inline-flex lg:hidden"
+            >
+              My orders
+            </Link>
+            <Button as="a" href="/checkout" size="sm" className="px-4 sm:px-5">
+              <span className="sm:hidden">Order</span>
+              <span className="hidden sm:inline">Order my five</span>
+            </Button>
+          </div>
         </div>
       </header>
 
       <section className="relative pt-20 lg:min-h-[780px]">
-        <div className="grid min-h-[700px] lg:grid-cols-[1.08fr_0.92fr]">
-          <div className="relative min-h-[470px] overflow-hidden bg-sand lg:min-h-[700px]">
+        <div className="grid lg:min-h-[700px] lg:grid-cols-[1.08fr_0.92fr]">
+          <div className="relative order-2 min-h-[360px] overflow-hidden bg-sand sm:min-h-[460px] lg:order-1 lg:min-h-[700px]">
             <Image
               src={CURRENT_BOWLS[0].imagePath}
               alt="Glow Bowl™ in a 32 ounce Soul Good jar"
@@ -48,7 +60,7 @@ export default function Home() {
             />
           </div>
 
-          <div className="relative flex items-center bg-oat px-6 py-16 sm:px-12 lg:px-16 lg:py-24">
+          <div className="relative order-1 flex items-center bg-oat px-5 py-10 text-center sm:px-12 sm:py-14 lg:order-2 lg:px-16 lg:py-24 lg:text-left">
             <Image
               src="/botanicals/clay-branch.png"
               alt=""
@@ -57,23 +69,25 @@ export default function Home() {
               aria-hidden="true"
               className="pointer-events-none absolute -right-20 bottom-0 w-52 rotate-6 opacity-25 sm:w-64 lg:-right-12 lg:w-72"
             />
-            <div className="relative z-10 max-w-[34rem]">
+            <div className="relative z-10 mx-auto max-w-[34rem] lg:mx-0">
               <p className="mb-5 text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">
                 One-time or weekly · Los Angeles
               </p>
-              <h1 className="text-[clamp(4.6rem,8vw,8.3rem)] leading-[0.76] font-normal tracking-[-0.055em] text-forest">
-                Soul Bowls<sup className="ml-1 text-[0.18em] align-top tracking-normal">™</sup>
+              <h1 className="text-[clamp(3.65rem,18vw,5rem)] leading-[0.8] font-normal tracking-[-0.055em] text-forest lg:text-[clamp(4.6rem,8vw,8.3rem)] lg:leading-[0.76]">
+                <span className="inline-flex items-start whitespace-nowrap">
+                  Soul Bowls<sup className="relative -top-1 ml-0.5 text-[0.16em] tracking-normal">™</sup>
+                </span>
               </h1>
               <p className="mt-7 font-serif text-3xl leading-tight text-forest sm:text-4xl">
                 Your week, nourished.
               </p>
-              <div className="mt-7 h-px w-12 bg-clay" />
+              <div className="mx-auto mt-7 h-px w-12 bg-clay lg:mx-0" />
               <p className="mt-7 max-w-md text-base leading-7 text-forest/72 sm:text-lg">
                 Five fresh 32 oz bowls for $88—order once or choose weekly. Start
                 with one of each, then adjust your mix at checkout. Choose free
                 pickup or $8.88 Los Angeles County delivery.
               </p>
-              <Button as="a" href="/join" size="lg" className="mt-8 min-w-48">
+              <Button as="a" href="/checkout" size="lg" className="mt-8 w-full sm:w-auto sm:min-w-48">
                 Order my five
               </Button>
             </div>
@@ -101,8 +115,11 @@ export default function Home() {
           </div>
 
           <div className="divide-y divide-forest/12 border-y border-forest/12">
-            {CURRENT_BOWLS.map((bowl, index) => {
+            {DISPLAY_BOWLS.map((bowl, index) => {
               const imageFirst = index % 2 === 0;
+              const availableNumber = bowl.available
+                ? AVAILABLE_BOWLS.findIndex((availableBowl) => availableBowl.id === bowl.id) + 1
+                : null;
               return (
                 <article
                   key={bowl.name}
@@ -123,14 +140,14 @@ export default function Home() {
                       </span>
                     ) : null}
                   </div>
-                  <div className={`relative px-2 py-4 sm:px-8 lg:px-12 ${imageFirst ? "lg:order-2" : "lg:order-1"}`}>
+                  <div className={`relative px-2 py-4 text-center sm:px-8 lg:px-12 lg:text-left ${imageFirst ? "lg:order-2" : "lg:order-1"}`}>
                     <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">
-                      {bowl.available ? `Available ${String(index + 1).padStart(2, "0")}` : "Sold out"} · {bowl.serving}
+                      {bowl.available ? `Available ${String(availableNumber).padStart(2, "0")}` : "Sold out"} · {bowl.serving}
                     </p>
-                    <h3 className="mt-3 max-w-[14ch] text-4xl leading-[0.94] font-normal tracking-[-0.035em] text-forest sm:text-5xl">
+                    <h3 className="mx-auto mt-3 max-w-[14ch] text-4xl leading-[0.94] font-normal tracking-[-0.035em] text-forest sm:text-5xl lg:mx-0">
                       {bowl.name}
                     </h3>
-                    <p className="mt-4 max-w-lg text-sm leading-6 text-forest/68">
+                    <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-forest/68 lg:mx-0">
                       {bowl.ingredients}
                     </p>
                     {bowl.allergen ? (
@@ -181,7 +198,7 @@ export default function Home() {
           </div>
           <ol className="grid border-t border-forest/15 sm:grid-cols-5">
             {RITUAL_STEPS.map((step) => (
-              <li key={step.number} className="border-b border-forest/15 py-5 sm:border-r sm:border-b-0 sm:px-5 sm:last:border-r-0">
+              <li key={step.number} className="border-b border-forest/15 py-5 text-center sm:border-r sm:border-b-0 sm:px-5 sm:text-left sm:last:border-r-0">
                 <p className="font-serif text-3xl text-clay">{step.number}</p>
                 <h3 className="mt-4 text-lg font-normal text-forest">{step.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-forest/62">{step.body}</p>
@@ -192,23 +209,23 @@ export default function Home() {
       </section>
 
       <section id="fulfillment" className="mx-auto grid w-full max-w-[1440px] md:grid-cols-2">
-        <article className="relative overflow-hidden bg-sage px-8 py-10 text-oat sm:px-14 lg:px-20">
+        <article className="relative overflow-hidden bg-sage px-8 py-10 text-center text-oat sm:px-14 md:text-left lg:px-20">
           <p className="text-[0.68rem] font-bold tracking-[0.22em] text-oat/72 uppercase">Free every Sunday</p>
           <h2 className="mt-4 text-5xl font-normal tracking-[-0.04em] sm:text-6xl">Pick up</h2>
-          <p className="mt-5 max-w-sm text-base leading-7 text-oat/78">
+          <p className="mx-auto mt-5 max-w-sm text-base leading-7 text-oat/78 md:mx-0">
             Swing by our Los Angeles kitchen. We confirm your pickup location and window before fulfillment.
           </p>
-          <Button as="a" href="/join?fulfillment=pickup" variant="secondary" className="mt-8 border-oat text-oat hover:bg-oat hover:text-forest">
+          <Button as="a" href="/checkout?fulfillment=pickup" variant="secondary" className="mt-8 w-full border-oat text-oat hover:bg-oat hover:text-forest sm:w-auto">
             Choose pickup
           </Button>
         </article>
-        <article className="relative overflow-hidden bg-clay px-8 py-10 text-oat sm:px-14 lg:px-20">
+        <article className="relative overflow-hidden bg-clay px-8 py-10 text-center text-oat sm:px-14 md:text-left lg:px-20">
           <p className="text-[0.68rem] font-bold tracking-[0.22em] text-oat/72 uppercase">$8.88 per order</p>
           <h2 className="mt-4 text-5xl font-normal tracking-[-0.04em] sm:text-6xl">Delivery</h2>
-          <p className="mt-5 max-w-sm text-base leading-7 text-oat/78">
+          <p className="mx-auto mt-5 max-w-sm text-base leading-7 text-oat/78 md:mx-0">
             Doorstep delivery to verified addresses throughout Los Angeles County, California.
           </p>
-          <Button as="a" href="/join?fulfillment=delivery" variant="secondary" className="mt-8 border-oat text-oat hover:bg-oat hover:text-forest">
+          <Button as="a" href="/checkout?fulfillment=delivery" variant="secondary" className="mt-8 w-full border-oat text-oat hover:bg-oat hover:text-forest sm:w-auto">
             Choose delivery
           </Button>
         </article>
@@ -250,7 +267,7 @@ export default function Home() {
           <p className="mx-auto mt-4 max-w-lg text-base leading-7 text-oat/68">
             Five thoughtful bowls, once or every week. Made locally and ready for real life.
           </p>
-          <Button as="a" href="/join" size="lg" className="mt-6 bg-sage hover:bg-oat hover:text-forest">
+          <Button as="a" href="/checkout" size="lg" className="mt-6 w-full bg-sage hover:bg-oat hover:text-forest sm:w-auto">
             Order my five
           </Button>
         </div>

@@ -139,6 +139,7 @@ export function ReserveButton({
   const [cardReady, setCardReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const cardRef = useRef<SquareCard | null>(null);
+  const errorRef = useRef<HTMLParagraphElement | null>(null);
   const configured = Boolean(squareApplicationId && squareLocationId);
   const effectiveBillingAddress =
     fulfillmentMethod === "delivery" && billingSameAsDelivery
@@ -255,6 +256,14 @@ export function ReserveButton({
     setError(null);
   }
 
+  function reportError(message: string): void {
+    setError(message);
+    window.requestAnimationFrame(() => {
+      errorRef.current?.focus();
+      errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  }
+
   function chooseFulfillment(method: FulfillmentMethod): void {
     setFulfillmentMethod(method);
     window.sessionStorage.setItem("soulbowls:fulfillment", method);
@@ -325,14 +334,14 @@ export function ReserveButton({
 
   async function calculateTotal(): Promise<void> {
     if (!bowlSelectionComplete) {
-      setError(`Select exactly ${targetBowls} bowls before calculating the total.`);
+      reportError(`Select exactly ${targetBowls} bowls before calculating the total.`);
       return;
     }
     if (
       fulfillmentMethod === "delivery" &&
       !addressIsComplete(deliveryAddress)
     ) {
-      setError("Enter the complete Los Angeles County delivery address.");
+      reportError("Enter the complete Los Angeles County delivery address.");
       return;
     }
     setQuoting(true);
@@ -360,7 +369,7 @@ export function ReserveButton({
     } catch (quoteError) {
       setQuote(null);
       setTaxQuoteToken(null);
-      setError(
+      reportError(
         quoteError instanceof Error ? quoteError.message : "Tax could not be calculated.",
       );
     } finally {
@@ -376,19 +385,19 @@ export function ReserveButton({
       window.sessionStorage.setItem("soulbowls:leadId", leadId);
     }
     if (!bowlSelectionComplete) {
-      setError(`Select exactly ${targetBowls} bowls before checkout.`);
+      reportError(`Select exactly ${targetBowls} bowls before checkout.`);
       return;
     }
     if (!contactComplete) {
-      setError("Enter your full name, email, and US phone number.");
+      reportError("Enter your full name, email, and US phone number.");
       return;
     }
     if (!addressIsComplete(effectiveBillingAddress)) {
-      setError("Enter the complete billing address for the card.");
+      reportError("Enter the complete billing address for the card.");
       return;
     }
     if (fulfillmentMethod === "delivery" && !addressIsComplete(deliveryAddress)) {
-      setError("Enter the complete delivery address.");
+      reportError("Enter the complete delivery address.");
       return;
     }
 
@@ -502,7 +511,7 @@ export function ReserveButton({
       window.sessionStorage.removeItem("soulbowls:leadId");
       router.replace("/welcome?confirmed=1");
     } catch (checkoutError) {
-      setError(
+      reportError(
         checkoutError instanceof Error
           ? checkoutError.message
           : "Square could not complete checkout.",
@@ -514,50 +523,57 @@ export function ReserveButton({
 
   function renderAddressFields(target: "billing" | "delivery") {
     const address = target === "billing" ? billingAddress : deliveryAddress;
-    const prefix = target === "billing" ? "billing" : "delivery";
+    const prefix = target === "billing" ? "billing" : "shipping";
+    const labelPrefix = target === "billing" ? "Billing" : "Delivery";
     return (
       <div className="grid gap-3">
-        <input
-          aria-label={`${target} street address`}
-          autoComplete={`${prefix} address-line1`}
-          className={INPUT_CLASS}
-          placeholder="Street address"
-          value={address.addressLine1}
-          onChange={(event) => updateAddress(target, "addressLine1", event.target.value)}
-        />
-        <input
-          aria-label={`${target} apartment or suite`}
-          autoComplete={`${prefix} address-line2`}
-          className={INPUT_CLASS}
-          placeholder="Apartment or suite (optional)"
-          value={address.addressLine2}
-          onChange={(event) => updateAddress(target, "addressLine2", event.target.value)}
-        />
-        <div className="grid grid-cols-[1fr_72px_96px] gap-2">
+        <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">
+          {labelPrefix} street address
           <input
-            aria-label={`${target} city`}
-            autoComplete={`${prefix} address-level2`}
+            autoComplete={`${prefix} address-line1`}
             className={INPUT_CLASS}
-            placeholder="City"
-            value={address.city}
-            onChange={(event) => updateAddress(target, "city", event.target.value)}
+            placeholder="Street address"
+            value={address.addressLine1}
+            onChange={(event) => updateAddress(target, "addressLine1", event.target.value)}
           />
+        </label>
+        <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">
+          Apartment or suite <span className="font-normal normal-case">(optional)</span>
           <input
-            aria-label={`${target} state`}
+            autoComplete={`${prefix} address-line2`}
             className={INPUT_CLASS}
-            disabled
-            value="CA"
+            placeholder="Apartment or suite"
+            value={address.addressLine2}
+            onChange={(event) => updateAddress(target, "addressLine2", event.target.value)}
           />
-          <input
-            aria-label={`${target} ZIP code`}
-            autoComplete={`${prefix} postal-code`}
-            className={INPUT_CLASS}
-            inputMode="numeric"
-            maxLength={5}
-            placeholder="ZIP"
-            value={address.postalCode}
-            onChange={(event) => updateAddress(target, "postalCode", event.target.value)}
-          />
+        </label>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-[1fr_72px_96px] sm:gap-2">
+          <label className="col-span-2 grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase sm:col-span-1">
+            City
+            <input
+              autoComplete={`${prefix} address-level2`}
+              className={INPUT_CLASS}
+              placeholder="City"
+              value={address.city}
+              onChange={(event) => updateAddress(target, "city", event.target.value)}
+            />
+          </label>
+          <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">
+            State
+            <input className={INPUT_CLASS} disabled value="CA" />
+          </label>
+          <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">
+            ZIP
+            <input
+              autoComplete={`${prefix} postal-code`}
+              className={INPUT_CLASS}
+              inputMode="numeric"
+              maxLength={5}
+              placeholder="90001"
+              value={address.postalCode}
+              onChange={(event) => updateAddress(target, "postalCode", event.target.value)}
+            />
+          </label>
         </div>
       </div>
     );
@@ -569,7 +585,7 @@ export function ReserveButton({
 
       <fieldset className="grid gap-3 border border-forest/14 bg-gold/10 p-5">
         <legend className="px-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-          Who are you feeding?
+          Step 1 · Plan size
         </legend>
         <div className="flex items-center justify-between gap-5">
           <div>
@@ -591,7 +607,7 @@ export function ReserveButton({
               −
             </button>
             <output
-              aria-label={`${peopleCount} people selected`}
+              aria-label={`${peopleCount} ${peopleCount === 1 ? "person" : "people"} selected`}
               className="flex h-11 min-w-11 items-center justify-center border-x border-forest/14 font-bold text-forest"
             >
               {peopleCount}
@@ -658,7 +674,7 @@ export function ReserveButton({
 
       <fieldset className="grid gap-2">
         <legend className="mb-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-          Choose how to order
+          Order frequency
         </legend>
         <div className="grid gap-2 sm:grid-cols-2">
           {(Object.keys(PURCHASE_OPTIONS) as PurchaseType[]).map((type) => {
@@ -707,12 +723,12 @@ export function ReserveButton({
 
       <fieldset className="grid gap-2">
         <legend className="mb-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-          Choose fulfillment
+          Step 3 · Choose fulfillment
         </legend>
         {(Object.keys(FULFILLMENT) as FulfillmentMethod[]).map((method) => {
           const option = FULFILLMENT[method];
           return (
-            <label key={method} className="flex cursor-pointer items-center justify-between gap-4 border border-forest/15 bg-white/60 p-4 text-sm text-forest/72 transition-colors hover:border-sage">
+            <label key={method} className="grid cursor-pointer grid-cols-[1fr_auto] items-start gap-3 border border-forest/15 bg-white/60 p-4 text-sm text-forest/72 transition-colors hover:border-sage sm:items-center">
               <span className="flex items-center gap-3">
                 <input type="radio" name="fulfillment" checked={fulfillmentMethod === method} disabled={pending} onChange={() => chooseFulfillment(method)} className="h-5 w-5 accent-forest" />
                 <span><strong className="block text-forest">{option.label}</strong>{method === "pickup" ? "Sunday location and window confirmed after checkout" : "Available throughout Los Angeles County"}</span>
@@ -724,13 +740,13 @@ export function ReserveButton({
       </fieldset>
 
       <fieldset className="grid gap-3">
-        <legend className="mb-1 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">Customer</legend>
+        <legend className="mb-1 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">Step 4 · Your details</legend>
         <div className="grid gap-3 sm:grid-cols-2">
-          <input aria-label="First name" autoComplete="given-name" className={INPUT_CLASS} placeholder="First name" value={contact.givenName} onChange={(event) => updateContact("givenName", event.target.value)} />
-          <input aria-label="Last name" autoComplete="family-name" className={INPUT_CLASS} placeholder="Last name" value={contact.familyName} onChange={(event) => updateContact("familyName", event.target.value)} />
+          <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">First name<input autoComplete="given-name" className={INPUT_CLASS} placeholder="First name" value={contact.givenName} onChange={(event) => updateContact("givenName", event.target.value)} /></label>
+          <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">Last name<input autoComplete="family-name" className={INPUT_CLASS} placeholder="Last name" value={contact.familyName} onChange={(event) => updateContact("familyName", event.target.value)} /></label>
         </div>
-        <input aria-label="Email" autoComplete="email" className={INPUT_CLASS} inputMode="email" placeholder="Email" type="email" value={contact.email} onChange={(event) => updateContact("email", event.target.value)} />
-        <input aria-label="Phone" autoComplete="tel" className={INPUT_CLASS} inputMode="tel" placeholder="US phone number" type="tel" value={contact.phone} onChange={(event) => updateContact("phone", event.target.value)} />
+        <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">Email<input autoComplete="email" className={INPUT_CLASS} inputMode="email" placeholder="you@example.com" type="email" value={contact.email} onChange={(event) => updateContact("email", event.target.value)} /></label>
+        <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">Phone<input autoComplete="tel" className={INPUT_CLASS} inputMode="tel" placeholder="US phone number" type="tel" value={contact.phone} onChange={(event) => updateContact("phone", event.target.value)} /></label>
       </fieldset>
 
       {fulfillmentMethod === "delivery" && (
@@ -759,6 +775,17 @@ export function ReserveButton({
             : "Calculate total"}
       </Button>
 
+      {error ? (
+        <p
+          ref={errorRef}
+          role="alert"
+          tabIndex={-1}
+          className="border border-clay/35 bg-clay/8 px-4 py-3 text-sm leading-relaxed text-clay outline-none"
+        >
+          {error}
+        </p>
+      ) : null}
+
       <dl className="grid gap-3 border-y border-forest/10 py-5 text-sm text-forest/70">
         <div className="flex justify-between gap-4"><dt>{mealSets} five-meal {mealSets === 1 ? "set" : "sets"}<span className="block text-xs text-forest/50">{peopleCount} {peopleCount === 1 ? "person" : "people"} · {mealsPerDay} {mealsPerDay === 1 ? "meal" : "meals"}/day</span></dt><dd className="font-semibold text-forest">{formatCents(bowlOrderCents)}</dd></div>
         <div className="flex justify-between gap-4"><dt>{FULFILLMENT[fulfillmentMethod].label}</dt><dd className="font-semibold text-forest">{formatCents(FULFILLMENT[fulfillmentMethod].amountCents)}</dd></div>
@@ -767,7 +794,7 @@ export function ReserveButton({
       </dl>
 
       <div>
-        <p className="mb-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">Secure card details</p>
+        <p className="mb-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">Step 5 · Secure card details</p>
         <div id="square-card" className="min-h-[90px] border border-forest/15 bg-white p-3" />
         {!configured && <p className="mt-2 text-sm text-clay">Square payment is not configured.</p>}
         {configured && !cardReady && !error && <p className="mt-2 text-xs text-forest/50">Loading Square’s secure card form…</p>}
@@ -800,7 +827,6 @@ export function ReserveButton({
 
       <p className="text-xs leading-relaxed text-forest/50">Secure {purchaseType === "weekly" ? "card storage and recurring billing are" : "one-time payment is"} provided by Square. {TAX.disclosure} Reusable-container deposit: {FEES.containerDeposit.amountCents === null ? "confirmed separately" : formatCents(FEES.containerDeposit.amountCents)}.</p>
 
-      {error && <p role="alert" className="text-sm leading-relaxed text-clay">{error}</p>}
     </div>
   );
 }
