@@ -43,11 +43,20 @@ export default function RootLayout({
       className={`${playfairDisplay.variable} ${lora.variable} ${inter.variable}`}
     >
       <body className="min-h-screen flex flex-col antialiased">
-        <CartProvider>
-          <Header />
-          {children}
-          <Footer />
-        </CartProvider>
+        <aside className="bg-black px-5 py-4 text-center text-sm text-white">
+          Archived design preview. Forms and purchases are disabled.{" "}
+          <a className="underline" href="https://www.soulgood.kitchen/">
+            Visit the live store
+          </a>
+          .
+        </aside>
+        <fieldset disabled className="contents">
+          <CartProvider>
+            <Header />
+            {children}
+            <Footer />
+          </CartProvider>
+        </fieldset>
       </body>
     </html>
   );

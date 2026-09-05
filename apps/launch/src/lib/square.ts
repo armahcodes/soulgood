@@ -16,16 +16,11 @@ import {
   type SquareCatalogConfig,
   squareBowlLineItems,
 } from "@/lib/square-catalog";
+import type { BillingAddress, DeliveryAddress } from "./address";
 
 export const SQUARE_API_VERSION = "2026-08-19";
 
-export type CheckoutAddress = {
-  addressLine1: string;
-  addressLine2: string;
-  city: string;
-  state: "CA";
-  postalCode: string;
-};
+export type CheckoutAddress = DeliveryAddress;
 
 export type TaxQuote = {
   subtotalCents: number;
@@ -102,10 +97,12 @@ export async function squareRequest<T>(
   fetcher: Fetcher = fetch,
 ): Promise<T> {
   const accessToken = process.env.SQUARE_ACCESS_TOKEN;
-  if (!accessToken) throw new SquareApiError("Square is not configured", 503, []);
+  if (!accessToken)
+    throw new SquareApiError("Square is not configured", 503, []);
 
   const response = await fetcher(`${squareBaseUrl()}${path}`, {
     ...init,
+    signal: init.signal ?? AbortSignal.timeout(12_000),
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
@@ -128,7 +125,7 @@ export async function squareRequest<T>(
   return body;
 }
 
-function addressToSquare(address: CheckoutAddress) {
+function addressToSquare(address: BillingAddress) {
   return {
     address_line_1: address.addressLine1,
     ...(address.addressLine2 ? { address_line_2: address.addressLine2 } : {}),
@@ -166,7 +163,9 @@ export async function createItemizedSquareOrder(input: {
     bowlSelectionTotal(input.bowlSelection) * BOWL_UNIT_PRICE_CENTS +
     FULFILLMENT[input.fulfillmentMethod].amountCents;
   if (expectedSubtotal !== input.quote.subtotalCents) {
-    throw new Error("The Square catalog subtotal does not match the checkout quote");
+    throw new Error(
+      "The Square catalog subtotal does not match the checkout quote",
+    );
   }
 
   const lineItems = squareBowlLineItems(input.bowlSelection, input.catalog);
@@ -239,6 +238,7 @@ export async function createItemizedSquareOrder(input: {
           meals_per_day: String(input.mealsPerDay),
           jar_size_ounces: "32",
           legal_version: LEGAL_VERSION,
+          checkout_attempt_id: input.leadId,
         },
       },
     }),
@@ -283,7 +283,9 @@ async function getPickupAddress(fetcher: Fetcher): Promise<CheckoutAddress> {
     address.administrative_district_level_1 !== "CA" ||
     !address.postal_code
   ) {
-    throw new Error("The Square pickup location needs a complete California address");
+    throw new Error(
+      "The Square pickup location needs a complete California address",
+    );
   }
   return {
     addressLine1: address.address_line_1,
@@ -305,7 +307,7 @@ async function lookupCaliforniaTax(
   });
   const response = await fetcher(
     `https://services.maps.cdtfa.ca.gov/api/taxrate/GetRateByAddress?${params}`,
-    { cache: "no-store" },
+    { cache: "no-store", signal: AbortSignal.timeout(12_000) },
   );
   const body = (await response.json().catch(() => ({}))) as {
     taxRateInfo?: Array<{
@@ -316,7 +318,9 @@ async function lookupCaliforniaTax(
   };
   const result = body.taxRateInfo?.[0];
   if (!response.ok || !result || typeof result.rate !== "number") {
-    throw new Error("California could not verify that address or calculate its tax rate");
+    throw new Error(
+      "California could not verify that address or calculate its tax rate",
+    );
   }
   return {
     rate: result.rate,
@@ -339,7 +343,9 @@ async function calculateTaxQuote(
 
   const tax = await lookupCaliforniaTax(taxableAddress, fetcher);
   if (fulfillmentMethod === "delivery" && tax.county !== "LOS ANGELES") {
-    throw new Error("Delivery is currently available only in Los Angeles County");
+    throw new Error(
+      "Delivery is currently available only in Los Angeles County",
+    );
   }
   if (!Number.isFinite(tax.rate) || tax.rate <= 0 || tax.rate >= 0.2) {
     throw new Error("California returned an invalid tax rate");
@@ -352,7 +358,10 @@ async function calculateTaxQuote(
     subtotalCents,
     taxCents,
     totalCents: subtotalCents + taxCents,
-    percentage: (tax.rate * 100).toFixed(4).replace(/0+$/, "").replace(/\.$/, ""),
+    percentage: (tax.rate * 100)
+      .toFixed(4)
+      .replace(/0+$/, "")
+      .replace(/\.$/, ""),
     jurisdiction: tax.jurisdiction,
     county: "LOS ANGELES",
   };
@@ -378,7 +387,12 @@ export async function getTaxQuote(
     );
   }
   if (process.env.NODE_ENV === "test") {
-    return calculateTaxQuote(fulfillmentMethod, deliveryAddress, mealSets, fetcher);
+    return calculateTaxQuote(
+      fulfillmentMethod,
+      deliveryAddress,
+      mealSets,
+      fetcher,
+    );
   }
 
   const cache = taxQuoteCache();

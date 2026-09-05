@@ -5,7 +5,7 @@ import type { LeadRecord } from "./index";
 /** Default capture file — the local JSONL fallback validators inspect. */
 export const DEFAULT_CAPTURE_FILE = path.join(
   process.cwd(),
-  "public",
+  ".local-data",
   "leads.local.jsonl",
 );
 
@@ -18,6 +18,9 @@ export async function appendLeadToFile(
   record: LeadRecord,
   filePath: string = DEFAULT_CAPTURE_FILE,
 ): Promise<void> {
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-  await fs.appendFile(filePath, JSON.stringify(record) + "\n", "utf8");
+  await fs.mkdir(path.dirname(filePath), { recursive: true, mode: 0o700 });
+  await fs.appendFile(filePath, JSON.stringify(record) + "\n", {
+    encoding: "utf8",
+    mode: 0o600,
+  });
 }

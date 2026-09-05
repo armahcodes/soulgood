@@ -19,6 +19,7 @@ export function OrderConfirmationEmail({
   receiptUrl,
   tax,
   total,
+  paymentPending = false,
 }: {
   accountUrl: string;
   bowlCount: number;
@@ -35,25 +36,34 @@ export function OrderConfirmationEmail({
   receiptUrl?: string;
   tax: string;
   total: string;
+  paymentPending?: boolean;
 }) {
   const weekly = purchaseType === "weekly";
   return (
     <EmailLayout
-      preview={`${weekly ? "Your weekly plan is active" : "Your Soul Bowls order is confirmed"} · ${orderNumber}`}
+      preview={`${paymentPending ? "Plan enrolled — payment pending" : "Your Soul Bowls order is confirmed"} · ${orderNumber}`}
     >
       <Text style={emailStyles.eyebrow}>
-        {weekly ? "Weekly plan active" : "Order confirmed"} · {orderNumber}
+        {paymentPending ? "Plan enrolled — payment pending" : "Order confirmed"}{" "}
+        · {orderNumber}
       </Text>
-      <Text style={emailStyles.heading}>Your {bowlCount} bowls are confirmed.</Text>
+      <Text style={emailStyles.heading}>
+        {paymentPending
+          ? "Your plan is enrolled."
+          : `Your ${bowlCount} bowls are confirmed.`}
+      </Text>
       <Text style={emailStyles.paragraph}>
-        Hi {customerName}, thank you for choosing Soul Bowls™. We’ll follow up
-        with your Sunday {fulfillment.toLowerCase()} window.
+        Hi {customerName}, thank you for choosing Soul Bowls™.{" "}
+        {paymentPending
+          ? "Square is processing your first invoice. This is not a payment receipt. We will confirm your bowls after payment clears."
+          : `We’ll follow up with your Sunday ${fulfillment.toLowerCase()} window.`}
       </Text>
 
       <Section style={emailStyles.panel}>
         <Text style={emailStyles.label}>
-          {peopleCount} {peopleCount === 1 ? "person" : "people"} · {mealsPerDay}{" "}
-          {mealsPerDay === 1 ? "meal" : "meals"} per person, per day · 5 days
+          {peopleCount} {peopleCount === 1 ? "person" : "people"} ·{" "}
+          {mealsPerDay} {mealsPerDay === 1 ? "meal" : "meals"} per person, per
+          day · 5 days
         </Text>
         <Text style={emailStyles.label}>Your bowl mix</Text>
         {bowls.map((bowl) => (
@@ -62,23 +72,33 @@ export function OrderConfirmationEmail({
           </Text>
         ))}
         <Hr style={innerDividerStyle} />
-        <Text style={priceRowStyle}>Bowl order <strong>{bowlSubtotal}</strong></Text>
-        <Text style={priceRowStyle}>{fulfillment} <strong>{fulfillmentFee}</strong></Text>
+        <Text style={priceRowStyle}>
+          Bowl order <strong>{bowlSubtotal}</strong>
+        </Text>
+        <Text style={priceRowStyle}>
+          {fulfillment} <strong>{fulfillmentFee}</strong>
+        </Text>
         {deliveryAddress ? (
           <Text style={addressStyle}>Delivering to {deliveryAddress}</Text>
         ) : null}
-        <Text style={priceRowStyle}>California sales tax <strong>{tax}</strong></Text>
+        <Text style={priceRowStyle}>
+          California sales tax <strong>{tax}</strong>
+        </Text>
         <Text style={{ ...emailStyles.label, marginTop: "18px" }}>
-          {weekly ? "Weekly charge" : "Total paid"}
+          {paymentPending ? "Amount awaiting payment" : "Total paid"}
         </Text>
         <Text style={emailStyles.total}>{total}</Text>
       </Section>
 
       <Section style={ctaSectionStyle}>
-        <Button href={accountUrl} style={emailStyles.button}>View my orders</Button>
+        <Button href={accountUrl} style={emailStyles.button}>
+          View my orders
+        </Button>
         {receiptUrl ? (
           <Text style={{ ...emailStyles.muted, marginTop: "16px" }}>
-            <a href={receiptUrl} style={receiptLinkStyle}>View Square receipt</a>
+            <a href={receiptUrl} style={receiptLinkStyle}>
+              View Square receipt
+            </a>
           </Text>
         ) : null}
       </Section>

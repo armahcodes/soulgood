@@ -34,9 +34,8 @@ function generateId(): string {
 }
 
 /**
- * Persist a lead. Uses MongoDB when `MONGODB_URI` is set; otherwise the
- * local-file adapter. If MongoDB throws, logs and falls back to the local file
- * so a lead is NEVER dropped.
+ * Persist a lead in MongoDB. Local development may explicitly opt into a private
+ * file adapter. Production storage failures must be reported to the customer.
  */
 export async function captureLead(
   lead: Lead,
@@ -56,14 +55,18 @@ export async function captureLead(
     try {
       await toMongo(record, env);
       return { id: record.id, adapter: "mongodb" };
-    } catch (error) {
-      console.error(
-        "[capture] MongoDB failed, falling back to local file:",
-        error,
-      );
+    } catch {
+      console.error("[capture] MongoDB unavailable");
     }
   }
 
+  if (
+    env.NODE_ENV === "production" ||
+    env.VERCEL ||
+    env.ALLOW_LOCAL_LEAD_CAPTURE !== "true"
+  ) {
+    throw new Error("Lead storage is temporarily unavailable");
+  }
   await toLocalFile(record);
   return { id: record.id, adapter: "local-file" };
 }

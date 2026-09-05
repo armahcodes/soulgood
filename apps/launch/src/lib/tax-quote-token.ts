@@ -7,8 +7,9 @@ import {
 } from "./bowl-selection";
 import type { FulfillmentMethod } from "./brand";
 import type { CheckoutAddress, TaxQuote } from "./square";
+import { hasStrongSecret } from "./strong-secret";
 
-const TOKEN_TTL_MS = 15 * 60 * 1000;
+export const TAX_QUOTE_TTL_MS = 15 * 60 * 1000;
 
 type TaxQuoteTokenPayload = TaxQuote & {
   addressHash: string;
@@ -20,7 +21,8 @@ type TaxQuoteTokenPayload = TaxQuote & {
 };
 
 function secret(): string | null {
-  return process.env.CHECKOUT_QUOTE_SECRET || null;
+  const value = process.env.CHECKOUT_QUOTE_SECRET;
+  return hasStrongSecret(value) ? value : null;
 }
 
 function addressHash(
@@ -47,7 +49,8 @@ function validQuote(value: unknown): value is TaxQuoteTokenPayload {
   const quote = value as Partial<TaxQuoteTokenPayload>;
   return (
     quote.version === 1 &&
-    (quote.fulfillmentMethod === "pickup" || quote.fulfillmentMethod === "delivery") &&
+    (quote.fulfillmentMethod === "pickup" ||
+      quote.fulfillmentMethod === "delivery") &&
     typeof quote.addressHash === "string" &&
     typeof quote.expiresAt === "number" &&
     Number.isInteger(quote.mealsPerDay) &&
@@ -82,7 +85,7 @@ export function createTaxQuoteToken(
   const payload: TaxQuoteTokenPayload = {
     ...quote,
     addressHash: addressHash(fulfillmentMethod, address),
-    expiresAt: Date.now() + TOKEN_TTL_MS,
+    expiresAt: Date.now() + TAX_QUOTE_TTL_MS,
     fulfillmentMethod,
     mealsPerDay,
     peopleCount,
@@ -112,7 +115,10 @@ export function verifyTaxQuoteToken(
     .digest("base64url");
   const supplied = Buffer.from(suppliedSignature);
   const expected = Buffer.from(expectedSignature);
-  if (supplied.length !== expected.length || !timingSafeEqual(supplied, expected)) {
+  if (
+    supplied.length !== expected.length ||
+    !timingSafeEqual(supplied, expected)
+  ) {
     return null;
   }
 
@@ -125,7 +131,8 @@ export function verifyTaxQuoteToken(
     if (payload.fulfillmentMethod !== fulfillmentMethod) return null;
     if (payload.peopleCount !== peopleCount) return null;
     if (payload.mealsPerDay !== mealsPerDay) return null;
-    if (payload.addressHash !== addressHash(fulfillmentMethod, address)) return null;
+    if (payload.addressHash !== addressHash(fulfillmentMethod, address))
+      return null;
     return {
       county: payload.county,
       jurisdiction: payload.jurisdiction,

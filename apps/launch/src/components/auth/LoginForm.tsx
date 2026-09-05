@@ -4,11 +4,16 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { authClient } from "@/lib/auth-client";
+import { safeAccountRedirect } from "@/lib/safe-redirect";
 
 const INPUT_CLASS =
   "min-h-12 w-full border border-forest/18 bg-white px-4 text-base text-forest outline-none placeholder:text-forest/38 focus:border-clay";
 
-export function LoginForm({ redirectTo = "/account" }: { redirectTo?: string }) {
+export function LoginForm({
+  redirectTo = "/account",
+}: {
+  redirectTo?: string;
+}) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -21,42 +26,66 @@ export function LoginForm({ redirectTo = "/account" }: { redirectTo?: string }) 
     setPending(true);
     setError(null);
     const normalizedEmail = email.trim().toLowerCase();
-    const { error: authError } = await authClient.emailOtp.sendVerificationOtp({
-      email: normalizedEmail,
-      type: "sign-in",
-    });
-    setPending(false);
-    if (authError) {
-      setError("We could not send a sign-in code. Check the email and try again.");
-      return;
+    try {
+      const { error: authError } =
+        await authClient.emailOtp.sendVerificationOtp({
+          email: normalizedEmail,
+          type: "sign-in",
+        });
+      setPending(false);
+      if (authError) {
+        setError(
+          "We could not send a sign-in code. Check the email and try again.",
+        );
+        return;
+      }
+      setEmail(normalizedEmail);
+      setStep("code");
+    } catch {
+      setError(
+        "We could not reach sign-in. Check your connection and try again.",
+      );
+    } finally {
+      setPending(false);
     }
-    setEmail(normalizedEmail);
-    setStep("code");
   }
 
   async function verifyCode(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
     setPending(true);
     setError(null);
-    const { error: authError } = await authClient.signIn.emailOtp({
-      email,
-      otp: otp.trim(),
-      name: "Soul Bowls Customer",
-    });
-    setPending(false);
-    if (authError) {
-      setError("That code is invalid or expired. Request a new code and try again.");
-      return;
+    try {
+      const { error: authError } = await authClient.signIn.emailOtp({
+        email,
+        otp: otp.trim(),
+        name: "Soul Bowls Customer",
+      });
+      setPending(false);
+      if (authError) {
+        setError(
+          "That code is invalid or expired. Request a new code and try again.",
+        );
+        return;
+      }
+      router.push(safeAccountRedirect(redirectTo));
+      router.refresh();
+    } catch {
+      setError(
+        "We could not verify the code. Check your connection and try again.",
+      );
+    } finally {
+      setPending(false);
     }
-    router.push(redirectTo);
-    router.refresh();
   }
 
   if (step === "code") {
     return (
       <form className="grid gap-5" onSubmit={verifyCode}>
         <div>
-          <label htmlFor="login-code" className="mb-2 block text-xs font-bold tracking-[0.12em] text-forest/58 uppercase">
+          <label
+            htmlFor="login-code"
+            className="mb-2 block text-xs font-bold tracking-[0.12em] text-forest/58 uppercase"
+          >
             Six-digit code
           </label>
           <input
@@ -71,9 +100,14 @@ export function LoginForm({ redirectTo = "/account" }: { redirectTo?: string }) 
             placeholder="000000"
             required
             value={otp}
-            onChange={(event) => setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))}
+            onChange={(event) =>
+              setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))
+            }
           />
-          <p id="code-help" className="mt-2 text-sm leading-relaxed text-forest/52">
+          <p
+            id="code-help"
+            className="mt-2 text-sm leading-relaxed text-forest/52"
+          >
             We sent a code to {email}. It expires in 10 minutes.
           </p>
         </div>
@@ -82,12 +116,21 @@ export function LoginForm({ redirectTo = "/account" }: { redirectTo?: string }) 
         </Button>
         <button
           type="button"
+          disabled={pending}
           className="text-sm font-semibold text-clay underline underline-offset-4"
-          onClick={() => { setOtp(""); setError(null); setStep("email"); }}
+          onClick={() => {
+            setOtp("");
+            setError(null);
+            setStep("email");
+          }}
         >
           Use a different email
         </button>
-        {error ? <p role="alert" className="text-sm leading-relaxed text-clay">{error}</p> : null}
+        {error ? (
+          <p role="alert" className="text-sm leading-relaxed text-clay">
+            {error}
+          </p>
+        ) : null}
       </form>
     );
   }
@@ -95,7 +138,10 @@ export function LoginForm({ redirectTo = "/account" }: { redirectTo?: string }) 
   return (
     <form className="grid gap-5" onSubmit={sendCode}>
       <div>
-        <label htmlFor="login-email" className="mb-2 block text-xs font-bold tracking-[0.12em] text-forest/58 uppercase">
+        <label
+          htmlFor="login-email"
+          className="mb-2 block text-xs font-bold tracking-[0.12em] text-forest/58 uppercase"
+        >
           Order email
         </label>
         <input
@@ -115,9 +161,14 @@ export function LoginForm({ redirectTo = "/account" }: { redirectTo?: string }) 
         {pending ? "Sending secure code…" : "Email me a sign-in code"}
       </Button>
       <p className="text-xs leading-relaxed text-forest/48">
-        No password needed. Use the same email entered at checkout to see its orders.
+        No password needed. Use the same email entered at checkout to see its
+        orders.
       </p>
-      {error ? <p role="alert" className="text-sm leading-relaxed text-clay">{error}</p> : null}
+      {error ? (
+        <p role="alert" className="text-sm leading-relaxed text-clay">
+          {error}
+        </p>
+      ) : null}
     </form>
   );
 }

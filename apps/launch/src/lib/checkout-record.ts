@@ -6,7 +6,8 @@ import type { CheckoutAddress } from "./square";
 
 export type CheckoutRecord = {
   squareObjectId: string;
-  squareObjectType: "payment" | "subscription";
+  squareObjectType: "payment" | "subscription" | "invoice";
+  subscriptionId?: string;
   squareOrderId?: string;
   squareCustomerId: string;
   customerEmail: string;
@@ -19,6 +20,7 @@ export type CheckoutRecord = {
   deliveryAddress?: CheckoutAddress;
   bowlSelection: BowlSelection;
   subtotalCents: number;
+  fulfillmentFeeCents?: number;
   taxCents: number;
   totalCents: number;
   orderStatus: string;
@@ -28,11 +30,12 @@ export type CheckoutRecord = {
 };
 
 /**
- * Store the operational checkout record when MongoDB is configured.
- * The Square payment note or subscription source still carries the exact mix,
- * so a database outage never makes a successful checkout unidentifiable.
+ * Insert once without overwriting a later reconciled payment status. The durable
+ * checkout attempt retries persistence before acknowledging checkout completion.
  */
-export async function persistCheckoutRecord(record: CheckoutRecord): Promise<boolean> {
+export async function persistCheckoutRecord(
+  record: CheckoutRecord,
+): Promise<boolean> {
   if (!process.env.MONGODB_URI) return false;
 
   await connectToDatabase();
@@ -67,7 +70,8 @@ export async function updateCheckoutConfirmationEmail(
       $set: {
         confirmationEmail: {
           ...result,
-          error: result.status === "failed" ? result.error.slice(0, 500) : undefined,
+          error:
+            result.status === "failed" ? result.error.slice(0, 500) : undefined,
           updatedAt: new Date(),
         },
       },
@@ -81,7 +85,8 @@ export type CustomerOrder = {
   type: PurchaseType;
   peopleCount: number;
   mealsPerDay: number;
-  squareObjectType: "payment" | "subscription";
+  squareObjectType: "payment" | "subscription" | "invoice";
+  subscriptionStatus?: string;
   status: string;
   fulfillmentMethod: FulfillmentMethod;
   deliveryAddress?: CheckoutAddress;
@@ -169,6 +174,7 @@ export async function listCheckoutRecordsForEmail(
       peopleCount: record.peopleCount || 1,
       mealsPerDay: record.mealsPerDay || 1,
       squareObjectType: record.squareObjectType,
+      subscriptionStatus: record.subscriptionStatus || undefined,
       status: record.orderStatus,
       fulfillmentMethod: record.fulfillmentMethod as FulfillmentMethod,
       deliveryAddress,

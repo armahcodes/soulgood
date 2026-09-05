@@ -3,7 +3,11 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { POST } from "../route";
 
-const captureFile = path.join(process.cwd(), "public", "leads.local.jsonl");
+const captureFile = path.join(
+  process.cwd(),
+  ".local-data",
+  "leads.local.jsonl",
+);
 
 async function lineCount(): Promise<number> {
   try {
@@ -27,17 +31,22 @@ let before = 0;
 beforeEach(async () => {
   // Ensure no MongoDB config so the route uses the local file.
   delete process.env.MONGODB_URI;
+  process.env.ALLOW_LOCAL_LEAD_CAPTURE = "true";
   before = await lineCount();
 });
 
 afterEach(async () => {
+  delete process.env.ALLOW_LOCAL_LEAD_CAPTURE;
   // Trim any test-appended lines back to the original count to keep the file clean.
   try {
     const contents = await fs.readFile(captureFile, "utf8");
     const lines = contents.trim() === "" ? [] : contents.trim().split("\n");
     if (lines.length > before) {
       const kept = lines.slice(0, before);
-      await fs.writeFile(captureFile, kept.length ? kept.join("\n") + "\n" : "");
+      await fs.writeFile(
+        captureFile,
+        kept.length ? kept.join("\n") + "\n" : "",
+      );
     }
   } catch {
     // no file — nothing to trim

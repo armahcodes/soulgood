@@ -4,15 +4,16 @@ import { ExchangeUpdateEmail } from "@/emails/ExchangeUpdateEmail";
 import { FulfillmentReminderEmail } from "@/emails/FulfillmentReminderEmail";
 import { OrderConfirmationEmail } from "@/emails/OrderConfirmationEmail";
 import { SubscriptionCancelledEmail } from "@/emails/SubscriptionCancelledEmail";
-import { bowlsForPlan, mealSetCount, type BowlSelection } from "./bowl-selection";
+import { type BowlSelection } from "./bowl-selection";
 import {
   formatCents,
   FULFILLMENT,
-  PRICING,
   type FulfillmentMethod,
   type PurchaseType,
 } from "./brand";
 import { CURRENT_BOWLS } from "./current-offer";
+import { EmailLayout, emailStyles } from "@/emails/EmailLayout";
+import { Button, Text } from "react-email";
 
 const ACCOUNT_URL = "https://www.soulgood.kitchen/account";
 const DEFAULT_FROM = "Soul Good <orders@send.soulgood.kitchen>";
@@ -26,6 +27,42 @@ function resendClient(): Resend {
 
 function sender(): string {
   return process.env.SOUL_GOOD_EMAIL_FROM || DEFAULT_FROM;
+}
+
+export async function sendPaymentUpdateEmail(input: {
+  customerEmail: string;
+  customerName: string;
+  orderId: string;
+  status: string;
+}): Promise<string> {
+  const message =
+    input.status === "REFUNDED"
+      ? "Square reports that your payment has been refunded."
+      : input.status === "PARTIALLY_REFUNDED"
+        ? "Square reports a partial refund on your payment."
+        : "Square did not complete this payment. Please review your account or contact us before placing the same order again.";
+  return assertSent(
+    await resendClient().emails.send(
+      {
+        from: sender(),
+        to: input.customerEmail,
+        replyTo: REPLY_TO,
+        subject: "An update about your Soul Bowls payment",
+        react: (
+          <EmailLayout preview="Your payment status has changed">
+            <Text style={emailStyles.heading}>A payment update.</Text>
+            <Text style={emailStyles.paragraph}>
+              Hi {input.customerName}, {message}
+            </Text>
+            <Button href={ACCOUNT_URL} style={emailStyles.button}>
+              View my orders
+            </Button>
+          </EmailLayout>
+        ),
+      },
+      { idempotencyKey: `payment-update/${input.orderId}/${input.status}` },
+    ),
+  );
 }
 
 function assertSent(
@@ -66,39 +103,46 @@ export async function sendOrderConfirmationEmail(input: {
   receiptUrl?: string;
   squareObjectId: string;
   subtotalCents: number;
+  fulfillmentFeeCents?: number;
   taxCents: number;
   totalCents: number;
+  paymentPending?: boolean;
 }): Promise<string> {
   const bowls = CURRENT_BOWLS.flatMap((bowl) => {
     const quantity = input.bowlSelection[bowl.id];
     return quantity > 0 ? [{ name: bowl.name, quantity }] : [];
   });
   const orderNumber = input.squareObjectId.slice(-8).toUpperCase();
+  const fulfillmentFee =
+    input.fulfillmentFeeCents ??
+    FULFILLMENT[input.fulfillmentMethod].amountCents;
   const result = await resendClient().emails.send(
     {
       from: sender(),
       to: input.customerEmail,
       replyTo: REPLY_TO,
-      subject:
-        input.purchaseType === "weekly"
-          ? `Your Soul Bowls weekly plan is active · ${orderNumber}`
-          : `Your Soul Bowls order is confirmed · ${orderNumber}`,
+      subject: input.paymentPending
+        ? `Your Soul Bowls plan is enrolled · payment pending · ${orderNumber}`
+        : `Your Soul Bowls order is confirmed · ${orderNumber}`,
       react: (
         <OrderConfirmationEmail
           accountUrl={ACCOUNT_URL}
           bowls={bowls}
-          bowlCount={bowlsForPlan(input.peopleCount, input.mealsPerDay)}
-          bowlSubtotal={formatCents(
-            PRICING.oneTimeCents * mealSetCount(input.peopleCount, input.mealsPerDay),
-          )}
+          bowlCount={bowls.reduce((count, bowl) => count + bowl.quantity, 0)}
+          bowlSubtotal={formatCents(input.subtotalCents - fulfillmentFee)}
           customerName={input.customerName}
           deliveryAddress={input.deliveryAddress}
-          fulfillment={input.fulfillmentMethod === "delivery" ? "LA County delivery" : "Pickup"}
-          fulfillmentFee={formatCents(FULFILLMENT[input.fulfillmentMethod].amountCents)}
+          fulfillment={
+            input.fulfillmentMethod === "delivery"
+              ? "LA County delivery"
+              : "Pickup"
+          }
+          fulfillmentFee={formatCents(fulfillmentFee)}
           mealsPerDay={input.mealsPerDay}
           orderNumber={orderNumber}
           peopleCount={input.peopleCount}
           purchaseType={input.purchaseType}
+          paymentPending={input.paymentPending}
           receiptUrl={input.receiptUrl}
           tax={formatCents(input.taxCents)}
           total={formatCents(input.totalCents)}
@@ -170,6 +214,7 @@ export async function sendExchangeUpdateEmail(input: {
   customerEmail: string;
   customerName: string;
   caseId: string;
+  updateId: string;
   update: string;
 }): Promise<string> {
   const result = await resendClient().emails.send(
@@ -187,7 +232,7 @@ export async function sendExchangeUpdateEmail(input: {
       ),
       tags: [{ name: "category", value: "exchange-update" }],
     },
-    { idempotencyKey: `exchange-update/${input.caseId}` },
+    { idempotencyKey: `exchange-update/${input.caseId}/${input.updateId}` },
   );
   return assertSent(result);
 }

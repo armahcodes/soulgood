@@ -3,14 +3,14 @@ import { ReserveButton } from "@/components/checkout/ReserveButton";
 import { Logo } from "@/components/ui/Logo";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { Wordmark } from "@/components/ui/Wordmark";
-import {
-  BRAND_NAME,
-  type FulfillmentMethod,
-  PLAN,
-  PRICING,
-} from "@/lib/brand";
+import { BRAND_NAME, type FulfillmentMethod, PLAN, PRICING } from "@/lib/brand";
 import { MAX_BOWLS_PER_ORDER } from "@/lib/bowl-selection";
-import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
+import {
+  AVAILABLE_BOWLS,
+  CURRENT_OFFER,
+  SOLD_OUT_BOWLS,
+} from "@/lib/current-offer";
+import { checkoutOperationsReady } from "@/lib/checkout-readiness";
 
 export const metadata = {
   title: `Order Soul Bowls™ — ${BRAND_NAME}`,
@@ -64,7 +64,8 @@ export default async function CheckoutPage({
             </p>
 
             <p className="mx-auto hidden max-w-lg text-sm leading-relaxed text-forest/55 sm:block lg:mx-0">
-              Available now: {AVAILABLE_BOWLS.map((bowl) => bowl.name).join(", ")}.
+              Available now:{" "}
+              {AVAILABLE_BOWLS.map((bowl) => bowl.name).join(", ")}.
               {SOLD_OUT_BOWLS.length > 0
                 ? ` Sold out: ${SOLD_OUT_BOWLS.map((bowl) => bowl.name).join(", ")}.`
                 : ""}
@@ -77,7 +78,10 @@ export default async function CheckoutPage({
 
             <ul className="mt-3 hidden gap-3 text-left sm:grid sm:grid-cols-2">
               {PLAN_ITEMS.map((item) => (
-                <li key={item} className="flex items-center gap-3 text-sm text-forest/75">
+                <li
+                  key={item}
+                  className="flex items-center gap-3 text-sm text-forest/75"
+                >
                   <span className="flex h-7 w-7 items-center justify-center bg-sage/12">
                     <Logo size={15} title="" variant="sage" />
                   </span>
@@ -103,6 +107,7 @@ export default async function CheckoutPage({
             <div className="pt-6">
               <ReserveButton
                 initialFulfillment={initialFulfillment}
+                paymentsAvailable={checkoutOperationsReady()}
                 squareApplicationId={process.env.SQUARE_APPLICATION_ID ?? ""}
                 squareEnvironment={
                   process.env.SQUARE_ENVIRONMENT === "production"
@@ -113,9 +118,9 @@ export default async function CheckoutPage({
               />
             </div>
             <p className="mt-4 text-center text-xs leading-relaxed text-forest/50">
-              No separate handling fee. Any reusable-container deposit is voluntary,
-              refundable, not California Redemption Value, and collected separately
-              when containers are issued.
+              No separate handling fee. Any reusable-container deposit is
+              voluntary, refundable, not California Redemption Value, and
+              collected separately when containers are issued.
             </p>
           </section>
         </div>

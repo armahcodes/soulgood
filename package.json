@@ -6,7 +6,8 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run launch:dev",
+    "legacy:dev": "SOULGOOD_LEGACY_PREVIEW=true next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

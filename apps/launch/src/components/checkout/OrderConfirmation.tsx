@@ -14,8 +14,9 @@ import {
 import { CURRENT_BOWLS } from "@/lib/current-offer";
 
 export function OrderConfirmation() {
-  const [confirmation, setConfirmation] =
-    useState<LastOrderConfirmation | null | undefined>(undefined);
+  const [confirmation, setConfirmation] = useState<
+    LastOrderConfirmation | null | undefined
+  >(undefined);
 
   useEffect(() => {
     let cancelled = false;
@@ -34,8 +35,13 @@ export function OrderConfirmation() {
 
   if (confirmation === undefined) {
     return (
-      <div className="flex min-h-[70vh] items-center justify-center" role="status">
-        <p className="text-sm text-forest/58">Loading your order confirmation…</p>
+      <div
+        className="flex min-h-[70vh] items-center justify-center"
+        role="status"
+      >
+        <p className="text-sm text-forest/58">
+          Loading your order confirmation…
+        </p>
       </div>
     );
   }
@@ -58,7 +64,9 @@ export function OrderConfirmation() {
           Square receipt. You can also check your confirmation email.
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <Button as="a" href="/account">View my orders</Button>
+          <Button as="a" href="/account">
+            View my orders
+          </Button>
           <Button as="a" href="/checkout" variant="secondary">
             Start a new order
           </Button>
@@ -83,15 +91,24 @@ export function OrderConfirmation() {
         <Logo size={46} title="" variant="cream" />
       </div>
       <p className="mb-5 text-xs font-bold tracking-[0.18em] text-clay uppercase">
-        {weekly ? "Weekly plan active" : "Order confirmed"}
+        {confirmation.paymentPending ||
+        confirmation.status === "PENDING_PAYMENT"
+          ? "Plan enrolled · payment pending"
+          : weekly
+            ? "Weekly plan"
+            : "Order confirmed"}
       </p>
       <h1 className="max-w-[12ch] text-5xl leading-[0.94] font-normal tracking-[-0.05em] text-forest sm:text-7xl">
-        Your bowls are confirmed.
+        {confirmation.paymentPending ||
+        confirmation.status === "PENDING_PAYMENT"
+          ? "Your plan is enrolled."
+          : "Your bowls are confirmed."}
       </h1>
       <p className="mt-6 max-w-2xl text-lg leading-relaxed text-forest/68">
-        Thanks for ordering Soul Bowls™. We&rsquo;ll text you to confirm your
-        first Sunday window. A confirmation email is on its way to the address
-        used at checkout.
+        {confirmation.paymentPending ||
+        confirmation.status === "PENDING_PAYMENT"
+          ? "Square is processing your first invoice. This is not a payment receipt. We’ll confirm your bowls after payment clears. Check your account for the latest status."
+          : "Thanks for ordering Soul Bowls™. Your order is saved in your account. We’ll follow up with your Sunday window, and send an email confirmation when notification processing completes."}
       </p>
 
       <section className="mt-10 w-full border border-sage/30 bg-white/50 p-6 text-left sm:p-8">
@@ -107,7 +124,9 @@ export function OrderConfirmation() {
               {confirmation.mealsPerDay}{" "}
               {confirmation.mealsPerDay === 1 ? "meal" : "meals"}/day
             </p>
-            <p className="mt-2 text-xs text-forest/50">Order {orderReference}</p>
+            <p className="mt-2 text-xs text-forest/50">
+              Order {orderReference}
+            </p>
           </div>
           <div className="sm:text-right">
             <span className="inline-flex bg-sage/14 px-3 py-2 text-xs font-bold tracking-[0.1em] text-forest uppercase">
@@ -196,13 +215,20 @@ export function OrderConfirmation() {
           ? "Your plan renews every seven days until canceled."
           : "This order is charged once and does not renew automatically."}{" "}
         Keep a copy of the{" "}
-        <Link href="/customer-agreement" className="font-semibold underline underline-offset-2">
+        <Link
+          href="/customer-agreement"
+          className="font-semibold underline underline-offset-2"
+        >
           Customer Agreement
         </Link>
         {weekly ? (
           <>
-            {" "}and use the{" "}
-            <Link href="/cancel" className="font-semibold underline underline-offset-2">
+            {" "}
+            and use the{" "}
+            <Link
+              href="/cancel"
+              className="font-semibold underline underline-offset-2"
+            >
               online cancellation page
             </Link>{" "}
             anytime to stop future renewals.

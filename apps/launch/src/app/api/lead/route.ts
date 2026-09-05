@@ -10,8 +10,7 @@ export const runtime = "nodejs";
  *
  * - Invalid body → 400 with field errors, NO persistence.
  * - Valid body → captureLead() → 200 { ok: true, id }.
- * - A downstream (MongoDB) failure still returns 200 via the local-file fallback;
- *   a lead is never dropped.
+ * - Storage failures return 503 so customers can retry, not a false success.
  */
 export async function POST(request: Request) {
   let body: unknown;
@@ -32,6 +31,18 @@ export async function POST(request: Request) {
     );
   }
 
-  const { id } = await captureLead(parsed.data);
-  return NextResponse.json({ ok: true, id }, { status: 200 });
+  try {
+    const { id } = await captureLead(parsed.data);
+    return NextResponse.json({ ok: true, id }, { status: 200 });
+  } catch {
+    return NextResponse.json(
+      {
+        ok: false,
+        errors: {
+          _root: ["We could not save your details. Please try again shortly."],
+        },
+      },
+      { status: 503 },
+    );
+  }
 }

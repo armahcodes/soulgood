@@ -20,6 +20,9 @@ export function getMongoDatabase(): MongoCache {
     minPoolSize: 0,
     retryReads: true,
     retryWrites: true,
+    serverSelectionTimeoutMS: 5000,
+    connectTimeoutMS: 5000,
+    socketTimeoutMS: 15000,
   });
   const db = client.db(process.env.MONGODB_DB || "soulgood");
   const resources = { client, db };

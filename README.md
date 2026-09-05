@@ -1,106 +1,75 @@
 # Soul Bowls™
 
-Five chef-made bowls ready every Sunday for $88/week, with pickup or delivery.
+Soul Good’s customer storefront lives in `apps/launch`: product browsing, checkout,
+Square payments, passwordless accounts, order history, and transactional email.
 
-This repository contains two apps:
-
-- **`apps/launch`** — the **Soul Bowls™ launch microsite** (currently the live/deployed site):
-  a focused product landing page → lead capture → confirmation flow.
-- **root (`src/`)** — the **full Soul Good website** (Next.js 16, App Router). It is kept in
-  the repo but is **not currently deployed** (hidden). Only the microsite is live.
-
-## Quick Start
-
-### Microsite (live site — `apps/launch`)
+## Development
 
 ```bash
-npm install
-npm run launch:dev     # http://localhost:3000  (microsite)
-npm run launch:build   # Production build
-npm run launch:start   # Serve production build
-npm run launch:lint    # ESLint
-npm run launch:test    # Vitest
+npm ci
+npm run dev                         # Active storefront on localhost:3000
+npm run launch:test                 # Unit and API regression tests
+npm run launch:lint
+npm run launch:build
+npm run test:e2e --workspace apps/launch
 ```
 
-> The microsite deploys on Vercel with the project **root directory set to `apps/launch`**.
+Copy `apps/launch/.env.example` to `apps/launch/.env.local` and configure a separate
+sandbox database and Square account. Never put production credentials in tests.
+Browser tests run a local server with mocked Square, checkout, and tax responses;
+they do not charge cards or prove live wallet/device eligibility.
 
-### Full website (hidden — repo root)
+## Customer offer
 
-```bash
-npm install
-npm run dev     # http://localhost:3000  (full website)
-npm run build   # Production build
-npm run start   # Serve production build
-npm run lint    # ESLint
-```
+- Five 32 oz Soul Bowls™ jars per five-day meal set, starting at $88.
+- One to six people, with one to three meals per person per day.
+- One of each available bowl per set; Herb Chicken is currently sold out.
+- One-time pickup is free. LA County delivery is $8.88 per order.
+- Automatic weekly orders currently support delivery only. Square’s itemized
+  subscription fulfillment does not support pickup; weekly pickup is disabled.
+- Address-based tax and the exact total are shown before consent and bound to a
+  signed, expiring quote. Checkout rejects changes to the approved total.
+- Apple Pay and Google Pay are offered for eligible one-time purchases; weekly
+  subscriptions use a card saved with explicit consent.
 
-> The full website is not connected to a deployment. To make it live again, point a
-> Vercel project at the repo root.
+Offer/catalog sources: `current-offer.ts`, `brand.ts`, `bowl-selection.ts`, and
+`square-catalog.ts` under `apps/launch/src/lib`. The catalog sync script writes
+to Square; inspect its target environment before intentionally running it.
 
-## Layout
+## Payment reliability
 
-```
-src/                    # Full Soul Good website (hidden / not deployed)
-├── app/                # marketing site routes incl. /menu
-├── components/         # site components incl. menu/WeeklyMenuContent
-└── lib/                # constants, types, and menu.ts (the real menu)
+Checkout saves an immutable recovery record in MongoDB before any Square write.
+Retries use the same reference and Square idempotency keys. An interrupted request
+is verified through the recovery screen, not treated as permission to charge again.
+Subscription enrollment is shown as payment pending until Square reports payment.
 
-apps/
-└── launch/             # The Soul Bowls™ microsite (live)
-    ├── src/app/        # customer flow, legal pages, and API routes
-    ├── src/components/  # signup, checkout, and brand UI
-    └── src/lib/        # lead schema, brand, capture, and legacy menu data
-```
+Signed webhooks and a scheduled worker reconcile payment, subscription, invoice,
+refund, cancellation, and email state. Branded customer emails use a durable outbox.
+Order history requires a verified email session; guest checkout does not overwrite
+an existing Square customer profile.
 
-## Legacy Menu Data
+## Deployment and operations
 
-The real Soul Good menu (transcribed from the official menu collateral) has four pathway
-**collections** — Mindful, Performance, Detox, Alignment — each with **Wraps / Bowls /
-Breakfast & Essentials / Juices & Hydration**.
+Vercel must use **`apps/launch` as its root directory**. Read
+[the operations runbook](apps/launch/OPERATIONS.md) before deploying this change.
+It contains required environment variables, webhook registration, scheduler setup,
+validation, alerts, incident recovery, and rollback instructions.
 
-Because the two apps deploy independently, each keeps its own self-contained copy of the
-menu data:
+New production checkouts fail closed if required recovery configuration is absent.
+Environment-variable presence alone does not prove the webhook or scheduler is
+working; the rollout checks are mandatory.
 
-- Microsite: `apps/launch/src/lib/menu.ts` (preserved legacy source data)
-- Full website: `src/lib/menu.ts` (drives `/menu`)
+Lead capture requires MongoDB in production. For local-only development, explicit
+`ALLOW_LOCAL_LEAD_CAPTURE=true` enables a private, gitignored
+`apps/launch/.local-data/leads.local.jsonl` file. Failed production persistence
+returns an error instead of pretending the lead was saved.
 
-Keep the two files in sync when the menu changes.
+## Archived root application
 
-## Flow & Pricing (microsite)
-
-1. **/** — presents the single Soul Bowls™ offer and captures contact, fulfillment preference, and LA County delivery eligibility.
-2. **/checkout** — discloses every charge and collects affirmative recurring-plan consent.
-3. **/welcome** — confirms the paid reservation and provides retainable plan/cancellation terms.
-4. **/terms**, **/customer-agreement**, and **/cancel** — legal and subscription-management pages.
-5. **/join** redirects to the homepage form; **/quiz** redirects to the homepage.
-
-- Plan pricing: **$88/week** for 5 chef-made bowls, ready every Sunday.
-- Sunday pickup: **$0**. Los Angeles County delivery: **$8.88/week**.
-- Applicable California sales tax is looked up by address through CDTFA, shown before consent, revalidated server-side, and passed to Square with the subscription.
-- Online payment remains disabled until the Square application, location, access token, and subscription-plan IDs are configured.
-
-Pricing and plan facts live in `apps/launch/src/lib/brand.ts`.
-
-## Lead Capture
-
-Leads POST to `/api/lead`. With `MONGODB_URI` set, leads go to MongoDB; otherwise
-they fall back to a local JSONL file (and on any MongoDB error, so a lead is never
-dropped). See `apps/launch/.env.example`.
-
-## Enabling Square Payments
-
-Create two WEEKLY Square subscription plan variations: **$88 pickup** and
-**$96.88 delivery**. Add `SQUARE_APPLICATION_ID`, `SQUARE_ACCESS_TOKEN`, `SQUARE_LOCATION_ID`,
-`SQUARE_PICKUP_PLAN_VARIATION_ID`, and `SQUARE_DELIVERY_PLAN_VARIATION_ID` to
-`apps/launch/.env.local` (gitignored — never commit it). Set `SQUARE_ENVIRONMENT`
-to `production` only for live credentials. The checkout uses Square Web Payments
-to tokenize the card, stores it on the Square customer with explicit consent, and
-creates a weekly subscription through the Subscriptions API. `/api/tax` uses the
-official CDTFA address service and rejects delivery addresses outside Los Angeles
-County. The server recalculates the rate before sending `tax_percentage` to Square.
-
-Any reusable-container deposit remains outside the recurring plan; it is disclosed
-and collected separately when containers are issued.
+The root `src/` app is an archived design, not the active checkout. Root builds
+redirect to the live storefront by default. `npm run legacy:dev` enables an
+explicit preview with disabled form controls and an archive banner. Root
+`npm run build` / `npm run lint` remain available to verify that archive.
 
 ## License
 

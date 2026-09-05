@@ -36,7 +36,11 @@ describe("captureLead adapter selection", () => {
     const toMongo = vi.fn().mockResolvedValue(undefined);
     const toLocalFile = vi.fn().mockResolvedValue(undefined);
 
-    const result = await captureLead(baseLead, { env: mongoEnv, toMongo, toLocalFile });
+    const result = await captureLead(baseLead, {
+      env: mongoEnv,
+      toMongo,
+      toLocalFile,
+    });
 
     expect(toMongo).toHaveBeenCalledOnce();
     expect(toLocalFile).not.toHaveBeenCalled();
@@ -49,7 +53,7 @@ describe("captureLead adapter selection", () => {
     const toLocalFile = vi.fn().mockResolvedValue(undefined);
 
     const result = await captureLead(baseLead, {
-      env: {},
+      env: { ALLOW_LOCAL_LEAD_CAPTURE: "true" },
       toMongo,
       toLocalFile,
     });
@@ -59,16 +63,19 @@ describe("captureLead adapter selection", () => {
     expect(result.adapter).toBe("local-file");
   });
 
-  it("falls back to the local file when MongoDB throws (lead never dropped)", async () => {
+  it("fails closed in production when MongoDB throws", async () => {
     const toMongo = vi.fn().mockRejectedValue(new Error("mongo down"));
     const toLocalFile = vi.fn().mockResolvedValue(undefined);
 
-    const result = await captureLead(baseLead, { env: mongoEnv, toMongo, toLocalFile });
-
+    await expect(
+      captureLead(baseLead, {
+        env: { ...mongoEnv, NODE_ENV: "production" },
+        toMongo,
+        toLocalFile,
+      }),
+    ).rejects.toThrow("temporarily unavailable");
     expect(toMongo).toHaveBeenCalledOnce();
-    expect(toLocalFile).toHaveBeenCalledOnce();
-    expect(result.adapter).toBe("local-file");
-    expect(result.id).toBeTruthy();
+    expect(toLocalFile).not.toHaveBeenCalled();
   });
 
   it("stamps a generated id and server-set capturedAt on the record", async () => {
@@ -77,7 +84,10 @@ describe("captureLead adapter selection", () => {
       captured = r;
     });
 
-    await captureLead(baseLead, { env: {}, toLocalFile });
+    await captureLead(baseLead, {
+      env: { ALLOW_LOCAL_LEAD_CAPTURE: "true" },
+      toLocalFile,
+    });
 
     expect(captured?.id).toBeTruthy();
     expect(captured?.capturedAt).toBeTruthy();

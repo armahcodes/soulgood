@@ -4,7 +4,8 @@ import { LoginForm } from "@/components/auth/LoginForm";
 import { Button } from "@/components/ui/Button";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { Wordmark } from "@/components/ui/Wordmark";
-import { auth } from "@/lib/auth";
+import { getAuth } from "@/lib/auth";
+import { safeAccountRedirect } from "@/lib/safe-redirect";
 import { BRAND_NAME } from "@/lib/brand";
 
 export const metadata = {
@@ -17,12 +18,10 @@ export default async function LoginPage({
 }: {
   searchParams: Promise<{ redirect?: string }>;
 }) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const requestHeaders = await headers();
+  const session = await getAuth().api.getSession({ headers: requestHeaders });
   const requestedRedirect = (await searchParams).redirect;
-  const redirectTo =
-    requestedRedirect?.startsWith("/") && !requestedRedirect.startsWith("//")
-      ? requestedRedirect
-      : "/account";
+  const redirectTo = safeAccountRedirect(requestedRedirect);
 
   if (session) redirect(redirectTo);
 
@@ -36,7 +35,9 @@ export default async function LoginPage({
         </header>
         <section className="mx-auto grid w-full max-w-5xl gap-9 px-5 py-10 sm:px-8 sm:py-20 lg:grid-cols-[1fr_0.78fr] lg:items-center lg:gap-12">
           <div className="text-center lg:text-left">
-            <p className="text-xs font-bold tracking-[0.18em] text-clay uppercase">Customer account</p>
+            <p className="text-xs font-bold tracking-[0.18em] text-clay uppercase">
+              Customer account
+            </p>
             <h1 className="mx-auto mt-5 max-w-[9ch] text-6xl leading-[0.88] font-normal tracking-[-0.055em] text-forest sm:text-7xl lg:mx-0">
               Your orders, in one place.
             </h1>
@@ -46,14 +47,24 @@ export default async function LoginPage({
             </p>
           </div>
           <div className="border border-forest/14 bg-white/45 p-6 sm:p-9">
-            <p className="mb-2 text-center font-serif text-3xl text-forest sm:text-left">Sign in to Soul Bowls™</p>
+            <p className="mb-2 text-center font-serif text-3xl text-forest sm:text-left">
+              Sign in to Soul Bowls™
+            </p>
             <p className="mb-7 text-center text-sm leading-relaxed text-forest/55 sm:text-left">
-              Returning customers can view receipts, reorder, and manage weekly plans.
+              Returning customers can view receipts, reorder, and manage weekly
+              plans.
             </p>
             <LoginForm redirectTo={redirectTo} />
             <div className="mt-7 border-t border-forest/10 pt-6 text-center">
-              <p className="mb-4 text-sm text-forest/58">New here? No account is required to order.</p>
-              <Button as="a" href="/checkout" variant="secondary" className="w-full">
+              <p className="mb-4 text-sm text-forest/58">
+                New here? No account is required to order.
+              </p>
+              <Button
+                as="a"
+                href="/checkout"
+                variant="secondary"
+                className="w-full"
+              >
                 Start an order
               </Button>
             </div>

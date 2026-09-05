@@ -5,6 +5,7 @@ import {
 import type { FulfillmentMethod, PurchaseType } from "./brand";
 
 export const LAST_ORDER_STORAGE_KEY = "soulbowls:lastOrder";
+export const ACTIVE_CHECKOUT_STORAGE_KEY = "soulbowls:activeCheckout";
 
 export type LastOrderConfirmation = {
   version: 1;
@@ -21,6 +22,7 @@ export type LastOrderConfirmation = {
   subtotalCents: number;
   taxCents: number;
   totalCents: number;
+  paymentPending?: boolean;
 };
 
 export function parseLastOrderConfirmation(

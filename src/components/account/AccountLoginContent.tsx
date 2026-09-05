@@ -19,22 +19,24 @@ const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
-const registerSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
-  password: z
-    .string()
-    .min(1, "Password is required")
-    .min(8, "Password must be at least 8 characters"),
-  confirmPassword: z.string().min(1, "Please confirm your password"),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
+const registerSchema = z
+  .object({
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    email: z
+      .string()
+      .min(1, "Email is required")
+      .email("Please enter a valid email address"),
+    password: z
+      .string()
+      .min(1, "Password is required")
+      .min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string().min(1, "Please confirm your password"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 type LoginFormData = z.infer<typeof loginSchema>;
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -68,7 +70,6 @@ function LoginForm() {
     }
 
     // TODO: Backend Integration - Submit login credentials to auth API
-    console.log("Login form submitted:", result.data);
     setIsSuccess(true);
     reset();
   };
@@ -88,7 +89,7 @@ function LoginForm() {
             "font-sans text-sm uppercase tracking-[0.06em] font-medium",
             "bg-black text-white px-8 py-3.5",
             "hover:bg-black/80 active:bg-black/70",
-            "transition-all duration-700 ease-[cubic-bezier(0.165,0.84,0.44,1)]"
+            "transition-all duration-700 ease-[cubic-bezier(0.165,0.84,0.44,1)]",
           )}
         >
           CONTINUE SHOPPING
@@ -151,7 +152,7 @@ function LoginForm() {
           "bg-black text-white px-8 py-4",
           "hover:bg-black/80 active:bg-black/70",
           "transition-all duration-700 ease-[cubic-bezier(0.165,0.84,0.44,1)]",
-          "disabled:opacity-50 disabled:pointer-events-none"
+          "disabled:opacity-50 disabled:pointer-events-none",
         )}
       >
         SIGN IN
@@ -195,7 +196,6 @@ function RegisterForm() {
     }
 
     // TODO: Backend Integration - Submit registration data to auth API
-    console.log("Register form submitted:", result.data);
     setIsSuccess(true);
     reset();
   };
@@ -215,7 +215,7 @@ function RegisterForm() {
             "font-sans text-sm uppercase tracking-[0.06em] font-medium",
             "bg-black text-white px-8 py-3.5",
             "hover:bg-black/80 active:bg-black/70",
-            "transition-all duration-700 ease-[cubic-bezier(0.165,0.84,0.44,1)]"
+            "transition-all duration-700 ease-[cubic-bezier(0.165,0.84,0.44,1)]",
           )}
         >
           START SHOPPING
@@ -313,7 +313,7 @@ function RegisterForm() {
           "bg-black text-white px-8 py-4",
           "hover:bg-black/80 active:bg-black/70",
           "transition-all duration-700 ease-[cubic-bezier(0.165,0.84,0.44,1)]",
-          "disabled:opacity-50 disabled:pointer-events-none"
+          "disabled:opacity-50 disabled:pointer-events-none",
         )}
       >
         CREATE ACCOUNT
@@ -363,7 +363,7 @@ export function AccountLoginContent() {
                 "transition-colors duration-300 border-b-2 -mb-[1px]",
                 activeTab === "login"
                   ? "border-black text-black"
-                  : "border-transparent text-black/40 hover:text-black/60"
+                  : "border-transparent text-black/40 hover:text-black/60",
               )}
             >
               LOGIN
@@ -376,7 +376,7 @@ export function AccountLoginContent() {
                 "transition-colors duration-300 border-b-2 -mb-[1px]",
                 activeTab === "register"
                   ? "border-black text-black"
-                  : "border-transparent text-black/40 hover:text-black/60"
+                  : "border-transparent text-black/40 hover:text-black/60",
               )}
             >
               REGISTER
@@ -384,9 +384,7 @@ export function AccountLoginContent() {
           </div>
 
           {/* Form Content */}
-          <div>
-            {activeTab === "login" ? <LoginForm /> : <RegisterForm />}
-          </div>
+          <div>{activeTab === "login" ? <LoginForm /> : <RegisterForm />}</div>
         </div>
       </section>
     </>

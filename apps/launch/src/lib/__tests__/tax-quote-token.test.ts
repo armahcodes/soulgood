@@ -1,8 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  createTaxQuoteToken,
-  verifyTaxQuoteToken,
-} from "../tax-quote-token";
+import { createTaxQuoteToken, verifyTaxQuoteToken } from "../tax-quote-token";
 
 const ADDRESS = {
   addressLine1: "123 Main Street",
@@ -23,7 +20,8 @@ const QUOTE = {
 
 describe("signed tax quote tokens", () => {
   beforeEach(() => {
-    process.env.CHECKOUT_QUOTE_SECRET = "test-tax-quote-secret-with-enough-entropy";
+    process.env.CHECKOUT_QUOTE_SECRET =
+      "test-tax-quote-secret-with-enough-entropy";
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-08-31T20:00:00Z"));
   });
@@ -37,7 +35,9 @@ describe("signed tax quote tokens", () => {
     const token = createTaxQuoteToken(QUOTE, "delivery", ADDRESS, 1, 2);
 
     expect(token).toBeTruthy();
-    expect(verifyTaxQuoteToken(token!, "delivery", ADDRESS, 1, 2)).toEqual(QUOTE);
+    expect(verifyTaxQuoteToken(token!, "delivery", ADDRESS, 1, 2)).toEqual(
+      QUOTE,
+    );
   });
 
   it("rejects a changed address and a tampered token", () => {
@@ -52,7 +52,9 @@ describe("signed tax quote tokens", () => {
         2,
       ),
     ).toBeNull();
-    expect(verifyTaxQuoteToken(`${token}x`, "delivery", ADDRESS, 1, 2)).toBeNull();
+    expect(
+      verifyTaxQuoteToken(`${token}x`, "delivery", ADDRESS, 1, 2),
+    ).toBeNull();
     expect(verifyTaxQuoteToken(token, "delivery", ADDRESS, 1, 3)).toBeNull();
   });
 
@@ -62,4 +64,13 @@ describe("signed tax quote tokens", () => {
 
     expect(verifyTaxQuoteToken(token, "delivery", ADDRESS, 1, 2)).toBeNull();
   });
+  it.each(["short", "placeholder-secret-that-is-long-enough"])(
+    "does not sign or verify with a weak secret",
+    (value) => {
+      const token = createTaxQuoteToken(QUOTE, "delivery", ADDRESS, 1, 2)!;
+      process.env.CHECKOUT_QUOTE_SECRET = value;
+      expect(createTaxQuoteToken(QUOTE, "delivery", ADDRESS, 1, 2)).toBeNull();
+      expect(verifyTaxQuoteToken(token, "delivery", ADDRESS, 1, 2)).toBeNull();
+    },
+  );
 });

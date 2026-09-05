@@ -14,10 +14,15 @@ const checkoutRecordSchema = new mongoose.Schema(
     squareObjectId: { type: String, required: true, unique: true, index: true },
     squareObjectType: {
       type: String,
-      enum: ["payment", "subscription"],
+      enum: ["payment", "subscription", "invoice"],
       required: true,
     },
     squareOrderId: { type: String, trim: true, index: true },
+    subscriptionId: { type: String, index: true },
+    subscriptionStatus: { type: String },
+    squareUpdatedAt: { type: Date },
+    lastReconciledAt: { type: Date, default: () => new Date(0), index: true },
+    latestInvoiceDate: { type: Date },
     squareCustomerId: { type: String, required: true, index: true },
     customerEmail: {
       type: String,
@@ -50,6 +55,7 @@ const checkoutRecordSchema = new mongoose.Schema(
     },
     bowlSelection: { type: selectionShape, required: true, _id: false },
     subtotalCents: { type: Number, required: true },
+    fulfillmentFeeCents: { type: Number, min: 0 },
     taxCents: { type: Number, required: true },
     totalCents: { type: Number, required: true },
     orderStatus: { type: String, required: true, trim: true },
@@ -72,8 +78,13 @@ const checkoutRecordSchema = new mongoose.Schema(
   { collection: "checkout_records", timestamps: true },
 );
 
-export type CheckoutRecordDocument = InferSchemaType<typeof checkoutRecordSchema>;
+export type CheckoutRecordDocument = InferSchemaType<
+  typeof checkoutRecordSchema
+>;
 
 export const CheckoutRecordModel: Model<CheckoutRecordDocument> =
   (mongoose.models.CheckoutRecord as Model<CheckoutRecordDocument>) ??
-  mongoose.model<CheckoutRecordDocument>("CheckoutRecord", checkoutRecordSchema);
+  mongoose.model<CheckoutRecordDocument>(
+    "CheckoutRecord",
+    checkoutRecordSchema,
+  );

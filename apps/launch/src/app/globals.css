@@ -120,7 +120,6 @@ h4 {
   -webkit-appearance: -apple-pay-button;
   -apple-pay-button-style: black;
   -apple-pay-button-type: buy;
-  appearance: none;
   width: 100%;
   min-height: 48px;
   border: 0;
