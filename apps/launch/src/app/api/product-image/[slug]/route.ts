@@ -17,11 +17,24 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
-  const pathname = PRODUCT_IMAGE_PATHS[slug];
+  const pathname = Object.hasOwn(PRODUCT_IMAGE_PATHS, slug)
+    ? PRODUCT_IMAGE_PATHS[slug]
+    : undefined;
 
   if (!pathname) {
     return new NextResponse("Not found", { status: 404 });
   }
+
+  // Approved product photographs ship with the app so a storage outage never
+  // leaves the menu without images. Only the allowlisted product slugs reach here.
+  const fallback = () =>
+    new NextResponse(null, {
+      status: 307,
+      headers: {
+        Location: `/products/${slug}.webp`,
+        "Cache-Control": "public, max-age=60",
+      },
+    });
 
   try {
     const result = await get(pathname, {
@@ -30,7 +43,7 @@ export async function GET(
     });
 
     if (!result) {
-      return new NextResponse("Not found", { status: 404 });
+      return fallback();
     }
 
     if (result.statusCode === 304) {
@@ -44,7 +57,7 @@ export async function GET(
     }
 
     if (result.statusCode !== 200 || !result.stream) {
-      return new NextResponse("Not found", { status: 404 });
+      return fallback();
     }
 
     return new NextResponse(result.stream, {
@@ -57,6 +70,6 @@ export async function GET(
       },
     });
   } catch {
-    return new NextResponse("Product image unavailable", { status: 503 });
+    return fallback();
   }
 }

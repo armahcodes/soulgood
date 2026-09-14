@@ -5,6 +5,7 @@ import {
   sendFulfillmentReminderEmail,
   sendExchangeUpdateEmail,
   sendPaymentUpdateEmail,
+  sendCulinaryQuoteEmail,
 } from "./email";
 import {
   updateCheckoutConfirmationEmail,
@@ -12,6 +13,7 @@ import {
 } from "./checkout-record";
 
 type MailPayloads = {
+  culinary: Parameters<typeof sendCulinaryQuoteEmail>[0];
   order: Parameters<typeof sendOrderConfirmationEmail>[0];
   cancellation: Parameters<typeof sendSubscriptionCancelledEmail>[0];
   fulfillment: Parameters<typeof sendFulfillmentReminderEmail>[0];
@@ -111,6 +113,9 @@ export async function drainEmailOutbox(limit = 5): Promise<number> {
         );
       let resendId: string;
       switch (job.kind) {
+        case "culinary":
+          resendId = await sendCulinaryQuoteEmail(job.payload);
+          break;
         case "order":
           resendId = await sendOrderConfirmationEmail(job.payload);
           break;

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { EB_Garamond } from "next/font/google";
-import { BRAND_NAME, TAGLINE } from "@/lib/brand";
+import { BRAND_NAME, NOURISHMENT, TAGLINE } from "@/lib/brand";
 import "./globals.css";
 
 const ebGaramond = EB_Garamond({
@@ -9,8 +9,8 @@ const ebGaramond = EB_Garamond({
   variable: "--font-eb-garamond",
 });
 
-const SITE_TITLE = `${BRAND_NAME} — Five 32 oz Jarred Bowls for $88`;
-const SITE_DESCRIPTION = `${TAGLINE}. Five fresh, chef-made jarred bowls for $88 one-time or weekly, with pickup or Los Angeles County delivery.`;
+const SITE_TITLE = `${BRAND_NAME} — ${NOURISHMENT.headline}`;
+const SITE_DESCRIPTION = `${TAGLINE}. Thoughtfully prepared by Chef Kyla. Five 32 oz bowls for $88, once or weekly, with Sunday pickup or in-house LA County delivery. Explore Eat Now for individual orders.`;
 
 export const metadata: Metadata = {
   title: SITE_TITLE,

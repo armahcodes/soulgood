@@ -1,0 +1,10 @@
+# Production configuration comes from Vercel's environment settings.
+.env*
+
+# Keep local captures, test artifacts, and operational scratch data off deployments.
+test-results/
+playwright-report/
+coverage/
+.local-data/
+public/leads.local.jsonl
+*.tsbuildinfo

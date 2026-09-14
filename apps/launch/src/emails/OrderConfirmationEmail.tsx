@@ -41,7 +41,7 @@ export function OrderConfirmationEmail({
   const weekly = purchaseType === "weekly";
   return (
     <EmailLayout
-      preview={`${paymentPending ? "Plan enrolled — payment pending" : "Your Soul Bowls order is confirmed"} · ${orderNumber}`}
+      preview={`${paymentPending ? "Plan enrolled — payment pending" : "Your Soul Bowls™ order is confirmed"} · ${orderNumber}`}
     >
       <Text style={emailStyles.eyebrow}>
         {paymentPending ? "Plan enrolled — payment pending" : "Order confirmed"}{" "}
@@ -53,10 +53,10 @@ export function OrderConfirmationEmail({
           : `Your ${bowlCount} bowls are confirmed.`}
       </Text>
       <Text style={emailStyles.paragraph}>
-        Hi {customerName}, thank you for choosing Soul Bowls™.{" "}
+        Hi {customerName}, thank you for making Soul Good part of your day.{" "}
         {paymentPending
           ? "Square is processing your first invoice. This is not a payment receipt. We will confirm your bowls after payment clears."
-          : `We’ll follow up with your Sunday ${fulfillment.toLowerCase()} window.`}
+          : `We’re looking forward to preparing your chosen Soul Bowls™ with care. We’ll follow up with your Sunday ${fulfillment.toLowerCase()} window.`}
       </Text>
 
       <Section style={emailStyles.panel}>
@@ -65,7 +65,7 @@ export function OrderConfirmationEmail({
           {mealsPerDay} {mealsPerDay === 1 ? "meal" : "meals"} per person, per
           day · 5 days
         </Text>
-        <Text style={emailStyles.label}>Your bowl mix</Text>
+        <Text style={emailStyles.label}>Your chosen bowls</Text>
         {bowls.map((bowl) => (
           <Text key={bowl.name} style={rowStyle}>
             {bowl.name} <strong>× {bowl.quantity}</strong>

@@ -1121,7 +1121,7 @@ export function ReserveButton({
       <fieldset disabled={pending || Boolean(recoveryId)} className="contents">
         <fieldset className="grid gap-3 border border-forest/14 bg-gold/10 p-5">
           <legend className="px-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-            Step 1 · Plan size
+            Step 1 · Who are we nourishing?
           </legend>
           <div className="flex items-center justify-between gap-5">
             <div>
@@ -1129,7 +1129,7 @@ export function ReserveButton({
                 {peopleCount} {peopleCount === 1 ? "person" : "people"}
               </p>
               <p className="mt-1 text-xs leading-relaxed text-forest/55">
-                One customer account can cover the whole order.
+                For you, or the people sharing your table. One checkout for everyone.
               </p>
             </div>
             <div className="flex items-center border border-forest/18 bg-oat">
@@ -1204,7 +1204,7 @@ export function ReserveButton({
               {peopleCount} × {mealsPerDay} × 5 days = {targetBowls} bowls
             </strong>
             <span className="mt-1 block">
-              {formatCents(bowlOrderCents)} before fulfillment and California
+              {formatCents(bowlOrderCents)} before delivery and California
               tax.
             </span>
           </p>
@@ -1268,7 +1268,7 @@ export function ReserveButton({
 
         <fieldset className="grid gap-2">
           <legend className="mb-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-            Step 3 · Choose fulfillment
+            Step 3 · Pickup or delivery
           </legend>
           {(Object.keys(FULFILLMENT) as FulfillmentMethod[]).map((method) => {
             const option = FULFILLMENT[method];
@@ -1477,7 +1477,7 @@ export function ReserveButton({
         <dl className="grid gap-3 border-y border-forest/10 py-5 text-sm text-forest/70">
           <div className="flex justify-between gap-4">
             <dt>
-              {mealSets} five-meal {mealSets === 1 ? "set" : "sets"}
+              {mealSets} {mealSets === 1 ? "set" : "sets"} of five bowls
               <span className="block text-xs text-forest/50">
                 {peopleCount} {peopleCount === 1 ? "person" : "people"} ·{" "}
                 {mealsPerDay} {mealsPerDay === 1 ? "meal" : "meals"}/day

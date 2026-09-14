@@ -171,6 +171,111 @@ Retain financial/idempotency ledgers and event deduplication records according t
 business’s approved retention policy. TTL applies to request-limit buckets, not
 financial records. Restrict database access and secure backups.
 
+## Eat Now single orders
+
+For the separate **Eat Now** single-order menu on `checkout.soulgood.kitchen`,
+see [Square Online setup](./SQUARE_ONLINE_SETUP.md). Eat Now delivery may use
+available courier partners (DoorDash, Uber Eats, or Postmates) or a Soul Good
+courier. Weekly meal-prep delivery remains exclusive to the Soul Good team.
+The app's delivery disclosures do not configure courier dispatch or guarantee
+provider availability. Operational courier assignment is separate from this app.
+The menu has its own cart and confirmations; the five-bowl checkout, account
+history and payment recovery protocol are not an automatic Square Online
+order import.
+
+## Culinary booking quotes
+
+`/quote` is a separate, one-time event estimate and request flow, not
+Square checkout. It does not take payment or reserve dates. Submitted requests create
+a draft Square invoice and its supporting customer/order for staff review.
+The customer interface is a five-step wizard: Experience, Menu, Event, Review,
+Contact. Only the active step is visible. Back/Next preserves in-memory entries;
+changing priced details invalidates the quote and acknowledgement. Review includes
+all fees, verified address tax, deposit, and balance before the separate contact step.
+Expired estimates link back to event details for a refresh without clearing the form.
+Staff must confirm availability, timing, staffing, allergies, final tax, and payment
+arrangements before confirming a booking. The previous `/culinary-bookings` URL
+permanently redirects to `/quote`, preserving query parameters.
+
+- Delivery only: 10-bowl minimum, $17.60 per bowl, plus $8.88 LA County delivery and tax.
+- Plated: $55 per guest, with a $555 food minimum, plus a mandatory $500 culinary-support fee, plus
+  $8.88 delivery and tax. Support includes plating, service, and ingredient education.
+  Food below $555 produces an explicitly labeled minimum adjustment; the adjustment
+  does not silently add servings. Food above $555 remains charged per guest. Support
+  is never included in or credited against the food minimum.
+- New plated requests choose one food style for the entire group: chef’s selection,
+  plant-forward, or chicken. Headcount sets servings and pricing; customers do not
+  allocate individual bowls. The saved quote, emails, and Square draft preserve the
+  style. Confirm final dishes and dietary needs before booking. Legacy saved quotes
+  retain their original recipe allocations. Bowl delivery still allows individual
+  quantities and balanced presets, excludes sold-out recipes, and supports undo.
+- 50% of the tax-inclusive total is due as a deposit after approval and signature.
+  The remaining balance is due on the event date, before team arrival. Odd cents
+  round up into the deposit; the balance is the exact remainder. There is no autopay.
+- Only available recipes can be selected. All prices, minimums, and fees are
+  recalculated server-side. Quantities are whole bowls, not retail five-bowl sets.
+- The address is checked against CDTFA's current rate lookup and must be in LA
+  County. The estimate uses the site's prepared-meal tax treatment, including
+  mandatory meal service and delivery. Confirm the actual food/service classification
+  and applicable rate before collecting payment; cold-food exemptions and delivery
+  rules can depend on how the order is supplied. See [CDTFA catering guidance](https://www.cdtfa.ca.gov/industry/caterers/industry-topics.htm).
+
+`POST /api/culinary-quotes` saves a server-priced estimate in `culinary_quotes` and
+returns a random reference valid for 30 minutes. Unrequested estimates are eligible
+for deletion after 24 hours. `POST /api/culinary-quotes/request` requires the quote
+UUID, contact details, and an explicit estimate acknowledgement. No public endpoint
+reads saved customer requests. Keep UUIDs out of logs; the short SG reference is for
+staff communication, not authorization.
+
+A request is saved atomically before the API acknowledges it. Identical retries
+return the saved outcome; changing an already requested quote's contact details is
+rejected. Requested records have no automatic deletion: apply the business's approved
+retention policy to them and their email jobs. The existing reconciliation scheduler
+creates the TTL/indexes and recovers pending customer and team notification jobs.
+Resend sends two branded, itemized emails through the durable outbox. Staff emails
+go to `CULINARY_BOOKING_EMAIL_TO`, falling back to `contact@soulgood.com`.
+
+Before launch, verify MongoDB access, the scheduler, a verified Resend sender, and
+the receiving staff inbox. Send an authorized test request and confirm both emails
+arrive. Local tests mock persistence, tax lookup, and mail; they do not establish live
+delivery. Monitor requested quotes with `notificationsQueued: false` and stalled
+email jobs so no request is left without staff follow-up.
+
+### Square draft invoice and contract review
+
+Current pricing-version requests atomically queue `invoiceJob` on the saved quote.
+The request's post-response task and protected reconciliation scheduler process it
+using a Mongo lease, persisted progress, and stable Square idempotency keys. Existing
+requested quotes are not backfilled; older unsubmitted estimates must be refreshed.
+`SQUARE_ACCESS_TOKEN` and `SQUARE_LOCATION_ID` must authorize customer, order, and
+invoice creation in the same Square account/environment. No invoice is published,
+sent, charged, or dispatched by this integration. Event line items are ad-hoc and
+do not change retail catalog prices or decrement retail jar stock.
+
+Square does not expose a public native Contracts API. Staff must open the draft in
+Square, attach the correct native contract, enable signature-before-payment where
+supported by the account plan, review the details, then send the invoice. Review the
+venue, allergies, staffing, tax treatment, exact arrival time, and deposit due date
+before publishing. Square's payment due date is date-only: the before-arrival deadline
+must also appear in the contract and be operationally confirmed by the team.
+If signature gating is unavailable, collect the contract signature before publishing
+the invoice; do not represent the request acknowledgement as a signed contract.
+
+Drafts contain DEPOSIT and BALANCE payment requests. The deposit due date is initially
+the request date for deterministic retries; staff must update it if publishing later.
+The team receives a second email when the draft is ready. `invoiceJob.state` moves
+from `pending` to `ready`, or `needs-review` after a total mismatch, passed event date,
+unexpected invoice state, or eight failed attempts. Inspect saved IDs in Square before
+retrying or repairing a job—never erase IDs or change idempotency keys to force a retry.
+Reconciliation returns 503 while culinary jobs need review. Monitor pending jobs and
+the staff inbox. `CULINARY_SQUARE_INVOICES_ENABLED=false` pauses creation without losing
+requests; use it for rollback, and continue manual follow-up on paused requests.
+
+Before production, run an authorized sandbox request and verify the saved order,
+draft payment schedule, native-contract attachment/gating, staff notifications, and
+final balance deadline. Unit and browser tests mock Square and do not establish live
+account access, native contract availability, email receipt, or end-to-end payment.
+
 ## Rollback
 
 Pause new checkout submissions before rolling back a financial change. Preserve

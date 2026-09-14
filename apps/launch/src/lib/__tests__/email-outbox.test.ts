@@ -43,6 +43,7 @@ vi.mock("../email", () => ({
   sendFulfillmentReminderEmail: mocks.send,
   sendExchangeUpdateEmail: mocks.send,
   sendPaymentUpdateEmail: mocks.send,
+  sendCulinaryQuoteEmail: mocks.send,
 }));
 vi.mock("../checkout-record", () => ({
   updateCheckoutConfirmationEmail: vi.fn(async () => {}),

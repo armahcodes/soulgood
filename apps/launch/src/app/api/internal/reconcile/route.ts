@@ -18,6 +18,8 @@ import { drainEmailOutbox } from "@/lib/email-outbox";
 import { CheckoutRecordModel } from "@/lib/db/checkout-record-model";
 import { connectToDatabase } from "@/lib/db/mongoose";
 import { getMongoDatabase } from "@/lib/db/mongodb";
+import { queuePendingCulinaryEmails } from "@/lib/culinary-quotes";
+import { reconcileCulinaryInvoices } from "@/lib/culinary-invoices";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -60,14 +62,24 @@ export async function GET(request: Request) {
       );
     }
     const events = await drainSquareJobs(8);
+    await queuePendingCulinaryEmails(5);
+    await reconcileCulinaryInvoices(3);
     const emails = await drainEmailOutbox(5);
     const db = getMongoDatabase().db;
-    const [checkoutAttention, emailAttention, staleEvents] = await Promise.all([
-      checkoutAttempts().countDocuments({ state: "needs-review" }),
-      db.collection("email_outbox").countDocuments({ state: "needs-review" }),
-      squareJobs().countDocuments({ state: "pending", attempts: { $gte: 10 } }),
-    ]);
-    const needsAttention = checkoutAttention + emailAttention + staleEvents > 0;
+    const [checkoutAttention, emailAttention, staleEvents, culinaryAttention] =
+      await Promise.all([
+        checkoutAttempts().countDocuments({ state: "needs-review" }),
+        db.collection("email_outbox").countDocuments({ state: "needs-review" }),
+        squareJobs().countDocuments({
+          state: "pending",
+          attempts: { $gte: 10 },
+        }),
+        db
+          .collection("culinary_quotes")
+          .countDocuments({ "invoiceJob.state": "needs-review" }),
+      ]);
+    const needsAttention =
+      checkoutAttention + emailAttention + staleEvents + culinaryAttention > 0;
     return NextResponse.json(
       {
         ok: !needsAttention,
@@ -76,6 +88,7 @@ export async function GET(request: Request) {
         checkoutAttention,
         emailAttention,
         staleEvents,
+        culinaryAttention,
       },
       {
         status: needsAttention ? 503 : 200,

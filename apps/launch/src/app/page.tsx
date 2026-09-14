@@ -4,13 +4,15 @@ import { Button } from "@/components/ui/Button";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { AVAILABLE_BOWLS, CURRENT_BOWLS, SOLD_OUT_BOWLS } from "@/lib/current-offer";
+import { EAT_NOW } from "@/lib/ordering";
+import { NOURISHMENT, TAGLINE } from "@/lib/brand";
 
 const RITUAL_STEPS = [
-  { number: "01", title: "Choose your order", body: "Order once or make it a weekly ritual." },
-  { number: "02", title: "We prep fresh", body: "Chef-made in Los Angeles with whole ingredients." },
-  { number: "03", title: "Pick up or receive", body: "Free pickup or $8.88 delivery in LA County." },
-  { number: "04", title: "Nourish your days", body: "Five 32 oz bowls, ready when your week gets full." },
-  { number: "05", title: "Feel good. Repeat.", body: "Come back when you want, or pause and cancel a weekly plan anytime." },
+  { number: "01", title: "Make it yours", body: "Choose the bowls you love. Order once or return to a weekly rhythm." },
+  { number: "02", title: "Made with intention", body: "Thoughtfully prepared by Chef Kyla with whole ingredients and care." },
+  { number: "03", title: "A Sunday connection", body: "Choose free pickup for a one-time order, or let our team deliver in LA County for $8.88." },
+  { number: "04", title: "Make a moment of it", body: "Set the table, enjoy your bowl, and make a little space for yourself." },
+  { number: "05", title: "Find your rhythm", body: "Choose a one-time order or a subscription that renews every seven days until canceled." },
 ] as const;
 
 const DISPLAY_BOWLS = [...AVAILABLE_BOWLS, ...SOLD_OUT_BOWLS];
@@ -18,35 +20,35 @@ const DISPLAY_BOWLS = [...AVAILABLE_BOWLS, ...SOLD_OUT_BOWLS];
 export default function Home() {
   return (
     <main className="overflow-hidden bg-oat">
-      <header className="absolute inset-x-0 top-0 z-30 border-b border-forest/10 bg-oat/92">
+      <header className="relative z-30 border-b border-forest/10 bg-oat/92">
         <div className="mx-auto flex min-h-20 w-full max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12">
           <Wordmark href="/" />
           <nav
             aria-label="Primary"
-            className="hidden items-center gap-8 text-[0.72rem] font-bold tracking-[0.08em] text-forest/72 uppercase lg:flex"
+            className="hidden items-center gap-5 text-[0.72rem] font-bold tracking-[0.08em] text-forest/72 uppercase xl:flex"
           >
+            <a href={EAT_NOW.menuUrl} className="inline-flex min-h-11 items-center text-clay transition-colors hover:text-forest">Eat Now</a>
             <a href="#bowls" className="transition-colors hover:text-clay">Soul Bowls™</a>
             <a href="#ritual" className="transition-colors hover:text-clay">Our ritual</a>
             <a href="#fulfillment" className="transition-colors hover:text-clay">Delivery &amp; pickup</a>
-            <a href="#price" className="transition-colors hover:text-clay">Order</a>
+            <Link href="/quote" className="transition-colors hover:text-clay">Culinary bookings</Link>
             <a href="/account" className="transition-colors hover:text-clay">My orders</a>
           </nav>
           <div className="flex items-center gap-3">
-            <Link
-              href="/account"
-              className="hidden text-[0.68rem] font-bold tracking-[0.08em] text-forest/68 uppercase transition-colors hover:text-clay sm:inline-flex lg:hidden"
-            >
-              My orders
-            </Link>
             <Button as="a" href="/checkout" size="sm" className="px-4 sm:px-5">
-              <span className="sm:hidden">Order</span>
-              <span className="hidden sm:inline">Order my five</span>
+              <span className="sm:hidden">Order bowls</span>
+              <span className="hidden sm:inline">{NOURISHMENT.cta}</span>
             </Button>
           </div>
         </div>
+        <nav aria-label="Quick links" className="flex flex-wrap items-center justify-center gap-x-5 border-t border-forest/10 px-4 text-center text-[0.65rem] font-bold tracking-[0.06em] uppercase xl:hidden">
+          <a href={EAT_NOW.menuUrl} className="inline-flex min-h-11 items-center text-clay">Eat Now · Single orders</a>
+          <Link href="/quote" className="inline-flex min-h-11 items-center">Culinary bookings</Link>
+          <Link href="/account" className="inline-flex min-h-11 items-center">My orders</Link>
+        </nav>
       </header>
 
-      <section className="relative pt-20 lg:min-h-[780px]">
+      <section className="relative lg:min-h-[700px]">
         <div className="grid lg:min-h-[700px] lg:grid-cols-[1.08fr_0.92fr]">
           <div className="relative order-2 min-h-[360px] overflow-hidden bg-sand sm:min-h-[460px] lg:order-1 lg:min-h-[700px]">
             <Image
@@ -71,7 +73,7 @@ export default function Home() {
             />
             <div className="relative z-10 mx-auto max-w-[34rem] lg:mx-0">
               <p className="mb-5 text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">
-                One-time or weekly · Los Angeles
+                {TAGLINE}
               </p>
               <h1 className="text-[clamp(3.65rem,18vw,5rem)] leading-[0.8] font-normal tracking-[-0.055em] text-forest lg:text-[clamp(4.6rem,8vw,8.3rem)] lg:leading-[0.76]">
                 <span className="inline-flex items-start whitespace-nowrap">
@@ -79,17 +81,31 @@ export default function Home() {
                 </span>
               </h1>
               <p className="mt-7 font-serif text-3xl leading-tight text-forest sm:text-4xl">
-                Your week, nourished.
+                {NOURISHMENT.headline}
               </p>
               <div className="mx-auto mt-7 h-px w-12 bg-clay lg:mx-0" />
               <p className="mt-7 max-w-md text-base leading-7 text-forest/72 sm:text-lg">
-                Five fresh 32 oz bowls for $88—order once or choose weekly. Start
-                with one of each, then adjust your mix at checkout. Choose free
-                pickup or $8.88 Los Angeles County delivery.
+                Thoughtfully prepared by Chef Kyla, Soul Bowls™ bring whole
+                ingredients and comforting flavors to your daily rhythm.
+                A nourishing moment, made for you.
               </p>
-              <Button as="a" href="/checkout" size="lg" className="mt-8 w-full sm:w-auto sm:min-w-48">
-                Order my five
-              </Button>
+              <p className="mt-4 text-sm leading-6 text-forest/75">
+                Five 32 oz bowls for $88. Order once or choose weekly delivery.
+                Free Sunday pickup for one-time orders, or $8.88 LA County delivery.
+                Applicable tax is shown at checkout.
+              </p>
+              <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap lg:justify-start">
+                <Button as="a" href="/checkout" size="lg" className="w-full sm:w-auto">
+                  {NOURISHMENT.cta}
+                </Button>
+                <Button as="a" href={EAT_NOW.menuUrl} target="_self" variant="secondary" size="lg" className="w-full sm:w-auto">
+                  Eat Now · Single orders
+                </Button>
+              </div>
+              <p className="mt-4 text-sm leading-6 text-forest/68">
+                A bowl for today? Explore Eat Now, with delivery by available courier partners or a Soul Good courier.{" "}
+                <Link href={EAT_NOW.infoPath} className="underline underline-offset-4">How Eat Now works</Link>
+              </p>
             </div>
           </div>
         </div>
@@ -107,10 +123,10 @@ export default function Home() {
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10">
             <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">
-              Current bowl lineup
+              Thoughtfully made, thoughtfully chosen
             </p>
             <h2 className="mt-4 text-4xl leading-none font-normal tracking-[-0.045em] text-forest sm:text-5xl">
-              Five available. One sold out.
+              Find your favorite flavors.
             </h2>
           </div>
 
@@ -164,7 +180,7 @@ export default function Home() {
       <section className="relative border-b border-forest/10 bg-oat pb-12 sm:pb-14">
         <div className="mx-auto w-full max-w-6xl px-5 text-center sm:px-8 lg:px-12">
           <p className="font-serif text-3xl text-forest sm:text-4xl">
-            Five bowls. One nourishing order.
+            A little variety. A daily ritual.
           </p>
           <div className="mt-7 grid grid-cols-2 gap-5 sm:grid-cols-5 sm:gap-6">
             {AVAILABLE_BOWLS.map((bowl) => (
@@ -191,9 +207,9 @@ export default function Home() {
       <section id="ritual" className="bg-oat py-12 sm:py-14">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="mb-8 text-center">
-            <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">Your bowl ritual</p>
+            <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">{NOURISHMENT.label}</p>
             <h2 className="mt-3 text-4xl leading-none font-normal tracking-[-0.04em] text-forest sm:text-5xl">
-              From our kitchen to your week.
+              From our kitchen, with care.
             </h2>
           </div>
           <ol className="grid border-t border-forest/15 sm:grid-cols-5">
@@ -213,17 +229,20 @@ export default function Home() {
           <p className="text-[0.68rem] font-bold tracking-[0.22em] text-oat/72 uppercase">Free every Sunday</p>
           <h2 className="mt-4 text-5xl font-normal tracking-[-0.04em] sm:text-6xl">Pick up</h2>
           <p className="mx-auto mt-5 max-w-sm text-base leading-7 text-oat/78 md:mx-0">
-            Swing by our Los Angeles kitchen. We confirm your pickup location and window before fulfillment.
+            Bring a little nourishment home. Free pickup is available for one-time orders; we confirm the Los Angeles pickup location and Sunday window with you.
           </p>
           <Button as="a" href="/checkout?fulfillment=pickup" variant="secondary" className="mt-8 w-full border-oat text-oat hover:bg-oat hover:text-forest sm:w-auto">
             Choose pickup
           </Button>
         </article>
         <article className="relative overflow-hidden bg-clay px-8 py-10 text-center text-oat sm:px-14 md:text-left lg:px-20">
-          <p className="text-[0.68rem] font-bold tracking-[0.22em] text-oat/72 uppercase">$8.88 per order</p>
+          <p className="text-[0.68rem] font-bold tracking-[0.22em] text-oat/72 uppercase">Weekly nourishment · $8.88 per order</p>
           <h2 className="mt-4 text-5xl font-normal tracking-[-0.04em] sm:text-6xl">Delivery</h2>
           <p className="mx-auto mt-5 max-w-sm text-base leading-7 text-oat/78 md:mx-0">
-            Doorstep delivery to verified addresses throughout Los Angeles County, California.
+            {NOURISHMENT.deliveryDisclosure} Weekly nourishment arrives on Sundays at verified LA County addresses.
+          </p>
+          <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-oat/90 md:mx-0">
+            Ordering Eat Now? Courier partners, service times, and charges depend on availability. <Link href={EAT_NOW.infoPath} className="underline underline-offset-4">See how Eat Now delivery works.</Link>
           </p>
           <Button as="a" href="/checkout?fulfillment=delivery" variant="secondary" className="mt-8 w-full border-oat text-oat hover:bg-oat hover:text-forest sm:w-auto">
             Choose delivery
@@ -240,13 +259,14 @@ export default function Home() {
           aria-hidden="true"
           className="pointer-events-none absolute -left-20 bottom-0 hidden w-56 -rotate-[58deg] opacity-[0.12] md:block"
         />
-        <p className="font-serif text-3xl text-forest">Five 32 oz bowls.</p>
-        <p className="mt-2 font-serif text-6xl leading-none tracking-[-0.05em] text-forest sm:text-7xl">$88. Once or weekly.</p>
+        <p className="font-serif text-3xl text-forest">{NOURISHMENT.label}, made personal.</p>
+        <p className="mt-2 font-serif text-6xl leading-none tracking-[-0.05em] text-forest sm:text-7xl">Five bowls. $88.</p>
         <div className="mx-auto mt-4 h-px w-12 bg-clay" />
         <p className="mt-4 text-sm leading-6 text-forest/62">
-          One of each available bowl is preselected. Adjust your five, then choose free pickup or
-          $8.88 LA County delivery. Applicable tax and any refundable jar deposit are
-          shown before payment.
+          Five thoughtfully prepared 32 oz bowls. Begin with one of each available
+          recipe, then make the selection your own. Order once or subscribe for
+          weekly delivery. One-time orders include a free pickup option; delivery
+          is $8.88. Applicable tax is shown before payment.
         </p>
       </section>
 
@@ -260,16 +280,31 @@ export default function Home() {
           className="pointer-events-none absolute -right-12 bottom-[-8rem] w-56 -rotate-12 opacity-20 sm:w-72"
         />
         <div className="relative z-10 mx-auto max-w-3xl">
-          <p className="text-[0.68rem] font-bold tracking-[0.22em] text-gold uppercase">Nourish · heal · thrive</p>
+          <p className="text-[0.68rem] font-bold tracking-[0.22em] text-gold uppercase">{TAGLINE}</p>
           <h2 className="mt-4 text-5xl leading-none font-normal tracking-[-0.045em] sm:text-6xl">
-            Your week, nourished.
+            Make room for nourishment.
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-base leading-7 text-oat/68">
-            Five thoughtful bowls, once or every week. Made locally and ready for real life.
+            A few thoughtful choices can become a daily ritual. Let us take care
+            of the cooking, so you can make time to enjoy it.
           </p>
           <Button as="a" href="/checkout" size="lg" className="mt-6 w-full bg-sage hover:bg-oat hover:text-forest sm:w-auto">
-            Order my five
+            {NOURISHMENT.cta}
           </Button>
+        </div>
+      </section>
+
+      <section className="border-t border-forest/15 bg-sand/30 px-5 py-12 text-center sm:px-8 sm:py-16">
+        <div className="mx-auto max-w-3xl">
+          <p className="text-[0.68rem] font-bold uppercase tracking-[0.22em] text-clay">For your next gathering</p>
+          <h2 className="mt-4 font-serif text-4xl leading-tight text-forest sm:text-5xl">Good food brings us together.</h2>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-forest/75">
+            Bowl delivery starts at 10 bowls, priced individually. For a plated experience,
+            pricing is $55 per guest with a $555 food minimum, plus a required $500 culinary-support fee
+            for plating, service, and ingredient education. Tax and delivery are additional.
+          </p>
+          <p className="mt-3 text-sm text-forest/70">Los Angeles County only. Build an itemized estimate with no payment required.</p>
+          <Button as="a" href="/quote" className="mt-7 w-full sm:w-auto">Plan a gathering</Button>
         </div>
       </section>
 

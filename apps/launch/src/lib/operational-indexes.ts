@@ -6,6 +6,22 @@ export function ensureOperationalIndexes(): Promise<void> {
     const { db } = getMongoDatabase();
     await Promise.all([
       db
+        .collection("culinary_quotes")
+        .createIndex({ purgeAfter: 1 }, { expireAfterSeconds: 0 }),
+      db
+        .collection("culinary_quotes")
+        .createIndex({ status: 1, notificationsQueued: 1, requestedAt: 1 }),
+      db
+        .collection("culinary_quotes")
+        .createIndex({
+          "invoiceJob.state": 1,
+          "invoiceJob.nextAttemptAt": 1,
+          "invoiceJob.leaseUntil": 1,
+        }),
+      db
+        .collection("culinary_quotes")
+        .createIndex({ "invoiceJob.state": 1, "invoiceJob.readyNotified": 1 }),
+      db
         .collection("checkout_attempts")
         .createIndex({ state: 1, nextAttemptAt: 1, leaseUntil: 1 }),
       db

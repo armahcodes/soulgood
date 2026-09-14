@@ -277,11 +277,13 @@ async function getPickupAddress(fetcher: Fetcher): Promise<CheckoutAddress> {
     };
   }>(`/v2/locations/${encodeURIComponent(locationId)}`, {}, fetcher);
   const address = body.location?.address;
+  // Square may store ZIP+4; CDTFA only accepts a 5-digit ZIP.
+  const postalCode = address?.postal_code?.trim().slice(0, 5) ?? "";
   if (
     !address?.address_line_1 ||
     !address.locality ||
     address.administrative_district_level_1 !== "CA" ||
-    !address.postal_code
+    !/^\d{5}$/.test(postalCode)
   ) {
     throw new Error(
       "The Square pickup location needs a complete California address",
@@ -292,18 +294,18 @@ async function getPickupAddress(fetcher: Fetcher): Promise<CheckoutAddress> {
     addressLine2: address.address_line_2 ?? "",
     city: address.locality,
     state: "CA",
-    postalCode: address.postal_code,
+    postalCode,
   };
 }
 
-async function lookupCaliforniaTax(
+export async function lookupCaliforniaTax(
   address: CheckoutAddress,
   fetcher: Fetcher,
 ): Promise<{ rate: number; jurisdiction: string; county: string }> {
   const params = new URLSearchParams({
     address: address.addressLine1,
     city: address.city,
-    zip: address.postalCode,
+    zip: address.postalCode.slice(0, 5),
   });
   const response = await fetcher(
     `https://services.maps.cdtfa.ca.gov/api/taxrate/GetRateByAddress?${params}`,

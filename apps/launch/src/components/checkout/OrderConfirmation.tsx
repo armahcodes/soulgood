@@ -108,7 +108,7 @@ export function OrderConfirmation() {
         {confirmation.paymentPending ||
         confirmation.status === "PENDING_PAYMENT"
           ? "Square is processing your first invoice. This is not a payment receipt. We’ll confirm your bowls after payment clears. Check your account for the latest status."
-          : "Thanks for ordering Soul Bowls™. Your order is saved in your account. We’ll follow up with your Sunday window, and send an email confirmation when notification processing completes."}
+          : "Thank you for making Soul Good part of your day. Your order is saved in your account. We’ll be in touch with your Sunday pickup or delivery window. Your confirmation email may take a few minutes to arrive."}
       </p>
 
       <section className="mt-10 w-full border border-sage/30 bg-white/50 p-6 text-left sm:p-8">
@@ -141,7 +141,7 @@ export function OrderConfirmation() {
         <div className="grid gap-7 pt-6 md:grid-cols-[1.1fr_0.9fr]">
           <div>
             <p className="text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-              Confirmed bowl mix
+              Your chosen bowls
             </p>
             <ul className="mt-4 grid gap-2 sm:grid-cols-2">
               {selectedBowls.map((bowl) => (

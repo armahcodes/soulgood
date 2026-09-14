@@ -1,0 +1,24 @@
+import { RefreshAccountButton } from "./RefreshAccountButton";
+import { CancellationHelp } from "./CancellationHelp";
+
+export function AccountUnavailable({ plans = false }: { plans?: boolean }) {
+  return (
+    <div className="mx-auto max-w-2xl space-y-8">
+      <section className="border border-forest/15 bg-white/50 p-6 sm:p-8">
+        <p className="text-xs font-bold tracking-[0.14em] text-clay uppercase">
+          Temporarily unavailable
+        </p>
+        <h1 className="mt-4 text-4xl">
+          We couldn’t load your {plans ? "weekly plans" : "orders"}.
+        </h1>
+        <p className="mt-4 text-sm leading-6 text-forest/75">
+          This does not mean your{" "}
+          {plans ? "plan has ended" : "orders are missing"}. No changes were
+          made. Please try again, or contact us for help.
+        </p>
+        <RefreshAccountButton />
+      </section>
+      <CancellationHelp />
+    </div>
+  );
+}

@@ -11,6 +11,10 @@ export async function allowCheckoutStatusRequest(
   return allowRequest(request, "checkout-status", 60_000, 120);
 }
 
+export async function allowCulinaryRequest(request: Request): Promise<boolean> {
+  return allowRequest(request, "culinary-quotes", 600_000, 30);
+}
+
 async function allowRequest(
   request: Request,
   scope: string,

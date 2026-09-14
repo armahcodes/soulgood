@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { CONTACT } from "@/lib/brand";
+import { EAT_NOW } from "@/lib/ordering";
 
 const LEGAL_LINKS = [
+  { href: EAT_NOW.infoPath, label: "About Eat Now" },
   { href: "/account", label: "My orders" },
+  { href: "/quote", label: "Culinary bookings" },
   { href: "/terms", label: "Terms of Service" },
   { href: "/customer-agreement", label: "Customer Agreement" },
-  { href: "/cancel", label: "Cancel subscription" },
+  { href: "/cancel", label: "Manage or cancel a plan" },
 ];
 
 export function SiteFooter() {
@@ -16,11 +19,14 @@ export function SiteFooter() {
         <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">
           <Wordmark href="/" variant="cream" />
           <p className="max-w-sm text-sm leading-relaxed text-oat/55">
-            Chef-made in Los Angeles County. Sunday pickup or delivery by Soul Goods LLC.
+            Thoughtfully prepared in Los Angeles. From our kitchen to your table,
+            with care from the Soul Good team. Weekly nourishment is available
+            on Sundays; Eat Now times are shown in the menu.
           </p>
         </div>
 
-        <nav aria-label="Legal and support" className="flex flex-wrap justify-center gap-x-5 gap-y-3 text-sm text-oat/68 md:justify-end">
+        <nav aria-label="Legal and support" className="flex flex-wrap justify-center gap-x-5 gap-y-1 text-sm text-oat/80 [&_a]:inline-flex [&_a]:min-h-11 [&_a]:items-center md:justify-end">
+          <a href={EAT_NOW.menuUrl} className="transition-colors hover:text-gold">Eat Now menu</a>
           {LEGAL_LINKS.map((link) => (
             <Link key={link.href} href={link.href} className="transition-colors hover:text-gold">
               {link.label}

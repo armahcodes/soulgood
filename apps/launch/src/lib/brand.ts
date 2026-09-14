@@ -20,7 +20,7 @@ export const CONTACT = {
 } as const;
 
 /** Version saved with customer consent records. */
-export const LEGAL_VERSION = "2026-08-31";
+export const LEGAL_VERSION = "2026-09-13";
 
 function parseFeeCents(value: string | undefined): number | null {
   if (!value || !/^\d+$/.test(value)) return null;
@@ -38,7 +38,16 @@ export function formatCents(amountCents: number | null): string {
 }
 
 /** Canonical product line. */
-export const TAGLINE = "Five bowls • One easy week";
+export const TAGLINE = "Nourish · Heal · Thrive";
+
+/** Brand-led language for the scheduled offering, available once or weekly. */
+export const NOURISHMENT = {
+  label: "Weekly nourishment",
+  cta: "Build your ritual",
+  headline: "Nourishment for your everyday.",
+  deliveryDisclosure:
+    "Weekly meal prep is delivered exclusively by the Soul Good team, not third-party couriers.",
+} as const;
 
 /** Founder name — always "Chef Kyla" (the source quote-card typo is corrected here). */
 export const FOUNDER = "Chef Kyla";

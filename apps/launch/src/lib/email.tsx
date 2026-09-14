@@ -4,6 +4,8 @@ import { ExchangeUpdateEmail } from "@/emails/ExchangeUpdateEmail";
 import { FulfillmentReminderEmail } from "@/emails/FulfillmentReminderEmail";
 import { OrderConfirmationEmail } from "@/emails/OrderConfirmationEmail";
 import { SubscriptionCancelledEmail } from "@/emails/SubscriptionCancelledEmail";
+import { CulinaryQuoteEmail } from "@/emails/CulinaryQuoteEmail";
+import type { CulinaryQuote, CulinaryRequest } from "./culinary-booking";
 import { type BowlSelection } from "./bowl-selection";
 import {
   formatCents,
@@ -27,6 +29,32 @@ function resendClient(): Resend {
 
 function sender(): string {
   return process.env.SOUL_GOOD_EMAIL_FROM || DEFAULT_FROM;
+}
+
+export async function sendCulinaryQuoteEmail(input: {
+  quote: CulinaryQuote;
+  request: CulinaryRequest;
+  audience: "customer" | "team";
+  invoiceId?: string;
+}): Promise<string> {
+  const team = input.audience === "team";
+  return assertSent(
+    await resendClient().emails.send(
+      {
+        from: sender(),
+        to: team
+          ? process.env.CULINARY_BOOKING_EMAIL_TO || REPLY_TO
+          : input.request.contact.email,
+        replyTo: team ? input.request.contact.email : REPLY_TO,
+        subject: `${team && input.invoiceId ? "Square invoice draft ready — contract review required" : team ? "New culinary booking request" : "Your culinary booking request"} · ${input.quote.reference}`,
+        react: <CulinaryQuoteEmail {...input} />,
+        tags: [{ name: "category", value: "culinary-booking" }],
+      },
+      {
+        idempotencyKey: `culinary-quote/${input.quote.id}/${input.audience}${input.invoiceId ? "/invoice-ready" : ""}`,
+      },
+    ),
+  );
 }
 
 export async function sendPaymentUpdateEmail(input: {
@@ -195,7 +223,7 @@ export async function sendSubscriptionCancelledEmail(input: {
       from: sender(),
       to: input.customerEmail,
       replyTo: REPLY_TO,
-      subject: "Your Soul Bowls weekly plan cancellation is scheduled",
+      subject: "Your Soul Bowls weekly plan cancellation is confirmed",
       react: (
         <SubscriptionCancelledEmail
           accountUrl={ACCOUNT_URL}

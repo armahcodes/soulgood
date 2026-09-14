@@ -54,11 +54,11 @@ export function BowlBuilder({
         <span className="flex items-end justify-between gap-4">
           <span>
             <span className="block text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-              Step 2 · Build your {target}
+              Step 2 · Choose your bowls
             </span>
             <span className="mt-1 block text-sm leading-relaxed text-forest/62">
-              We started with one of each available bowl for every five-meal set.
-              Adjust the mix to fit your order.
+              Start with a little of everything: one of each available recipe
+              per set of five. Keep the variety or choose more of your favorites.
             </span>
           </span>
           <span
@@ -192,7 +192,7 @@ export function BowlBuilder({
         </p>
       ) : (
         <p role="status" className="text-sm font-semibold text-sage">
-          Your {target}-bowl order is ready.
+          Your selection is complete: {target} bowls.
         </p>
       )}
     </fieldset>

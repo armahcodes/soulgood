@@ -9,6 +9,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "default" | "sm" | "lg";
   as?: "button" | "a";
   href?: string;
+  target?: React.AnchorHTMLAttributes<HTMLAnchorElement>["target"];
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -19,6 +20,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       size = "default",
       as = "button",
       href,
+      target,
       children,
       onClick,
       ...props
@@ -30,7 +32,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary:
-        "bg-forest text-oat hover:bg-sage active:bg-sage/90",
+        "bg-forest text-oat hover:bg-forest/90 active:bg-forest/95",
       secondary:
         "bg-transparent text-forest border border-forest hover:bg-forest hover:text-oat active:bg-forest/90",
       link: "bg-transparent text-clay hover:text-forest underline underline-offset-4 decoration-1",
@@ -57,6 +59,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         return (
           <Link
             href={href}
+            target={target}
             className={classes}
             onClick={
               onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>
@@ -71,7 +74,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         <a
           href={href}
           className={classes}
-          target="_blank"
+          target={target ?? "_blank"}
           rel="noopener noreferrer"
           onClick={
             onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>

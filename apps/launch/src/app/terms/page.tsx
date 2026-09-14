@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
-import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, PRICING, TAX } from "@/lib/brand";
+import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, NOURISHMENT, PRICING, TAX } from "@/lib/brand";
 import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
+import { EAT_NOW } from "@/lib/ordering";
 
 export const metadata = {
   title: `Terms of Service — ${BRAND_NAME}`,
-  description: `Terms governing Soul Bowls™ one-time and weekly pickup or delivery orders operated by ${BUSINESS.legalName}.`,
+  description: `Terms governing Soul Bowls™ Eat Now orders and weekly meal prep operated by ${BUSINESS.legalName}.`,
 };
 
 export default function TermsPage() {
@@ -41,7 +42,7 @@ export default function TermsPage() {
       <section>
         <h2>3. One-time orders and weekly subscriptions</h2>
         <p>
-          A standard five-meal set includes five chef-made Soul Bowls™ in
+          For scheduled meal prep, a standard five-meal set includes five chef-made Soul Bowls™ in
           {` ${CURRENT_OFFER.format}`} for {PRICING.oneTime}. You may combine sets
           for multiple people or multiple daily meals. At checkout, you may choose a
           one-time order with no automatic renewal or a weekly subscription at the
@@ -55,12 +56,17 @@ export default function TermsPage() {
           Cancellation stops future renewals; it does not reverse an order that
           has already been charged and committed to production.
         </p>
+        <p>
+          Eat Now is our separate single-order menu at checkout.soulgood.kitchen.
+          Bowls are sold individually at the displayed menu prices. An Eat Now
+          one-time purchase does not enroll you in a weekly meal-prep subscription.
+        </p>
       </section>
 
       <section>
         <h2>4. Pricing and fees</h2>
         <p>
-          Each five-meal set is {PRICING.oneTime}, whether purchased once or
+          For scheduled meal prep, each five-meal set is {PRICING.oneTime}, whether purchased once or
           through a weekly plan. Multi-person and multi-meal orders contain multiple
           sets, and the displayed base price scales by the number of sets.
           {` ${FEES.delivery.label}`}:
@@ -69,6 +75,11 @@ export default function TermsPage() {
           {` ${FEES.containerDeposit.disclosure}`} Order and fulfillment amounts due
           at checkout will be displayed before payment. We do not add undisclosed
           handling or service fees.
+        </p>
+        <p>
+          Eat Now has its own item prices, delivery charges, and service availability.
+          Review the applicable charges, tax, and total in Eat Now checkout before
+          paying. The meal-prep delivery fee does not set Eat Now delivery charges.
         </p>
         <p>
           {TAX.disclosure} Tax is added to the displayed subtotal where required.
@@ -84,10 +95,19 @@ export default function TermsPage() {
 
       <section>
         <h2>5. Pickup and delivery</h2>
+        <h3>Weekly meal prep</h3>
         <p>
-          Sunday pickup has no fulfillment fee. We will provide the pickup location
-          and available window before fulfillment. LA County delivery costs
-          $8.88 per order and is generally scheduled for Sunday. Pickup and delivery windows
+          {NOURISHMENT.deliveryDisclosure} Sunday pickup has no fulfillment fee for
+          one-time meal-prep orders; weekly plans require delivery. We will provide
+          the pickup location and available window before fulfillment. Meal-prep
+          delivery in LA County costs $8.88 per order and is generally scheduled for Sunday.
+        </p>
+        <h3>Eat Now</h3>
+        <p>{EAT_NOW.deliveryDetails}</p>
+        <p>{EAT_NOW.availability}</p>
+        <h3>For all deliveries</h3>
+        <p>
+          Pickup and delivery windows
           are estimates and may change because of traffic, weather, building access,
           safety conditions, or events outside our reasonable control.
         </p>

@@ -13,7 +13,8 @@ export function SignOutButton() {
     <button
       type="button"
       disabled={pending}
-      className="text-xs font-bold tracking-[0.1em] text-forest/58 uppercase underline decoration-forest/20 underline-offset-4 hover:text-clay disabled:opacity-50"
+      aria-live="polite"
+      className="min-h-11 text-sm font-semibold text-forest/75 underline decoration-forest/30 underline-offset-4 hover:text-forest disabled:opacity-50"
       onClick={async () => {
         setPending(true);
         setError(false);

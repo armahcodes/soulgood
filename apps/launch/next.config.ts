@@ -15,6 +15,11 @@ const squareContentSecurityPolicy = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      { source: "/culinary-bookings", destination: "/quote", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

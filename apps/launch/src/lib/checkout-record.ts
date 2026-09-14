@@ -92,6 +92,7 @@ export type CustomerOrder = {
   deliveryAddress?: CheckoutAddress;
   bowlSelection: BowlSelection;
   subtotalCents: number;
+  fulfillmentFeeCents?: number;
   taxCents: number;
   totalCents: number;
   receiptUrl?: string;
@@ -103,6 +104,7 @@ export type OwnedSubscription = {
   customerEmail: string;
   customerName: string;
   cancellationScheduledFor?: string;
+  subscriptionStatus?: string;
 };
 
 export async function getOwnedSubscription(
@@ -122,6 +124,7 @@ export async function getOwnedSubscription(
     customerEmail: record.customerEmail,
     customerName: record.customerName,
     cancellationScheduledFor: record.cancellationScheduledFor || undefined,
+    subscriptionStatus: record.subscriptionStatus || record.orderStatus,
   };
 }
 
@@ -136,6 +139,7 @@ export async function markSubscriptionCancellation(
     {
       $set: {
         cancellationScheduledFor: effectiveDate,
+        subscriptionStatus: status,
         orderStatus: status,
       },
     },
@@ -144,15 +148,17 @@ export async function markSubscriptionCancellation(
 
 export async function listCheckoutRecordsForEmail(
   email: string,
+  options: { subscriptionsOnly?: boolean } = {},
 ): Promise<CustomerOrder[]> {
   if (!process.env.MONGODB_URI) return [];
   await connectToDatabase();
-  const records = await CheckoutRecordModel.find({
+  const query = CheckoutRecordModel.find({
     customerEmail: email.trim().toLowerCase(),
+    ...(options.subscriptionsOnly ? { squareObjectType: "subscription" } : {}),
   })
-    .sort({ createdAt: -1 })
-    .limit(50)
-    .exec();
+    .sort({ createdAt: -1 });
+  // Plans have their own query so renewals cannot push an active plan out of view.
+  const records = await (options.subscriptionsOnly ? query : query.limit(50)).exec();
 
   return records.map((record) => {
     const savedAddress = record.deliveryAddress;
@@ -180,6 +186,7 @@ export async function listCheckoutRecordsForEmail(
       deliveryAddress,
       bowlSelection: record.bowlSelection as BowlSelection,
       subtotalCents: record.subtotalCents,
+      fulfillmentFeeCents: record.fulfillmentFeeCents ?? undefined,
       taxCents: record.taxCents,
       totalCents: record.totalCents,
       receiptUrl: record.receiptUrl || undefined,
