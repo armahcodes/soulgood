@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 };
 
 const primaryAction =
-  "inline-flex min-h-13 items-center justify-center gap-3 bg-forest px-6 py-4 text-sm font-bold text-oat transition-colors hover:bg-forest/90";
+  "inline-flex min-h-13 items-center justify-center gap-3 rounded-md bg-forest px-6 py-4 text-sm font-bold text-oat transition-colors hover:bg-forest/90";
 const eyebrow = "text-xs font-bold uppercase tracking-[0.2em]";
 
 export default function FoodForTheSoulPage() {
@@ -214,7 +214,7 @@ export default function FoodForTheSoulPage() {
           aria-labelledby="drive-heading"
           className="mx-auto max-w-7xl scroll-mt-8 px-5 py-16 sm:px-8 sm:py-24 lg:px-12"
         >
-          <div className="grid border border-forest/20 md:grid-cols-[0.75fr_1.25fr]">
+          <div className="grid overflow-hidden rounded-lg border border-forest/20 md:grid-cols-[0.75fr_1.25fr]">
             <div className="flex flex-col items-center justify-center bg-sand/60 px-8 py-10 text-center sm:py-14">
               <p className={eyebrow}>The next meal drive</p>
               <time dateTime={COMMUNITY_DRIVE.dateISO} className="mt-5 block">

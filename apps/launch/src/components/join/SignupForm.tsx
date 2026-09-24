@@ -10,7 +10,7 @@ import { leadFieldSchemas, leadSchema, type Lead } from "@/lib/lead-schema";
 import type { FulfillmentMethod } from "@/lib/brand";
 
 const INPUT_CLASS =
-  "min-h-[52px] rounded-none border border-forest/18 bg-white/70 px-4 text-base text-forest placeholder:text-forest/35 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/20";
+  "min-h-[52px] rounded-md border border-forest/18 bg-white/70 px-4 text-base text-forest placeholder:text-forest/35 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/20";
 
 export function SignupForm({ initialFulfillment = "delivery" }: { initialFulfillment?: FulfillmentMethod }) {
   const router = useRouter();

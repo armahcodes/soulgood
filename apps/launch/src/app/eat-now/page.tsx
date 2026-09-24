@@ -51,12 +51,13 @@ export default function EatNowPage() {
               Already placed an Eat Now order?
             </a>
           </div>
-          <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden bg-sand/35">
+          <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-lg bg-sand/35 shadow-[0_40px_70px_-45px_rgb(44_58_52/0.6)]">
             <Image
               src={CURRENT_BOWLS[0].imagePath}
               alt="Glow Bowl™ in a 32 ounce Soul Good jar"
               fill
-              priority
+              loading="eager"
+              fetchPriority="high"
               unoptimized
               sizes="(min-width: 1024px) 448px, (min-width: 640px) 448px, 100vw"
               className="object-cover"
@@ -67,7 +68,7 @@ export default function EatNowPage() {
         <section aria-labelledby="eat-now-details" className="border-y border-forest/12 bg-sand/25">
           <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-12">
             <h2 id="eat-now-details" className="text-center font-serif text-3xl text-forest sm:text-4xl">One order. Your own rhythm.</h2>
-            <ol className="mt-8 grid gap-7 text-center md:grid-cols-3 md:text-left">
+            <ol className="mt-8 grid gap-4 text-center md:grid-cols-3 md:text-left [&>li]:rounded-lg [&>li]:border [&>li]:border-forest/12 [&>li]:bg-card [&>li]:p-6">
               <li>
                 <h3 className="text-2xl text-forest">01. Choose from the menu</h3>
                 <p className="mt-3 text-sm leading-6 text-forest/75">The live menu has the latest items and prices. For a single order, select “One time” if purchase options are shown.</p>
@@ -92,7 +93,7 @@ export default function EatNowPage() {
             <p className="mt-3 text-sm leading-7 text-forest/75">For an update, a missing confirmation, or help with delivery, contact our team with the order reference from your confirmation. Do not send card details.</p>
             <a href={`mailto:${CONTACT.email}?subject=Eat%20Now%20order%20help`} className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-forest underline underline-offset-4">Contact Soul Good</a>
           </div>
-          <div className="border border-forest/15 bg-white/35 p-6 text-center sm:p-8 md:text-left">
+          <div className="border border-forest/15 bg-white/35 p-6 text-center sm:p-8 md:text-left rounded-lg">
             <h2 className="font-serif text-3xl text-forest sm:text-4xl">A ritual to come home to.</h2>
             <p className="mt-4 text-sm leading-7 text-forest/75">Make space for nourishment throughout your week. Five 32 oz Soul Bowls™ start at $88, once or weekly. {NOURISHMENT.deliveryDisclosure}</p>
             <p className="mt-3 text-sm leading-7 text-forest/75">For meal prep, Sunday pickup is free for one-time orders; LA County delivery is $8.88. Applicable tax is additional. Eat Now has its own delivery availability and charges, shown at checkout.</p>

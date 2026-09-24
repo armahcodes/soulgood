@@ -62,7 +62,7 @@ function RecipeDialog({
         )
           close();
       }}
-      className="fixed inset-0 m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-lg overflow-y-auto border border-forest/20 bg-oat p-5 text-forest shadow-xl backdrop:bg-forest/55 sm:p-7"
+      className="fixed inset-0 m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-lg overflow-y-auto border border-forest/20 bg-oat p-5 text-forest shadow-xl backdrop:bg-forest/55 sm:p-7 rounded-lg"
     >
       <div className="flex items-start justify-between gap-3">
         <div>
@@ -166,7 +166,7 @@ export function CulinaryMenu({
                 `Balanced menu set to ${event.target.value} bowls.`,
               )
             }
-            className="min-h-11 border border-forest/20 bg-white/60 px-2 text-base"
+            className="min-h-11 border border-forest/20 bg-white/60 px-2 text-base rounded-md"
           >
             <option value="" disabled>
               Choose size
@@ -217,7 +217,7 @@ export function CulinaryMenu({
               </button>
             </div>
             <div className="col-start-2 flex items-center justify-start sm:col-start-3 sm:row-span-2 sm:row-start-1 sm:justify-end">
-              <div className="flex border border-forest/20 bg-white/70">
+              <div className="flex border border-forest/20 bg-white/70 rounded-lg">
                 <button
                   type="button"
                   aria-label={`Remove one ${bowl.name}`}

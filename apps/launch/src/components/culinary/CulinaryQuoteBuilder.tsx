@@ -24,7 +24,7 @@ import {
 } from "@/lib/culinary-booking";
 
 const INPUT =
-  "min-h-[48px] w-full min-w-0 rounded-none border border-forest/20 bg-white/70 px-3 py-3 text-base text-forest placeholder:text-forest/45 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30 disabled:opacity-60";
+  "min-h-[48px] w-full min-w-0 rounded-md border border-forest/20 bg-white/70 px-3 py-3 text-base text-forest placeholder:text-forest/45 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30 disabled:opacity-60";
 const LABEL = "grid min-w-0 gap-2 text-sm font-semibold text-forest";
 const EMPTY_CONTACT = { name: "", email: "", phone: "" };
 const STEPS = ["Experience", "Menu", "Event", "Review", "Contact"];
@@ -325,7 +325,7 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
       )}
       {step < 3 && !received && (
         <div
-          className="print-hidden mb-6 flex flex-wrap items-center justify-between gap-2 border border-forest/15 bg-sand/30 px-4 py-3 text-sm"
+          className="print-hidden mb-6 flex flex-wrap items-center justify-between gap-2 border border-forest/15 bg-sand/30 px-4 py-3 text-sm rounded-lg"
           aria-label="Running estimate"
         >
           <span>
@@ -371,7 +371,7 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
               {(["delivery", "plated"] as const).map((option) => (
                 <label
                   key={option}
-                  className={`relative flex cursor-pointer flex-col gap-3 border p-5 transition-colors ${experience === option ? "border-forest bg-forest text-oat" : "border-forest/20 bg-white/40 text-forest hover:border-sage"}`}
+                  className={`relative flex cursor-pointer flex-col gap-3 rounded-lg border p-5 transition-colors ${experience === option ? "border-forest bg-forest text-oat" : "border-forest/20 bg-white/40 text-forest hover:border-sage"}`}
                 >
                   <div className="flex items-center justify-between">
                     <span>
@@ -615,7 +615,7 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
           {error && !quote && (
             <p
               role="alert"
-              className="border border-clay/40 bg-clay/10 p-3 text-sm leading-6"
+              className="border border-clay/40 bg-clay/10 p-3 text-sm leading-6 rounded-lg"
             >
               {error}
             </p>
@@ -655,7 +655,7 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
 
       <aside
         hidden={step < 3 && !received}
-        className="culinary-quote-aside min-w-0 border border-forest/20 bg-white/50"
+        className="culinary-quote-aside min-w-0 border border-forest/20 bg-white/50 rounded-lg"
         aria-labelledby="quote-heading"
       >
         <div className="bg-forest px-5 py-6 text-oat sm:px-7">
@@ -883,7 +883,7 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
           {expired && !received && (
             <p
               role="status"
-              className="print-hidden mt-4 border border-clay/40 bg-clay/10 p-3 text-sm"
+              className="print-hidden mt-4 border border-clay/40 bg-clay/10 p-3 text-sm rounded-lg"
             >
               This estimate expired. Refresh your quote before requesting a
               booking.
@@ -899,7 +899,7 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
           {error && quote && (
             <p
               role="alert"
-              className="print-hidden mt-4 border border-clay/40 bg-clay/10 p-3 text-sm leading-6"
+              className="print-hidden mt-4 border border-clay/40 bg-clay/10 p-3 text-sm leading-6 rounded-lg"
             >
               {error}
             </p>
@@ -927,7 +927,7 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
           )}
           {received ? (
             <div
-              className="mt-6 border border-sage/40 bg-sage/10 p-4"
+              className="mt-6 border border-sage/40 bg-sage/10 p-4 rounded-lg"
               role="status"
             >
               <p className="font-semibold">Thank you—your request is saved.</p>

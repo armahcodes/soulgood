@@ -19,7 +19,7 @@ export function ShareDrive() {
       <button
         type="button"
         onClick={copyLink}
-        className="inline-flex min-h-12 items-center justify-center gap-2 border border-forest/30 px-6 text-sm font-bold transition-colors hover:bg-forest hover:text-oat"
+        className="inline-flex min-h-12 items-center justify-center gap-2 border border-forest/30 px-6 text-sm font-bold transition-colors hover:bg-forest hover:text-oat rounded-md"
       >
         {state === "copied" ? (
           <Check aria-hidden="true" size={16} />
@@ -42,7 +42,7 @@ export function ShareDrive() {
               readOnly
               value={COMMUNITY_DRIVE.url}
               onFocus={(event) => event.target.select()}
-              className="mt-2 min-h-12 w-full border border-forest/30 bg-oat px-3 text-sm"
+              className="mt-2 min-h-12 w-full border border-forest/30 bg-oat px-3 text-sm rounded-md"
             />
           </div>
         )}

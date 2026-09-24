@@ -12,7 +12,7 @@ import {
 } from "@/lib/community-drive";
 
 const inputClass =
-  "mt-2 min-h-12 w-full rounded-none border border-forest/30 bg-oat/40 px-4 py-3 text-base text-forest placeholder:text-forest/50 aria-[invalid=true]:border-red-700";
+  "mt-2 min-h-12 w-full rounded-md border border-forest/30 bg-oat/40 px-4 py-3 text-base text-forest placeholder:text-forest/50 aria-[invalid=true]:border-red-700";
 
 export function CommunityInterestForm() {
   const [interest, setInterest] = useState<CommunityInterestKind>("host");
@@ -134,7 +134,7 @@ export function CommunityInterestForm() {
             </a>
           </p>
         </div>
-        <div className="border border-forest/15 bg-oat p-5 sm:p-8">
+        <div className="border border-forest/15 bg-oat p-5 sm:p-8 rounded-lg">
           {status === "received" ? (
             <div
               className="flex min-h-[400px] flex-col items-center justify-center text-center"
@@ -198,7 +198,7 @@ export function CommunityInterestForm() {
                     {COMMUNITY_INTERESTS.map((option) => (
                       <label
                         key={option.value}
-                        className={`flex min-h-24 cursor-pointer items-start gap-3 border p-4 transition-colors ${interest === option.value ? "border-forest bg-forest text-oat" : "border-forest/25 hover:border-forest"}`}
+                        className={`flex min-h-24 cursor-pointer items-start gap-3 rounded-lg border p-4 transition-colors ${interest === option.value ? "border-forest bg-forest text-oat" : "border-forest/25 hover:border-forest"}`}
                       >
                         <input
                           type="radio"
@@ -363,7 +363,7 @@ export function CommunityInterestForm() {
                   {failure && (
                     <p
                       role="alert"
-                      className="mt-5 border border-red-800/30 bg-red-50 p-4 text-sm leading-6 text-red-900"
+                      className="mt-5 border border-red-800/30 bg-red-50 p-4 text-sm leading-6 text-red-900 rounded-lg"
                     >
                       {failure}
                     </p>
