@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { EmptyState } from "@/components/ui/kit/empty-state";
 import { CancelSubscriptionButton } from "./CancelSubscriptionButton";
 import { CancellationHelp } from "./CancellationHelp";
 import { formatCents } from "@/lib/brand";
@@ -48,7 +49,7 @@ export function WeeklyPlans({
             sortedPlans.map((plan) => (
               <article
                 key={plan.id}
-                className="border border-forest/15 bg-white/50 p-5 sm:p-7"
+                className="rounded-lg border border-forest/12 bg-card shadow-[0_20px_40px_-36px_rgb(44_58_52/0.45)] p-5 sm:p-7"
               >
                 <p className="text-xs font-bold tracking-[0.12em] text-forest/65 uppercase">
                   Weekly plan · {plan.id.slice(-8).toUpperCase()}
@@ -83,26 +84,28 @@ export function WeeklyPlans({
               </article>
             ))
           ) : (
-            <section className="border border-forest/15 bg-white/50 p-6 sm:p-8">
-              <h2 className="text-3xl">
-                No weekly plans found for this email.
-              </h2>
-              <p className="mt-4 text-sm leading-6 text-forest/75">
-                A one-time purchase does not renew, so there is nothing to
-                cancel. If you expected a weekly plan, check that you signed in
-                with the email used at checkout, or contact us below.
-              </p>
-              <Link
-                href="/account"
-                className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-4"
-              >
-                View my orders
-              </Link>
-            </section>
+            <EmptyState
+              title="No weekly plans found for this email."
+              description={
+                <p>
+                  A one-time purchase does not renew, so there is nothing to
+                  cancel. If you expected a weekly plan, check that you signed in
+                  with the email used at checkout, or contact us below.
+                </p>
+              }
+              action={
+                <Link
+                  href="/account"
+                  className="inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-4"
+                >
+                  View my orders
+                </Link>
+              }
+            />
           )}
           <CancellationHelp />
         </div>
-        <aside className="border border-forest/12 bg-sand/25 p-6">
+        <aside className="rounded-lg border border-forest/12 bg-sand/25 p-6">
           <h2 className="text-2xl">What to expect</h2>
           <ol className="mt-5 space-y-5 text-sm leading-6 text-forest/75">
             <li>

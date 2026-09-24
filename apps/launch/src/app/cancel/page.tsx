@@ -52,7 +52,7 @@ export default async function CancelPage() {
               confirmed.
             </p>
           </div>
-          <section className="my-8 border border-forest/15 bg-white/50 p-6 sm:p-8">
+          <section className="my-8 rounded-lg border border-forest/12 bg-card p-6 sm:p-8">
             <h2 className="text-3xl">Find your weekly plan</h2>
             <p className="mt-3 text-sm leading-6 text-forest/75">
               Use the email you entered at checkout. We’ll send a secure sign-in

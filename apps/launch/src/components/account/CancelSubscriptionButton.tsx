@@ -153,7 +153,7 @@ export function CancelSubscriptionButton({
     return (
       <section
         aria-labelledby={headingId}
-        className="border border-sage/40 bg-sage/10 p-5 sm:p-6"
+        className="rounded-lg border border-sage/40 bg-sage/10 p-5 sm:p-6"
       >
         <div role="status" aria-live="polite">
           <h3
@@ -188,7 +188,7 @@ export function CancelSubscriptionButton({
       <section
         aria-labelledby={headingId}
         aria-busy={Boolean(busy)}
-        className="border border-gold/50 bg-gold/10 p-5 sm:p-6"
+        className="rounded-lg border border-gold/50 bg-gold/10 p-5 sm:p-6"
       >
         <div role="status" aria-live="polite">
           <h3
@@ -264,7 +264,7 @@ export function CancelSubscriptionButton({
     <section
       aria-labelledby={headingId}
       aria-busy={Boolean(busy)}
-      className="border border-forest/20 bg-oat p-5 sm:p-6"
+      className="rounded-lg border border-forest/20 bg-oat p-5 sm:p-6"
     >
       <h3
         ref={heading}

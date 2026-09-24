@@ -3,11 +3,12 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { OtpInput } from "@/components/ui/kit/otp-input";
 import { authClient } from "@/lib/auth-client";
 import { safeAccountRedirect } from "@/lib/safe-redirect";
 
 const INPUT_CLASS =
-  "min-h-12 w-full border border-forest/18 bg-white px-4 text-base text-forest outline-none placeholder:text-forest/38 focus:border-clay";
+  "min-h-12 w-full rounded-md border border-forest/18 bg-white px-4 text-base text-forest outline-none transition-[border-color,box-shadow] placeholder:text-forest/38 focus:border-forest/60 focus:ring-4 focus:ring-sage/20";
 
 export function LoginForm({
   redirectTo = "/account",
@@ -130,22 +131,18 @@ export function LoginForm({
           >
             Six-digit code
           </label>
-          <input
+          <OtpInput
             id="login-code"
             ref={codeInput}
             aria-describedby={`code-help${error ? " login-error" : ""}`}
             aria-invalid={Boolean(error)}
+            invalid={Boolean(error)}
             autoComplete="one-time-code"
-            className={`${INPUT_CLASS} text-center text-2xl tracking-[0.35em]`}
             inputMode="numeric"
-            maxLength={6}
             pattern="[0-9]{6}"
-            placeholder="000000"
             required
             value={otp}
-            onChange={(event) =>
-              setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))
-            }
+            onValueChange={setOtp}
           />
           <p
             id="code-help"
@@ -165,7 +162,7 @@ export function LoginForm({
           <p
             id="login-error"
             role="alert"
-            className="text-sm leading-6 text-forest"
+            className="rounded-md border border-clay/30 bg-clay/8 px-4 py-3 text-sm leading-6 text-forest"
           >
             {error}
           </p>
@@ -252,7 +249,7 @@ export function LoginForm({
         <p
           id="login-error"
           role="alert"
-          className="text-sm leading-relaxed text-forest"
+          className="rounded-md border border-clay/30 bg-clay/8 px-4 py-3 text-sm leading-relaxed text-forest"
         >
           {error}
         </p>

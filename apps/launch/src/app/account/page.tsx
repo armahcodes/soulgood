@@ -6,6 +6,7 @@ import { CustomerShell } from "@/components/account/CustomerShell";
 import { AccountUnavailable } from "@/components/account/AccountUnavailable";
 import { OrderHistory } from "@/components/account/OrderHistory";
 import { Button } from "@/components/ui/Button";
+import { EmptyState } from "@/components/ui/kit/empty-state";
 import { getAuth } from "@/lib/auth";
 import { BRAND_NAME, CONTACT } from "@/lib/brand";
 import { listCheckoutRecordsForEmail } from "@/lib/checkout-record";
@@ -69,7 +70,7 @@ export default async function AccountPage() {
           Start a new order
         </Button>
       </div>
-      <section className="my-8 flex flex-col gap-5 border border-forest/15 bg-sand/30 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7">
+      <section className="my-8 flex flex-col gap-5 rounded-lg border border-forest/12 bg-sand/30 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7">
         <div>
           <h2 className="text-2xl">Your weekly plans</h2>
           <p className="mt-2 text-sm leading-6 text-forest/75">
@@ -93,15 +94,23 @@ export default async function AccountPage() {
         {orders.length ? (
           <OrderHistory orders={orders} email={session.user.email} />
         ) : (
-          <div className="border border-forest/15 bg-white/50 p-6 sm:p-8">
-            <h3 className="text-2xl">No order receipts here yet.</h3>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-forest/75">
-              Orders appear when the checkout email matches this verified email.
-              If you just enrolled in weekly nourishment, check your plan above;
-              its invoice may still be processing. For an older or missing
-              order, contact us using the help below.
-            </p>
-          </div>
+          <EmptyState
+            headingLevel={3}
+            title="No order receipts here yet."
+            description={
+              <p>
+                Orders appear when the checkout email matches this verified email.
+                If you just enrolled in weekly nourishment, check your plan above;
+                its invoice may still be processing. For an older or missing
+                order, contact us using the help below.
+              </p>
+            }
+            action={
+              <Button as="a" href="/checkout">
+                Build your ritual
+              </Button>
+            }
+          />
         )}
       </section>
       <aside className="mt-8 border-t border-forest/15 pt-6">

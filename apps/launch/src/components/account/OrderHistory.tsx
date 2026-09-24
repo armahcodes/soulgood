@@ -22,7 +22,7 @@ export function OrderHistory({
         return (
           <article
             key={order.id}
-            className="min-w-0 border border-forest/15 bg-white/50 p-5 sm:p-7"
+            className="min-w-0 rounded-lg border border-forest/12 bg-card shadow-[0_20px_40px_-36px_rgb(44_58_52/0.45)] p-5 sm:p-7"
           >
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
@@ -44,7 +44,7 @@ export function OrderHistory({
                 </p>
               </div>
               <div className="flex w-full items-center justify-between gap-4 border-t border-forest/10 pt-3 sm:w-auto sm:flex-col sm:items-end sm:border-0 sm:pt-0">
-                <span className="inline-flex border border-forest/15 bg-oat px-3 py-1.5 text-xs font-semibold">
+                <span className="inline-flex rounded-md border border-forest/15 bg-oat px-3 py-1.5 text-xs font-semibold">
                   {orderStatusLabel(order.status)}
                 </span>
                 <p className="font-serif text-3xl">
