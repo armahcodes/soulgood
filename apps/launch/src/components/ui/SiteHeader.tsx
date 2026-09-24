@@ -1,9 +1,9 @@
-"use client";
+ "use client";
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { MenuToggleIcon } from "@/components/ui/kit/menu-toggle-icon";
@@ -15,12 +15,40 @@ import { cn } from "@/lib/utils";
 type NavLink = { href: string; label: string; external?: boolean };
 
 export const PRIMARY_NAV: readonly NavLink[] = [
-  { href: "/#bowls", label: "Soul Bowls™" },
-  { href: "/#ritual", label: "How it works" },
-  { href: "/quote", label: "Culinary bookings" },
+  { href: "/#bowls", label: "Menu" },
+  { href: "/quiz", label: "Find your pathway" },
+  { href: EAT_NOW.menuUrl, label: "Eat Now", external: true },
+  { href: "/quote", label: "Gatherings" },
+];
+
+const SECONDARY_NAV: readonly NavLink[] = [
   { href: "/food-for-the-soul", label: "Food for the Soul" },
   { href: "/account", label: "My orders" },
 ];
+
+function NavItem({
+  link,
+  className,
+  active,
+  onClick,
+  children,
+}: {
+  link: NavLink;
+  className: string;
+  active: boolean;
+  onClick?: () => void;
+  children: React.ReactNode;
+}) {
+  return link.external ? (
+    <a href={link.href} className={className} onClick={onClick}>
+      {children}
+    </a>
+  ) : (
+    <Link href={link.href} aria-current={active ? "page" : undefined} className={className} onClick={onClick}>
+      {children}
+    </Link>
+  );
+}
 
 /**
  * Site header — brand adaptation of 21st.dev efferd/header-1: sticky,
@@ -78,30 +106,33 @@ export function SiteHeader({
 
         {variant === "full" ? (
           <>
-            <nav aria-label="Primary" className="hidden items-center gap-1 xl:flex">
-              <a
-                href={EAT_NOW.menuUrl}
-                className="inline-flex min-h-11 items-center gap-1 rounded-md px-3 text-[0.72rem] font-bold tracking-[0.1em] text-clay uppercase transition-colors hover:bg-clay/8"
-              >
-                Eat Now
-                <ArrowUpRight className="size-3.5" aria-hidden />
-              </a>
+            <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
               {PRIMARY_NAV.map((link) => (
-                <Link
+                <NavItem
                   key={link.href}
-                  href={link.href}
-                  aria-current={isActive(link.href) ? "page" : undefined}
+                  link={link}
+                  active={isActive(link.href)}
                   className={cn(
-                    "inline-flex min-h-11 items-center rounded-md px-3 text-[0.72rem] font-bold tracking-[0.1em] uppercase transition-colors",
-                    isActive(link.href) ? "text-forest" : "text-forest/68 hover:bg-forest/5 hover:text-forest",
+                    "relative inline-flex min-h-11 items-center gap-1 rounded-md px-3.5 text-[0.72rem] font-bold tracking-[0.1em] uppercase transition-colors",
+                    "after:absolute after:inset-x-3.5 after:bottom-2 after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 hover:after:scale-x-100",
+                    isActive(link.href) ? "text-forest after:scale-x-100" : link.external ? "text-clay" : "text-forest/70 hover:text-forest",
                   )}
                 >
                   {link.label}
-                </Link>
+                  {link.external ? <ArrowUpRight className="size-3.5" aria-hidden /> : null}
+                </NavItem>
               ))}
             </nav>
 
             <div className="flex items-center gap-2">
+              <Link
+                href="/account"
+                aria-label="My orders"
+                aria-current={isActive("/account") ? "page" : undefined}
+                className="hidden size-11 items-center justify-center rounded-full text-forest/75 transition-colors hover:bg-forest/5 hover:text-forest sm:flex"
+              >
+                <UserRound className="size-5" aria-hidden />
+              </Link>
               <Button as="a" href={cta.href} target="_self" size="sm" className="px-4 sm:px-5">
                 {cta.short ? (
                   <>
@@ -118,7 +149,7 @@ export function SiteHeader({
                 aria-expanded={open}
                 aria-controls="mobile-menu"
                 aria-label={open ? "Close menu" : "Open menu"}
-                className="flex size-11 items-center justify-center rounded-md border border-forest/15 text-forest transition-colors hover:bg-forest/5 xl:hidden"
+                className="flex size-11 items-center justify-center rounded-md border border-forest/15 text-forest transition-colors hover:bg-forest/5 lg:hidden"
               >
                 <MenuToggleIcon open={open} className="size-6" />
               </button>
@@ -151,7 +182,7 @@ function MobileMenu({
     <div
       id="mobile-menu"
       style={{ top }}
-      className="fixed inset-x-0 bottom-0 z-30 overflow-y-auto border-t border-forest/10 bg-oat/96 backdrop-blur-xl xl:hidden"
+      className="fixed inset-x-0 bottom-0 z-30 overflow-y-auto border-t border-forest/10 bg-oat/96 backdrop-blur-xl lg:hidden"
     >
       <nav
         aria-label="Mobile"
@@ -160,24 +191,39 @@ function MobileMenu({
         <ul className="divide-y divide-forest/10 border-y border-forest/10">
           {PRIMARY_NAV.map((link) => (
             <li key={link.href}>
-              <Link
-                href={link.href}
+              <NavItem
+                link={link}
+                active={isActive(link.href)}
                 onClick={onNavigate}
-                aria-current={isActive(link.href) ? "page" : undefined}
                 className="flex min-h-16 items-center justify-between font-serif text-3xl tracking-[-0.02em] text-forest"
               >
                 {link.label}
-                <span aria-hidden className="font-sans text-base text-clay">→</span>
-              </Link>
+                {link.external ? (
+                  <ArrowUpRight className="size-5 text-clay" aria-hidden />
+                ) : (
+                  <span aria-hidden className="font-sans text-base text-clay">→</span>
+                )}
+              </NavItem>
+            </li>
+          ))}
+        </ul>
+        <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-1">
+          {SECONDARY_NAV.map((link) => (
+            <li key={link.href}>
+              <NavItem
+                link={link}
+                active={isActive(link.href)}
+                onClick={onNavigate}
+                className="inline-flex min-h-11 items-center text-sm font-semibold text-forest/75 underline decoration-forest/20 underline-offset-4 hover:text-forest"
+              >
+                {link.label}
+              </NavItem>
             </li>
           ))}
         </ul>
         <div className="mt-8 grid gap-3">
           <Button as="a" href="/checkout" size="lg" onClick={onNavigate}>
             {NOURISHMENT.cta}
-          </Button>
-          <Button as="a" href={EAT_NOW.menuUrl} target="_self" variant="secondary" size="lg">
-            Eat Now menu
           </Button>
         </div>
         <p className="mt-auto pt-10 text-center text-xs leading-5 text-forest/60">

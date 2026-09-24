@@ -1,64 +1,44 @@
 "use client";
 
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface OptionButtonProps {
-  label: string;
-  selected: boolean;
-  /** "radio" for single-select, "checkbox" for multi-select. */
-  role: "radio" | "checkbox";
-  /** Disabled when a multi-select cap is reached and this option is unselected. */
-  disabled?: boolean;
-  onSelect: () => void;
-}
-
 /**
- * A large, thumb-friendly quiz option. Renders the label VERBATIM. Left marker
- * is a ring (radio) or square (checkbox) that fills when selected.
+ * A large, thumb-friendly single-select option (radio card). Label is rendered
+ * verbatim from the Pathway Finder source.
  */
 export function OptionButton({
   label,
   selected,
-  role,
-  disabled = false,
   onSelect,
-}: OptionButtonProps) {
+}: {
+  label: string;
+  selected: boolean;
+  onSelect: () => void;
+}) {
   return (
     <button
       type="button"
-      role={role}
+      role="radio"
       aria-checked={selected}
-      aria-disabled={disabled || undefined}
-      onClick={() => {
-        if (!disabled) onSelect();
-      }}
+      onClick={onSelect}
       className={cn(
-        "flex w-full items-center gap-3 rounded-2xl border px-5 py-4 text-left text-base leading-snug transition-colors duration-200",
-        "min-h-[56px]",
+        "group flex min-h-16 w-full items-center gap-4 rounded-lg border px-5 py-4 text-left text-base leading-snug transition-[border-color,background-color,box-shadow,transform] duration-200 active:scale-[0.99]",
         selected
-          ? "border-sage bg-sage/15 text-forest"
-          : "border-forest/15 bg-white/70 text-forest hover:border-sage/60",
-        disabled && !selected && "cursor-not-allowed opacity-40 hover:border-forest/15",
+          ? "border-forest bg-forest text-oat shadow-[0_18px_30px_-22px_rgb(44_58_52/0.8)]"
+          : "border-forest/15 bg-card text-forest hover:border-forest/40 hover:bg-oat",
       )}
     >
+      <span className="flex-1">{label}</span>
       <span
         aria-hidden
         className={cn(
-          "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border-2 transition-colors",
-          role === "radio" ? "rounded-full" : "rounded-md",
-          selected ? "border-sage bg-sage" : "border-forest/30 bg-transparent",
+          "flex size-6 shrink-0 items-center justify-center rounded-full border transition-colors",
+          selected ? "border-oat bg-oat text-forest" : "border-forest/25 text-transparent group-hover:border-forest/50",
         )}
       >
-        {selected && (
-          <span
-            className={cn(
-              "block bg-oat",
-              role === "radio" ? "h-2 w-2 rounded-full" : "h-2.5 w-2.5 rounded-[2px]",
-            )}
-          />
-        )}
+        <Check className="size-3.5" strokeWidth={3} />
       </span>
-      <span className="flex-1">{label}</span>
     </button>
   );
 }

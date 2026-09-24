@@ -1,20 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
 import type { QuizQuestion } from "@/lib/quiz";
 import { toggleSelection } from "@/lib/pathway-state";
 import { OptionButton } from "./OptionButton";
 import { Pill } from "./Pill";
 
 type StepValue = string | string[] | undefined;
-
-interface QuestionStepProps {
-  question: QuizQuestion;
-  value: StepValue;
-  onChange: (value: StepValue) => void;
-  /** For single-select: advance to the next step immediately on tap. */
-  onAdvance: () => void;
-}
 
 /**
  * Renders one quiz question. Single-select advances on tap; multi-select toggles
@@ -26,93 +17,72 @@ export function QuestionStep({
   value,
   onChange,
   onAdvance,
-}: QuestionStepProps) {
-  const selectedArray = useMemo(
-    () => (Array.isArray(value) ? value : []),
-    [value],
-  );
+}: {
+  question: QuizQuestion;
+  value: StepValue;
+  onChange: (value: StepValue) => void;
+  /** For single-select: advance to the next step after a tap. */
+  onAdvance: () => void;
+}) {
+  const selected = Array.isArray(value) ? value : [];
+  const headingId = `q-${question.id}-heading`;
 
-  if (question.type === "text") {
-    return (
-      <div className="flex flex-col gap-4">
-        <Header question={question} />
+  return (
+    <div className="flex flex-col gap-7">
+      <div className="flex flex-col gap-3">
+        <h1 id={headingId} className="text-[clamp(2rem,6vw,2.9rem)] leading-[1.02] font-normal tracking-[-0.035em] text-forest">
+          {question.prompt}
+        </h1>
+        {question.helper ? (
+          <p className="text-sm font-semibold text-clay">{question.helper}</p>
+        ) : question.type === "multi" ? (
+          <p className="text-sm text-forest/65">Choose any that apply, or continue.</p>
+        ) : question.type === "text" ? (
+          <p className="text-sm text-forest/65">Optional. A few words is plenty.</p>
+        ) : null}
+      </div>
+
+      {question.type === "text" ? (
         <textarea
           id={`q-${question.id}`}
-          aria-label={question.prompt}
+          aria-labelledby={headingId}
           value={typeof value === "string" ? value : ""}
-          onChange={(e) => onChange(e.target.value)}
-          rows={3}
-          placeholder="Optional — share a few words"
-          className="w-full resize-none rounded-2xl border border-forest/15 bg-white/70 px-5 py-4 text-base text-forest placeholder:text-forest/35 focus:border-sage focus:outline-none"
+          onChange={(event) => onChange(event.target.value)}
+          rows={4}
+          maxLength={500}
+          placeholder="Share a few words"
+          className="w-full resize-none rounded-lg border border-forest/15 bg-card px-5 py-4 text-lg text-forest placeholder:text-forest/35 focus:border-forest/50 focus:ring-4 focus:ring-sage/20 focus:outline-none"
         />
-      </div>
-    );
-  }
-
-  if (question.type === "single") {
-    return (
-      <div className="flex flex-col gap-4">
-        <Header question={question} />
-        <div
-          role="radiogroup"
-          aria-label={question.prompt}
-          className="flex flex-col gap-3"
-        >
-          {question.options?.map((opt) => (
+      ) : question.type === "single" ? (
+        <div role="radiogroup" aria-labelledby={headingId} className="grid gap-3">
+          {question.options?.map((option) => (
             <OptionButton
-              key={opt.value}
-              label={opt.label}
-              role="radio"
-              selected={value === opt.value}
+              key={option.value}
+              label={option.label}
+              selected={value === option.value}
               onSelect={() => {
-                onChange(opt.value);
+                onChange(option.value);
                 onAdvance();
               }}
             />
           ))}
         </div>
-      </div>
-    );
-  }
-
-  // multi — compact wrap-flowing pills (toggle chips)
-  const max = question.maxSelections;
-  const atCap = typeof max === "number" && selectedArray.length >= max;
-  return (
-    <div className="flex flex-col gap-4">
-      <Header question={question} />
-      <div
-        role="group"
-        aria-label={question.prompt}
-        className="flex flex-wrap gap-[9px]"
-      >
-        {question.options?.map((opt) => {
-          const selected = selectedArray.includes(opt.value);
-          return (
-            <Pill
-              key={opt.value}
-              label={opt.label}
-              selected={selected}
-              disabled={atCap && !selected}
-              onToggle={() =>
-                onChange(toggleSelection(selectedArray, opt.value, max))
-              }
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function Header({ question }: { question: QuizQuestion }) {
-  return (
-    <div className="flex flex-col gap-2">
-      <h2 className="text-2xl leading-tight font-medium text-forest">
-        {question.prompt}
-      </h2>
-      {question.helper && (
-        <p className="text-sm text-clay">{question.helper}</p>
+      ) : (
+        <div role="group" aria-labelledby={headingId} className="flex flex-wrap gap-2.5">
+          {question.options?.map((option) => {
+            const isSelected = selected.includes(option.value);
+            const atCap = typeof question.maxSelections === "number" && selected.length >= question.maxSelections;
+            return (
+              <Pill
+                key={option.value}
+                label={option.label}
+                selected={isSelected}
+                disabled={atCap && !isSelected}
+                onToggle={() => onChange(toggleSelection(selected, option.value, question.maxSelections))}
+              />
+            );
+          })}
+        </div>
       )}
     </div>
   );

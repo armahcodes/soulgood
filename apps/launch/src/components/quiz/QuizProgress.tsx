@@ -1,42 +1,52 @@
-interface QuizProgressProps {
-  /** 1-based index of the current step. */
-  current: number;
-  total: number;
-  /** Go to the previous step (or the Intro from the first question). */
-  onBack: () => void;
-}
+import { ArrowLeft } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 /**
- * The quiz header row: a circular back button, a slim progress bar, and a
- * compact "n / total" step count. The back button is always available here —
- * on the first question it returns to the Intro screen.
+ * Segmented quiz progress — brand adaptation of 21st.dev
+ * sean0205/questionnaire-segmented-progress, with a back control.
  */
-export function QuizProgress({ current, total, onBack }: QuizProgressProps) {
-  const pct = Math.round((current / total) * 100);
+export function QuizProgress({
+  current,
+  total,
+  onBack,
+}: {
+  /** 1-based index of the current question. */
+  current: number;
+  total: number;
+  onBack: () => void;
+}) {
   return (
-    <div className="flex w-full items-center gap-3.5">
+    <div className="flex w-full items-center gap-4">
       <button
         type="button"
         onClick={onBack}
         aria-label="Go back"
-        className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full border border-forest/15 bg-white/70 text-lg text-forest/70 transition-colors hover:border-sage/60 hover:text-forest"
+        className="flex size-11 shrink-0 items-center justify-center rounded-full border border-forest/15 bg-card text-forest/75 transition-colors hover:border-forest/40 hover:text-forest"
       >
-        <span aria-hidden>←</span>
+        <ArrowLeft className="size-4" aria-hidden />
       </button>
-      <div className="flex-1">
-        <div className="h-[5px] w-full overflow-hidden rounded-full bg-forest/10">
-          <div
-            className="h-full rounded-full bg-sage transition-all duration-500 ease-out"
-            style={{ width: `${pct}%` }}
-          />
-        </div>
+      <div
+        className="flex flex-1 gap-1"
+        role="progressbar"
+        aria-label="Pathway Finder progress"
+        aria-valuemin={1}
+        aria-valuemax={total}
+        aria-valuenow={current}
+        aria-valuetext={`Question ${current} of ${total}`}
+      >
+        {Array.from({ length: total }, (_, index) => (
+          <span key={index} className="h-1.5 flex-1 overflow-hidden rounded-full bg-forest/10">
+            <span
+              className={cn(
+                "block h-full rounded-full bg-sage transition-[width] duration-500 ease-(--ease-soft)",
+                index < current ? "w-full" : "w-0",
+              )}
+            />
+          </span>
+        ))}
       </div>
-      <p className="text-xs text-forest/40 tabular-nums">
-        <span className="sr-only">Step </span>
-        {current}
-        <span className="sr-only"> of </span>
-        <span aria-hidden> / </span>
-        {total}
+      <p className="shrink-0 text-xs font-bold text-forest/60 tabular-nums">
+        {current}/{total}
       </p>
     </div>
   );

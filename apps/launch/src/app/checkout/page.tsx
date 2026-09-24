@@ -99,6 +99,15 @@ export default async function CheckoutPage({
               Five bowls start at $88 · tax shown before payment
             </p>
 
+            <Link
+              href="/quiz"
+              className="group mx-auto flex w-fit items-center gap-3 rounded-full border border-forest/15 bg-card py-1.5 pr-4 pl-1.5 text-sm text-forest transition-colors hover:border-forest/40 lg:mx-0"
+            >
+              <span className="shrink-0 rounded-full bg-sage px-2.5 py-1 text-[0.6rem] font-bold tracking-[0.14em] whitespace-nowrap text-oat uppercase">2 min</span>
+              <span className="hidden sm:inline">Not sure which bowls?</span>{" "}
+              <span className="font-semibold whitespace-nowrap underline underline-offset-4 group-hover:text-clay">Find your pathway</span>
+            </Link>
+
             <ul className="mt-2 hidden gap-3 border-t border-forest/10 pt-6 text-left sm:grid sm:grid-cols-2">
               {PLAN_ITEMS.map((item) => (
                 <li
