@@ -44,6 +44,7 @@ vi.mock("../email", () => ({
   sendExchangeUpdateEmail: mocks.send,
   sendPaymentUpdateEmail: mocks.send,
   sendCulinaryQuoteEmail: mocks.send,
+  sendCommunityInterestEmail: mocks.send,
 }));
 vi.mock("../checkout-record", () => ({
   updateCheckoutConfirmationEmail: vi.fn(async () => {}),
@@ -64,6 +65,25 @@ const payload = {
   subscriptionId: "test-subscription",
 };
 describe("durable email outbox", () => {
+  it("delivers community inquiries through the existing retryable queue", async () => {
+    await enqueueEmail("community:test", "community", {
+      id: "test",
+      name: "Test Neighbor",
+      email: "neighbor@example.com",
+      interest: "host",
+      community: "Long Beach",
+      organization: "",
+      message: "",
+      consent: true,
+      campaign: "food-for-the-soul-2026-10-15",
+      capturedAt: new Date().toISOString(),
+    });
+    expect(await drainEmailOutbox(1)).toBe(1);
+    expect(mocks.send).toHaveBeenCalledWith(
+      expect.objectContaining({ interest: "host" }),
+    );
+    expect(mocks.rows.get("community:test")?.state).toBe("sent");
+  });
   it("deduplicates enqueue and retries an identical payload after a transport failure", async () => {
     await enqueueEmail("job-one", "cancellation", payload);
     await enqueueEmail("job-one", "cancellation", payload);

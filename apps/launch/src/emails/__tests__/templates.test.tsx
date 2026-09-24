@@ -4,6 +4,7 @@ import { AuthCodeEmail } from "../AuthCodeEmail";
 import { OrderConfirmationEmail } from "../OrderConfirmationEmail";
 import { CulinaryQuoteEmail } from "../CulinaryQuoteEmail";
 import { SubscriptionCancelledEmail } from "../SubscriptionCancelledEmail";
+import { CommunityInterestEmail } from "../CommunityInterestEmail";
 import {
   balancedCulinarySelection,
   culinaryLineItems,
@@ -13,6 +14,32 @@ import {
 } from "@/lib/culinary-booking";
 
 describe("customer email templates", () => {
+  it("renders actionable community inquiries, escaping visitor input", async () => {
+    const email = (
+      <CommunityInterestEmail
+        interest={{
+          id: "test",
+          name: "Test Neighbor",
+          email: "neighbor@example.com",
+          interest: "host",
+          community: "Long Beach",
+          organization: "Community group",
+          message: "<script>alert(1)</script>",
+          consent: true,
+          campaign: "food-for-the-soul-2026-10-15",
+          capturedAt: "2026-09-19T10:00:00Z",
+        }}
+      />
+    );
+    const html = await render(email);
+    const plain = await render(email, { plainText: true });
+    expect(html).not.toContain("<script>");
+    expect(html).toContain("#2C3A34");
+    expect(plain).toContain("Long Beach");
+    expect(plain).toContain("Bring a drive to my community");
+    expect(plain).toContain("not a confirmed drive");
+    expect(plain).toContain("October 15, 2026");
+  });
   it("matches the confirmed cancellation UI and preserves the calendar end date", async () => {
     const plain = await render(
       <SubscriptionCancelledEmail

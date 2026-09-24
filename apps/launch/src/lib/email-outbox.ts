@@ -6,6 +6,7 @@ import {
   sendExchangeUpdateEmail,
   sendPaymentUpdateEmail,
   sendCulinaryQuoteEmail,
+  sendCommunityInterestEmail,
 } from "./email";
 import {
   updateCheckoutConfirmationEmail,
@@ -13,6 +14,7 @@ import {
 } from "./checkout-record";
 
 type MailPayloads = {
+  community: Parameters<typeof sendCommunityInterestEmail>[0];
   culinary: Parameters<typeof sendCulinaryQuoteEmail>[0];
   order: Parameters<typeof sendOrderConfirmationEmail>[0];
   cancellation: Parameters<typeof sendSubscriptionCancelledEmail>[0];
@@ -113,6 +115,9 @@ export async function drainEmailOutbox(limit = 5): Promise<number> {
         );
       let resendId: string;
       switch (job.kind) {
+        case "community":
+          resendId = await sendCommunityInterestEmail(job.payload);
+          break;
         case "culinary":
           resendId = await sendCulinaryQuoteEmail(job.payload);
           break;

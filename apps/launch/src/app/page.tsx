@@ -48,6 +48,13 @@ export default function Home() {
         </nav>
       </header>
 
+      <Link href="/food-for-the-soul" className="flex min-h-12 flex-wrap items-center justify-center gap-x-2 gap-y-1 bg-forest px-5 py-3 text-center text-sm text-oat transition-colors hover:bg-forest/90">
+        <span className="font-bold">Food for the Soul</span>
+        <span aria-hidden="true" className="text-gold">·</span>
+        <span>Our October 15 community meal drive</span>
+        <span className="underline underline-offset-4">Get involved →</span>
+      </Link>
+
       <section className="relative lg:min-h-[700px]">
         <div className="grid lg:min-h-[700px] lg:grid-cols-[1.08fr_0.92fr]">
           <div className="relative order-2 min-h-[360px] overflow-hidden bg-sand sm:min-h-[460px] lg:order-1 lg:min-h-[700px]">
@@ -305,6 +312,21 @@ export default function Home() {
           </p>
           <p className="mt-3 text-sm text-forest/70">Los Angeles County only. Build an itemized estimate with no payment required.</p>
           <Button as="a" href="/quote" className="mt-7 w-full sm:w-auto">Plan a gathering</Button>
+        </div>
+      </section>
+
+      <section className="border-t border-forest/15 bg-oat px-5 py-14 sm:px-8 sm:py-20">
+        <div className="mx-auto grid max-w-5xl items-center gap-8 text-center md:grid-cols-[auto_1fr] md:gap-16 md:text-left">
+          <div className="border-b border-forest/20 pb-8 md:border-r md:border-b-0 md:pr-16 md:pb-0">
+            <p className="font-serif text-8xl leading-none tracking-[-0.06em] text-forest">100+</p>
+            <p className="mt-3 text-sm font-bold text-forest/75">community meals delivered</p>
+          </div>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-forest/70">A community initiative by Soul Good</p>
+            <h2 className="mt-3 text-5xl leading-tight tracking-[-0.04em]">Food for the Soul.</h2>
+            <p className="mt-4 max-w-xl text-base leading-7 text-forest/80">We provide the meals. Together, we bring them to your community. Partner with us to bring a meal drive where you are, or learn how to get involved in our October 15 drive.</p>
+            <Button as="a" href="/food-for-the-soul" className="mt-6 w-full sm:w-auto">Explore Food for the Soul</Button>
+          </div>
         </div>
       </section>
 

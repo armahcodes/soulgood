@@ -5,6 +5,8 @@ import { FulfillmentReminderEmail } from "@/emails/FulfillmentReminderEmail";
 import { OrderConfirmationEmail } from "@/emails/OrderConfirmationEmail";
 import { SubscriptionCancelledEmail } from "@/emails/SubscriptionCancelledEmail";
 import { CulinaryQuoteEmail } from "@/emails/CulinaryQuoteEmail";
+import { CommunityInterestEmail } from "@/emails/CommunityInterestEmail";
+import type { CommunityInterestRecord } from "./community-drive";
 import type { CulinaryQuote, CulinaryRequest } from "./culinary-booking";
 import { type BowlSelection } from "./bowl-selection";
 import {
@@ -29,6 +31,24 @@ function resendClient(): Resend {
 
 function sender(): string {
   return process.env.SOUL_GOOD_EMAIL_FROM || DEFAULT_FROM;
+}
+
+export async function sendCommunityInterestEmail(
+  input: CommunityInterestRecord,
+): Promise<string> {
+  return assertSent(
+    await resendClient().emails.send(
+      {
+        from: sender(),
+        to: process.env.COMMUNITY_EMAIL_TO || REPLY_TO,
+        replyTo: input.email,
+        subject: "New community connection · Food for the Soul",
+        react: <CommunityInterestEmail interest={input} />,
+        tags: [{ name: "category", value: "community-interest" }],
+      },
+      { idempotencyKey: `community-interest/${input.id}` },
+    ),
+  );
 }
 
 export async function sendCulinaryQuoteEmail(input: {

@@ -15,6 +15,10 @@ export async function allowCulinaryRequest(request: Request): Promise<boolean> {
   return allowRequest(request, "culinary-quotes", 600_000, 30);
 }
 
+export async function allowCommunityRequest(request: Request): Promise<boolean> {
+  return allowRequest(request, "community-interest", 600_000, 10);
+}
+
 async function allowRequest(
   request: Request,
   scope: string,

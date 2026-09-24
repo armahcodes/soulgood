@@ -7,6 +7,7 @@ const LEGAL_LINKS = [
   { href: EAT_NOW.infoPath, label: "About Eat Now" },
   { href: "/account", label: "My orders" },
   { href: "/quote", label: "Culinary bookings" },
+  { href: "/food-for-the-soul", label: "Food for the Soul" },
   { href: "/terms", label: "Terms of Service" },
   { href: "/customer-agreement", label: "Customer Agreement" },
   { href: "/cancel", label: "Manage or cancel a plan" },
@@ -15,7 +16,7 @@ const LEGAL_LINKS = [
 export function SiteFooter() {
   return (
     <footer className="border-t border-oat/12 bg-forest text-oat">
-      <div className="mx-auto grid w-full max-w-7xl gap-8 px-5 py-8 sm:px-8 md:grid-cols-[1fr_auto] md:items-end lg:px-12">
+      <div className="mx-auto grid w-full max-w-7xl gap-8 px-5 py-8 sm:px-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:items-end lg:px-12">
         <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">
           <Wordmark href="/" variant="cream" />
           <p className="max-w-sm text-sm leading-relaxed text-oat/55">
