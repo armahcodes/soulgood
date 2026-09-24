@@ -20,7 +20,7 @@ export function Wordmark({ href, className, variant = "full-color" }: WordmarkPr
       alt={BRAND_NAME}
       width={212}
       height={74}
-      priority
+      loading="eager"
       sizes="212px"
       className="h-auto w-[148px] sm:w-[188px]"
     />

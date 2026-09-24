@@ -1,5 +1,6 @@
 import { OrderConfirmation } from "@/components/checkout/OrderConfirmation";
-import { Wordmark } from "@/components/ui/Wordmark";
+import Link from "next/link";
+import { SiteHeader } from "@/components/ui/SiteHeader";
 import { BRAND_NAME } from "@/lib/brand";
 
 export const metadata = {
@@ -9,13 +10,21 @@ export const metadata = {
 
 export default function WelcomePage() {
   return (
-    <main className="flex min-h-screen flex-col bg-oat">
-      <header className="border-b border-forest/12">
-        <div className="mx-auto flex min-h-20 w-full max-w-5xl items-center px-5 sm:px-8">
-          <Wordmark href="/" />
-        </div>
-      </header>
-      <OrderConfirmation />
-    </main>
+    <>
+      <SiteHeader
+        variant="focus"
+        aside={
+          <Link
+            href="/account"
+            className="inline-flex min-h-11 items-center text-[0.7rem] font-bold tracking-[0.1em] text-forest/70 uppercase transition-colors hover:text-clay"
+          >
+            My orders
+          </Link>
+        }
+      />
+      <main className="flex min-h-screen flex-col bg-oat">
+        <OrderConfirmation />
+      </main>
+    </>
   );
 }

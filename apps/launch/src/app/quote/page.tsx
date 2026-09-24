@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { CulinaryQuoteBuilder } from "@/components/culinary/CulinaryQuoteBuilder";
-import { Wordmark } from "@/components/ui/Wordmark";
+import { SiteFooter } from "@/components/ui/SiteFooter";
+import { SiteHeader } from "@/components/ui/SiteHeader";
 import { todayInLosAngeles } from "@/lib/culinary-booking";
 
 export const dynamic = "force-dynamic";
@@ -13,17 +13,7 @@ export const metadata = {
 export default function QuotePage() {
   return (
     <div className="culinary-page min-h-screen bg-oat text-forest">
-      <header className="print-hidden border-b border-forest/12">
-        <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8 lg:px-12">
-          <Wordmark href="/" />
-          <Link
-            href="/checkout"
-            className="text-right text-xs font-semibold text-forest underline underline-offset-4"
-          >
-            Looking for weekly bowls?
-          </Link>
-        </div>
-      </header>
+      <SiteHeader current="/quote" className="print-hidden" />
       <main className="mx-auto max-w-5xl px-4 py-6 sm:px-8 sm:py-9">
         <div className="print-hidden mx-auto mb-6 max-w-3xl text-center">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-clay">
@@ -39,26 +29,9 @@ export default function QuotePage() {
         </div>
         <CulinaryQuoteBuilder today={todayInLosAngeles()} />
       </main>
-      <footer className="print-hidden mx-auto flex max-w-3xl flex-wrap justify-center gap-x-5 gap-y-3 border-t border-forest/10 px-4 py-5 text-xs text-forest/65">
-        <Link
-          href="/"
-          className="inline-flex min-h-11 items-center underline underline-offset-4"
-        >
-          Back to Soul Good
-        </Link>
-        <Link
-          href="/terms"
-          className="inline-flex min-h-11 items-center underline underline-offset-4"
-        >
-          Terms of service
-        </Link>
-        <Link
-          href="/customer-agreement"
-          className="inline-flex min-h-11 items-center underline underline-offset-4"
-        >
-          Customer agreement
-        </Link>
-      </footer>
+      <div className="print-hidden mt-10">
+        <SiteFooter />
+      </div>
     </div>
   );
 }

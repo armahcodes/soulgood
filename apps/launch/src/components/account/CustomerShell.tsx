@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 import { SiteFooter } from "@/components/ui/SiteFooter";
-import { Wordmark } from "@/components/ui/Wordmark";
+import { SiteHeader } from "@/components/ui/SiteHeader";
+import { cn } from "@/lib/utils";
 
 export function CustomerShell({
   children,
@@ -20,39 +21,36 @@ export function CustomerShell({
       >
         Skip to account content
       </a>
-      <header className="border-b border-forest/12">
-        <div className="mx-auto flex min-h-20 max-w-6xl items-center justify-between gap-4 px-5 sm:px-8">
-          <Wordmark href="/" />
-          {signedIn ? (
-            <SignOutButton />
-          ) : (
-            <Link
-              href="/"
-              className="inline-flex min-h-11 shrink-0 items-center text-sm font-semibold underline underline-offset-4"
-            >
-              Home
-            </Link>
-          )}
+      <SiteHeader current="/account" />
+      <div className="border-b border-forest/10 bg-card/60">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-5 py-3 sm:px-8">
+          {/* Pill tabs — brand adaptation of 21st.dev preetsuthar17/animated-tabs */}
+          <nav
+            aria-label="Customer account"
+            className="inline-flex rounded-lg border border-forest/12 bg-oat p-1"
+          >
+            {[
+              { key: "orders", href: "/account", label: "My orders" },
+              { key: "plans", href: "/cancel", label: "Manage weekly plans" },
+            ].map((item) => (
+              <Link
+                key={item.key}
+                href={item.href}
+                aria-current={active === item.key ? "page" : undefined}
+                className={cn(
+                  "inline-flex min-h-11 items-center rounded-md px-4 text-sm font-semibold transition-colors duration-200",
+                  active === item.key
+                    ? "bg-forest text-oat shadow-[0_1px_2px_rgb(44_58_52/0.25)]"
+                    : "text-forest/70 hover:bg-forest/5 hover:text-forest",
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          {signedIn ? <SignOutButton /> : null}
         </div>
-        <nav
-          aria-label="Customer account"
-          className="mx-auto flex max-w-6xl gap-6 px-5 sm:px-8"
-        >
-          {[
-            { key: "orders", href: "/account", label: "My orders" },
-            { key: "plans", href: "/cancel", label: "Manage weekly plans" },
-          ].map((item) => (
-            <Link
-              key={item.key}
-              href={item.href}
-              aria-current={active === item.key ? "page" : undefined}
-              className={`inline-flex min-h-12 items-center border-b-2 text-sm font-semibold ${active === item.key ? "border-forest text-forest" : "border-transparent text-forest/65 hover:border-forest/30 hover:text-forest"}`}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </header>
+      </div>
       <main
         id="main-content"
         className="mx-auto min-h-[60vh] w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-14"

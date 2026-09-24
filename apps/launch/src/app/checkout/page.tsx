@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ReserveButton } from "@/components/checkout/ReserveButton";
 import { Logo } from "@/components/ui/Logo";
 import { SiteFooter } from "@/components/ui/SiteFooter";
-import { Wordmark } from "@/components/ui/Wordmark";
+import { SiteHeader } from "@/components/ui/SiteHeader";
 import { BRAND_NAME, type FulfillmentMethod, NOURISHMENT, PLAN, PRICING } from "@/lib/brand";
 import { MAX_BOWLS_PER_ORDER } from "@/lib/bowl-selection";
 import {
@@ -37,18 +37,18 @@ export default async function CheckoutPage({
 
   return (
     <>
+      <SiteHeader
+        variant="focus"
+        aside={
+          <Link
+            href="/account"
+            className="inline-flex min-h-11 items-center text-[0.7rem] font-bold tracking-[0.1em] text-forest/70 uppercase transition-colors hover:text-clay"
+          >
+            My orders
+          </Link>
+        }
+      />
       <main className="min-h-screen bg-oat">
-        <header className="border-b border-forest/12">
-          <div className="mx-auto flex min-h-20 w-full max-w-6xl items-center justify-between gap-4 px-5 sm:px-8">
-            <Wordmark href="/" />
-            <Link
-              href="/account"
-              className="text-[0.68rem] font-bold tracking-[0.08em] text-forest/68 uppercase transition-colors hover:text-clay"
-            >
-              My orders
-            </Link>
-          </div>
-        </header>
 
         <div className="border-b border-forest/12 bg-sand/25 px-5 py-3 text-center text-sm leading-6 text-forest/75">
           A bowl for today?{" "}

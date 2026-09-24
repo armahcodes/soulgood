@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowRight, Heart, HandHeart, Sprout } from "lucide-react";
-import { Wordmark } from "@/components/ui/Wordmark";
+import { SiteHeader } from "@/components/ui/SiteHeader";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { CommunityInterestForm } from "@/components/community/CommunityInterestForm";
 import { ShareDrive } from "@/components/community/ShareDrive";
@@ -50,39 +50,30 @@ export default function FoodForTheSoulPage() {
       >
         Skip to content
       </a>
-      <header className="border-b border-forest/15">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-12">
-          <Wordmark href="/" />
-          <nav
-            aria-label="Community navigation"
-            className="flex items-center gap-7 text-sm"
-          >
+      <SiteHeader
+        current={COMMUNITY_DRIVE.path}
+        cta={{ href: "#get-involved", label: "Get involved" }}
+      />
+      <nav
+        aria-label="Community navigation"
+        className="border-b border-forest/10 bg-card/60"
+      >
+        <div className="scrollbar-none mx-auto flex max-w-7xl items-center gap-6 overflow-x-auto px-5 text-sm sm:px-8 lg:px-12">
+          {[
+            { href: "#our-impact", label: "Our impact" },
+            { href: "#next-drive", label: "The next drive" },
+            { href: "#get-involved", label: "Get involved" },
+          ].map((link) => (
             <a
-              href="#our-impact"
-              className="hidden min-h-11 items-center hover:underline md:inline-flex"
+              key={link.href}
+              href={link.href}
+              className="inline-flex min-h-12 shrink-0 items-center gap-2 font-semibold text-forest/72 transition-colors hover:text-clay"
             >
-              Our impact
+              {link.label}
             </a>
-            <a
-              href="#next-drive"
-              className="hidden min-h-11 items-center hover:underline md:inline-flex"
-            >
-              The next drive
-            </a>
-            <a
-              href="#get-involved"
-              className="inline-flex min-h-11 items-center border border-forest px-3 text-xs font-bold sm:px-5 sm:text-sm"
-            >
-              Get involved{" "}
-              <ArrowRight
-                size={15}
-                aria-hidden="true"
-                className="ml-2 hidden sm:block"
-              />
-            </a>
-          </nav>
+          ))}
         </div>
-      </header>
+      </nav>
       <main id="main-content">
         <section
           aria-labelledby="campaign-title"

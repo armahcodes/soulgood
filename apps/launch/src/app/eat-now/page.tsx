@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { SiteFooter } from "@/components/ui/SiteFooter";
-import { Wordmark } from "@/components/ui/Wordmark";
+import { SiteHeader } from "@/components/ui/SiteHeader";
 import { BRAND_NAME, CONTACT, NOURISHMENT } from "@/lib/brand";
 import { CURRENT_BOWLS } from "@/lib/current-offer";
 import { EAT_NOW } from "@/lib/ordering";
@@ -23,15 +23,8 @@ export const metadata: Metadata = {
 export default function EatNowPage() {
   return (
     <>
+      <SiteHeader cta={{ href: EAT_NOW.menuUrl, label: "Eat Now menu", short: "Order" }} />
       <main className="min-h-screen bg-oat">
-        <header className="border-b border-forest/12">
-          <div className="mx-auto flex min-h-20 w-full max-w-6xl items-center justify-between gap-4 px-5 sm:px-8">
-            <Wordmark href="/" />
-            <Link href="/checkout" className="inline-flex min-h-11 items-center text-right text-xs font-bold tracking-[0.08em] text-forest uppercase">
-              {NOURISHMENT.label}
-            </Link>
-          </div>
-        </header>
 
         <section className="mx-auto grid w-full max-w-6xl items-center gap-8 px-5 py-10 sm:px-8 sm:py-16 lg:grid-cols-2 lg:gap-14">
           <div className="min-w-0 text-center lg:text-left">
