@@ -5,10 +5,15 @@ import { useRouter } from "next/navigation";
 import Script from "next/script";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BowlBuilder } from "@/components/checkout/BowlBuilder";
+import { CheckoutProgress } from "@/components/checkout/CheckoutProgress";
+import { MobileOrderBar } from "@/components/checkout/MobileOrderBar";
+import { QuantityStepper } from "@/components/ui/kit/quantity-stepper";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import {
   bowlsForPlan,
   bowlSelectionSchemaForPlan,
+  bowlSelectionTotal,
   DEFAULT_BOWL_SELECTION,
   MAX_MEALS_PER_DAY,
   MAX_MEAL_SETS_PER_ORDER,
@@ -122,7 +127,29 @@ declare global {
 }
 
 const INPUT_CLASS =
-  "min-h-[50px] w-full rounded-none border border-forest/18 bg-white/75 px-4 text-base text-forest placeholder:text-forest/35 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/20";
+  "min-h-[50px] w-full rounded-md border border-forest/18 bg-white/80 px-4 text-base text-forest transition-[border-color,box-shadow] placeholder:text-forest/35 focus:border-forest/60 focus:outline-none focus:ring-4 focus:ring-sage/20 disabled:bg-forest/5 disabled:text-forest/55";
+
+const STEP_CARD =
+  "grid scroll-mt-40 gap-3 rounded-lg border border-forest/12 bg-card p-4 sm:p-6 [&>legend+*]:clear-both";
+
+const OPTION_CARD =
+  "cursor-pointer rounded-lg border border-forest/15 bg-oat/70 p-4 transition-[border-color,background-color,box-shadow] duration-200 hover:border-forest/40 has-checked:border-forest has-checked:bg-oat has-checked:shadow-[0_0_0_1px_var(--color-forest)] has-disabled:cursor-not-allowed has-disabled:opacity-60 has-disabled:hover:border-forest/15";
+
+function StepLegend({ number, title }: { number?: number; title: string }) {
+  return (
+    <legend className="float-left mb-2 flex w-full items-center gap-2.5 text-xs font-bold tracking-[0.12em] text-forest/70 uppercase">
+      {number ? (
+        <>
+          <span aria-hidden="true" className="flex size-6 shrink-0 items-center justify-center rounded-full bg-forest text-[0.65rem] text-oat">
+            {number}
+          </span>
+          <span className="sr-only">Step {number} · </span>
+        </>
+      ) : null}
+      {title}
+    </legend>
+  );
+}
 
 const EMPTY_ADDRESS: CheckoutAddress = {
   addressLine1: "",
@@ -473,6 +500,17 @@ export function ReserveButton({
     addressIsComplete(effectiveBillingAddress) &&
     (fulfillmentMethod !== "delivery" || addressIsComplete(deliveryAddress)),
   );
+  const detailsComplete =
+    Boolean(contactComplete) &&
+    addressIsComplete(effectiveBillingAddress) &&
+    (fulfillmentMethod !== "delivery" || addressIsComplete(deliveryAddress));
+  const progressSteps = [
+    { id: "step-size", label: "Size", complete: true },
+    { id: "step-bowls", label: "Bowls", complete: bowlSelectionComplete },
+    { id: "step-details", label: "Details", complete: detailsComplete },
+    { id: "step-total", label: "Total", complete: Boolean(quote) },
+    { id: "step-pay", label: "Pay", complete: Boolean(quote) && accepted },
+  ];
 
   const resetQuote = useCallback((): void => {
     quoteRequestRef.current++;
@@ -1061,10 +1099,11 @@ export function ReserveButton({
 
   return (
     <div className="flex flex-col gap-6">
+      <CheckoutProgress steps={progressSteps} />
       {!paymentsAvailable && (
         <p
           role="status"
-          className="border border-clay/30 bg-clay/8 p-4 text-sm leading-relaxed text-forest"
+          className="rounded-lg border border-clay/30 bg-clay/8 p-4 text-sm leading-relaxed text-forest"
         >
           Secure checkout is temporarily unavailable. Please check back shortly.
           If you already submitted a payment, keep this page and use the
@@ -1085,7 +1124,7 @@ export function ReserveButton({
       {recoveryId && (
         <section
           role="status"
-          className="grid gap-4 border border-sage bg-sage/10 p-5 text-sm text-forest"
+          className="grid gap-4 rounded-lg border border-sage bg-sage/10 p-5 text-sm text-forest"
         >
           <h2 className="font-serif text-2xl">Checking your purchase</h2>
           <p>
@@ -1119,10 +1158,8 @@ export function ReserveButton({
         </section>
       )}
       <fieldset disabled={pending || Boolean(recoveryId)} className="contents">
-        <fieldset className="grid gap-3 border border-forest/14 bg-gold/10 p-5">
-          <legend className="px-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-            Step 1 · Who are we nourishing?
-          </legend>
+        <fieldset id="step-size" className={STEP_CARD}>
+          <StepLegend number={1} title="Who are we nourishing?" />
           <div className="flex items-center justify-between gap-5">
             <div>
               <p className="font-serif text-2xl text-forest">
@@ -1132,40 +1169,24 @@ export function ReserveButton({
                 For you, or the people sharing your table. One checkout for everyone.
               </p>
             </div>
-            <div className="flex items-center border border-forest/18 bg-oat">
-              <button
-                type="button"
-                aria-label="Remove one person"
-                className="h-11 w-11 text-xl text-forest disabled:text-forest/25"
-                disabled={pending || peopleCount === 1}
-                onClick={() => chooseOrderSize(peopleCount - 1, mealsPerDay)}
-              >
-                −
-              </button>
-              <output
-                aria-label={`${peopleCount} ${peopleCount === 1 ? "person" : "people"} selected`}
-                className="flex h-11 min-w-11 items-center justify-center border-x border-forest/14 font-bold text-forest"
-              >
-                {peopleCount}
-              </output>
-              <button
-                type="button"
-                aria-label="Add one person"
-                className="h-11 w-11 text-xl text-forest disabled:text-forest/25"
-                disabled={pending || peopleCount === MAX_PEOPLE_PER_ORDER}
-                onClick={() =>
-                  chooseOrderSize(
-                    peopleCount + 1,
-                    Math.min(
-                      mealsPerDay,
-                      Math.floor(MAX_MEAL_SETS_PER_ORDER / (peopleCount + 1)),
-                    ),
-                  )
-                }
-              >
-                +
-              </button>
-            </div>
+            <QuantityStepper
+              value={peopleCount}
+              valueLabel={`${peopleCount} ${peopleCount === 1 ? "person" : "people"} selected`}
+              decrementLabel="Remove one person"
+              incrementLabel="Add one person"
+              decrementDisabled={pending || peopleCount === 1}
+              incrementDisabled={pending || peopleCount === MAX_PEOPLE_PER_ORDER}
+              onDecrement={() => chooseOrderSize(peopleCount - 1, mealsPerDay)}
+              onIncrement={() =>
+                chooseOrderSize(
+                  peopleCount + 1,
+                  Math.min(
+                    mealsPerDay,
+                    Math.floor(MAX_MEAL_SETS_PER_ORDER / (peopleCount + 1)),
+                  ),
+                )
+              }
+            />
           </div>
 
           <div className="border-t border-forest/10 pt-4">
@@ -1186,11 +1207,12 @@ export function ReserveButton({
                     disabled={pending || !available}
                     aria-pressed={mealsPerDay === meals}
                     onClick={() => chooseOrderSize(peopleCount, meals)}
-                    className={`min-h-14 border px-2 text-sm font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-35 ${
+                    className={cn(
+                      "min-h-12 rounded-md border px-2 text-sm font-bold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-35",
                       mealsPerDay === meals
-                        ? "border-sage bg-sage/14 text-forest"
-                        : "border-forest/14 bg-white/60 text-forest/65 hover:border-sage"
-                    }`}
+                        ? "border-forest bg-forest text-oat"
+                        : "border-forest/15 bg-oat/70 text-forest/70 hover:border-forest/40",
+                    )}
                   >
                     {meals} {meals === 1 ? "meal" : "meals"}
                   </button>
@@ -1210,21 +1232,15 @@ export function ReserveButton({
           </p>
         </fieldset>
 
-        <fieldset className="grid gap-2">
-          <legend className="mb-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-            Order frequency
-          </legend>
+        <fieldset className={STEP_CARD}>
+          <StepLegend title="Order frequency" />
           <div className="grid gap-2 sm:grid-cols-2">
             {(Object.keys(PURCHASE_OPTIONS) as PurchaseType[]).map((type) => {
               const option = PURCHASE_OPTIONS[type];
               return (
                 <label
                   key={type}
-                  className={`cursor-pointer border p-4 transition-colors ${
-                    purchaseType === type
-                      ? "border-sage bg-sage/10"
-                      : "border-forest/15 bg-white/60 hover:border-sage"
-                  }`}
+                  className={OPTION_CARD}
                 >
                   <span className="flex items-start gap-3">
                     <input
@@ -1242,7 +1258,7 @@ export function ReserveButton({
                       <strong className="block text-forest">
                         {option.label}
                       </strong>
-                      <span className="mt-1 block leading-relaxed text-forest/58">
+                      <span className="mt-1 block leading-relaxed text-forest/65">
                         {type === "weekly" && fulfillmentMethod === "pickup"
                           ? "Weekly plans currently require delivery. One-time pickup is available."
                           : option.disclosure}
@@ -1266,16 +1282,14 @@ export function ReserveButton({
           selection={bowlSelection}
         />
 
-        <fieldset className="grid gap-2">
-          <legend className="mb-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-            Step 3 · Pickup or delivery
-          </legend>
+        <fieldset id="step-fulfillment" className={STEP_CARD}>
+          <StepLegend number={3} title="Pickup or delivery" />
           {(Object.keys(FULFILLMENT) as FulfillmentMethod[]).map((method) => {
             const option = FULFILLMENT[method];
             return (
               <label
                 key={method}
-                className="grid cursor-pointer grid-cols-[1fr_auto] items-start gap-3 border border-forest/15 bg-white/60 p-4 text-sm text-forest/72 transition-colors hover:border-sage sm:items-center"
+                className={cn(OPTION_CARD, "grid grid-cols-[1fr_auto] items-start gap-3 text-sm text-forest/72 sm:items-center")}
               >
                 <span className="flex items-center gap-3">
                   <input
@@ -1304,10 +1318,8 @@ export function ReserveButton({
           })}
         </fieldset>
 
-        <fieldset className="grid gap-3">
-          <legend className="mb-1 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-            Step 4 · Your details
-          </legend>
+        <fieldset id="step-details" className={STEP_CARD}>
+          <StepLegend number={4} title="Your details" />
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">
               First name
@@ -1361,12 +1373,10 @@ export function ReserveButton({
         </fieldset>
 
         {fulfillmentMethod === "delivery" && (
-          <fieldset className="grid gap-3">
-            <legend className="mb-1 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-              LA County delivery address
-            </legend>
+          <fieldset className={STEP_CARD}>
+            <StepLegend title="LA County delivery address" />
             {renderAddressFields("delivery")}
-            <label className="flex items-start gap-3 border border-forest/12 bg-white/55 p-4 text-sm text-forest/72">
+            <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-forest/12 bg-oat/70 p-4 text-sm text-forest/72">
               <input
                 type="checkbox"
                 className="mt-0.5 h-5 w-5 shrink-0 accent-forest"
@@ -1390,18 +1400,14 @@ export function ReserveButton({
         )}
 
         {(fulfillmentMethod === "pickup" || !billingSameAsDelivery) && (
-          <fieldset className="grid gap-3">
-            <legend className="mb-1 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-              Billing address
-            </legend>
+          <fieldset className={STEP_CARD}>
+            <StepLegend title="Billing address" />
             {renderAddressFields("billing")}
           </fieldset>
         )}
 
-        <fieldset className="grid gap-3">
-          <legend className="mb-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-            Cardholder name
-          </legend>
+        <fieldset className={STEP_CARD}>
+          <StepLegend title="Cardholder name" />
           <label className="flex items-start gap-3 text-sm text-forest/70">
             <input
               type="checkbox"
@@ -1468,13 +1474,22 @@ export function ReserveButton({
             ref={errorRef}
             role="alert"
             tabIndex={-1}
-            className="border border-clay/35 bg-clay/8 px-4 py-3 text-sm leading-relaxed text-clay outline-none"
+            className="rounded-lg border border-clay/35 bg-clay/8 px-4 py-3 text-sm leading-relaxed text-clay outline-none"
           >
             {error}
           </p>
         ) : null}
 
-        <dl className="grid gap-3 border-y border-forest/10 py-5 text-sm text-forest/70">
+        <dl
+          id="step-total"
+          className="grid scroll-mt-40 gap-3 rounded-lg border border-forest/12 bg-card p-5 text-sm text-forest/70 sm:p-6"
+        >
+          <div className="-mt-1 mb-1 flex items-center justify-between border-b border-dashed border-forest/15 pb-3">
+            <dt className="font-serif text-xl text-forest">Order summary</dt>
+            <dd className="text-xs font-bold tracking-[0.1em] text-forest/60 uppercase">
+              {bowlSelectionTotal(bowlSelection)} of {targetBowls} bowls
+            </dd>
+          </div>
           <div className="flex justify-between gap-4">
             <dt>
               {mealSets} {mealSets === 1 ? "set" : "sets"} of five bowls
@@ -1525,13 +1540,17 @@ export function ReserveButton({
           </div>
         </dl>
 
-        <div>
-          <p className="mb-2 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-            Step 5 · Secure payment
+        <div id="step-pay" className="scroll-mt-40">
+          <p className="mb-3 flex items-center gap-2.5 text-xs font-bold tracking-[0.12em] text-forest/70 uppercase">
+            <span aria-hidden="true" className="flex size-6 items-center justify-center rounded-full bg-forest text-[0.65rem] text-oat">
+              5
+            </span>
+            <span className="sr-only">Step 5 · </span>
+            Secure payment
           </p>
           <div
             id="square-card"
-            className="min-h-[90px] border border-forest/15 bg-white p-3"
+            className="min-h-[90px] rounded-md border border-forest/15 bg-white p-3"
           />
           {!configured && (
             <p className="mt-2 text-sm text-clay">
@@ -1545,7 +1564,7 @@ export function ReserveButton({
           )}
         </div>
 
-        <div className="border border-forest/15 bg-white/60 p-4 text-sm leading-relaxed text-forest/72">
+        <div className="rounded-lg border border-forest/15 bg-oat/70 p-4 text-sm leading-relaxed text-forest/72">
           <p className="font-bold tracking-[0.08em] text-forest uppercase">
             {purchaseType === "weekly"
               ? "Automatic renewal"
@@ -1593,7 +1612,7 @@ export function ReserveButton({
 
         {purchaseType === "one-time" ? (
           <div
-            className="grid gap-3 border border-forest/12 bg-white/55 p-4"
+            className="grid gap-3 rounded-lg border border-forest/12 bg-oat/70 p-4"
             aria-label="Express checkout options"
           >
             <div className="flex items-center gap-3" aria-hidden="true">
@@ -1649,7 +1668,7 @@ export function ReserveButton({
             ) : null}
           </div>
         ) : (
-          <p className="border border-forest/12 bg-white/55 px-4 py-3 text-xs leading-relaxed text-forest/60">
+          <p className="rounded-lg border border-forest/12 bg-oat/70 px-4 py-3 text-xs leading-relaxed text-forest/65">
             Weekly plans require a card because Apple Pay and Google Pay cannot
             be saved for automatic renewal through Square.
           </p>
@@ -1689,6 +1708,17 @@ export function ReserveButton({
           .
         </p>
       </fieldset>
+      <MobileOrderBar
+        hidden={pending || Boolean(recoveryId)}
+        selected={bowlSelectionTotal(bowlSelection)}
+        target={targetBowls}
+        totalLabel={
+          quote
+            ? formatCents(quote.totalCents)
+            : formatCents(bowlOrderCents + FULFILLMENT[fulfillmentMethod].amountCents)
+        }
+        totalNote={quote ? "incl. tax" : "before tax"}
+      />
     </div>
   );
 }

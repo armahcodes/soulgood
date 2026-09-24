@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import { QuantityStepper } from "@/components/ui/kit/quantity-stepper";
+import { cn } from "@/lib/utils";
 import {
   bowlsForPlan,
   bowlSelectionTotal,
@@ -49,67 +51,73 @@ export function BowlBuilder({
   }
 
   return (
-    <fieldset className="grid gap-4">
-      <legend className="w-full">
-        <span className="flex items-end justify-between gap-4">
-          <span>
-            <span className="block text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
-              Step 2 · Choose your bowls
-            </span>
-            <span className="mt-1 block text-sm leading-relaxed text-forest/62">
-              Start with a little of everything: one of each available recipe
-              per set of five. Keep the variety or choose more of your favorites.
-            </span>
-          </span>
-          <span
-            aria-live="polite"
-            className={`shrink-0 text-sm font-bold ${complete ? "text-sage" : "text-clay"}`}
-          >
-            {total} of {target}
-          </span>
+    <fieldset id="step-bowls" className="grid scroll-mt-40 gap-4 rounded-lg border border-forest/12 bg-card p-4 sm:p-6">
+      <legend className="sr-only">Step 2 · Choose your bowls</legend>
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <p aria-hidden="true" className="flex items-center gap-2.5 text-xs font-bold tracking-[0.12em] text-forest/70 uppercase">
+            <span className="flex size-6 items-center justify-center rounded-full bg-forest text-[0.65rem] text-oat">2</span>
+            Choose your bowls
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-forest/68">
+            Start with a little of everything: one of each available recipe
+            per set of five. Keep the variety or choose more of your favorites.
+          </p>
+        </div>
+        <span
+          aria-live="polite"
+          className={cn(
+            "shrink-0 rounded-md px-2.5 py-1 text-sm font-bold tabular-nums transition-colors",
+            complete ? "bg-sage/15 text-forest" : "bg-clay/10 text-clay",
+          )}
+        >
+          {total} of {target}
         </span>
-      </legend>
+      </div>
 
-      <div
-        aria-hidden="true"
-        className="h-1.5 overflow-hidden rounded-full bg-forest/8"
-      >
+      <div aria-hidden="true" className="h-1.5 overflow-hidden rounded-full bg-forest/8">
         <div
-          className={`h-full rounded-full transition-all ${complete ? "bg-sage" : "bg-clay"}`}
+          className={cn("h-full rounded-full transition-all duration-500 ease-(--ease-soft)", complete ? "bg-sage" : "bg-clay")}
           style={{ width: `${Math.min(total / target, 1) * 100}%` }}
         />
       </div>
 
-      <div className="grid gap-3">
+      <div className="grid gap-2.5">
         {DISPLAY_BOWLS.map((bowl) => {
           const quantity = selection[bowl.id];
           return (
             <article
               key={bowl.id}
               data-availability={bowl.available ? "available" : "sold-out"}
-              className={`relative overflow-hidden border bg-white/65 transition-colors ${
-                quantity > 0 ? "border-sage/45" : "border-forest/12"
-              } ${bowl.available ? "" : "opacity-65"}`}
+              className={cn(
+                "relative overflow-hidden rounded-lg border bg-oat/70 transition-[border-color,box-shadow] duration-300",
+                quantity > 0 ? "border-sage/60 shadow-[0_0_0_1px_var(--color-sage)]" : "border-forest/12",
+                !bowl.available && "opacity-65",
+              )}
             >
-              <div className="grid grid-cols-[88px_1fr] items-stretch sm:grid-cols-[104px_1fr]">
-                <div className={`relative min-h-[118px] ${bowl.tone}`}>
+              <div className="grid grid-cols-[84px_1fr] items-stretch sm:grid-cols-[100px_1fr]">
+                <div className={cn("relative min-h-[112px]", bowl.tone)}>
                   <Image
                     src={bowl.imagePath}
                     alt={`${bowl.name} in a 32 ounce Soul Good jar`}
                     fill
-                    sizes="104px"
+                    sizes="100px"
                     className="object-cover"
                     unoptimized
                   />
                   {!bowl.available ? (
-                    <span className="absolute inset-x-2 top-2 bg-forest px-2 py-1 text-center text-[0.62rem] font-bold tracking-[0.12em] text-oat uppercase">
+                    <span className="absolute inset-x-2 top-2 rounded-sm bg-forest px-2 py-1 text-center text-[0.6rem] font-bold tracking-[0.12em] text-oat uppercase">
                       Sold out
+                    </span>
+                  ) : quantity > 0 ? (
+                    <span aria-hidden="true" className="absolute top-2 left-2 flex size-6 items-center justify-center rounded-full bg-forest text-[0.7rem] font-bold text-oat">
+                      {quantity}
                     </span>
                   ) : null}
                 </div>
-                <div className="flex min-w-0 flex-col justify-between gap-3 p-4">
+                <div className="flex min-w-0 flex-col justify-between gap-3 p-3.5 sm:p-4">
                   <div>
-                    <h3 className="font-serif text-lg leading-tight font-semibold text-forest">
+                    <h3 className="font-serif text-xl leading-tight text-forest">
                       {bowl.name}
                     </h3>
                     {!bowl.available ? (
@@ -117,17 +125,18 @@ export function BowlBuilder({
                         Currently unavailable
                       </p>
                     ) : null}
-                    <p className="mt-1 text-xs leading-relaxed text-forest/55">
+                    <p className="mt-1 text-xs leading-relaxed text-forest/65">
                       {bowl.dietary.join(" · ")}
                     </p>
                   </div>
 
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <details className="group min-w-[6rem] flex-1">
-                      <summary className="cursor-pointer list-none text-xs font-bold text-forest underline decoration-forest/25 underline-offset-4">
+                      <summary className="inline-flex min-h-11 cursor-pointer list-none items-center gap-1 text-xs font-bold text-forest underline decoration-forest/25 underline-offset-4">
                         Learn more
+                        <span aria-hidden="true" className="transition-transform group-open:rotate-180">⌄</span>
                       </summary>
-                      <div className="col-span-2 mt-3 border-t border-forest/10 pt-3 text-xs leading-relaxed text-forest/65">
+                      <div className="mt-1 border-t border-forest/10 pt-3 text-xs leading-relaxed text-forest/70">
                         <p>{bowl.ingredients}</p>
                         <p className="mt-2">
                           <strong className="text-forest">Serve:</strong> {bowl.serving}
@@ -135,7 +144,7 @@ export function BowlBuilder({
                         {bowl.allergen ? (
                           <p className="mt-2 font-bold text-clay">{bowl.allergen}</p>
                         ) : (
-                          <p className="mt-2 text-forest/48">
+                          <p className="mt-2 text-forest/60">
                             No named major allergen on the current label. Cross-contact
                             can still occur.
                           </p>
@@ -143,40 +152,23 @@ export function BowlBuilder({
                       </div>
                     </details>
 
-                    <div
-                      aria-label={`${bowl.name} quantity`}
-                      className="flex shrink-0 items-center border border-forest/18 bg-oat"
-                    >
-                      <button
-                        type="button"
-                        aria-label={`Remove one ${bowl.name}`}
-                        className="flex h-10 w-10 items-center justify-center text-xl text-forest transition-colors hover:bg-sage/12 disabled:cursor-not-allowed disabled:text-forest/25"
-                        disabled={disabled || !bowl.available || quantity === 0}
-                        onClick={() => changeQuantity(bowl.id, -1)}
-                      >
-                        <span aria-hidden="true">−</span>
-                      </button>
-                      <output
-                        aria-label={`${quantity} ${bowl.name} selected`}
-                        className="flex h-10 min-w-9 items-center justify-center border-x border-forest/12 text-sm font-bold text-forest"
-                      >
-                        {quantity}
-                      </output>
-                      <button
-                        type="button"
-                        aria-label={`Add one ${bowl.name}`}
-                        className="flex h-10 w-10 items-center justify-center text-xl text-forest transition-colors hover:bg-sage/12 disabled:cursor-not-allowed disabled:text-forest/25"
-                        disabled={
-                          disabled ||
-                          !bowl.available ||
-                          total >= target ||
-                          quantity >= maxPerRecipe
-                        }
-                        onClick={() => changeQuantity(bowl.id, 1)}
-                      >
-                        <span aria-hidden="true">+</span>
-                      </button>
-                    </div>
+                    <QuantityStepper
+                      size="sm"
+                      value={quantity}
+                      groupLabel={`${bowl.name} quantity`}
+                      valueLabel={`${quantity} ${bowl.name} selected`}
+                      decrementLabel={`Remove one ${bowl.name}`}
+                      incrementLabel={`Add one ${bowl.name}`}
+                      decrementDisabled={disabled || !bowl.available || quantity === 0}
+                      incrementDisabled={
+                        disabled ||
+                        !bowl.available ||
+                        total >= target ||
+                        quantity >= maxPerRecipe
+                      }
+                      onDecrement={() => changeQuantity(bowl.id, -1)}
+                      onIncrement={() => changeQuantity(bowl.id, 1)}
+                    />
                   </div>
                 </div>
               </div>
@@ -188,7 +180,7 @@ export function BowlBuilder({
       {!complete ? (
         <p role="status" className="text-sm font-semibold text-clay">
           Select {target - total} more {target - total === 1 ? "bowl" : "bowls"}
-          to continue.
+          {" "}to continue.
         </p>
       ) : (
         <p role="status" className="text-sm font-semibold text-sage">

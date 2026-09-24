@@ -1,6 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
+import { Check } from "lucide-react";
 import { ReserveButton } from "@/components/checkout/ReserveButton";
-import { Logo } from "@/components/ui/Logo";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import { BRAND_NAME, type FulfillmentMethod, NOURISHMENT, PLAN, PRICING } from "@/lib/brand";
@@ -49,7 +50,6 @@ export default async function CheckoutPage({
         }
       />
       <main className="min-h-screen bg-oat">
-
         <div className="border-b border-forest/12 bg-sand/25 px-5 py-3 text-center text-sm leading-6 text-forest/75">
           A bowl for today?{" "}
           <a href={EAT_NOW.menuUrl} className="inline-flex min-h-11 items-center font-semibold text-forest underline underline-offset-4">Order from the Eat Now menu</a>
@@ -57,7 +57,18 @@ export default async function CheckoutPage({
         </div>
 
         <div className="mx-auto grid w-full max-w-6xl grid-cols-[minmax(0,1fr)] gap-8 px-4 py-8 sm:px-8 sm:py-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start lg:gap-16 lg:py-20">
-          <section className="min-w-0 flex flex-col gap-5 text-center lg:gap-6 lg:text-left">
+          <section className="min-w-0 flex flex-col gap-5 text-center lg:sticky lg:top-28 lg:gap-6 lg:text-left">
+            <div aria-hidden="true" className="mx-auto flex -space-x-5 lg:mx-0">
+              {AVAILABLE_BOWLS.map((bowl, index) => (
+                <div
+                  key={bowl.id}
+                  className="relative size-16 overflow-hidden rounded-full border-4 border-oat bg-sand shadow-sm sm:size-[4.5rem]"
+                  style={{ zIndex: AVAILABLE_BOWLS.length - index }}
+                >
+                  <Image src={bowl.imagePath} alt="" fill unoptimized sizes="72px" className="scale-150 object-cover object-[50%_60%]" />
+                </div>
+              ))}
+            </div>
             <p className="text-xs font-bold tracking-[0.18em] text-clay uppercase">
               {NOURISHMENT.label} · Once or weekly
             </p>
@@ -88,14 +99,14 @@ export default async function CheckoutPage({
               Five bowls start at $88 · tax shown before payment
             </p>
 
-            <ul className="mt-3 hidden gap-3 text-left sm:grid sm:grid-cols-2">
+            <ul className="mt-2 hidden gap-3 border-t border-forest/10 pt-6 text-left sm:grid sm:grid-cols-2">
               {PLAN_ITEMS.map((item) => (
                 <li
                   key={item}
-                  className="flex items-center gap-3 text-sm text-forest/75"
+                  className="flex items-start gap-3 text-sm leading-6 text-forest/75"
                 >
-                  <span className="flex h-7 w-7 items-center justify-center bg-sage/12">
-                    <Logo size={15} title="" variant="sage" />
+                  <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-sage/15 text-sage">
+                    <Check className="size-3" aria-hidden />
                   </span>
                   {item}
                 </li>
@@ -103,16 +114,13 @@ export default async function CheckoutPage({
             </ul>
           </section>
 
-          <section className="min-w-0 border border-forest/14 bg-white/35 p-4 sm:p-9">
+          <section className="min-w-0 rounded-lg border border-forest/12 bg-white/40 p-4 shadow-[0_30px_60px_-45px_rgb(44_58_52/0.5)] sm:p-9">
             <div className="border-b border-forest/10 pb-5 text-center sm:pb-6 sm:text-left">
               <p className="font-serif text-2xl font-semibold text-forest">
                 Your nourishment, your way.
               </p>
               <p className="mt-1 text-sm text-forest/55">
                 One-time or weekly · 5 to {MAX_BOWLS_PER_ORDER} bowls
-              </p>
-              <p className="mt-3 text-xs font-bold tracking-[0.08em] text-clay uppercase sm:hidden">
-                Size · Bowls · Pickup or delivery · Details · Pay
               </p>
             </div>
 

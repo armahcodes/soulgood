@@ -1,7 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Check, Clock } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import { ReorderButton } from "@/components/checkout/ReorderButton";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
@@ -12,6 +15,30 @@ import {
   type LastOrderConfirmation,
 } from "@/lib/checkout-session";
 import { CURRENT_BOWLS } from "@/lib/current-offer";
+
+/** Animated status seal — adapted from 21st.dev kavikatiyar/order-confirmation-card. */
+function StatusSeal({ pending }: { pending: boolean }) {
+  const reduced = useReducedMotion();
+  const Icon = pending ? Clock : Check;
+  return (
+    <motion.div
+      initial={reduced ? false : { scale: 0.6, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      className={`relative mb-8 flex size-20 items-center justify-center rounded-full ${pending ? "bg-gold/25 text-forest" : "bg-sage text-oat"}`}
+    >
+      <span aria-hidden className={`absolute inset-0 rounded-full ${pending ? "" : "motion-safe:animate-ping bg-sage/30 [animation-iteration-count:2]"}`} />
+      <motion.span
+        initial={reduced ? false : { scale: 0, rotate: -30 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ delay: 0.15, type: "spring", stiffness: 320, damping: 18 }}
+        className="relative"
+      >
+        <Icon className="size-9" strokeWidth={2.25} aria-hidden />
+      </motion.span>
+    </motion.div>
+  );
+}
 
 export function OrderConfirmation() {
   const [confirmation, setConfirmation] = useState<
@@ -36,12 +63,17 @@ export function OrderConfirmation() {
   if (confirmation === undefined) {
     return (
       <div
-        className="flex min-h-[70vh] items-center justify-center"
+        className="mx-auto flex min-h-[70vh] w-full max-w-4xl flex-col items-center px-5 py-16"
         role="status"
       >
-        <p className="text-sm text-forest/58">
-          Loading your order confirmation…
-        </p>
+        <span className="sr-only">Loading your order confirmation…</span>
+        <div aria-hidden="true" className="flex w-full flex-col items-center gap-5 motion-safe:animate-pulse">
+          <div className="size-20 rounded-full bg-forest/8" />
+          <div className="h-3 w-32 rounded bg-forest/8" />
+          <div className="h-14 w-3/4 max-w-md rounded-md bg-forest/8" />
+          <div className="h-4 w-full max-w-lg rounded bg-forest/8" />
+          <div className="mt-6 h-56 w-full rounded-lg bg-forest/6" />
+        </div>
       </div>
     );
   }
@@ -49,8 +81,8 @@ export function OrderConfirmation() {
   if (!confirmation) {
     return (
       <section className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-5 py-16 text-center sm:px-8">
-        <div className="mb-8 flex h-20 w-20 items-center justify-center bg-forest">
-          <Logo size={46} title="" variant="cream" />
+        <div className="mb-8 flex size-20 items-center justify-center rounded-full bg-forest">
+          <Logo size={42} title="" variant="cream" />
         </div>
         <p className="mb-5 text-xs font-bold tracking-[0.18em] text-clay uppercase">
           Confirmation unavailable
@@ -76,6 +108,9 @@ export function OrderConfirmation() {
   }
 
   const weekly = confirmation.purchaseType === "weekly";
+  const pending =
+    Boolean(confirmation.paymentPending) ||
+    confirmation.status === "PENDING_PAYMENT";
   const selectedBowls = CURRENT_BOWLS.filter(
     (bowl) => confirmation.bowlSelection[bowl.id] > 0,
   );
@@ -87,9 +122,7 @@ export function OrderConfirmation() {
 
   return (
     <section className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center px-5 py-12 text-center sm:px-8 sm:py-16">
-      <div className="mb-7 flex h-20 w-20 items-center justify-center bg-forest">
-        <Logo size={46} title="" variant="cream" />
-      </div>
+      <StatusSeal pending={pending} />
       <p className="mb-5 text-xs font-bold tracking-[0.18em] text-clay uppercase">
         {confirmation.paymentPending ||
         confirmation.status === "PENDING_PAYMENT"
@@ -111,7 +144,7 @@ export function OrderConfirmation() {
           : "Thank you for making Soul Good part of your day. Your order is saved in your account. We’ll be in touch with your Sunday pickup or delivery window. Your confirmation email may take a few minutes to arrive."}
       </p>
 
-      <section className="mt-10 w-full border border-sage/30 bg-white/50 p-6 text-left sm:p-8">
+      <section className="mt-10 w-full overflow-hidden rounded-lg border border-forest/12 bg-card p-6 text-left shadow-[0_30px_60px_-45px_rgb(44_58_52/0.5)] sm:p-8">
         <div className="flex flex-col justify-between gap-5 border-b border-forest/10 pb-6 sm:flex-row sm:items-start">
           <div>
             <p className="text-xs font-bold tracking-[0.16em] text-clay uppercase">
@@ -129,7 +162,7 @@ export function OrderConfirmation() {
             </p>
           </div>
           <div className="sm:text-right">
-            <span className="inline-flex bg-sage/14 px-3 py-2 text-xs font-bold tracking-[0.1em] text-forest uppercase">
+            <span className="inline-flex rounded-md bg-sage/14 px-3 py-2 text-xs font-bold tracking-[0.1em] text-forest uppercase">
               {confirmation.status}
             </span>
             <p className="mt-3 font-serif text-3xl text-forest">
@@ -147,9 +180,14 @@ export function OrderConfirmation() {
               {selectedBowls.map((bowl) => (
                 <li
                   key={bowl.id}
-                  className="flex justify-between gap-3 border-b border-forest/8 pb-2 text-sm text-forest/68"
+                  className="flex items-center justify-between gap-3 border-b border-forest/8 pb-2 text-sm text-forest/68"
                 >
-                  <span>{bowl.name}</span>
+                  <span className="flex min-w-0 items-center gap-3">
+                    <span className="relative size-10 shrink-0 overflow-hidden rounded-md bg-sand">
+                      <Image src={bowl.imagePath} alt="" fill unoptimized sizes="40px" className="object-cover" />
+                    </span>
+                    {bowl.name}
+                  </span>
                   <strong className="text-forest">
                     × {confirmation.bowlSelection[bowl.id]}
                   </strong>
@@ -201,8 +239,8 @@ export function OrderConfirmation() {
           "We text you to confirm your Sunday pickup or delivery window.",
           `Your fresh 32 oz jarred bowls are prepared for ${PLAN.deliveryDay}.`,
         ].map((step, index) => (
-          <li key={step} className="border border-forest/12 bg-white/35 p-5">
-            <span className="mb-5 flex h-7 w-7 items-center justify-center bg-gold text-xs font-bold text-forest">
+          <li key={step} className="rounded-lg border border-forest/12 bg-card/70 p-5">
+            <span className="mb-5 flex size-7 items-center justify-center rounded-full bg-gold/30 text-xs font-bold text-forest">
               {index + 1}
             </span>
             <p className="text-sm leading-relaxed text-forest/72">{step}</p>
@@ -210,7 +248,7 @@ export function OrderConfirmation() {
         ))}
       </ol>
 
-      <div className="mt-8 max-w-3xl border border-forest/12 bg-white/35 p-5 text-sm leading-relaxed text-forest/68">
+      <div className="mt-8 max-w-3xl rounded-lg border border-forest/12 bg-card/70 p-5 text-sm leading-relaxed text-forest/70">
         {weekly
           ? "Your plan renews every seven days until canceled."
           : "This order is charged once and does not renew automatically."}{" "}
