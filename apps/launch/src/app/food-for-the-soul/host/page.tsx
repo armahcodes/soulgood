@@ -6,17 +6,15 @@ import { Reveal } from "@/components/ui/kit/reveal";
 import { Timeline } from "@/components/ui/kit/timeline";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SiteHeader } from "@/components/ui/SiteHeader";
-import { BRAND_NAME, CONTACT } from "@/lib/brand";
+import { CONTACT } from "@/lib/brand";
 import { todayInLosAngeles } from "@/lib/culinary-booking";
 import { HOST_COMMITMENTS, MEAL_DRIVE_LEAD_DAYS, NON_DISCRIMINATION_STATEMENT, REVIEW_CRITERIA } from "@/lib/meal-drive";
+import { pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbJsonLd, faqJsonLd } from "@/lib/structured-data";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
-  alternates: { canonical: "/food-for-the-soul/host" },
-  title: `Host a Food for the Soul meal drive — ${BRAND_NAME}`,
-  description:
-    "Organizations in Los Angeles and Orange County can apply to host a Food for the Soul community meal drive. Meals are free, open to all, and served first come, first served.",
-};
+export const metadata = pageMetadata("/food-for-the-soul/host");
 
 const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase";
 const ICONS = { need: HandHeart, open: Users, site: MapPin, logistics: Scale } as const;
@@ -28,7 +26,7 @@ const STEPS = [
   { title: "Drive day", body: "We bring the meals. Your volunteers serve them to everyone who comes, first come, first served." },
 ];
 
-const FAQS = [
+const HOST_FAQS = [
   { id: "qualify", title: "Do people need to qualify to receive a meal?", content: "No. Meals are free and open to anyone who comes. Hosts may not ask for ID, proof of income, immigration status, residency, or membership, and no one has to join or attend anything to receive a meal." },
   { id: "order", title: "How are meals handed out?", content: "First come, first served, one line for everyone, while supplies last. If we run out, we run out for everyone equally; hosts don’t hold meals back for particular groups." },
   { id: "faith", title: "Can faith communities and other groups host?", content: "Yes. Faith-based and secular organizations are welcome on equal terms and reviewed the same way. Drives must be open to all, and receiving a meal can’t depend on taking part in any service or activity." },
@@ -42,6 +40,7 @@ export default function HostMealDrivePage() {
     <>
       <SiteHeader current="/food-for-the-soul" />
       <main className="bg-oat">
+        <JsonLd data={[breadcrumbJsonLd([{ name: "Food for the Soul", path: "/food-for-the-soul" }, { name: "Host a meal drive", path: "/food-for-the-soul/host" }]), faqJsonLd(HOST_FAQS)]} />
         <section className="mx-auto grid w-full max-w-6xl gap-10 px-5 pt-10 pb-14 sm:px-8 sm:pt-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:px-12">
           <div>
             <p className={eyebrow}>Food for the Soul · Host application</p>
@@ -139,7 +138,7 @@ export default function HostMealDrivePage() {
               <p className={eyebrow}>Questions</p>
               <h2 id="host-faq-heading" className="mt-4 text-4xl leading-none text-forest sm:text-5xl">Good to know.</h2>
             </div>
-            <Accordion items={FAQS} defaultOpen={["qualify"]} />
+            <Accordion items={HOST_FAQS} defaultOpen={["qualify"]} />
           </div>
         </section>
       </main>

@@ -2,14 +2,11 @@ import Link from "next/link";
 import { QuizFlow } from "@/components/quiz/QuizFlow";
 import { getAddOnVariationIds } from "@/lib/square-catalog";
 import { SiteHeader } from "@/components/ui/SiteHeader";
-import { BRAND_NAME } from "@/lib/brand";
+import { pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
-export const metadata = {
-  alternates: { canonical: "/quiz" },
-  title: `Find your pathway — ${BRAND_NAME}`,
-  description:
-    "Answer a few gentle questions about your days and energy. We’ll match your Soul Good pathway and suggest Soul Bowls™ that suit you.",
-};
+export const metadata = pageMetadata("/quiz");
 
 export default function QuizPage() {
   return (
@@ -26,6 +23,7 @@ export default function QuizPage() {
         }
       />
       <main className="flex flex-1 flex-col">
+        <JsonLd data={breadcrumbJsonLd([{ name: "Pathway Finder", path: "/quiz" }])} />
         <QuizFlow sidesOrderable={Boolean(getAddOnVariationIds())} />
       </main>
     </div>

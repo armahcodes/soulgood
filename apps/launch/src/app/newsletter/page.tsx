@@ -3,13 +3,9 @@ import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup";
 import { UnsubscribePanel } from "@/components/newsletter/UnsubscribePanel";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SiteHeader } from "@/components/ui/SiteHeader";
-import { BRAND_NAME } from "@/lib/brand";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: `Newsletter — ${BRAND_NAME}`,
-  description: "New menus, Food for the Soul meal drives, and news from the Soul Good kitchen.",
-  robots: { index: false },
-};
+export const metadata = pageMetadata("/newsletter");
 
 const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase";
 

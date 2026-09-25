@@ -1,11 +1,7 @@
 import { redirect } from "next/navigation";
-import { BRAND_NAME } from "@/lib/brand";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: `Order Soul Bowls™ — ${BRAND_NAME}`,
-  description:
-    "Build and pay for a one-time or weekly Soul Bowls™ order with Sunday pickup or delivery across Los Angeles and Orange County.",
-};
+export const metadata = pageMetadata("/join");
 
 export default async function JoinPage({
   searchParams,

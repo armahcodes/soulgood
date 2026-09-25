@@ -9,15 +9,11 @@ import {
 } from "@/components/account/WeeklyPlans";
 import { Button } from "@/components/ui/Button";
 import { getAuth } from "@/lib/auth";
-import { BRAND_NAME } from "@/lib/brand";
 import { listCheckoutRecordsForEmail } from "@/lib/checkout-record";
 import { cancellationJobs } from "@/lib/subscription-cancellation";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: `Manage weekly plans — ${BRAND_NAME}`,
-  description:
-    "View your weekly plans and cancel future Soul Bowls™ renewals online.",
-};
+export const metadata = pageMetadata("/cancel");
 
 export const dynamic = "force-dynamic";
 

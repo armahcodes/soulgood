@@ -4,7 +4,7 @@ import { CULINARY_PRICING } from "@/lib/culinary-booking";
 
 // Question wording stays lowercase-friendly: the quote wizard's step buttons are
 // matched by name ("Experience", "Menu", "Event", "Review", "Contact").
-const FAQS = [
+export const GATHERINGS_FAQS = [
   {
     id: "difference",
     title: "What’s the difference between bowl delivery and a plated dinner?",
@@ -38,5 +38,5 @@ const FAQS = [
 ] as const;
 
 export function GatheringsFaq() {
-  return <Accordion items={FAQS} defaultOpen={["difference"]} />;
+  return <Accordion items={GATHERINGS_FAQS} defaultOpen={["difference"]} />;
 }

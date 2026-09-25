@@ -4,14 +4,11 @@ import { UnsubscribePanel } from "@/components/newsletter/UnsubscribePanel";
 import { ClearDeviceData, PrivacyRequestForm, SaleSharingPreference } from "@/components/privacy/PrivacyChoices";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SiteHeader } from "@/components/ui/SiteHeader";
-import { BRAND_NAME, BUSINESS, CONTACT } from "@/lib/brand";
+import { BUSINESS, CONTACT } from "@/lib/brand";
 import { PRIVACY_RESPONSE_DAYS } from "@/lib/privacy-shared";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  alternates: { canonical: "/privacy-choices" },
-  title: `Your Privacy Choices — ${BRAND_NAME}`,
-  description: "Opt out of sale or sharing, manage marketing email, clear data saved on this device, and make a privacy request.",
-};
+export const metadata = pageMetadata("/privacy-choices");
 
 const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase";
 const card = "scroll-mt-28 rounded-lg border border-forest/12 bg-card p-5 sm:p-8";

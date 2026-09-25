@@ -1,4 +1,5 @@
-import { organizationJsonLd, serializeJsonLd } from "@/lib/structured-data";
+import { faqJsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/structured-data";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { SaladBarShowcase } from "@/components/sections/SaladBarShowcase";
 import Image from "next/image";
 import Link from "next/link";
@@ -65,6 +66,7 @@ const FAQS = [
   {
     id: "cancel",
     title: "Can I cancel?",
+    plain: "Yes. Cancel future renewals online at any time at soulgood.kitchen/cancel. An order already charged and committed to production remains final.",
     content: (
       <>
         Yes. <Link href="/cancel" className="text-clay-ink underline underline-offset-4">Cancel future renewals online</Link> at any time. An order already charged and committed to production remains final.
@@ -111,12 +113,12 @@ export default function Home() {
       <AnnouncementBar />
       <SiteHeader current="/" />
       <main className="overflow-x-clip bg-oat">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(organizationJsonLd()) }} />
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd(), faqJsonLd(FAQS)]} />
         {/* Hero — editorial split, adapted from 21st.dev felipemenezes098/hero-08 */}
         <section className="relative">
           {/* Phones: title → jar stack → details, so the product is visible on arrival. Desktop: text left, stack right. */}
           <div className="mx-auto grid w-full max-w-[1440px] gap-6 px-5 pt-6 pb-14 sm:gap-10 sm:px-8 sm:pt-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:grid-rows-[auto_auto] lg:gap-x-10 lg:gap-y-0 lg:px-12 lg:pt-10 lg:pb-20">
-            <div className="relative z-10 text-center motion-safe:animate-[rise_0.8s_var(--ease-soft)] lg:col-start-1 lg:row-start-1 lg:self-end lg:text-left">
+            <div className="relative z-10 text-center lg:col-start-1 lg:row-start-1 lg:self-end lg:text-left">
               <p className={eyebrow}>{TAGLINE}</p>
               <h1 className="mt-4 text-[clamp(3.6rem,17vw,5rem)] leading-[1.02] font-normal tracking-[0.01em] text-forest lg:text-[clamp(5rem,8.4vw,8.4rem)] lg:leading-[1.02]">
                 <span className="inline-flex items-start whitespace-nowrap">
@@ -149,7 +151,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="relative z-10 flex flex-col text-center motion-safe:animate-[rise_1s_var(--ease-soft)] lg:col-start-1 lg:row-start-2 lg:self-start lg:text-left">
+            <div className="relative z-10 flex flex-col text-center lg:col-start-1 lg:row-start-2 lg:self-start lg:text-left">
               <p className="mx-auto max-w-md text-base lg:mt-6 leading-7 text-forest/72 sm:text-lg lg:mx-0">
                 Thoughtfully prepared by {FOUNDER}, Soul Bowls™ bring whole ingredients and
                 comforting flavors to your daily rhythm. A nourishing moment, made for you.
@@ -296,6 +298,12 @@ export default function Home() {
               </p>
             </Reveal>
             <DeliveryOptions />
+            <p className="mt-8 text-center text-sm text-forest/75 lg:text-left">
+              Delivery details for{" "}
+              <Link href="/delivery/los-angeles" className="font-semibold underline underline-offset-4 hover:text-clay-ink">Los Angeles</Link>,{" "}
+              <Link href="/delivery/orange-county" className="font-semibold underline underline-offset-4 hover:text-clay-ink">Orange County</Link>, and{" "}
+              <Link href="/delivery/long-beach" className="font-semibold underline underline-offset-4 hover:text-clay-ink">Long Beach</Link>.
+            </p>
           </div>
         </section>
 

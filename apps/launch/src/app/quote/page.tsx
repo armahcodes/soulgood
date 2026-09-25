@@ -12,14 +12,13 @@ import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import { formatCents } from "@/lib/brand";
 import { CULINARY_PRICING, todayInLosAngeles, type CulinaryExperience } from "@/lib/culinary-booking";
+import { pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd } from "@/lib/structured-data";
+import { GATHERINGS_FAQS } from "@/components/gatherings/GatheringsFaq";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
-  alternates: { canonical: "/quote" },
-  title: "Gatherings & culinary bookings — Soul Bowls™",
-  description:
-    "Plan a Los Angeles County gathering. Bowl delivery starts at 10 bowls. Plated service is $55 per guest, with a $555 food minimum plus $500 culinary support, tax, and delivery. 50% deposit; balance due on the event date before arrival.",
-};
+export const metadata = pageMetadata("/quote");
 
 const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase";
 
@@ -45,9 +44,26 @@ export default async function QuotePage({ searchParams }: { searchParams: Promis
     <div className="culinary-page min-h-screen bg-oat text-forest">
       <SiteHeader current="/quote" className="print-hidden" />
       <main>
+        <JsonLd
+          data={[
+            breadcrumbJsonLd([{ name: "Gatherings", path: "/quote" }]),
+            serviceJsonLd({
+              name: "Soul Good gatherings and catering",
+              description: "Soul Bowls™ delivered for gatherings from 10 bowls, or plated dinners served by our team, in Los Angeles County.",
+              path: "/quote",
+              serviceType: "Catering",
+              area: "la",
+              offers: [
+                { name: "Bowl delivery", priceCents: CULINARY_PRICING.bowlUnitCents, unit: "per bowl, 10-bowl minimum" },
+                { name: "Plated dinner", priceCents: CULINARY_PRICING.platedPersonCents, unit: "per guest" },
+              ],
+            }),
+            faqJsonLd(GATHERINGS_FAQS),
+          ]}
+        />
         {/* Hero — headline with an expanding gallery of gatherings */}
         <section className="print-hidden mx-auto grid w-full max-w-[1440px] items-center gap-10 px-5 pt-8 pb-12 sm:px-8 sm:pt-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12 lg:px-12 lg:pb-16">
-          <div className="text-center motion-safe:animate-[rise_0.8s_var(--ease-soft)] lg:text-left">
+          <div className="text-center lg:text-left">
             <p className={eyebrow}>Gatherings · Los Angeles County</p>
             <h1 className="mt-4 text-[clamp(3rem,11vw,5.5rem)] leading-[1.02] font-normal tracking-[0.01em] text-forest">
               Let’s plan your gathering.

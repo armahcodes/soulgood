@@ -1,31 +1,24 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SiteHeader } from "@/components/ui/SiteHeader";
-import { BRAND_NAME, CONTACT, NOURISHMENT, ORDER_RULES } from "@/lib/brand";
+import { CONTACT, NOURISHMENT, ORDER_RULES } from "@/lib/brand";
 import { DeliveryOptions } from "@/components/sections/DeliveryOptions";
 import { CURRENT_BOWLS } from "@/lib/current-offer";
 import { EAT_NOW } from "@/lib/ordering";
+import { pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
-const title = `Take Out — Single-order ${BRAND_NAME}`;
-const description =
-  `Order single Soul Bowls™ on demand, ${EAT_NOW.days}, within about ${EAT_NOW.radiusMiles} miles of our Long Beach kitchen. ${EAT_NOW.deliveryDetails} $50 minimum; free delivery on orders over $100.`;
-
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { canonical: "https://www.soulgood.kitchen/eat-now" },
-  openGraph: { title, description, url: "https://www.soulgood.kitchen/eat-now" },
-  twitter: { title, description },
-};
+export const metadata = pageMetadata("/eat-now");
 
 export default function EatNowPage() {
   return (
     <>
       <SiteHeader cta={{ href: EAT_NOW.menuUrl, label: "Take Out menu", short: "Order" }} />
       <main className="min-h-screen bg-oat">
+        <JsonLd data={breadcrumbJsonLd([{ name: "Take Out", path: "/eat-now" }])} />
 
         <section className="mx-auto grid w-full max-w-6xl items-center gap-8 px-5 py-10 sm:px-8 sm:py-16 lg:grid-cols-2 lg:gap-14">
           <div className="min-w-0 text-center lg:text-left">

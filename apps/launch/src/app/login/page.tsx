@@ -6,13 +6,9 @@ import { CancellationHelp } from "@/components/account/CancellationHelp";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { getAuth } from "@/lib/auth";
 import { safeAccountRedirect } from "@/lib/safe-redirect";
-import { BRAND_NAME } from "@/lib/brand";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: `Sign in — ${BRAND_NAME}`,
-  description:
-    "Securely sign in by email to view your Soul Bowls™ orders and manage weekly plans.",
-};
+export const metadata = pageMetadata("/login");
 
 export const dynamic = "force-dynamic";
 

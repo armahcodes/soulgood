@@ -8,14 +8,12 @@ import { OrderHistory } from "@/components/account/OrderHistory";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/kit/empty-state";
 import { getAuth } from "@/lib/auth";
-import { BRAND_NAME, CONTACT } from "@/lib/brand";
+import { CONTACT } from "@/lib/brand";
 import { listCheckoutRecordsForEmail } from "@/lib/checkout-record";
 import { EAT_NOW } from "@/lib/ordering";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: `My orders — ${BRAND_NAME}`,
-  description: "Review your Soul Bowls™ orders and weekly plans.",
-};
+export const metadata = pageMetadata("/account");
 
 export const dynamic = "force-dynamic";
 

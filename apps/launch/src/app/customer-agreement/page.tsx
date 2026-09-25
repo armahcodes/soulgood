@@ -1,15 +1,12 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
-import { BRAND_NAME, BUSINESS, CONTACT, FEES, formatCents, LEGAL_VERSION, NOURISHMENT, ORDER_RULES, PLAN, PRICING, SERVICE_AREA, TAX } from "@/lib/brand";
+import { BUSINESS, CONTACT, FEES, formatCents, LEGAL_VERSION, NOURISHMENT, ORDER_RULES, PLAN, PRICING, SERVICE_AREA, TAX } from "@/lib/brand";
 import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
 import { EAT_NOW } from "@/lib/ordering";
 import { TIER_PRICE_CENTS } from "@/lib/menu-extras";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  alternates: { canonical: "/customer-agreement" },
-  title: `Customer Agreement — ${BRAND_NAME}`,
-  description: `Purchase and delivery terms for ${BRAND_NAME} Take Out orders and weekly meal prep, including renewal, cancellation, and exchanges.`,
-};
+export const metadata = pageMetadata("/customer-agreement");
 
 export default function CustomerAgreementPage() {
   return (

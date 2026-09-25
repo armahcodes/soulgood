@@ -16,7 +16,7 @@ export function CustomerLoading({
     <CustomerShell active={active}>
       <div role="status" className="mx-auto grid max-w-3xl gap-5">
         <div>
-          <h1 className="text-3xl">{label}</h1>
+          <p className="font-serif text-3xl text-forest">{label}</p>
           <p className="mt-3 text-sm leading-6 text-forest/75">
             Please wait a moment. No changes are being made to your orders or
             plans.

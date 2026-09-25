@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Jost, Marcellus } from "next/font/google";
-import { BRAND_NAME, NOURISHMENT, TAGLINE } from "@/lib/brand";
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 // Marcellus echoes the flared, chiselled SOUL GOOD wordmark; Jost matches the
@@ -19,27 +19,33 @@ const jost = Jost({
   variable: "--font-jost",
 });
 
-const SITE_TITLE = `${BRAND_NAME} — ${NOURISHMENT.headline}`;
-const SITE_DESCRIPTION = `${TAGLINE}. Chef-made Soul Bowls™ by Chef Kyla. Weekly nourishment delivered Sundays across Los Angeles and Orange County, or order on demand Thursday–Sunday near Long Beach. $50 minimum; free delivery over $100.`;
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.soulgood.kitchen"),
-  title: SITE_TITLE,
-  description: SITE_DESCRIPTION,
-  applicationName: BRAND_NAME,
+  metadataBase: new URL(SITE_URL),
+  title: { default: DEFAULT_TITLE, template: `%s | ${SITE_NAME}` },
+  description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_NAME,
   appleWebApp: { capable: true, title: "Soul Good", statusBarStyle: "default" },
   formatDetection: { telephone: false },
   openGraph: {
     type: "website",
-    siteName: BRAND_NAME,
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
+    siteName: SITE_NAME,
+    locale: "en_US",
+    url: SITE_URL,
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
   },
+  // Set GOOGLE_SITE_VERIFICATION / BING_SITE_VERIFICATION to verify Search Console and Bing Webmaster Tools.
+  verification: {
+    ...(process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : {}),
+    ...(process.env.BING_SITE_VERIFICATION ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } } : {}),
+  },
+  category: "food",
 };
 
 export const viewport: Viewport = {

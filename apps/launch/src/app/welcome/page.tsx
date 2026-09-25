@@ -1,12 +1,9 @@
 import { OrderConfirmation } from "@/components/checkout/OrderConfirmation";
 import Link from "next/link";
 import { SiteHeader } from "@/components/ui/SiteHeader";
-import { BRAND_NAME } from "@/lib/brand";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: `Order status — ${BRAND_NAME}`,
-  description: `Review your ${BRAND_NAME} checkout confirmation and next steps.`,
-};
+export const metadata = pageMetadata("/welcome");
 
 export default function WelcomePage() {
   return (

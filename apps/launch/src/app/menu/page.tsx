@@ -1,4 +1,5 @@
-import { menuJsonLd, serializeJsonLd } from "@/lib/structured-data";
+import { breadcrumbJsonLd, menuJsonLd } from "@/lib/structured-data";
+import { JsonLd } from "@/components/seo/JsonLd";
 import Image from "next/image";
 import Link from "next/link";
 import { BowlCollection } from "@/components/sections/BowlCollection";
@@ -9,18 +10,14 @@ import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/kit/reveal";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SiteHeader } from "@/components/ui/SiteHeader";
-import { BRAND_NAME, ORDER_RULES } from "@/lib/brand";
+import { ORDER_RULES } from "@/lib/brand";
 import { AVAILABLE_BOWLS } from "@/lib/current-offer";
 import { MENU_COLLECTION_LIST } from "@/lib/menu";
 import { MENU_EXTRAS } from "@/lib/menu-extras";
 import { getAddOnVariationIds } from "@/lib/square-catalog";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  alternates: { canonical: "/menu" },
-  title: `Menu — ${BRAND_NAME}`,
-  description:
-    "The full Soul Good menu: chef-made Soul Bowls™, made-to-order salads you can build your way, veggie cups, and snacks & light bites.",
-};
+export const metadata = pageMetadata("/menu");
 
 const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase";
 
@@ -32,9 +29,9 @@ export default function MenuPage() {
     <>
       <SiteHeader current="/menu" />
       <main className="bg-oat">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(menuJsonLd()) }} />
+        <JsonLd data={[menuJsonLd(), breadcrumbJsonLd([{ name: "Menu", path: "/menu" }])]} />
         <section className="mx-auto grid w-full max-w-7xl items-center gap-8 px-5 pt-8 pb-10 sm:px-8 sm:pt-12 lg:grid-cols-[1fr_1fr] lg:gap-12 lg:px-12 lg:pb-14">
-          <div className="text-center motion-safe:animate-[rise_0.8s_var(--ease-soft)] lg:text-left">
+          <div className="text-center lg:text-left">
             <p className={eyebrow}>The Soul Good menu</p>
             <h1 className="mt-4 text-5xl leading-[1.02] font-normal tracking-[0.01em] text-forest sm:text-7xl">
               Everything from our kitchen.

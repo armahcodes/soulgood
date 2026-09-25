@@ -45,3 +45,12 @@ From `apps/launch`: `npx tsc --noEmit -p .`, `npx eslint src e2e`, `npx vitest r
 - Muted forest text is `text-forest/72` or darker; muted oat text on forest is `text-oat/62` or lighter. Anything fainter fails AA for small text.
 - Horizontal scrollers without focusable children need `tabIndex={0}`, `role="region"`, and an `aria-label`.
 - Re-check with axe (scratch install, not a repo dependency) after visual changes; the last full sweep of every page on desktop and mobile had zero violations.
+
+## SEO
+
+- Page titles, descriptions, canonicals, and robots live in `src/lib/seo.ts` (`PAGE_SEO` + `pageMetadata(path)`); the root layout adds " | Soul Good". Keep titles ≤ ~60 characters and descriptions ≤ 160, facts only (no health claims). `e2e/seo.spec.ts` enforces this.
+- Private pages (login, account, cancel, welcome, join, newsletter) use `index: false` (noindex meta). Don't block them in robots.txt, or crawlers can't see the noindex.
+- Structured data helpers are in `src/lib/structured-data.ts`, rendered with `<JsonLd>`. FAQ markup must match questions visible on the page.
+- Service-area pages come from `src/lib/delivery-areas.ts` (`/delivery/[area]`). Keep each area's facts in sync with checkout and Take Out rules.
+- Share cards: `src/lib/og-card.tsx` + `opengraph-image.tsx` per route; photo crops and the Marcellus font are in `assets/og/`.
+- Set `GOOGLE_SITE_VERIFICATION` / `BING_SITE_VERIFICATION` in Vercel to verify Search Console and Bing, then submit `https://www.soulgood.kitchen/sitemap.xml`.

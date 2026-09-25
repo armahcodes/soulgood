@@ -15,6 +15,7 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
       { href: EAT_NOW.menuUrl, label: "Take Out menu", external: true },
       { href: EAT_NOW.infoPath, label: "About Take Out" },
       { href: "/quote", label: "Culinary bookings" },
+      { href: "/delivery", label: "Delivery areas" },
     ],
   },
   {

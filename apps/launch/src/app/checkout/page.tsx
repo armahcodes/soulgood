@@ -5,7 +5,7 @@ import { ReserveButton } from "@/components/checkout/ReserveButton";
 import { getAddOnVariationIds } from "@/lib/square-catalog";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SiteHeader } from "@/components/ui/SiteHeader";
-import { BRAND_NAME, type FulfillmentMethod, NOURISHMENT, PLAN } from "@/lib/brand";
+import { type FulfillmentMethod, NOURISHMENT, PLAN, PRICING } from "@/lib/brand";
 import { MAX_BOWLS_PER_ORDER } from "@/lib/bowl-selection";
 import {
   AVAILABLE_BOWLS,
@@ -14,12 +14,11 @@ import {
 } from "@/lib/current-offer";
 import { checkoutOperationsReady } from "@/lib/checkout-readiness";
 import { EAT_NOW } from "@/lib/ordering";
+import { pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbJsonLd, serviceJsonLd } from "@/lib/structured-data";
 
-export const metadata = {
-  alternates: { canonical: "/checkout" },
-  title: `${NOURISHMENT.label} — ${BRAND_NAME}`,
-  description: "Make nourishment part of your day with chef-crafted Soul Bowls™, once or weekly. Sunday delivery across Los Angeles and Orange County, free on orders over $100.",
-};
+export const metadata = pageMetadata("/checkout");
 
 const PLAN_ITEMS = [
   "Chef-made bowls built on whole ingredients",
@@ -52,6 +51,18 @@ export default async function CheckoutPage({
         }
       />
       <main className="min-h-screen bg-oat">
+        <JsonLd
+          data={[
+            breadcrumbJsonLd([{ name: "Order", path: "/checkout" }]),
+            serviceJsonLd({
+              name: "Soul Good weekly meal prep",
+              description: "Chef-made Soul Bowls™ in 32 oz jars, packed in sets of five, delivered Sundays across Los Angeles and Orange County or picked up free.",
+              path: "/checkout",
+              serviceType: "Meal prep delivery",
+              offers: [{ name: "Set of five Soul Bowls™", priceCents: PRICING.oneTimeCents, unit: "set of five 32 oz bowls" }],
+            }),
+          ]}
+        />
         <div className="border-b border-forest/12 bg-sand/25 px-5 py-3 text-center text-sm leading-6 text-forest/75">
           A bowl for today?{" "}
           <a href={EAT_NOW.menuUrl} className="inline-flex min-h-11 items-center font-semibold text-forest underline underline-offset-4">Order from the Take Out menu</a>

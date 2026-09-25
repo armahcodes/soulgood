@@ -1,17 +1,14 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
-import { BRAND_NAME, BUSINESS, CONTACT, FEES, formatCents, LEGAL_VERSION, NOURISHMENT, ORDER_RULES, PRICING, SERVICE_AREA, TAX } from "@/lib/brand";
+import { BUSINESS, CONTACT, FEES, formatCents, LEGAL_VERSION, NOURISHMENT, ORDER_RULES, PRICING, SERVICE_AREA, TAX } from "@/lib/brand";
 import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
 import { EAT_NOW } from "@/lib/ordering";
 import { CULINARY_PRICING } from "@/lib/culinary-booking";
 import { TIER_PRICE_CENTS } from "@/lib/menu-extras";
 import { NON_DISCRIMINATION_STATEMENT } from "@/lib/meal-drive";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  alternates: { canonical: "/terms" },
-  title: `Terms of Service — ${BRAND_NAME}`,
-  description: `Terms governing Soul Bowls™ Take Out orders and weekly meal prep operated by ${BUSINESS.legalName}.`,
-};
+export const metadata = pageMetadata("/terms");
 
 export default function TermsPage() {
   return (

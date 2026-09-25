@@ -257,7 +257,7 @@ function StackCard({
           unoptimized
           draggable={false}
           loading={index < 2 ? "eager" : "lazy"}
-          fetchPriority={isFront ? "high" : "auto"}
+          fetchPriority={index < 2 ? "high" : "auto"}
           sizes="(min-width: 1024px) 24vw, 62vw"
           className="pointer-events-none object-cover"
         />

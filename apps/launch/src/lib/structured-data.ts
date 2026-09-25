@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { BUSINESS, CONTACT, PRICING } from "./brand";
 import { AVAILABLE_BOWLS } from "./current-offer";
 import { EXTRA_CATEGORIES, extraPriceCents, MENU_EXTRAS } from "./menu-extras";
@@ -83,4 +84,81 @@ export function menuJsonLd() {
 /** Serialize for a <script type="application/ld+json">, escaping "<" so content can't close the tag. */
 export function serializeJsonLd(data: unknown): string {
   return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
+export function websiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE}/#website`,
+    name: "Soul Good",
+    alternateName: ["Soul Good Kitchen", "Soul Bowls"],
+    url: SITE,
+    publisher: { "@id": `${SITE}/#organization` },
+    inLanguage: "en-US",
+  };
+}
+
+/** Breadcrumbs for an inner page: Home → … → this page. */
+export function breadcrumbJsonLd(trail: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [{ name: "Home", path: "/" }, ...trail].map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: `${SITE}${item.path === "/" ? "" : item.path}`,
+    })),
+  };
+}
+
+type FaqItem = { title: string; content: ReactNode; plain?: string };
+
+/** FAQPage from the same questions shown on the page (visible content only). */
+export function faqJsonLd(items: readonly FaqItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items
+      .map((item) => ({ question: item.title, answer: item.plain ?? (typeof item.content === "string" ? item.content : null) }))
+      .filter((item): item is { question: string; answer: string } => Boolean(item.answer))
+      .map((item) => ({ "@type": "Question", name: item.question, acceptedAnswer: { "@type": "Answer", text: item.answer } })),
+  };
+}
+
+const AREA_SERVED = [
+  { "@type": "AdministrativeArea", name: "Los Angeles County, California" },
+  { "@type": "AdministrativeArea", name: "Orange County, California" },
+];
+
+export function serviceJsonLd(input: {
+  name: string;
+  description: string;
+  path: string;
+  serviceType: string;
+  area?: "la-oc" | "la";
+  offers?: { name: string; priceCents: number; unit?: string }[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: input.name,
+    description: input.description,
+    url: `${SITE}${input.path}`,
+    serviceType: input.serviceType,
+    provider: { "@id": `${SITE}/#organization` },
+    areaServed: input.area === "la" ? [AREA_SERVED[0]] : AREA_SERVED,
+    ...(input.offers
+      ? {
+          offers: input.offers.map((offer) => ({
+            "@type": "Offer",
+            name: offer.name,
+            price: dollars(offer.priceCents),
+            priceCurrency: "USD",
+            ...(offer.unit ? { priceSpecification: { "@type": "UnitPriceSpecification", price: dollars(offer.priceCents), priceCurrency: "USD", unitText: offer.unit } } : {}),
+          })),
+        }
+      : {}),
+  };
 }

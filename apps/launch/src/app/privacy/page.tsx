@@ -1,13 +1,10 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
-import { BRAND_NAME, BUSINESS, CONTACT, LEGAL_VERSION } from "@/lib/brand";
+import { BUSINESS, CONTACT, LEGAL_VERSION } from "@/lib/brand";
 import { PRIVACY_RESPONSE_DAYS } from "@/lib/privacy-shared";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  alternates: { canonical: "/privacy" },
-  title: `Privacy Policy — ${BRAND_NAME}`,
-  description: `How ${BUSINESS.legalName} collects, uses, shares, and protects personal information, and the privacy choices and rights available to you.`,
-};
+export const metadata = pageMetadata("/privacy");
 
 const CATEGORIES = [
   {

@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowRight, Heart, HandHeart, Plus, Sprout } from "lucide-react";
@@ -8,35 +7,38 @@ import { SiteFooter } from "@/components/ui/SiteFooter";
 import { CommunityInterestForm } from "@/components/community/CommunityInterestForm";
 import { ShareDrive } from "@/components/community/ShareDrive";
 import { COMMUNITY_DRIVE } from "@/lib/community-drive";
+import { pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbJsonLd, faqJsonLd } from "@/lib/structured-data";
 
-const description =
-  "100+ meals delivered, and more good to share. Food for the Soul by Soul Good brings nourishing meals to communities. Partner with us or get involved in our October 15, 2026 meal drive.";
-export const metadata: Metadata = {
-  title: "Food for the Soul · Community Meal Drive by Soul Good",
-  description,
-  alternates: { canonical: COMMUNITY_DRIVE.url },
-  openGraph: {
-    type: "website",
-    title: "Food for the Soul · A little good goes a long way.",
-    description,
-    url: COMMUNITY_DRIVE.url,
-    siteName: "Soul Good",
-    images: [
-      {
-        url: "https://www.soulgood.kitchen/products/golden-harvest-bowl.webp",
-        width: 480,
-        height: 600,
-        alt: "A Soul Good Golden Harvest Bowl",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Food for the Soul by Soul Good",
-    description,
-    images: ["https://www.soulgood.kitchen/products/golden-harvest-bowl.webp"],
-  },
-};
+export const metadata = pageMetadata("/food-for-the-soul");
+
+const FFS_FAQS: [string, string][] = [
+            [
+              "What is Food for the Soul?",
+              "Food for the Soul is Soul Good’s community meal-drive initiative. We provide meals and invite communities and organizations to connect with us to bring a drive to the people they serve.",
+            ],
+            [
+              "Can we bring a meal drive to our community?",
+              "That’s exactly the conversation we’d love to have. Organizations in Los Angeles and Orange County can apply through our host application; if you’re still exploring, choose “Bring a drive to my community” above. Applications are reviewed in the order received using the same published criteria, and submitting doesn’t confirm a date or location.",
+            ],
+            [
+              "Do I need to represent an organization?",
+              "To host a drive, yes: drives are run with an organization that can provide a site and volunteers. Anyone can still reach out here as a community member, a potential volunteer, or someone who simply wants to learn more.",
+            ],
+            [
+              "Who can receive a meal?",
+              "Everyone who comes. Meals are free and served first come, first served while supplies last. No one is asked for ID, proof of income, immigration status, or membership, and no one is turned away because of who they are.",
+            ],
+            [
+              "Where and when is the October 15 drive?",
+              "The next drive is October 15, 2026. The time, location, and participation details are still to be confirmed. Choose “Learn about the next drive” to connect with our team about details.",
+            ],
+            [
+              "Is this a meal order or a paid booking?",
+              "No. This page is for community partnerships and participation in Food for the Soul. No payment is collected, and this form does not place a meal order, reserve a meal, or create a subscription.",
+            ],
+          ];
 
 const primaryAction =
   "inline-flex min-h-13 items-center justify-center gap-3 rounded-md bg-forest px-5 py-4 text-center text-sm font-semibold text-oat transition-colors hover:bg-forest/90";
@@ -77,6 +79,7 @@ export default function FoodForTheSoulPage() {
         </div>
       </nav>
       <main id="main-content">
+        <JsonLd data={[breadcrumbJsonLd([{ name: "Food for the Soul", path: "/food-for-the-soul" }]), faqJsonLd(FFS_FAQS.map(([title, content]) => ({ title, content })))]} />
         <section
           aria-labelledby="campaign-title"
           className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] items-center gap-10 px-5 py-10 sm:px-8 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:px-12 lg:py-20"
@@ -336,32 +339,7 @@ export default function FoodForTheSoulPage() {
           >
             A few things you might be wondering.
           </h2>
-          {[
-            [
-              "What is Food for the Soul?",
-              "Food for the Soul is Soul Good’s community meal-drive initiative. We provide meals and invite communities and organizations to connect with us to bring a drive to the people they serve.",
-            ],
-            [
-              "Can we bring a meal drive to our community?",
-              "That’s exactly the conversation we’d love to have. Organizations in Los Angeles and Orange County can apply through our host application; if you’re still exploring, choose “Bring a drive to my community” above. Applications are reviewed in the order received using the same published criteria, and submitting doesn’t confirm a date or location.",
-            ],
-            [
-              "Do I need to represent an organization?",
-              "To host a drive, yes: drives are run with an organization that can provide a site and volunteers. Anyone can still reach out here as a community member, a potential volunteer, or someone who simply wants to learn more.",
-            ],
-            [
-              "Who can receive a meal?",
-              "Everyone who comes. Meals are free and served first come, first served while supplies last. No one is asked for ID, proof of income, immigration status, or membership, and no one is turned away because of who they are.",
-            ],
-            [
-              "Where and when is the October 15 drive?",
-              "The next drive is October 15, 2026. The time, location, and participation details are still to be confirmed. Choose “Learn about the next drive” to connect with our team about details.",
-            ],
-            [
-              "Is this a meal order or a paid booking?",
-              "No. This page is for community partnerships and participation in Food for the Soul. No payment is collected, and this form does not place a meal order, reserve a meal, or create a subscription.",
-            ],
-          ].map(([question, answer]) => (
+          {FFS_FAQS.map(([question, answer]) => (
             <details
               key={question}
               className="group border-b border-forest/15 first-of-type:border-t"
