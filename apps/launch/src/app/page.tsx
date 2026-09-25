@@ -14,6 +14,7 @@ import { BowlCollection } from "@/components/sections/BowlCollection";
 import { DeliveryOptions } from "@/components/sections/DeliveryOptions";
 import { LastMixCard } from "@/components/sections/LastMixCard";
 import { PlanPicker } from "@/components/sections/PlanPicker";
+import { Testimonials } from "@/components/sections/Testimonials";
 import { PATHWAY_LIST } from "@/lib/pathways";
 import { AVAILABLE_BOWLS, CURRENT_OFFER } from "@/lib/current-offer";
 import { EAT_NOW } from "@/lib/ordering";
@@ -52,7 +53,7 @@ const FAQS = [
   {
     id: "delivery",
     title: "Where do you deliver?",
-    content: `Weekly nourishment is delivered on Sundays to verified addresses throughout ${BUSINESS.serviceArea}: $8.88, or free on orders over $100. On-demand Eat Now orders are delivered Thursday through Sunday within about 20 miles of our Long Beach kitchen, with a courier fee shown at checkout. Every order has a $50 minimum.`,
+    content: `Weekly nourishment is delivered on Sundays to verified addresses throughout ${BUSINESS.serviceArea}: $8.88, or free on orders over $100. On-demand Take Out orders are delivered Thursday through Sunday within about 20 miles of our Long Beach kitchen, with a courier fee shown at checkout. Every order has a $50 minimum.`,
   },
   {
     id: "pickup",
@@ -145,7 +146,7 @@ export default function Home() {
                   {NOURISHMENT.cta}
                 </Button>
                 <Button as="a" href={EAT_NOW.menuUrl} target="_self" variant="secondary" size="lg" className="w-full sm:w-auto">
-                  Eat Now · Single orders
+                  Take Out · Single orders
                 </Button>
               </div>
               <Link
@@ -157,9 +158,9 @@ export default function Home() {
                 <span className="font-semibold whitespace-nowrap underline underline-offset-4 group-hover:text-clay">Find your pathway</span>
               </Link>
               <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-forest/68 lg:mx-0">
-                A bowl for today? Eat Now delivers on demand Thursday–Sunday through courier partners or a Soul Good courier.{" "}
+                A bowl for today? Take Out delivers on demand Thursday–Sunday through courier partners or a Soul Good courier.{" "}
                 <Link href={EAT_NOW.infoPath} className="font-semibold text-forest underline underline-offset-4 hover:text-clay">
-                  How Eat Now works
+                  How Take Out works
                 </Link>
               </p>
             </div>
@@ -213,6 +214,8 @@ export default function Home() {
             <BowlCollection />
           </div>
         </section>
+
+        <Testimonials />
 
         {/* Pathway Finder invitation */}
         <section id="pathway" className="relative scroll-mt-24 overflow-hidden bg-forest py-16 text-oat sm:py-24">
@@ -287,8 +290,8 @@ export default function Home() {
               <PlanPicker />
             </Reveal>
             <p className="mx-auto mt-6 max-w-2xl text-center text-xs leading-5 text-forest/65">
-              Ordering on demand instead? Eat Now courier fees and service times depend on your address.{" "}
-              <Link href={EAT_NOW.infoPath} className="underline underline-offset-4 hover:text-clay">See how Eat Now delivery works.</Link>
+              Ordering on demand instead? Take Out courier fees and service times depend on your address.{" "}
+              <Link href={EAT_NOW.infoPath} className="underline underline-offset-4 hover:text-clay">See how Take Out delivery works.</Link>
             </p>
           </div>
         </section>
