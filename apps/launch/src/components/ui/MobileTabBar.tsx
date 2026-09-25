@@ -10,7 +10,7 @@ type Tab = { href: string; label: string; icon: typeof House; external?: boolean
 
 const TABS: readonly Tab[] = [
   { href: "/", label: "Home", icon: House },
-  { href: "/#bowls", label: "Menu", icon: Soup },
+  { href: "/menu", label: "Menu", icon: Soup },
   { href: "/quiz", label: "Pathway", icon: Compass },
   { href: EAT_NOW.menuUrl, label: "Take Out", icon: ShoppingBag, external: true },
   { href: "/account", label: "Orders", icon: UserRound },

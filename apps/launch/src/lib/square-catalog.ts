@@ -1,4 +1,11 @@
 import type { BowlSelection } from "./bowl-selection";
+import {
+  describeExtraOptions,
+  findExtra,
+  TIER_PRICE_CENTS,
+  type ExtraLine,
+  type ExtraTier,
+} from "./menu-extras";
 import { PRICING } from "./brand";
 import {
   BOWL_IDS,
@@ -23,11 +30,31 @@ if (!Number.isInteger(BOWL_UNIT_PRICE_CENTS)) {
   throw new Error("The five-bowl price must divide evenly into catalog units");
 }
 
+/** One Square catalog item ("Soul Good Salads & Light Bites") with a variation per price tier. */
+const ADD_ON_VARIATION_ENV: Record<ExtraTier, string> = {
+  "signature-salad": "SQUARE_ADDON_SIGNATURE_SALAD_VARIATION_ID",
+  "build-your-own": "SQUARE_ADDON_BUILD_YOUR_OWN_SALAD_VARIATION_ID",
+  "veggie-cup": "SQUARE_ADDON_VEGGIE_CUP_VARIATION_ID",
+  snack: "SQUARE_ADDON_SNACK_VARIATION_ID",
+  "tasting-trio": "SQUARE_ADDON_TASTING_TRIO_VARIATION_ID",
+};
+
 export type SquareCatalogConfig = {
   bowlVariationIds: Record<BowlId, string>;
   deliveryVariationId: string;
   weeklyPlanVariationId: string;
+  /** Present only when every salad/snack tier is configured in Square. */
+  addOnVariationIds?: Record<ExtraTier, string>;
 };
+
+export function getAddOnVariationIds(): Record<ExtraTier, string> | undefined {
+  const entries = (Object.keys(ADD_ON_VARIATION_ENV) as ExtraTier[]).map(
+    (tier) => [tier, process.env[ADD_ON_VARIATION_ENV[tier]]?.trim()] as const,
+  );
+  return entries.every(([, id]) => id)
+    ? (Object.fromEntries(entries) as Record<ExtraTier, string>)
+    : undefined;
+}
 
 export type SquareOrderLineItem = {
   quantity: string;
@@ -53,11 +80,34 @@ export function getSquareCatalogConfig(): SquareCatalogConfig | null {
     return null;
   }
 
+  const addOnVariationIds = getAddOnVariationIds();
   return {
     bowlVariationIds: bowlVariationIds as Record<BowlId, string>,
     deliveryVariationId,
     weeklyPlanVariationId,
+    ...(addOnVariationIds ? { addOnVariationIds } : {}),
   };
+}
+
+/** Salads and snacks as tier-priced catalog line items; the note carries the dish and choices. */
+export function squareExtraLineItems(
+  lines: readonly ExtraLine[],
+  config: SquareCatalogConfig,
+): SquareOrderLineItem[] {
+  if (!lines.length) return [];
+  if (!config.addOnVariationIds) throw new Error("Salads and snacks are not configured in Square");
+  const ids = config.addOnVariationIds;
+  return lines.map((line) => {
+    const extra = findExtra(line.id);
+    if (!extra) throw new Error("Unknown menu item");
+    const options = describeExtraOptions(line);
+    return {
+      quantity: String(line.quantity),
+      catalog_object_id: ids[extra.tier],
+      base_price_money: { amount: TIER_PRICE_CENTS[extra.tier], currency: "USD" as const },
+      note: options ? `${extra.name} · ${options}` : extra.name,
+    };
+  });
 }
 
 export function squareBowlLineItems(

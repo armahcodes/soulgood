@@ -320,6 +320,65 @@ if (!savedDeliveryVariation?.id) {
   throw new Error("Square did not return the Soul Bowls delivery variation ID");
 }
 
+// Salads & light bites: one item, one variation per price tier (src/lib/menu-extras.ts).
+// It lives in the Soul Bowls™ category so weekly plan order templates accept it.
+const ADD_ON_TIERS = [
+  { tier: "signature-salad", env: "SQUARE_ADDON_SIGNATURE_SALAD_VARIATION_ID", name: "Signature salad", cents: 1400 },
+  { tier: "build-your-own", env: "SQUARE_ADDON_BUILD_YOUR_OWN_SALAD_VARIATION_ID", name: "Build-your-own salad", cents: 1500 },
+  { tier: "veggie-cup", env: "SQUARE_ADDON_VEGGIE_CUP_VARIATION_ID", name: "Veggie cup", cents: 600 },
+  { tier: "snack", env: "SQUARE_ADDON_SNACK_VARIATION_ID", name: "Snack & light bite", cents: 800 },
+  { tier: "tasting-trio", env: "SQUARE_ADDON_TASTING_TRIO_VARIATION_ID", name: "Veggie tasting trio", cents: 1600 },
+];
+const addOnSku = (tier) => `SOUL-GOOD-ADDON-${tier.toUpperCase()}`;
+const existingAddOns = existingItems.find((item) =>
+  item.item_data?.variations?.some((variation) =>
+    variation.item_variation_data?.sku?.startsWith("SOUL-GOOD-ADDON-"),
+  ),
+);
+const addOnItemId = existingAddOns?.id ?? "#soul-good-add-ons";
+const addOnsBody = await upsertCatalogObject({
+  type: "ITEM",
+  id: addOnItemId,
+  ...(existingAddOns?.version ? { version: existingAddOns.version } : {}),
+  present_at_all_locations: true,
+  item_data: {
+    name: "Soul Good Salads & Light Bites",
+    description_html:
+      "<p>Made-to-order salads, veggie cups, and snacks added to a Soul Bowls™ order. The line item note names the dish and the customer's choices.</p>",
+    product_type: "REGULAR",
+    categories: [{ id: category.id }],
+    reporting_category: { id: category.id },
+    variations: ADD_ON_TIERS.map((tier) => {
+      const existingVariation = existingAddOns?.item_data?.variations?.find(
+        (variation) => variation.item_variation_data?.sku === addOnSku(tier.tier),
+      );
+      return {
+        type: "ITEM_VARIATION",
+        id: existingVariation?.id ?? `#addon-${tier.tier}`,
+        ...(existingVariation?.version ? { version: existingVariation.version } : {}),
+        present_at_all_locations: true,
+        item_variation_data: {
+          item_id: addOnItemId,
+          name: tier.name,
+          sku: addOnSku(tier.tier),
+          pricing_type: "FIXED_PRICING",
+          price_money: { amount: tier.cents, currency: "USD" },
+          track_inventory: false,
+          user_data: `soul-good-addon:${tier.tier}`,
+        },
+      };
+    }),
+  },
+});
+const addOnVariationEnv = {};
+for (const tier of ADD_ON_TIERS) {
+  const saved = addOnsBody.catalog_object?.item_data?.variations?.find(
+    (variation) => variation.item_variation_data?.sku === addOnSku(tier.tier),
+  );
+  if (!saved?.id) throw new Error(`Square did not return the ${tier.name} variation ID`);
+  addOnVariationEnv[tier.env] = saved.id;
+}
+
 const plan = catalogObjects.find(
   (object) =>
     object.type === "SUBSCRIPTION_PLAN" &&
@@ -361,6 +420,7 @@ console.log(
         ...variationIds,
         SQUARE_SOUL_BOWLS_DELIVERY_VARIATION_ID: savedDeliveryVariation.id,
         SQUARE_WEEKLY_ITEMIZED_PLAN_VARIATION_ID: planVariation.id,
+        ...addOnVariationEnv,
       },
     },
     null,

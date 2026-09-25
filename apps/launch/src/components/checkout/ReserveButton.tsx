@@ -6,7 +6,15 @@ import Script from "next/script";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BowlBuilder } from "@/components/checkout/BowlBuilder";
 import { CheckoutProgress } from "@/components/checkout/CheckoutProgress";
+import { CheckoutExtras } from "@/components/checkout/CheckoutExtras";
 import { MobileOrderBar } from "@/components/checkout/MobileOrderBar";
+import { useExtrasCart } from "@/components/menu/use-extras-cart";
+import {
+  extrasCount,
+  extrasFingerprint,
+  extrasTotalCents,
+  type ExtraLine,
+} from "@/lib/menu-extras";
 import { QuantityStepper } from "@/components/ui/kit/quantity-stepper";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
@@ -116,6 +124,7 @@ type CheckoutSuccess = {
   mealsPerDay: number;
   peopleCount: number;
   bowlSelection: BowlSelection;
+  extras?: ExtraLine[];
   tax: TaxQuote;
   paymentPending?: boolean;
 };
@@ -184,6 +193,9 @@ export function ReserveButton({
   const [purchaseType, setPurchaseType] = useState<PurchaseType>("one-time");
   const [peopleCount, setPeopleCount] = useState(1);
   const [mealsPerDay, setMealsPerDay] = useState(1);
+  const { lines: extras, clear: clearExtras } = useExtrasCart();
+  const extrasKey = extrasFingerprint(extras);
+  const extrasCents = extrasTotalCents(extras);
   const [bowlSelection, setBowlSelection] = useState<BowlSelection>(
     DEFAULT_BOWL_SELECTION,
   );
@@ -391,12 +403,15 @@ export function ReserveButton({
       walletPaymentsRef.current = payments;
       const bowlsAmount =
         PRICING.oneTimeCents * mealSetCount(peopleCount, mealsPerDay);
-      const fulfillmentAmount = fulfillmentFeeCents(fulfillmentMethod, bowlsAmount);
+      const fulfillmentAmount = fulfillmentFeeCents(fulfillmentMethod, bowlsAmount + extrasCents);
       const paymentRequestOptions = {
         countryCode: "US" as const,
         currencyCode: "USD" as const,
         lineItems: [
           { amount: (bowlsAmount / 100).toFixed(2), label: "Soul Bowls™" },
+          ...(extrasCents > 0
+            ? [{ amount: (extrasCents / 100).toFixed(2), label: "Salads & snacks" }]
+            : []),
           {
             amount: (fulfillmentAmount / 100).toFixed(2),
             label: FULFILLMENT[fulfillmentMethod].label,
@@ -469,6 +484,7 @@ export function ReserveButton({
     };
   }, [
     configured,
+    extrasCents,
     fulfillmentMethod,
     mealsPerDay,
     peopleCount,
@@ -490,7 +506,8 @@ export function ReserveButton({
   const mealSets = mealSetCount(peopleCount, mealsPerDay);
   const targetBowls = bowlsForPlan(peopleCount, mealsPerDay);
   const bowlOrderCents = PRICING.oneTimeCents * mealSets;
-  const deliveryCents = fulfillmentFeeCents(fulfillmentMethod, bowlOrderCents);
+  const foodCents = bowlOrderCents + extrasCents;
+  const deliveryCents = fulfillmentFeeCents(fulfillmentMethod, foodCents);
   const bowlSelectionComplete = bowlSelectionSchemaForPlan(
     peopleCount,
     mealsPerDay,
@@ -537,6 +554,14 @@ export function ReserveButton({
     );
     return () => window.clearTimeout(timer);
   }, [quoteExpiresAt, resetQuote]);
+
+  // Salads and snacks change the total, so any accepted quote no longer applies.
+  const extrasKeyRef = useRef(extrasKey);
+  useEffect(() => {
+    if (extrasKeyRef.current === extrasKey) return;
+    extrasKeyRef.current = extrasKey;
+    resetQuote();
+  }, [extrasKey, resetQuote]);
 
   function reportError(message: string): void {
     setError(message);
@@ -653,6 +678,7 @@ export function ReserveButton({
           fulfillmentMethod,
           mealsPerDay,
           peopleCount,
+          extras,
           deliveryAddress:
             fulfillmentMethod === "delivery" ? deliveryAddress : null,
         }),
@@ -777,6 +803,7 @@ export function ReserveButton({
           peopleCount: data.peopleCount,
           mealsPerDay: data.mealsPerDay,
           bowlSelection: data.bowlSelection,
+          ...(data.extras?.length ? { extras: data.extras } : {}),
           subtotalCents: data.tax.subtotalCents,
           taxCents: data.tax.taxCents,
           totalCents: data.tax.totalCents,
@@ -788,6 +815,7 @@ export function ReserveButton({
         );
         window.sessionStorage.removeItem(ACTIVE_CHECKOUT_STORAGE_KEY);
         window.sessionStorage.removeItem("soulbowls:leadId");
+        clearExtras();
         attemptIdRef.current = null;
         setRecoveryId(null);
         router.replace("/welcome?confirmed=1");
@@ -814,7 +842,7 @@ export function ReserveButton({
       );
       return Boolean(data?.missing);
     },
-    [resetQuote, router],
+    [clearExtras, resetQuote, router],
   );
 
   const checkCheckoutStatus = useCallback(
@@ -880,6 +908,7 @@ export function ReserveButton({
             ? { givenName: contact.givenName, familyName: contact.familyName }
             : billingName,
           bowlSelection,
+          extras,
           contact,
           deliveryAddress:
             fulfillmentMethod === "delivery" ? deliveryAddress : null,
@@ -1285,6 +1314,8 @@ export function ReserveButton({
           selection={bowlSelection}
         />
 
+        <CheckoutExtras disabled={pending} weekly={purchaseType === "weekly"} className={STEP_CARD} />
+
         <fieldset id="step-fulfillment" className={STEP_CARD}>
           <StepLegend number={3} title="Pickup or delivery" />
           {(Object.keys(FULFILLMENT) as FulfillmentMethod[]).map((method) => {
@@ -1313,9 +1344,9 @@ export function ReserveButton({
                   </span>
                 </span>
                 <strong className="shrink-0 text-forest">
-                  {fulfillmentFeeCents(method, bowlOrderCents) === 0
+                  {fulfillmentFeeCents(method, foodCents) === 0
                     ? method === "delivery" ? "Free" : formatCents(0)
-                    : formatCents(fulfillmentFeeCents(method, bowlOrderCents))}
+                    : formatCents(fulfillmentFeeCents(method, foodCents))}
                 </strong>
               </label>
             );
@@ -1506,6 +1537,18 @@ export function ReserveButton({
               {formatCents(bowlOrderCents)}
             </dd>
           </div>
+          {extrasCents > 0 ? (
+            <div className="flex justify-between gap-4">
+              <dt>
+                Salads &amp; snacks
+                <span className="block text-xs text-forest/50">
+                  {extrasCount(extras)} {extrasCount(extras) === 1 ? "item" : "items"}
+                  {purchaseType === "weekly" ? " · every week" : ""}
+                </span>
+              </dt>
+              <dd className="font-semibold text-forest">{formatCents(extrasCents)}</dd>
+            </div>
+          ) : null}
           <div className="flex justify-between gap-4">
             <dt>{FULFILLMENT[fulfillmentMethod].label}</dt>
             <dd className="font-semibold text-forest">
@@ -1540,7 +1583,7 @@ export function ReserveButton({
               {quote
                 ? formatCents(quote.totalCents)
                 : formatCents(
-                    bowlOrderCents + deliveryCents,
+                    foodCents + deliveryCents,
                   )}
             </dd>
           </div>
@@ -1721,7 +1764,7 @@ export function ReserveButton({
         totalLabel={
           quote
             ? formatCents(quote.totalCents)
-            : formatCents(bowlOrderCents + deliveryCents)
+            : formatCents(foodCents + deliveryCents)
         }
         totalNote={quote ? "incl. tax" : "before tax"}
       />

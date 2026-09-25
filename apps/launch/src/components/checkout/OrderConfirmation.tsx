@@ -16,6 +16,7 @@ import {
 } from "@/lib/checkout-session";
 import { CURRENT_BOWLS } from "@/lib/current-offer";
 import { orderStatusLabel } from "@/lib/customer-experience";
+import { describeExtraOptions, findExtra } from "@/lib/menu-extras";
 import { LAST_MIX_KEY, type LastMix } from "@/lib/last-mix";
 
 /** Animated status seal — adapted from 21st.dev kavikatiyar/order-confirmation-card. */
@@ -210,6 +211,32 @@ export function OrderConfirmation() {
                 </li>
               ))}
             </ul>
+            {confirmation.extras?.length ? (
+              <>
+                <p className="mt-6 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">Salads &amp; snacks</p>
+                <ul className="mt-3 grid divide-y divide-forest/8">
+                  {confirmation.extras.map((line, index) => {
+                    const extra = findExtra(line.id);
+                    return (
+                      <li key={`${line.id}-${index}`} className="flex items-center justify-between gap-3 py-2.5 text-sm text-forest/75">
+                        <span className="flex min-w-0 items-center gap-3">
+                          {extra ? (
+                            <span className="relative size-11 shrink-0 overflow-hidden rounded-md bg-sand">
+                              <Image src={extra.imagePath} alt="" fill sizes="44px" className="object-cover" />
+                            </span>
+                          ) : null}
+                          <span className="min-w-0">
+                            <span className="block font-serif text-lg leading-tight text-forest">{extra?.name ?? line.id}</span>
+                            {describeExtraOptions(line) ? <span className="block text-xs text-forest/60">{describeExtraOptions(line)}</span> : null}
+                          </span>
+                        </span>
+                        <span className="shrink-0 rounded-full bg-forest/6 px-2.5 py-1 text-xs font-bold whitespace-nowrap text-forest tabular-nums">× {line.quantity}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </>
+            ) : null}
           </div>
 
           <dl className="grid content-start gap-3 text-sm text-forest/62">

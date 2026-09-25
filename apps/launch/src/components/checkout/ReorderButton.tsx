@@ -4,9 +4,11 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import type { BowlSelection } from "@/lib/bowl-selection";
 import type { FulfillmentMethod } from "@/lib/brand";
+import { EXTRAS_STORAGE_KEY, type ExtraLine } from "@/lib/menu-extras";
 
 type ReorderButtonProps = {
   bowlSelection: BowlSelection;
+  extras?: ExtraLine[];
   peopleCount: number;
   mealsPerDay: number;
   fulfillmentMethod: FulfillmentMethod;
@@ -18,6 +20,7 @@ type ReorderButtonProps = {
 
 export function ReorderButton({
   bowlSelection,
+  extras,
   peopleCount,
   mealsPerDay,
   fulfillmentMethod,
@@ -36,6 +39,8 @@ export function ReorderButton({
     window.sessionStorage.setItem("soulbowls:peopleCount", String(peopleCount));
     window.sessionStorage.setItem("soulbowls:mealsPerDay", String(mealsPerDay));
     window.sessionStorage.setItem("soulbowls:fulfillment", fulfillmentMethod);
+    if (extras?.length) window.sessionStorage.setItem(EXTRAS_STORAGE_KEY, JSON.stringify(extras));
+    else window.sessionStorage.removeItem(EXTRAS_STORAGE_KEY);
     // Reorders start as a one-time purchase so an existing weekly customer never
     // creates a second subscription by accident.
     window.sessionStorage.setItem("soulbowls:purchaseType", "one-time");

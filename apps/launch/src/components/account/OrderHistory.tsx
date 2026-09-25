@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { ReorderButton } from "@/components/checkout/ReorderButton";
+import { describeExtraOptions, findExtra } from "@/lib/menu-extras";
 import { formatCents, CONTACT } from "@/lib/brand";
 import type { CustomerOrder } from "@/lib/checkout-record";
 import { CURRENT_BOWLS } from "@/lib/current-offer";
@@ -103,6 +104,26 @@ export function OrderHistory({
                       </li>
                     ))}
                   </ul>
+                  {order.extras?.length ? (
+                    <>
+                      <h4 className="mt-5 font-sans text-xs font-bold tracking-[0.1em] text-forest/65 uppercase">
+                        Salads &amp; snacks
+                      </h4>
+                      <ul className="mt-3 space-y-2 text-sm leading-6">
+                        {order.extras.map((line, index) => (
+                          <li key={`${line.id}-${index}`} className="flex justify-between gap-3 border-b border-forest/10 pb-2">
+                            <span>
+                              {findExtra(line.id)?.name ?? line.id}
+                              {describeExtraOptions(line) ? (
+                                <span className="block text-xs text-forest/60">{describeExtraOptions(line)}</span>
+                              ) : null}
+                            </span>
+                            <strong className="shrink-0">× {line.quantity}</strong>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : null}
                 </div>
                 <dl className="space-y-3 text-sm leading-6">
                   <div>
@@ -130,8 +151,8 @@ export function OrderHistory({
                     </dd>
                   </div>
                   <div className="flex justify-between gap-3">
-                    <dt>Bowls</dt>
-                    <dd>{formatCents(order.subtotalCents)}</dd>
+                    <dt>{order.extras?.length ? "Bowls, salads & snacks" : "Bowls"}</dt>
+                    <dd>{formatCents(order.subtotalCents - (order.fulfillmentFeeCents ?? 0))}</dd>
                   </div>
                   {order.fulfillmentFeeCents !== undefined ? (
                     <div className="flex justify-between gap-3">
@@ -157,6 +178,7 @@ export function OrderHistory({
             <div className="flex flex-col gap-3 border-t border-forest/12 pt-4 sm:flex-row sm:flex-wrap sm:items-center">
               <ReorderButton
                 bowlSelection={order.bowlSelection}
+                extras={order.extras}
                 customerEmail={email}
                 fulfillmentMethod={order.fulfillmentMethod}
                 mealsPerDay={order.mealsPerDay}

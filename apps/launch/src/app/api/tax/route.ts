@@ -10,7 +10,9 @@ import {
   MAX_PEOPLE_PER_ORDER,
   mealSetCount,
 } from "@/lib/bowl-selection";
+import { extraLinesSchema, extrasTotalCents } from "@/lib/menu-extras";
 import { getTaxQuote } from "@/lib/square";
+import { getAddOnVariationIds } from "@/lib/square-catalog";
 import { createTaxQuoteToken, TAX_QUOTE_TTL_MS } from "@/lib/tax-quote-token";
 
 export const runtime = "nodejs";
@@ -29,6 +31,7 @@ const addressSchema = z.object({
 const orderSizeShape = {
   peopleCount: z.number().int().min(1).max(MAX_PEOPLE_PER_ORDER).default(1),
   mealsPerDay: z.number().int().min(1).max(MAX_MEALS_PER_DAY).default(1),
+  extras: extraLinesSchema.default([]),
 };
 
 const requestSchema = z
@@ -64,11 +67,20 @@ async function handleTaxQuote(request: Request) {
     );
   }
 
+  if (parsed.data.extras.length && !getAddOnVariationIds()) {
+    return NextResponse.json(
+      { error: "Salads and snacks can't be added online yet. Remove them to continue." },
+      { status: 422 },
+    );
+  }
+
   try {
     const quote = await getTaxQuote(
       parsed.data.fulfillmentMethod,
       parsed.data.deliveryAddress,
       mealSetCount(parsed.data.peopleCount, parsed.data.mealsPerDay),
+      fetch,
+      extrasTotalCents(parsed.data.extras),
     );
     const quoteToken = createTaxQuoteToken(
       quote,
@@ -76,6 +88,7 @@ async function handleTaxQuote(request: Request) {
       parsed.data.deliveryAddress,
       parsed.data.peopleCount,
       parsed.data.mealsPerDay,
+      parsed.data.extras,
     );
     if (!quoteToken)
       return NextResponse.json(

@@ -18,7 +18,9 @@ import {
   BOWL_UNIT_PRICE_CENTS,
   type SquareCatalogConfig,
   squareBowlLineItems,
+  squareExtraLineItems,
 } from "@/lib/square-catalog";
+import { extrasTotalCents, type ExtraLine } from "@/lib/menu-extras";
 import type { BillingAddress, DeliveryAddress } from "./address";
 
 export const SQUARE_API_VERSION = "2026-08-19";
@@ -63,11 +65,13 @@ function taxQuoteCacheKey(
   fulfillmentMethod: FulfillmentMethod,
   address: CheckoutAddress | null,
   mealSets: number,
+  extrasCents: number,
 ): string {
-  if (!address) return `${fulfillmentMethod}|sets:${mealSets}`;
+  if (!address) return `${fulfillmentMethod}|sets:${mealSets}|extras:${extrasCents}`;
   return [
     fulfillmentMethod,
     `sets:${mealSets}`,
+    `extras:${extrasCents}`,
     address.addressLine1,
     address.addressLine2,
     address.city,
@@ -143,6 +147,7 @@ export { addressToSquare };
 
 export async function createItemizedSquareOrder(input: {
   bowlSelection: BowlSelection;
+  extras?: readonly ExtraLine[];
   catalog: SquareCatalogConfig;
   contact: {
     email: string;
@@ -162,16 +167,21 @@ export async function createItemizedSquareOrder(input: {
   quote: TaxQuote;
   state: "DRAFT" | "OPEN";
 }): Promise<ItemizedSquareOrder> {
-  const bowlsCents = bowlSelectionTotal(input.bowlSelection) * BOWL_UNIT_PRICE_CENTS;
-  const deliveryCents = fulfillmentFeeCents(input.fulfillmentMethod, bowlsCents);
-  const expectedSubtotal = bowlsCents + deliveryCents;
+  const extras = input.extras ?? [];
+  const foodCents =
+    bowlSelectionTotal(input.bowlSelection) * BOWL_UNIT_PRICE_CENTS + extrasTotalCents(extras);
+  const deliveryCents = fulfillmentFeeCents(input.fulfillmentMethod, foodCents);
+  const expectedSubtotal = foodCents + deliveryCents;
   if (expectedSubtotal !== input.quote.subtotalCents) {
     throw new Error(
       "The Square catalog subtotal does not match the checkout quote",
     );
   }
 
-  const lineItems = squareBowlLineItems(input.bowlSelection, input.catalog);
+  const lineItems = [
+    ...squareBowlLineItems(input.bowlSelection, input.catalog),
+    ...squareExtraLineItems(extras, input.catalog),
+  ];
   if (input.fulfillmentMethod === "delivery") {
     if (!input.deliveryAddress) {
       throw new Error("A delivery address is required for the Square order");
@@ -342,6 +352,7 @@ async function calculateTaxQuote(
   deliveryAddress: CheckoutAddress | null,
   mealSets: number,
   fetcher: Fetcher = fetch,
+  extrasCents = 0,
 ): Promise<TaxQuote> {
   const taxableAddress =
     fulfillmentMethod === "pickup"
@@ -362,11 +373,11 @@ async function calculateTaxQuote(
     throw new Error("California returned an invalid tax rate");
   }
 
-  const bowlsCents = PRICING.weeklyCents * mealSets;
-  if (bowlsCents < ORDER_RULES.minimumOrderCents) {
+  const foodCents = PRICING.weeklyCents * mealSets + extrasCents;
+  if (foodCents < ORDER_RULES.minimumOrderCents) {
     throw new Error(`Orders have a ${ORDER_RULES.minimumLabel}`);
   }
-  const subtotalCents = bowlsCents + fulfillmentFeeCents(fulfillmentMethod, bowlsCents);
+  const subtotalCents = foodCents + fulfillmentFeeCents(fulfillmentMethod, foodCents);
   const taxCents = Math.round(subtotalCents * tax.rate);
   return {
     subtotalCents,
@@ -390,7 +401,11 @@ export async function getTaxQuote(
   deliveryAddress: CheckoutAddress | null,
   mealSets = 1,
   fetcher: Fetcher = fetch,
+  extrasCents = 0,
 ): Promise<TaxQuote> {
+  if (!Number.isInteger(extrasCents) || extrasCents < 0) {
+    throw new Error("Invalid salads and snacks total");
+  }
   if (
     !Number.isInteger(mealSets) ||
     mealSets < 1 ||
@@ -406,11 +421,12 @@ export async function getTaxQuote(
       deliveryAddress,
       mealSets,
       fetcher,
+      extrasCents,
     );
   }
 
   const cache = taxQuoteCache();
-  const key = taxQuoteCacheKey(fulfillmentMethod, deliveryAddress, mealSets);
+  const key = taxQuoteCacheKey(fulfillmentMethod, deliveryAddress, mealSets, extrasCents);
   const now = Date.now();
   const cached = cache.get(key);
   if (cached && cached.expiresAt > now) return cached.value;
@@ -425,6 +441,7 @@ export async function getTaxQuote(
     deliveryAddress,
     mealSets,
     fetcher,
+    extrasCents,
   );
   cache.set(key, { expiresAt: now + TAX_QUOTE_CACHE_TTL_MS, value });
   value.catch(() => cache.delete(key));

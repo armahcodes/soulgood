@@ -8,6 +8,7 @@ import {
   MAX_PEOPLE_PER_ORDER,
   mealSetCount,
 } from "./bowl-selection";
+import { extraLinesSchema } from "./menu-extras";
 
 export const checkoutInputSchema = z
   .object({
@@ -18,6 +19,7 @@ export const checkoutInputSchema = z
       familyName: z.string().trim().min(1).max(100),
     }),
     bowlSelection: bowlSelectionDraftSchema,
+    extras: extraLinesSchema.default([]),
     contact: z.object({
       givenName: z.string().trim().min(1).max(100),
       familyName: z.string().trim().min(1).max(100),

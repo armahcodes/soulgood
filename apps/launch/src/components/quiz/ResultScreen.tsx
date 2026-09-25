@@ -116,7 +116,7 @@ export function ResultScreen({
           Start with this mix
         </Button>
         <div className="flex flex-wrap items-center justify-center gap-x-6 text-sm font-semibold">
-          <Link href="/#bowls" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-clay">
+          <Link href="/menu" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-clay">
             Browse all bowls
           </Link>
           <button type="button" onClick={onRetake} className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-clay">

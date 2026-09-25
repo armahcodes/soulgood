@@ -54,6 +54,8 @@ const checkoutRecordSchema = new mongoose.Schema(
       _id: false,
     },
     bowlSelection: { type: selectionShape, required: true, _id: false },
+    // Salads and snacks, validated by extraLinesSchema before they are saved.
+    extras: { type: [mongoose.Schema.Types.Mixed], default: undefined },
     subtotalCents: { type: Number, required: true },
     fulfillmentFeeCents: { type: Number, min: 0 },
     taxCents: { type: Number, required: true },

@@ -1,5 +1,6 @@
 import type { BowlSelection } from "./bowl-selection";
 import type { FulfillmentMethod, PurchaseType } from "./brand";
+import { parseStoredExtras, type ExtraLine } from "./menu-extras";
 import { CheckoutRecordModel } from "./db/checkout-record-model";
 import { connectToDatabase } from "./db/mongoose";
 import type { CheckoutAddress } from "./square";
@@ -19,6 +20,7 @@ export type CheckoutRecord = {
   fulfillmentMethod: FulfillmentMethod;
   deliveryAddress?: CheckoutAddress;
   bowlSelection: BowlSelection;
+  extras?: ExtraLine[];
   subtotalCents: number;
   fulfillmentFeeCents?: number;
   taxCents: number;
@@ -91,6 +93,7 @@ export type CustomerOrder = {
   fulfillmentMethod: FulfillmentMethod;
   deliveryAddress?: CheckoutAddress;
   bowlSelection: BowlSelection;
+  extras?: ExtraLine[];
   subtotalCents: number;
   fulfillmentFeeCents?: number;
   taxCents: number;
@@ -185,6 +188,7 @@ export async function listCheckoutRecordsForEmail(
       fulfillmentMethod: record.fulfillmentMethod as FulfillmentMethod,
       deliveryAddress,
       bowlSelection: record.bowlSelection as BowlSelection,
+      extras: parseStoredExtras(JSON.stringify(record.extras ?? [])),
       subtotalCents: record.subtotalCents,
       fulfillmentFeeCents: record.fulfillmentFeeCents ?? undefined,
       taxCents: record.taxCents,

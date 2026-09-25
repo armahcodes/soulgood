@@ -1,13 +1,14 @@
 import { Button, Hr, Section, Text } from "react-email";
 import { EmailLayout, emailStyles } from "./EmailLayout";
 
-export type EmailBowlSelection = { name: string; quantity: number };
+export type EmailBowlSelection = { name: string; quantity: number; detail?: string };
 
 export function OrderConfirmationEmail({
   accountUrl,
   bowlCount,
   bowlSubtotal,
   bowls,
+  addOns,
   customerName,
   deliveryAddress,
   fulfillment,
@@ -25,6 +26,7 @@ export function OrderConfirmationEmail({
   bowlCount: number;
   bowlSubtotal: string;
   bowls: EmailBowlSelection[];
+  addOns?: EmailBowlSelection[];
   customerName: string;
   deliveryAddress?: string;
   fulfillment: string;
@@ -71,9 +73,20 @@ export function OrderConfirmationEmail({
             {bowl.name} <strong>× {bowl.quantity}</strong>
           </Text>
         ))}
+        {addOns?.length ? (
+          <>
+            <Text style={emailStyles.label}>Salads &amp; snacks</Text>
+            {addOns.map((item) => (
+              <Text key={`${item.name}-${item.detail ?? ""}`} style={rowStyle}>
+                {item.name} <strong>× {item.quantity}</strong>
+                {item.detail ? <><br />{item.detail}</> : null}
+              </Text>
+            ))}
+          </>
+        ) : null}
         <Hr style={innerDividerStyle} />
         <Text style={priceRowStyle}>
-          Bowl order <strong>{bowlSubtotal}</strong>
+          {addOns?.length ? "Food" : "Bowl order"} <strong>{bowlSubtotal}</strong>
         </Text>
         <Text style={priceRowStyle}>
           {fulfillment} <strong>{fulfillmentFee}</strong>

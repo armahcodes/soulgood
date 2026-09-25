@@ -90,6 +90,13 @@ describe("getTaxQuote for weekly delivery", () => {
     expect(quote.subtotalCents).toBe(17600);
   });
 
+  it("adds salads and snacks to the subtotal and counts them toward free delivery", async () => {
+    const small = await getTaxQuote("delivery", address("Santa Ana", "92701"), 1, cdtfa("ORANGE") as unknown as typeof fetch, 600);
+    expect(small.subtotalCents).toBe(8800 + 600 + 888);
+    const overHundred = await getTaxQuote("delivery", address("Costa Mesa", "92626"), 1, cdtfa("ORANGE") as unknown as typeof fetch, 1400);
+    expect(overHundred.subtotalCents).toBe(8800 + 1400);
+  });
+
   it("rejects delivery outside Los Angeles and Orange County", async () => {
     await expect(
       getTaxQuote("delivery", address("Riverside", "92501"), 1, cdtfa("RIVERSIDE") as unknown as typeof fetch),

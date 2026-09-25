@@ -31,6 +31,15 @@ describe("signed tax quote tokens", () => {
     delete process.env.CHECKOUT_QUOTE_SECRET;
   });
 
+  it("binds the quote to the exact salads and snacks it priced", () => {
+    const salad = { id: "rainbow-crunch", quantity: 1, dressing: "lemon" as const };
+    const token = createTaxQuoteToken(QUOTE, "delivery", ADDRESS, 1, 1, [salad]);
+    expect(verifyTaxQuoteToken(token!, "delivery", ADDRESS, 1, 1, [salad])).toEqual(QUOTE);
+    expect(verifyTaxQuoteToken(token!, "delivery", ADDRESS, 1, 1, [])).toBeNull();
+    expect(verifyTaxQuoteToken(token!, "delivery", ADDRESS, 1, 1, [{ ...salad, quantity: 2 }])).toBeNull();
+    expect(verifyTaxQuoteToken(token!, "delivery", ADDRESS, 1, 1, [{ ...salad, dressing: "house" }])).toBeNull();
+  });
+
   it("round trips a verified quote for the exact address", () => {
     const token = createTaxQuoteToken(QUOTE, "delivery", ADDRESS, 1, 2);
 

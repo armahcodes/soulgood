@@ -8,6 +8,7 @@ import { CulinaryQuoteEmail } from "@/emails/CulinaryQuoteEmail";
 import { CommunityInterestEmail } from "@/emails/CommunityInterestEmail";
 import type { CommunityInterestRecord } from "./community-drive";
 import type { CulinaryQuote, CulinaryRequest } from "./culinary-booking";
+import { describeExtraOptions, findExtra, type ExtraLine } from "./menu-extras";
 import { type BowlSelection } from "./bowl-selection";
 import {
   formatCents,
@@ -141,6 +142,7 @@ export async function sendAuthCodeEmail(input: {
 
 export async function sendOrderConfirmationEmail(input: {
   bowlSelection: BowlSelection;
+  extras?: ExtraLine[];
   customerEmail: string;
   customerName: string;
   deliveryAddress?: string;
@@ -176,13 +178,18 @@ export async function sendOrderConfirmationEmail(input: {
         <OrderConfirmationEmail
           accountUrl={ACCOUNT_URL}
           bowls={bowls}
+          addOns={(input.extras ?? []).map((line) => ({
+            name: findExtra(line.id)?.name ?? line.id,
+            quantity: line.quantity,
+            detail: describeExtraOptions(line) || undefined,
+          }))}
           bowlCount={bowls.reduce((count, bowl) => count + bowl.quantity, 0)}
           bowlSubtotal={formatCents(input.subtotalCents - fulfillmentFee)}
           customerName={input.customerName}
           deliveryAddress={input.deliveryAddress}
           fulfillment={
             input.fulfillmentMethod === "delivery"
-              ? "LA County delivery"
+              ? "Sunday delivery"
               : "Pickup"
           }
           fulfillmentFee={formatCents(fulfillmentFee)}

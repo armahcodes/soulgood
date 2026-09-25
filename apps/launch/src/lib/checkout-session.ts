@@ -3,6 +3,7 @@ import {
   type BowlSelection,
 } from "./bowl-selection";
 import type { FulfillmentMethod, PurchaseType } from "./brand";
+import { extraLinesSchema, type ExtraLine } from "./menu-extras";
 
 export const LAST_ORDER_STORAGE_KEY = "soulbowls:lastOrder";
 export const ACTIVE_CHECKOUT_STORAGE_KEY = "soulbowls:activeCheckout";
@@ -19,6 +20,7 @@ export type LastOrderConfirmation = {
   peopleCount: number;
   mealsPerDay: number;
   bowlSelection: BowlSelection;
+  extras?: ExtraLine[];
   subtotalCents: number;
   taxCents: number;
   totalCents: number;
@@ -61,7 +63,8 @@ export function parseLastOrderConfirmation(
       !bowlSelectionSchemaForPlan(
         parsed.peopleCount as number,
         parsed.mealsPerDay as number,
-      ).safeParse(parsed.bowlSelection).success
+      ).safeParse(parsed.bowlSelection).success ||
+      (parsed.extras !== undefined && !extraLinesSchema.safeParse(parsed.extras).success)
     ) {
       return null;
     }

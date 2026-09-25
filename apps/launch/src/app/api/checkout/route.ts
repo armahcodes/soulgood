@@ -56,6 +56,14 @@ async function checkout(request: Request) {
     );
   }
   const input = parsed.data;
+  if (input.extras.length && !getSquareCatalogConfig()?.addOnVariationIds)
+    return NextResponse.json(
+      {
+        error: "Salads and snacks can't be added online yet. Remove them to continue.",
+        retrySameAttempt: true,
+      },
+      { status: 400 },
+    );
   try {
     // Accepted attempts retain their original amount even after the quote expires.
     const existing = await mongoAttemptStore.get(input.idempotencyKey);
@@ -84,6 +92,7 @@ async function checkout(request: Request) {
         input.deliveryAddress,
         input.peopleCount,
         input.mealsPerDay,
+        input.extras,
       );
     if (!quote || quote.totalCents !== input.expectedTotalCents) {
       return NextResponse.json(

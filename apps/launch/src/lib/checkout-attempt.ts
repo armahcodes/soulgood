@@ -17,6 +17,7 @@ import {
 } from "./square";
 import { fulfillmentFeeCents, LEGAL_VERSION } from "./brand";
 import { bowlSelectionTotal } from "./bowl-selection";
+import { extrasTotalCents } from "./menu-extras";
 import { persistCheckoutRecord, type CheckoutRecord } from "./checkout-record";
 import { enqueueOrderEmail } from "./email-outbox";
 
@@ -34,6 +35,7 @@ export type CheckoutResult = {
   peopleCount: number;
   mealsPerDay: number;
   bowlSelection: CheckoutInput["bowlSelection"];
+  extras: CheckoutInput["extras"];
   tax: TaxQuote;
   paymentPending: boolean;
 };
@@ -154,7 +156,8 @@ export async function startCheckoutAttempt(
         : "sandbox",
     fulfillmentFeeCents: fulfillmentFeeCents(
       input.fulfillmentMethod,
-      bowlSelectionTotal(input.bowlSelection) * BOWL_UNIT_PRICE_CENTS,
+      bowlSelectionTotal(input.bowlSelection) * BOWL_UNIT_PRICE_CENTS +
+        extrasTotalCents(input.extras ?? []),
     ),
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -404,6 +407,7 @@ export async function processCheckoutAttempt(
       fulfillmentMethod: input.fulfillmentMethod,
       deliveryAddress: input.deliveryAddress ?? undefined,
       bowlSelection: input.bowlSelection,
+      ...(input.extras?.length ? { extras: input.extras } : {}),
       peopleCount: input.peopleCount,
       mealsPerDay: input.mealsPerDay,
       subtotalCents: attempt.quote.subtotalCents,
@@ -433,6 +437,7 @@ export async function processCheckoutAttempt(
       peopleCount: input.peopleCount,
       mealsPerDay: input.mealsPerDay,
       bowlSelection: input.bowlSelection,
+      extras: input.extras ?? [],
       tax: attempt.quote,
     };
     await patch({ state: "complete", result }, true);

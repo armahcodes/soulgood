@@ -18,3 +18,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Verification
 
 From `apps/launch`: `npx tsc --noEmit -p .`, `npx eslint src e2e`, `npx vitest run`, `npx playwright test` (starts its own dev server on :3109 — stop any other `next dev` for this app first).
+
+## Salads, veggie cups & snacks (add-ons)
+
+- Catalog, options, and prices live in `src/lib/menu-extras.ts`; product photos are in `public/menu/<id>.webp` (generated with the imagine.art MCP, Nano Banana Pro, 4:5, oat linen / sage / clay styling).
+- Add-ons are validated and priced server-side, bound into the signed tax quote (`extrasHash`), and sent to Square as tier-priced catalog line items whose note names the dish and choices. They repeat on weekly plans.
+- Online add-ons stay disabled until all five `SQUARE_ADDON_*_VARIATION_ID` env vars exist. Create them with `node scripts/square-catalog-sync.mjs` (writes to the Square account in `.env`), then add the printed IDs to Vercel.

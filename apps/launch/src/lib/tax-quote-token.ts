@@ -7,12 +7,15 @@ import {
 } from "./bowl-selection";
 import { SERVICE_AREA, type FulfillmentMethod, type ServiceCounty } from "./brand";
 import type { CheckoutAddress, TaxQuote } from "./square";
+import { extrasFingerprint, type ExtraLine } from "./menu-extras";
 import { hasStrongSecret } from "./strong-secret";
 
 export const TAX_QUOTE_TTL_MS = 15 * 60 * 1000;
 
 type TaxQuoteTokenPayload = TaxQuote & {
   addressHash: string;
+  /** Binds the quote to the exact salads and snacks it priced. */
+  extrasHash?: string;
   expiresAt: number;
   fulfillmentMethod: FulfillmentMethod;
   mealsPerDay: number;
@@ -42,6 +45,10 @@ function addressHash(
         .join("|")
     : fulfillmentMethod;
   return createHash("sha256").update(normalized).digest("base64url");
+}
+
+function extrasHash(extras: readonly ExtraLine[]): string {
+  return createHash("sha256").update(extrasFingerprint(extras)).digest("base64url");
 }
 
 function validQuote(value: unknown): value is TaxQuoteTokenPayload {
@@ -79,12 +86,14 @@ export function createTaxQuoteToken(
   address: CheckoutAddress | null,
   peopleCount: number,
   mealsPerDay: number,
+  extras: readonly ExtraLine[] = [],
 ): string | null {
   const signingSecret = secret();
   if (!signingSecret) return null;
   const payload: TaxQuoteTokenPayload = {
     ...quote,
     addressHash: addressHash(fulfillmentMethod, address),
+    extrasHash: extrasHash(extras),
     expiresAt: Date.now() + TAX_QUOTE_TTL_MS,
     fulfillmentMethod,
     mealsPerDay,
@@ -104,6 +113,7 @@ export function verifyTaxQuoteToken(
   address: CheckoutAddress | null,
   peopleCount: number,
   mealsPerDay: number,
+  extras: readonly ExtraLine[] = [],
 ): TaxQuote | null {
   const signingSecret = secret();
   if (!signingSecret) return null;
@@ -133,6 +143,8 @@ export function verifyTaxQuoteToken(
     if (payload.mealsPerDay !== mealsPerDay) return null;
     if (payload.addressHash !== addressHash(fulfillmentMethod, address))
       return null;
+    // Quotes signed before add-ons existed carry no hash and only cover bowls.
+    if ((payload.extrasHash ?? extrasHash([])) !== extrasHash(extras)) return null;
     return {
       county: payload.county,
       jurisdiction: payload.jurisdiction,
