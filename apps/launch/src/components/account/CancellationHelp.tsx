@@ -4,7 +4,7 @@ export const cancellationHelpHref = `mailto:${CONTACT.email}?subject=${encodeURI
 
 export function CancellationHelp() {
   return (
-    <aside id="cancellation-help" className="border-t border-forest/15 pt-6">
+    <aside id="cancellation-help" className="rounded-lg border border-forest/12 bg-card/70 p-6 sm:p-8">
       <h2 className="text-2xl">Can’t find your plan or access your email?</h2>
       <p className="mt-3 text-sm leading-6 text-forest/75">
         We can help with a plan under another email or an older subscription.
@@ -20,7 +20,7 @@ export function CancellationHelp() {
         This opens your email app; you still need to send the message. Include
         your name, checkout email, and delivery ZIP. If it does not open, email{" "}
         <a
-          className="break-all underline underline-offset-4"
+          className="whitespace-nowrap underline underline-offset-4"
           href={`mailto:${CONTACT.email}`}
         >
           {CONTACT.email}

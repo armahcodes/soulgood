@@ -695,6 +695,8 @@ test("group menu supports keyboard selection and stays within a 320px screen", a
   await page
     .getByRole("button", { name: "Choose my menu", exact: true })
     .click();
+  // The wizard moves focus to the new step on the next tick; start from there.
+  await expect(page.getByLabel("Step 2 of 5: Menu")).toBeFocused();
   const chef = page.getByRole("radio", { name: /^Chef’s selection/ });
   await chef.focus();
   await page.keyboard.press("ArrowDown");

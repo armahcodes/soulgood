@@ -70,15 +70,15 @@ export default function EatNowPage() {
             <h2 id="eat-now-details" className="text-center font-serif text-3xl text-forest sm:text-4xl">One order. Your own rhythm.</h2>
             <ol className="mt-8 grid gap-4 text-center md:grid-cols-3 md:text-left [&>li]:rounded-lg [&>li]:border [&>li]:border-forest/12 [&>li]:bg-card [&>li]:p-6">
               <li>
-                <h3 className="text-2xl text-forest">01. Choose from the menu</h3>
+                <h3 className="flex items-center justify-center gap-3 text-2xl text-forest md:justify-start"><span aria-hidden="true" className="flex size-8 shrink-0 items-center justify-center rounded-full bg-forest font-sans text-xs font-bold text-oat">1</span>Choose from the menu</h3>
                 <p className="mt-3 text-sm leading-6 text-forest/75">The live menu has the latest items and prices. For a single order, select “One time” if purchase options are shown.</p>
               </li>
               <li>
-                <h3 className="text-2xl text-forest">02. Check your service time</h3>
+                <h3 className="flex items-center justify-center gap-3 text-2xl text-forest md:justify-start"><span aria-hidden="true" className="flex size-8 shrink-0 items-center justify-center rounded-full bg-forest font-sans text-xs font-bold text-oat">2</span>Check your service time</h3>
                 <p className="mt-3 text-sm leading-6 text-forest/75">{EAT_NOW.availability}</p>
               </li>
               <li>
-                <h3 className="text-2xl text-forest">03. Keep your confirmation</h3>
+                <h3 className="flex items-center justify-center gap-3 text-2xl text-forest md:justify-start"><span aria-hidden="true" className="flex size-8 shrink-0 items-center justify-center rounded-full bg-forest font-sans text-xs font-bold text-oat">3</span>Keep your confirmation</h3>
                 <p className="mt-3 text-sm leading-6 text-forest/75">Square confirms the order after checkout. Our team prepares your food; an available courier partner or Soul Good courier brings it to you. Keep your order reference and contact Soul Good if you need help.</p>
               </li>
             </ol>

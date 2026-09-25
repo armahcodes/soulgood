@@ -113,7 +113,7 @@ export default async function AccountPage() {
           />
         )}
       </section>
-      <aside className="mt-8 border-t border-forest/15 pt-6">
+      <aside className="mt-10 rounded-lg border border-forest/12 bg-card/70 p-6 sm:p-8">
         <h2 className="text-2xl">Looking for an Eat Now order?</h2>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-forest/75">
           Single orders from our Eat Now menu have their own Square
