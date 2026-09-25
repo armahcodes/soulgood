@@ -150,7 +150,7 @@ const OPTION_CARD =
 
 function StepLegend({ number, title }: { number?: number; title: string }) {
   return (
-    <legend className="float-left mb-2 flex w-full items-center gap-2.5 text-xs font-bold tracking-[0.12em] text-forest/70 uppercase">
+    <legend className="float-left mb-2 flex w-full items-center gap-2.5 text-xs font-medium tracking-[0.12em] text-forest/70 uppercase">
       {number ? (
         <>
           <span aria-hidden="true" className="flex size-6 shrink-0 items-center justify-center rounded-full bg-forest text-[0.65rem] text-oat">
@@ -1056,7 +1056,7 @@ export function ReserveButton({
     const labelPrefix = target === "billing" ? "Billing" : "Delivery";
     return (
       <div className="grid gap-3">
-        <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">
+        <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
           {labelPrefix} street address
           <input
             autoComplete={`${prefix} address-line1`}
@@ -1068,7 +1068,7 @@ export function ReserveButton({
             }
           />
         </label>
-        <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">
+        <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
           Apartment or suite{" "}
           <span className="font-normal normal-case">(optional)</span>
           <input
@@ -1082,7 +1082,7 @@ export function ReserveButton({
           />
         </label>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-[1fr_72px_96px] sm:gap-2">
-          <label className="col-span-2 grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase sm:col-span-1">
+          <label className="col-span-2 grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase sm:col-span-1">
             City
             <input
               autoComplete={`${prefix} address-level2`}
@@ -1094,7 +1094,7 @@ export function ReserveButton({
               }
             />
           </label>
-          <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">
+          <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
             State
             {target === "delivery" ? (
               <input className={INPUT_CLASS} disabled value="CA" />
@@ -1116,7 +1116,7 @@ export function ReserveButton({
               </select>
             )}
           </label>
-          <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">
+          <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
             ZIP
             <input
               autoComplete={`${prefix} postal-code`}
@@ -1228,7 +1228,7 @@ export function ReserveButton({
           </div>
 
           <div className="border-t border-forest/10 pt-4">
-            <p className="text-xs font-bold tracking-[0.1em] text-forest/55 uppercase">
+            <p className="text-xs font-medium tracking-[0.1em] text-forest/55 uppercase">
               Meals per person, per day
             </p>
             <div className="mt-3 grid grid-cols-3 gap-2">
@@ -1364,7 +1364,7 @@ export function ReserveButton({
         <fieldset id="step-details" className={STEP_CARD}>
           <StepLegend number={4} title="Your details" />
           <div className="grid gap-3 sm:grid-cols-2">
-            <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">
+            <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
               First name
               <input
                 autoComplete="given-name"
@@ -1376,7 +1376,7 @@ export function ReserveButton({
                 }
               />
             </label>
-            <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">
+            <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
               Last name
               <input
                 autoComplete="family-name"
@@ -1389,7 +1389,7 @@ export function ReserveButton({
               />
             </label>
           </div>
-          <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">
+          <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
             Email
             <input
               autoComplete="email"
@@ -1401,7 +1401,7 @@ export function ReserveButton({
               onChange={(event) => updateContact("email", event.target.value)}
             />
           </label>
-          <label className="grid gap-2 text-xs font-bold tracking-[0.08em] text-forest/58 uppercase">
+          <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
             Phone
             <input
               autoComplete="tel"
@@ -1529,7 +1529,7 @@ export function ReserveButton({
         >
           <div className="-mt-1 mb-1 flex items-center justify-between border-b border-dashed border-forest/15 pb-3">
             <dt className="font-serif text-xl text-forest">Order summary</dt>
-            <dd className="text-xs font-bold tracking-[0.1em] text-forest/60 uppercase">
+            <dd className="text-xs font-medium tracking-[0.1em] text-forest/60 uppercase">
               {bowlSelectionTotal(bowlSelection)} of {targetBowls} bowls
             </dd>
           </div>
@@ -1598,7 +1598,7 @@ export function ReserveButton({
         </dl>
 
         <div id="step-pay" className="scroll-mt-40">
-          <p className="mb-3 flex items-center gap-2.5 text-xs font-bold tracking-[0.12em] text-forest/70 uppercase">
+          <p className="mb-3 flex items-center gap-2.5 text-xs font-medium tracking-[0.12em] text-forest/70 uppercase">
             <span aria-hidden="true" className="flex size-6 items-center justify-center rounded-full bg-forest text-[0.65rem] text-oat">
               5
             </span>
@@ -1622,7 +1622,7 @@ export function ReserveButton({
         </div>
 
         <div className="rounded-lg border border-forest/15 bg-oat/70 p-4 text-sm leading-relaxed text-forest/72">
-          <p className="font-bold tracking-[0.08em] text-forest uppercase">
+          <p className="font-medium tracking-[0.08em] text-forest uppercase">
             {purchaseType === "weekly"
               ? "Automatic renewal"
               : "One-time payment"}
@@ -1674,7 +1674,7 @@ export function ReserveButton({
           >
             <div className="flex items-center gap-3" aria-hidden="true">
               <span className="h-px flex-1 bg-forest/12" />
-              <span className="text-xs font-bold tracking-[0.1em] text-forest/50 uppercase">
+              <span className="text-xs font-medium tracking-[0.1em] text-forest/50 uppercase">
                 Express checkout
               </span>
               <span className="h-px flex-1 bg-forest/12" />

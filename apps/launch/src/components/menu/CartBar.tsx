@@ -56,7 +56,7 @@ export function CartBar() {
                   <span className="block text-xs text-oat/70 tabular-nums">{formatCents(extrasTotalCents(lines))} · review</span>
                 </span>
               </button>
-              <Link href="/checkout" className="inline-flex min-h-11 shrink-0 items-center rounded-full bg-oat px-4 text-xs font-bold tracking-[0.1em] text-forest uppercase transition-colors hover:bg-sand">
+              <Link href="/checkout" className="inline-flex min-h-11 shrink-0 items-center rounded-full bg-oat px-4 text-xs font-medium tracking-[0.1em] text-forest uppercase transition-colors hover:bg-sand">
                 Checkout
               </Link>
             </div>
@@ -79,7 +79,7 @@ export function CartBar() {
         }
       >
         <div className="px-5 pt-10 pb-4 md:px-8 md:pt-8">
-          <h2 id="cart-sheet-title" className="pr-12 text-3xl leading-none tracking-[-0.03em] text-forest">Your salads &amp; snacks</h2>
+          <h2 id="cart-sheet-title" className="pr-12 text-3xl leading-none tracking-[0.01em] text-forest">Your salads &amp; snacks</h2>
           <ul className="mt-5 divide-y divide-forest/10">
             {lines.map((line, index) => {
               const extra = findExtra(line.id);

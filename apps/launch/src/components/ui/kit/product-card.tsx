@@ -59,7 +59,7 @@ export function ProductCardBadge({
   return (
     <span
       className={cn(
-        "absolute top-3 left-3 rounded-md px-2.5 py-1.5 text-[0.62rem] font-bold tracking-[0.14em] uppercase backdrop-blur-sm",
+        "absolute top-3 left-3 rounded-md px-2.5 py-1.5 text-[0.62rem] font-medium tracking-[0.14em] uppercase backdrop-blur-sm",
         tone === "dark" ? "bg-forest text-oat" : "bg-oat/90 text-forest",
         className,
       )}
@@ -74,7 +74,7 @@ export function ProductCardContent({ className, children }: { className?: string
 }
 
 export function ProductCardTitle({ className, children }: { className?: string; children: React.ReactNode }) {
-  return <h3 className={cn("text-[1.7rem] leading-[1.02] font-normal tracking-[-0.025em] text-forest", className)}>{children}</h3>;
+  return <h3 className={cn("text-[1.7rem] leading-[1.02] font-normal tracking-[0.01em] text-forest", className)}>{children}</h3>;
 }
 
 export function ProductCardSubtitle({ className, children }: { className?: string; children: React.ReactNode }) {

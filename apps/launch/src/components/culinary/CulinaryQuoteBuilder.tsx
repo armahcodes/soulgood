@@ -858,7 +858,7 @@ export function CulinaryQuoteBuilder({
               </div>
             </dl>
             <div className="mt-6 border-y border-forest/15 py-5">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-forest/70">
+              <p className="text-xs font-medium uppercase tracking-[0.12em] text-forest/70">
                 {quote ? "Estimated total · USD" : "Estimate before tax · USD"}
               </p>
               <p

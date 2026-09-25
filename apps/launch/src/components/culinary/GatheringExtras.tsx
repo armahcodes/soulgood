@@ -43,7 +43,7 @@ export function GatheringExtras({ lines, onChange }: { lines: ExtraLine[]; onCha
     <section aria-labelledby="gathering-extras-title" className="mt-8 border-t border-forest/15 pt-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-[0.65rem] font-bold tracking-[0.18em] text-clay uppercase">Optional · menu prices</p>
+          <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay uppercase">Optional · menu prices</p>
           <h3 id="gathering-extras-title" className="mt-1 font-serif text-2xl text-forest sm:text-3xl">Add salads &amp; snacks</h3>
           <p className="mt-1 text-sm leading-6 text-forest/70">
             Made-to-order salads, veggie cups, and shareable bites, delivered with your bowls.

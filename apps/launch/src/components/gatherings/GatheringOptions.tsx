@@ -62,17 +62,17 @@ export function GatheringOptions() {
           <div className="relative aspect-[16/9] overflow-hidden">
             <Image src={option.image} alt="" fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
             {option.featured ? (
-              <span className="absolute top-4 left-4 rounded-full bg-forest px-3 py-1 text-[0.62rem] font-bold tracking-[0.16em] text-oat uppercase">
+              <span className="absolute top-4 left-4 rounded-full bg-forest px-3 py-1 text-[0.62rem] font-medium tracking-[0.16em] text-oat uppercase">
                 Chef-led service
               </span>
             ) : null}
           </div>
           <div className="flex flex-1 flex-col p-6 sm:p-8">
-            <p className="text-[0.65rem] font-bold tracking-[0.18em] text-clay uppercase">{option.eyebrow}</p>
+            <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay uppercase">{option.eyebrow}</p>
             <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <h3 className="font-serif text-3xl leading-none tracking-[-0.02em] text-forest sm:text-4xl">{option.name}</h3>
+              <h3 className="font-serif text-3xl leading-none tracking-[0.01em] text-forest sm:text-4xl">{option.name}</h3>
               <p className="text-forest">
-                <span className="font-serif text-3xl tracking-[-0.02em]">{option.price}</span>{" "}
+                <span className="font-serif text-3xl tracking-[0.01em]">{option.price}</span>{" "}
                 <span className="text-sm text-forest/65">{option.unit}</span>
               </p>
             </div>
@@ -90,7 +90,7 @@ export function GatheringOptions() {
             <Link
               href={`/quote?experience=${option.id}#quote`}
               className={cn(
-                "group mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-6 text-sm font-bold tracking-[0.12em] uppercase transition-colors",
+                "group mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-6 text-sm font-medium tracking-[0.12em] uppercase transition-colors",
                 option.featured ? "bg-forest text-oat hover:bg-forest/90" : "border border-forest/20 text-forest hover:border-forest hover:bg-forest hover:text-oat",
               )}
             >

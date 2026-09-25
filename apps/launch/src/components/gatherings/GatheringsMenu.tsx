@@ -70,12 +70,12 @@ export function GatheringsMenu() {
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {MENU_COLLECTION_LIST.map((collection) => (
                   <div key={collection.id} className="rounded-lg border border-forest/12 bg-oat p-5">
-                    <p className="text-[0.65rem] font-bold tracking-[0.18em] text-sage uppercase">{collection.tagline}</p>
+                    <p className="text-[0.65rem] font-medium tracking-[0.18em] text-sage uppercase">{collection.tagline}</p>
                     <h3 className="mt-2 font-serif text-3xl leading-none text-forest">{collection.name}</h3>
                     <dl className="mt-4 grid gap-3 border-t border-forest/10 pt-4">
                       {collection.categories.map((category) => (
                         <div key={category.id}>
-                          <dt className="text-[0.65rem] font-bold tracking-[0.14em] text-forest/55 uppercase">{category.label}</dt>
+                          <dt className="text-[0.65rem] font-medium tracking-[0.14em] text-forest/55 uppercase">{category.label}</dt>
                           <dd className="mt-1 text-sm leading-6 text-forest/80">
                             {category.items.map((item) => `${item.name}${item.note ? ` (${item.note})` : ""}`).join(" · ")}
                           </dd>
@@ -98,7 +98,7 @@ export function GatheringsMenu() {
                         {formatCents(item.price)}
                       </span>
                     </span>
-                    <span className="mt-3 block font-serif text-xl leading-[1.05] tracking-[-0.02em] text-forest sm:text-2xl">{item.name}</span>
+                    <span className="mt-3 block font-serif text-xl leading-[1.05] tracking-[0.01em] text-forest sm:text-2xl">{item.name}</span>
                     <span className="mt-1.5 line-clamp-3 block text-[0.8rem] leading-5 text-forest/68 sm:text-sm sm:leading-6">{item.description}</span>
                   </li>
                 ))}

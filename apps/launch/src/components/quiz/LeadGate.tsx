@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 const INPUT =
   "min-h-12 w-full rounded-md border border-forest/18 bg-white px-4 text-base text-forest transition-[border-color,box-shadow] placeholder:text-forest/35 focus:border-forest/60 focus:ring-4 focus:ring-sage/20 focus:outline-none aria-[invalid=true]:border-clay";
-const LABEL = "grid gap-2 text-xs font-bold tracking-[0.1em] text-forest/70 uppercase";
+const LABEL = "grid gap-2 text-xs font-medium tracking-[0.1em] text-forest/70 uppercase";
 
 type FieldErrors = Partial<Record<keyof JoinFormValues | "_root", string>>;
 
@@ -99,8 +99,8 @@ export function LeadGate({
     <div className="flex flex-col gap-8">
       <div className="flex flex-col items-center gap-5 text-center">
         <SeedOfLife size={72} className="text-sage" bloom title="" />
-        <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">Your pathway is ready</p>
-        <h1 className="text-[clamp(2.4rem,8vw,3.6rem)] leading-[0.95] font-normal tracking-[-0.045em] text-forest">
+        <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase">Your pathway is ready</p>
+        <h1 className="text-[clamp(2.4rem,8vw,3.6rem)] leading-[1.02] font-normal tracking-[0.01em] text-forest">
           Where should we send it?
         </h1>
         <p className="max-w-[36ch] text-base leading-7 text-forest/72">
@@ -154,7 +154,7 @@ export function LeadGate({
         </div>
 
         <fieldset className="grid gap-2">
-          <legend className="mb-2 text-xs font-bold tracking-[0.1em] text-forest/70 uppercase">How would you like your bowls?</legend>
+          <legend className="mb-2 text-xs font-medium tracking-[0.1em] text-forest/70 uppercase">How would you like your bowls?</legend>
           <div className="grid gap-2 sm:grid-cols-2">
             {(["pickup", "delivery"] as const).map((method) => (
               <label

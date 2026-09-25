@@ -29,15 +29,15 @@ export default function EatNowPage() {
 
         <section className="mx-auto grid w-full max-w-6xl items-center gap-8 px-5 py-10 sm:px-8 sm:py-16 lg:grid-cols-2 lg:gap-14">
           <div className="min-w-0 text-center lg:text-left">
-            <p className="text-xs font-bold tracking-[0.18em] text-clay uppercase">Take Out · Single orders</p>
-            <h1 className="mx-auto mt-5 max-w-[12ch] font-serif text-6xl leading-[0.95] tracking-[-0.045em] text-forest sm:text-7xl lg:mx-0">
+            <p className="text-xs font-medium tracking-[0.18em] text-clay uppercase">Take Out · Single orders</p>
+            <h1 className="mx-auto mt-5 max-w-[12ch] font-serif text-6xl leading-[1.02] tracking-[0.01em] text-forest sm:text-7xl lg:mx-0">
               A little good, whenever it fits.
             </h1>
             <p className="mx-auto mt-6 max-w-lg text-lg leading-8 text-forest/75 lg:mx-0">
               A bowl for you, a few to share. Thoughtfully prepared Soul Bowls™,
               chosen one at a time. Find the flavors that feel right today.
             </p>
-            <ul className="mx-auto mt-6 flex max-w-lg flex-wrap justify-center gap-2 text-xs font-bold tracking-[0.06em] text-forest uppercase lg:mx-0 lg:justify-start">
+            <ul className="mx-auto mt-6 flex max-w-lg flex-wrap justify-center gap-2 text-xs font-medium tracking-[0.06em] text-forest uppercase lg:mx-0 lg:justify-start">
               <li className="rounded-full border border-forest/15 bg-card px-3 py-1.5">{EAT_NOW.days}</li>
               <li className="rounded-full border border-forest/15 bg-card px-3 py-1.5">~{EAT_NOW.radiusMiles} mi from Long Beach</li>
               <li className="rounded-full border border-forest/15 bg-card px-3 py-1.5">{ORDER_RULES.minimumLabel}</li>

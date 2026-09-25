@@ -29,10 +29,10 @@ export function WeeklyPlans({
   return (
     <>
       <div className="max-w-2xl text-center sm:text-left">
-        <p className="text-xs font-bold tracking-[0.16em] text-clay uppercase">
+        <p className="text-xs font-medium tracking-[0.16em] text-clay uppercase">
           Your weekly nourishment
         </p>
-        <h1 className="mt-4 text-4xl leading-tight tracking-[-0.04em] sm:text-5xl">
+        <h1 className="mt-4 text-4xl leading-tight tracking-[0.01em] sm:text-5xl">
           Your plans. Your choice.
         </h1>
         <p className="mt-4 text-base leading-7 text-forest/75">
@@ -51,7 +51,7 @@ export function WeeklyPlans({
                 key={plan.id}
                 className="rounded-lg border border-forest/12 bg-card shadow-[0_20px_40px_-36px_rgb(44_58_52/0.45)] p-5 sm:p-7"
               >
-                <p className="text-xs font-bold tracking-[0.12em] text-forest/65 uppercase">
+                <p className="text-xs font-medium tracking-[0.12em] text-forest/65 uppercase">
                   Weekly plan · {plan.id.slice(-8).toUpperCase()}
                 </p>
                 <h2 className="mt-3 text-3xl">Soul Bowls™</h2>

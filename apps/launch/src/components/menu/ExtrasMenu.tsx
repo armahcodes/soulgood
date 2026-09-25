@@ -48,7 +48,7 @@ function ExtraCard({ extra, onOpen }: { extra: MenuExtra; onOpen: () => void }) 
         </span>
       </span>
       <span className="block pt-3 sm:pt-4">
-        <span className="block font-serif text-xl leading-[1.05] tracking-[-0.02em] text-forest sm:text-2xl">{extra.name}</span>
+        <span className="block font-serif text-xl leading-[1.05] tracking-[0.01em] text-forest sm:text-2xl">{extra.name}</span>
         <span className="mt-1.5 line-clamp-2 block text-[0.8rem] leading-5 text-forest/68 sm:text-sm sm:leading-6">{extra.description}</span>
       </span>
     </button>
@@ -63,10 +63,10 @@ function BuildYourOwnCard({ extra, onOpen }: { extra: MenuExtra; onOpen: () => v
       </div>
       <div className="flex flex-col justify-between gap-5 p-5 sm:p-6">
         <div>
-          <p className="flex items-center gap-2 text-[0.65rem] font-bold tracking-[0.18em] text-clay uppercase">
+          <p className="flex items-center gap-2 text-[0.65rem] font-medium tracking-[0.18em] text-clay uppercase">
             <Sparkles className="size-3.5" aria-hidden /> Make it yours · {formatCents(extraPriceCents(extra.id))}
           </p>
-          <h3 className="mt-2 text-3xl leading-none tracking-[-0.03em] text-forest">{extra.name}</h3>
+          <h3 className="mt-2 text-3xl leading-none tracking-[0.01em] text-forest">{extra.name}</h3>
           <p className="mt-3 text-sm leading-6 text-forest/72">{extra.description}</p>
           <div className="mt-4 flex flex-wrap gap-1.5" aria-hidden="true">
             {[...SALAD_BASES, ...SALAD_TOPPINGS].slice(0, 7).map((item) => (
@@ -84,7 +84,7 @@ function BuildYourOwnCard({ extra, onOpen }: { extra: MenuExtra; onOpen: () => v
             onOpen();
           }}
           aria-haspopup="dialog"
-          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-forest px-6 text-sm font-bold tracking-[0.12em] text-oat uppercase transition-colors hover:bg-forest/90"
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-forest px-6 text-sm font-medium tracking-[0.12em] text-oat uppercase transition-colors hover:bg-forest/90"
         >
           Build your salad
         </button>
@@ -107,8 +107,8 @@ export function ExtrasMenu({ orderable = true }: { orderable?: boolean }) {
             <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12">
               <Reveal className="mb-8 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
                 <div className="max-w-xl">
-                  <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">{category.eyebrow}</p>
-                  <h2 id={`${category.id}-heading`} className="mt-3 text-4xl leading-none font-normal tracking-[-0.045em] text-forest sm:text-5xl">
+                  <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase">{category.eyebrow}</p>
+                  <h2 id={`${category.id}-heading`} className="mt-3 text-4xl leading-none font-normal tracking-[0.01em] text-forest sm:text-5xl">
                     {category.title}
                   </h2>
                 </div>

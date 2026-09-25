@@ -14,9 +14,9 @@
   --color-gold: #c9a161;
   --color-sand: #ecd6bc;
 
-  /* Type: EB Garamond (headlines, via next/font/google) + Arial system stack (body) */
-  --font-serif: var(--font-eb-garamond), Georgia, "Times New Roman", serif;
-  --font-sans: Arial, Helvetica, "Helvetica Neue", sans-serif;
+  /* Type: Marcellus (display, matches the wordmark) + Jost (body/UI, matches the tagline) */
+  --font-serif: var(--font-marcellus), "Cormorant", Georgia, serif;
+  --font-sans: var(--font-jost), "Futura", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
 
   /* Soft, restrained corners (4–6px). Larger steps are capped so registry components stay on-brand. */
   --radius-xs: 2px;
@@ -111,20 +111,16 @@ html {
   }
 }
 
-/* Reveal (components/ui/kit/reveal.tsx): subtle fade-up for below-the-fold content. */
+/* Reveal (components/ui/kit/reveal.tsx): a quiet fade for below-the-fold content — no sliding. */
 .reveal[data-reveal="armed"],
 .reveal-stagger[data-reveal="armed"] > * {
   opacity: 0;
-  transform: translateY(14px);
 }
 
 .reveal[data-reveal="shown"],
 .reveal-stagger[data-reveal="shown"] > * {
   opacity: 1;
-  transform: none;
-  transition:
-    opacity 0.7s var(--ease-soft),
-    transform 0.7s var(--ease-soft);
+  transition: opacity 0.9s var(--ease-soft);
 }
 
 .reveal-stagger[data-reveal="shown"] > :nth-child(2) { transition-delay: 70ms; }
@@ -193,20 +189,31 @@ summary {
   color: var(--color-forest);
 }
 
-h1,
-h2,
-h3,
-h4 {
-  font-family: var(--font-serif);
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+  }
+
+  /* Marcellus has one weight: never fake bold or italic it. */
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-serif {
+    font-synthesis: none;
+  }
 }
 
 .legal-copy h2 {
   margin-bottom: 1rem;
   font-family: var(--font-serif);
   font-size: 1.85rem;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.15;
-  letter-spacing: -0.02em;
 }
 
 .legal-copy > * + * {

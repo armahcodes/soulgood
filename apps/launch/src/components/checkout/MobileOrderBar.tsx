@@ -61,7 +61,7 @@ export function MobileOrderBar({
     >
       <div className="mx-auto flex max-w-xl items-center justify-between gap-4">
         <div className="min-w-0">
-          <p className={cn("text-[0.65rem] font-bold tracking-[0.12em] uppercase", complete ? "text-sage" : "text-clay")}>
+          <p className={cn("text-[0.65rem] font-medium tracking-[0.12em] uppercase", complete ? "text-sage" : "text-clay")}>
             {selected} of {target} bowls
           </p>
           <p className="font-serif text-2xl leading-tight text-forest">
@@ -70,7 +70,7 @@ export function MobileOrderBar({
         </div>
         <a
           href="#step-total"
-          className="inline-flex min-h-11 shrink-0 items-center rounded-md bg-forest px-5 text-xs font-bold tracking-[0.08em] text-oat uppercase"
+          className="inline-flex min-h-11 shrink-0 items-center rounded-md bg-forest px-5 text-xs font-medium tracking-[0.08em] text-oat uppercase"
         >
           Review total
         </a>

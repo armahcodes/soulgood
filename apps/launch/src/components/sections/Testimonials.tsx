@@ -64,8 +64,8 @@ export function Testimonials() {
     <section aria-labelledby="testimonials-heading" className="relative overflow-hidden border-t border-forest/10 bg-card/60 pt-16 pb-16 sm:pt-24 md:pb-32">
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-8 lg:px-12">
         <Reveal className="mx-auto mb-12 max-w-2xl text-center sm:mb-16">
-          <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">Kind words</p>
-          <h2 id="testimonials-heading" className="mt-4 text-4xl leading-none font-normal tracking-[-0.045em] text-forest sm:text-6xl">
+          <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase">Kind words</p>
+          <h2 id="testimonials-heading" className="mt-4 text-4xl leading-none font-normal tracking-[0.01em] text-forest sm:text-6xl">
             Real nourishment, real days.
           </h2>
           <div className="mt-5 flex items-center justify-center gap-3 text-sm text-forest/70">
@@ -94,7 +94,7 @@ export function Testimonials() {
               <div>
                 <Stars />
                 <blockquote className="mt-5">
-                  <p className="font-serif text-[1.35rem] leading-snug tracking-[-0.01em] text-forest">
+                  <p className="font-serif text-[1.35rem] leading-snug tracking-[0.01em] text-forest">
                     <span aria-hidden="true" className="mr-0.5 text-clay">“</span>
                     {testimonial.quote}
                     <span aria-hidden="true" className="ml-0.5 text-clay">”</span>

@@ -112,13 +112,13 @@ export function BowlSheet({ bowl, onClose }: { bowl: CurrentBowl | null; onClose
             >
               <Image src={bowl.imagePath} alt={`${bowl.name} in a 32 ounce Soul Good jar`} fill unoptimized sizes="(min-width: 768px) 320px, 100vw" className="object-cover" />
               {!bowl.available ? (
-                <span className="absolute top-3 left-3 rounded-md bg-forest px-2.5 py-1.5 text-[0.62rem] font-bold tracking-[0.14em] text-oat uppercase">Sold out</span>
+                <span className="absolute top-3 left-3 rounded-md bg-forest px-2.5 py-1.5 text-[0.62rem] font-medium tracking-[0.14em] text-oat uppercase">Sold out</span>
               ) : null}
             </div>
 
             <div className="px-5 pt-5 md:p-8">
-              <p className="text-[0.65rem] font-bold tracking-[0.18em] text-clay uppercase">{bowl.serving} · 32 oz jar</p>
-              <h2 id="bowl-sheet-title" className="mt-2 text-4xl leading-none tracking-[-0.03em] text-forest">{bowl.name}</h2>
+              <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay uppercase">{bowl.serving} · 32 oz jar</p>
+              <h2 id="bowl-sheet-title" className="mt-2 text-4xl leading-none tracking-[0.01em] text-forest">{bowl.name}</h2>
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {bowl.dietary.map((tag) => (
                   <span key={tag} className="rounded-full border border-forest/12 bg-card px-3 py-1 text-xs font-semibold text-forest/75">
@@ -129,11 +129,11 @@ export function BowlSheet({ bowl, onClose }: { bowl: CurrentBowl | null; onClose
 
               <dl className="mt-6 grid gap-4 text-sm leading-6">
                 <div>
-                  <dt className="text-[0.65rem] font-bold tracking-[0.16em] text-forest/60 uppercase">What’s inside</dt>
+                  <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/60 uppercase">What’s inside</dt>
                   <dd className="mt-1 text-forest/80">{bowl.ingredients}</dd>
                 </div>
                 <div>
-                  <dt className="text-[0.65rem] font-bold tracking-[0.16em] text-forest/60 uppercase">Allergens</dt>
+                  <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/60 uppercase">Allergens</dt>
                   <dd className="mt-1">
                     {bowl.allergen ? (
                       <span className="font-semibold text-clay">{bowl.allergen}</span>
@@ -143,7 +143,7 @@ export function BowlSheet({ bowl, onClose }: { bowl: CurrentBowl | null; onClose
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-[0.65rem] font-bold tracking-[0.16em] text-forest/60 uppercase">Enjoy it</dt>
+                  <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/60 uppercase">Enjoy it</dt>
                   <dd className="mt-1 text-forest/75">
                     {CURRENT_OFFER.coldServing} {CURRENT_OFFER.warmServing}
                   </dd>

@@ -30,7 +30,7 @@ export function QuestionStep({
   return (
     <div className="flex flex-col gap-7">
       <div className="flex flex-col gap-3">
-        <h1 id={headingId} className="text-[clamp(2rem,6vw,2.9rem)] leading-[1.02] font-normal tracking-[-0.035em] text-forest">
+        <h1 id={headingId} className="text-[clamp(2rem,6vw,2.9rem)] leading-[1.02] font-normal tracking-[0.01em] text-forest">
           {question.prompt}
         </h1>
         {question.helper ? (

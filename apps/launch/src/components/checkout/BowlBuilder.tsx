@@ -55,7 +55,7 @@ export function BowlBuilder({
       <legend className="sr-only">Step 2 · Choose your bowls</legend>
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p aria-hidden="true" className="flex items-center gap-2.5 text-xs font-bold tracking-[0.12em] text-forest/70 uppercase">
+          <p aria-hidden="true" className="flex items-center gap-2.5 text-xs font-medium tracking-[0.12em] text-forest/70 uppercase">
             <span className="flex size-6 items-center justify-center rounded-full bg-forest text-[0.65rem] text-oat">2</span>
             Choose your bowls
           </p>
@@ -106,7 +106,7 @@ export function BowlBuilder({
                     unoptimized
                   />
                   {!bowl.available ? (
-                    <span className="absolute inset-x-2 top-2 rounded-sm bg-forest px-2 py-1 text-center text-[0.6rem] font-bold tracking-[0.12em] text-oat uppercase">
+                    <span className="absolute inset-x-2 top-2 rounded-sm bg-forest px-2 py-1 text-center text-[0.6rem] font-medium tracking-[0.12em] text-oat uppercase">
                       Sold out
                     </span>
                   ) : quantity > 0 ? (
@@ -121,7 +121,7 @@ export function BowlBuilder({
                       {bowl.name}
                     </h3>
                     {!bowl.available ? (
-                      <p className="mt-1 text-xs font-bold tracking-[0.08em] text-clay uppercase">
+                      <p className="mt-1 text-xs font-medium tracking-[0.08em] text-clay uppercase">
                         Currently unavailable
                       </p>
                     ) : null}

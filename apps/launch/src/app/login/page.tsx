@@ -38,10 +38,10 @@ export default async function LoginPage({
     <CustomerShell active={managingPlan ? "plans" : "signin"}>
       <div className="mx-auto grid max-w-5xl items-start gap-8 lg:grid-cols-[1fr_1fr] lg:gap-16">
         <div className="text-center lg:pt-6 lg:text-left">
-          <p className="text-xs font-bold tracking-[0.16em] text-clay uppercase">
+          <p className="text-xs font-medium tracking-[0.16em] text-clay uppercase">
             {managingPlan ? "Weekly plan management" : "Welcome back"}
           </p>
-          <h1 className="mt-4 text-4xl leading-tight tracking-[-0.04em] sm:text-5xl">
+          <h1 className="mt-4 text-4xl leading-tight tracking-[0.01em] sm:text-5xl">
             {managingPlan
               ? "Let’s find your weekly plan."
               : "Your orders, in one place."}

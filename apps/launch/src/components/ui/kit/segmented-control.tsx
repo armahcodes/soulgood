@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 const SPRING = { type: "spring", stiffness: 480, damping: 36, mass: 0.5 } as const;
 const SEGMENT =
-  "flex min-h-11 items-center justify-center px-4 text-center text-[0.72rem] font-bold tracking-[0.1em] uppercase whitespace-nowrap";
+  "flex min-h-11 items-center justify-center px-4 text-center text-[0.72rem] font-medium tracking-[0.1em] uppercase whitespace-nowrap";
 
 export type SegmentedOption<T extends string = string> = { value: T; label: string };
 

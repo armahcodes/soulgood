@@ -25,8 +25,8 @@ export function DeliveryOptions({ showEatNowAction = true }: { showEatNowAction?
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-start lg:gap-12">
       <Reveal stagger className="grid gap-4">
         <article className="rounded-lg border border-forest/12 bg-card p-6 sm:p-7">
-          <p className="text-[0.65rem] font-bold tracking-[0.18em] text-sage uppercase">Weekly nourishment</p>
-          <h3 className="mt-2 text-3xl leading-tight tracking-[-0.02em] text-forest">Delivered every Sunday.</h3>
+          <p className="text-[0.65rem] font-medium tracking-[0.18em] text-sage uppercase">Weekly nourishment</p>
+          <h3 className="mt-2 text-3xl leading-tight tracking-[0.01em] text-forest">Delivered every Sunday.</h3>
           <p className="mt-3 text-sm leading-6 text-forest/72">
             Your bowls for the week, prepared by Chef Kyla and brought to your door by our own
             delivery team, never a third-party courier.
@@ -45,8 +45,8 @@ export function DeliveryOptions({ showEatNowAction = true }: { showEatNowAction?
         </article>
 
         <article className="rounded-lg border border-clay/25 bg-card p-6 sm:p-7">
-          <p className="text-[0.65rem] font-bold tracking-[0.18em] text-clay uppercase">Take Out · On demand</p>
-          <h3 className="mt-2 text-3xl leading-tight tracking-[-0.02em] text-forest">A bowl when you want it.</h3>
+          <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay uppercase">Take Out · On demand</p>
+          <h3 className="mt-2 text-3xl leading-tight tracking-[0.01em] text-forest">A bowl when you want it.</h3>
           <p className="mt-3 text-sm leading-6 text-forest/72">
             Order single bowls Thursday through Sunday. An on-demand courier, through partners like
             Uber Direct, or a Soul Good courier brings it to you.

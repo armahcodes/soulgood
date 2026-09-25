@@ -70,7 +70,7 @@ export function SiteFooter() {
           >
             {COLUMNS.map((column) => (
               <div key={column.title}>
-                <p className="mb-3 text-[0.65rem] font-bold tracking-[0.2em] text-gold uppercase">
+                <p className="mb-3 text-[0.65rem] font-medium tracking-[0.2em] text-gold uppercase">
                   {column.title}
                 </p>
                 <ul className="grid">

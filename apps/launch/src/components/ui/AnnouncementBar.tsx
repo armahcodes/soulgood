@@ -9,7 +9,7 @@ export function AnnouncementBar() {
       href={COMMUNITY_DRIVE.path}
       className="group flex min-h-11 items-center justify-center gap-x-2 bg-forest px-5 py-2.5 text-center text-[0.8rem] text-oat transition-colors hover:bg-[#25312c]"
     >
-      <span className="hidden rounded-sm bg-gold/20 px-1.5 py-0.5 text-[0.6rem] font-bold tracking-[0.16em] text-gold uppercase sm:inline">
+      <span className="hidden rounded-sm bg-gold/20 px-1.5 py-0.5 text-[0.6rem] font-medium tracking-[0.16em] text-gold uppercase sm:inline">
         Community
       </span>
       <span>

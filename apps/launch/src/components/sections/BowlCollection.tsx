@@ -91,7 +91,7 @@ export function BowlCollection() {
     <>
       <div className="mb-6 grid gap-3">
         <div className="flex items-center justify-between gap-4">
-          <p className="flex items-center gap-2 text-[0.68rem] font-bold tracking-[0.14em] text-forest/65 uppercase">
+          <p className="flex items-center gap-2 text-[0.68rem] font-medium tracking-[0.14em] text-forest/65 uppercase">
             <SlidersHorizontal className="size-3.5" aria-hidden />
             Filter by label
           </p>
@@ -181,7 +181,7 @@ export function BowlCollection() {
                   />
                   <span
                     className={cn(
-                      "absolute top-3 left-3 rounded-md px-2.5 py-1.5 text-[0.62rem] font-bold tracking-[0.14em] uppercase backdrop-blur-sm",
+                      "absolute top-3 left-3 rounded-md px-2.5 py-1.5 text-[0.62rem] font-medium tracking-[0.14em] uppercase backdrop-blur-sm",
                       bowl.available ? "bg-oat/90 text-forest" : "bg-forest text-oat",
                     )}
                   >
@@ -195,11 +195,11 @@ export function BowlCollection() {
                   </span>
                 </span>
                 <span className="block pt-5">
-                  <span className="block font-serif text-[1.7rem] leading-[1.02] tracking-[-0.025em] text-forest">{bowl.name}</span>
+                  <span className="block font-serif text-[1.7rem] leading-[1.02] tracking-[0.01em] text-forest">{bowl.name}</span>
                   <span className="mt-3 line-clamp-2 block text-sm leading-6 text-forest/68">{bowl.ingredients}</span>
                   <span className="mt-4 flex flex-wrap gap-1.5">
                     {bowl.dietary.map((tag) => (
-                      <span key={tag} className="rounded-md border border-forest/12 px-2 py-1 text-[0.65rem] font-bold tracking-[0.06em] text-forest/70 uppercase">
+                      <span key={tag} className="rounded-md border border-forest/12 px-2 py-1 text-[0.65rem] font-medium tracking-[0.06em] text-forest/70 uppercase">
                         {tag}
                       </span>
                     ))}

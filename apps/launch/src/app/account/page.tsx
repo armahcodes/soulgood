@@ -51,10 +51,10 @@ export default async function AccountPage() {
     <CustomerShell active="orders" signedIn>
       <div className="flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:items-end sm:text-left">
         <div>
-          <p className="text-xs font-bold tracking-[0.16em] text-clay uppercase">
+          <p className="text-xs font-medium tracking-[0.16em] text-clay uppercase">
             Welcome to your table
           </p>
-          <h1 className="mt-4 text-4xl tracking-[-0.04em] sm:text-5xl">
+          <h1 className="mt-4 text-4xl tracking-[0.01em] sm:text-5xl">
             My orders
           </h1>
           <p className="mt-3 break-all text-sm text-forest/70">

@@ -42,10 +42,10 @@ export function ServiceAndFaq() {
     <section id="delivery" className="bg-sand/45">
       <div className="mx-auto grid w-full max-w-7xl gap-16 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[0.8fr_1.2fr] lg:px-12 lg:py-28">
         <div className="flex flex-col items-start gap-6">
-          <span className="rounded-full bg-clay px-4 py-2 text-xs font-bold tracking-[0.16em] text-oat uppercase">
+          <span className="rounded-full bg-clay px-4 py-2 text-xs font-medium tracking-[0.16em] text-oat uppercase">
             Pickup or LA County delivery
           </span>
-          <h2 className="max-w-[10ch] text-5xl leading-[0.94] font-semibold tracking-[-0.045em] text-forest sm:text-6xl">
+          <h2 className="max-w-[10ch] text-5xl leading-[1.02] font-semibold tracking-[0.01em] text-forest sm:text-6xl">
             Local by design.
           </h2>
           <p className="max-w-md text-lg leading-relaxed text-forest/68">
@@ -54,7 +54,7 @@ export function ServiceAndFaq() {
           </p>
 
           <div className="mt-2 w-full max-w-md rounded-3xl border border-forest/12 bg-oat/75 p-6">
-            <p className="mb-4 text-xs font-bold tracking-[0.16em] text-forest/45 uppercase">
+            <p className="mb-4 text-xs font-medium tracking-[0.16em] text-forest/45 uppercase">
               Transparent charges
             </p>
             <dl className="grid gap-4 text-sm">
@@ -95,7 +95,7 @@ export function ServiceAndFaq() {
         </div>
 
         <div id="faq">
-          <p className="mb-5 text-xs font-bold tracking-[0.18em] text-clay uppercase">
+          <p className="mb-5 text-xs font-medium tracking-[0.18em] text-clay uppercase">
             Common questions
           </p>
           <div className="border-t border-forest/15">

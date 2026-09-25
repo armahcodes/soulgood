@@ -101,10 +101,10 @@ export function OrderConfirmation() {
         <div className="mb-8 flex size-20 items-center justify-center rounded-full bg-forest">
           <Logo size={42} title="" variant="cream" />
         </div>
-        <p className="mb-5 text-xs font-bold tracking-[0.18em] text-clay uppercase">
+        <p className="mb-5 text-xs font-medium tracking-[0.18em] text-clay uppercase">
           Confirmation unavailable
         </p>
-        <h1 className="max-w-[12ch] text-5xl leading-[0.94] font-normal tracking-[-0.05em] text-forest sm:text-7xl">
+        <h1 className="max-w-[12ch] text-5xl leading-[1.02] font-normal tracking-[0.01em] text-forest sm:text-7xl">
           Let&rsquo;s find your order.
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/68">
@@ -140,7 +140,7 @@ export function OrderConfirmation() {
   return (
     <section className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center px-5 py-12 text-center sm:px-8 sm:py-16">
       <StatusSeal pending={pending} />
-      <p className="mb-5 text-xs font-bold tracking-[0.18em] text-clay uppercase">
+      <p className="mb-5 text-xs font-medium tracking-[0.18em] text-clay uppercase">
         {confirmation.paymentPending ||
         confirmation.status === "PENDING_PAYMENT"
           ? "Plan enrolled · payment pending"
@@ -148,7 +148,7 @@ export function OrderConfirmation() {
             ? "Weekly plan"
             : "Order confirmed"}
       </p>
-      <h1 className="max-w-[12ch] text-5xl leading-[0.94] font-normal tracking-[-0.05em] text-forest sm:text-7xl">
+      <h1 className="max-w-[12ch] text-5xl leading-[1.02] font-normal tracking-[0.01em] text-forest sm:text-7xl">
         {confirmation.paymentPending ||
         confirmation.status === "PENDING_PAYMENT"
           ? "Your plan is enrolled."
@@ -164,7 +164,7 @@ export function OrderConfirmation() {
       <section className="mt-10 w-full overflow-hidden rounded-lg border border-forest/12 bg-card p-6 text-left shadow-[0_30px_60px_-45px_rgb(44_58_52/0.5)] sm:p-8">
         <div className="flex flex-col justify-between gap-5 border-b border-forest/10 pb-6 sm:flex-row sm:items-start">
           <div>
-            <p className="text-xs font-bold tracking-[0.16em] text-clay uppercase">
+            <p className="text-xs font-medium tracking-[0.16em] text-clay uppercase">
               {weekly ? "Weekly plan" : "One-time order"}
             </p>
             <p className="mt-2 font-serif text-3xl text-forest">
@@ -179,7 +179,7 @@ export function OrderConfirmation() {
             </p>
           </div>
           <div className="sm:text-right">
-            <span className="inline-flex rounded-md bg-sage/14 px-3 py-2 text-xs font-bold tracking-[0.1em] text-forest uppercase">
+            <span className="inline-flex rounded-md bg-sage/14 px-3 py-2 text-xs font-medium tracking-[0.1em] text-forest uppercase">
               {orderStatusLabel(confirmation.status)}
             </span>
             <p className="mt-3 font-serif text-3xl text-forest">
@@ -190,7 +190,7 @@ export function OrderConfirmation() {
 
         <div className="grid gap-7 pt-6 md:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <p className="text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
+            <p className="text-xs font-medium tracking-[0.12em] text-forest/55 uppercase">
               Your chosen bowls
             </p>
             <ul className="mt-4 grid divide-y divide-forest/8">
@@ -213,7 +213,7 @@ export function OrderConfirmation() {
             </ul>
             {confirmation.extras?.length ? (
               <>
-                <p className="mt-6 text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">Salads &amp; snacks</p>
+                <p className="mt-6 text-xs font-medium tracking-[0.12em] text-forest/55 uppercase">Salads &amp; snacks</p>
                 <ul className="mt-3 grid divide-y divide-forest/8">
                   {confirmation.extras.map((line, index) => {
                     const extra = findExtra(line.id);

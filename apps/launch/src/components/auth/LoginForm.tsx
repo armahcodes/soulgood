@@ -127,7 +127,7 @@ export function LoginForm({
         <div>
           <label
             htmlFor="login-code"
-            className="mb-2 block text-xs font-bold tracking-[0.12em] text-forest/58 uppercase"
+            className="mb-2 block text-xs font-medium tracking-[0.12em] text-forest/58 uppercase"
           >
             Six-digit code
           </label>
@@ -210,7 +210,7 @@ export function LoginForm({
       <div>
         <label
           htmlFor="login-email"
-          className="mb-2 block text-xs font-bold tracking-[0.12em] text-forest/58 uppercase"
+          className="mb-2 block text-xs font-medium tracking-[0.12em] text-forest/58 uppercase"
         >
           Order email
         </label>

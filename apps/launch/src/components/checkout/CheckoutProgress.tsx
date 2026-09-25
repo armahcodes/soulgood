@@ -50,7 +50,7 @@ export function CheckoutProgress({ steps }: { steps: readonly CheckoutStep[] }) 
                 </span>
                 <span
                   className={cn(
-                    "text-[0.62rem] font-bold tracking-[0.08em] uppercase sm:text-[0.68rem]",
+                    "text-[0.62rem] font-medium tracking-[0.08em] uppercase sm:text-[0.68rem]",
                     current ? "text-forest" : "text-forest/60 group-hover:text-forest",
                   )}
                 >

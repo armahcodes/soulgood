@@ -130,8 +130,8 @@ export function JarStack({ items, className }: { items: readonly JarStackItem[];
             exit={reduced ? undefined : { opacity: 0, y: -6 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="text-[0.62rem] font-bold tracking-[0.18em] text-forest/65 uppercase">{front.meta}</p>
-            <p className="mt-2 font-serif text-3xl leading-none tracking-[-0.02em] text-forest">{front.name}</p>
+            <p className="text-[0.62rem] font-medium tracking-[0.18em] text-forest/65 uppercase">{front.meta}</p>
+            <p className="mt-2 font-serif text-3xl leading-none tracking-[0.01em] text-forest">{front.name}</p>
             <p className="mt-2 line-clamp-2 text-sm leading-6 text-forest/72">{front.detail}</p>
           </motion.div>
         </AnimatePresence>

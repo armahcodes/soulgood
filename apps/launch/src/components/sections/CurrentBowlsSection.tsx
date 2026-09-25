@@ -7,10 +7,10 @@ export function CurrentBowlsSection() {
       <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-12 lg:py-28">
         <div className="mb-12 grid gap-5 lg:grid-cols-[1fr_0.72fr] lg:items-end">
           <div>
-            <p className="mb-4 text-xs font-bold tracking-[0.18em] text-clay uppercase">
+            <p className="mb-4 text-xs font-medium tracking-[0.18em] text-clay uppercase">
               In your week now
             </p>
-            <h2 className="max-w-[11ch] text-5xl leading-[0.94] font-semibold tracking-[-0.045em] text-forest sm:text-6xl">
+            <h2 className="max-w-[11ch] text-5xl leading-[1.02] font-semibold tracking-[0.01em] text-forest sm:text-6xl">
               Five available. Your mix.
             </h2>
           </div>
@@ -38,17 +38,17 @@ export function CurrentBowlsSection() {
                   unoptimized
                 />
                 {!bowl.available ? (
-                  <span className="absolute left-4 top-4 bg-forest px-3 py-2 text-xs font-bold tracking-[0.14em] text-oat uppercase">
+                  <span className="absolute left-4 top-4 bg-forest px-3 py-2 text-xs font-medium tracking-[0.14em] text-oat uppercase">
                     Sold out
                   </span>
                 ) : null}
               </div>
               <div className="flex flex-1 flex-col p-6">
-                <div className="mb-7 flex items-center justify-between gap-3 text-xs font-bold tracking-[0.14em] text-forest/48 uppercase">
+                <div className="mb-7 flex items-center justify-between gap-3 text-xs font-medium tracking-[0.14em] text-forest/48 uppercase">
                   <span>{bowl.available ? String(index + 1).padStart(2, "0") : "Sold out"}</span>
                   <span>{bowl.serving}</span>
                 </div>
-                <h3 className="text-2xl leading-tight font-semibold tracking-[-0.025em] text-forest">
+                <h3 className="text-2xl leading-tight font-semibold tracking-[0.01em] text-forest">
                   {bowl.name}
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-forest/68">

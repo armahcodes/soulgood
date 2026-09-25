@@ -52,13 +52,13 @@ export function ResultScreen({
         <motion.div {...rise(0)}>
           <SeedOfLife size={96} className="text-sage" bloom title="" />
         </motion.div>
-        <motion.p {...rise(0.1)} className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">
+        <motion.p {...rise(0.1)} className="text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase">
           Your Soul Good pathway
         </motion.p>
-        <motion.h1 {...rise(0.18)} className="text-[clamp(3.6rem,14vw,6rem)] leading-[0.85] font-normal tracking-[-0.055em] text-forest">
+        <motion.h1 {...rise(0.18)} className="text-[clamp(3.6rem,14vw,6rem)] leading-[1.02] font-normal tracking-[0.01em] text-forest">
           {pathway.name}
         </motion.h1>
-        <motion.p {...rise(0.26)} className="text-sm font-bold tracking-[0.12em] text-sage uppercase">
+        <motion.p {...rise(0.26)} className="text-sm font-medium tracking-[0.12em] text-sage uppercase">
           {pathway.descriptor}
         </motion.p>
         <motion.p {...rise(0.32)} className="max-w-[38ch] text-lg leading-relaxed text-forest/75">
@@ -69,8 +69,8 @@ export function ResultScreen({
       <motion.section {...rise(0.4)} aria-labelledby="mix-heading" className="overflow-hidden rounded-lg border border-forest/12 bg-card shadow-[0_30px_60px_-45px_rgb(44_58_52/0.5)]">
         <div className="flex flex-wrap items-end justify-between gap-3 border-b border-dashed border-forest/15 p-5 sm:p-7">
           <div>
-            <p className="text-[0.65rem] font-bold tracking-[0.18em] text-forest/60 uppercase">Chosen for your pathway</p>
-            <h2 id="mix-heading" className="mt-2 text-3xl leading-none tracking-[-0.03em] text-forest">Your starting mix</h2>
+            <p className="text-[0.65rem] font-medium tracking-[0.18em] text-forest/60 uppercase">Chosen for your pathway</p>
+            <h2 id="mix-heading" className="mt-2 text-3xl leading-none tracking-[0.01em] text-forest">Your starting mix</h2>
           </div>
           <p className="max-w-xs text-sm leading-6 text-forest/70">{MIX_RATIONALE[state.pathway]}</p>
         </div>

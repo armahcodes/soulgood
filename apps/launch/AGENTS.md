@@ -24,3 +24,9 @@ From `apps/launch`: `npx tsc --noEmit -p .`, `npx eslint src e2e`, `npx vitest r
 - Catalog, options, and prices live in `src/lib/menu-extras.ts`; product photos are in `public/menu/<id>.webp` (generated with the imagine.art MCP, Nano Banana Pro, 4:5, oat linen / sage / clay styling).
 - Add-ons are validated and priced server-side, bound into the signed tax quote (`extrasHash`), and sent to Square as tier-priced catalog line items whose note names the dish and choices. They repeat on weekly plans.
 - Online add-ons stay disabled until all five `SQUARE_ADDON_*_VARIATION_ID` env vars exist. Create them with `node scripts/square-catalog-sync.mjs` (writes to the Square account in `.env`), then add the printed IDs to Vercel.
+
+## Typography (brand)
+
+- Display: **Marcellus** (`--font-serif`) — the closest web match to the flared SOUL GOOD wordmark. One weight only; headings never use negative tracking or faux bold (`font-synthesis: none`).
+- Body & UI: **Jost** (`--font-sans`) — matches the geometric NOURISH • HEAL • THRIVE tagline. Labels/eyebrows use Jost medium, uppercase, wide tracking (0.16–0.3em), like the tagline.
+- Avoid tight negative letter-spacing, sub-1.0 leading on multi-line headings, and scrolling/sliding text; reveals are fade-only.

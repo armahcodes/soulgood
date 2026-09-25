@@ -115,7 +115,7 @@ export function SiteHeader({
                   link={link}
                   active={isActive(link.href)}
                   className={cn(
-                    "relative inline-flex min-h-11 items-center gap-1 rounded-md px-3.5 text-[0.72rem] font-bold tracking-[0.1em] uppercase transition-colors",
+                    "relative inline-flex min-h-11 items-center gap-1 rounded-md px-3.5 text-[0.72rem] font-medium tracking-[0.1em] uppercase transition-colors",
                     "after:absolute after:inset-x-3.5 after:bottom-2 after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 hover:after:scale-x-100",
                     isActive(link.href) ? "text-forest after:scale-x-100" : link.external ? "text-clay" : "text-forest/70 hover:text-forest",
                   )}
@@ -199,7 +199,7 @@ function MobileMenu({
                 link={link}
                 active={isActive(link.href)}
                 onClick={onNavigate}
-                className="flex min-h-16 items-center justify-between font-serif text-3xl tracking-[-0.02em] text-forest"
+                className="flex min-h-16 items-center justify-between font-serif text-3xl tracking-[0.01em] text-forest"
               >
                 {link.label}
                 {link.external ? (

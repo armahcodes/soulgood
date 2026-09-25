@@ -44,7 +44,7 @@ export default async function CheckoutPage({
         aside={
           <Link
             href="/account"
-            className="inline-flex min-h-11 items-center text-[0.7rem] font-bold tracking-[0.1em] text-forest/70 uppercase transition-colors hover:text-clay"
+            className="inline-flex min-h-11 items-center text-[0.7rem] font-medium tracking-[0.1em] text-forest/70 uppercase transition-colors hover:text-clay"
           >
             My orders
           </Link>
@@ -70,10 +70,10 @@ export default async function CheckoutPage({
                 </div>
               ))}
             </div>
-            <p className="text-xs font-bold tracking-[0.18em] text-clay uppercase">
+            <p className="text-xs font-medium tracking-[0.18em] text-clay uppercase">
               {NOURISHMENT.label} · Once or weekly
             </p>
-            <h1 className="mx-auto max-w-[10ch] text-5xl leading-[0.9] font-normal tracking-[-0.05em] text-forest sm:text-7xl lg:mx-0 lg:max-w-[9ch]">
+            <h1 className="mx-auto max-w-[10ch] text-5xl leading-[1.02] font-normal tracking-[0.01em] text-forest sm:text-7xl lg:mx-0 lg:max-w-[9ch]">
               Make this ritual yours.
             </h1>
             <p className="mx-auto max-w-md text-base leading-relaxed text-forest/72 lg:mx-0">
@@ -90,13 +90,13 @@ export default async function CheckoutPage({
               href="/quiz"
               className="group mx-auto flex w-fit items-center gap-3 rounded-full border border-forest/15 bg-card py-1.5 pr-4 pl-1.5 text-sm text-forest transition-colors hover:border-forest/40 lg:mx-0"
             >
-              <span className="shrink-0 rounded-full bg-sage px-2.5 py-1 text-[0.6rem] font-bold tracking-[0.14em] whitespace-nowrap text-oat uppercase">2 min</span>
+              <span className="shrink-0 rounded-full bg-sage px-2.5 py-1 text-[0.6rem] font-medium tracking-[0.14em] whitespace-nowrap text-oat uppercase">2 min</span>
               <span className="hidden sm:inline">Not sure which bowls?</span>{" "}
               <span className="font-semibold whitespace-nowrap underline underline-offset-4 group-hover:text-clay">Find your pathway</span>
             </Link>
 
             <div className="mt-2 hidden rounded-lg border border-forest/12 bg-card/70 p-6 text-left sm:block">
-              <p className="text-[0.65rem] font-bold tracking-[0.18em] text-forest/60 uppercase">What’s included</p>
+              <p className="text-[0.65rem] font-medium tracking-[0.18em] text-forest/60 uppercase">What’s included</p>
               <ul className="mt-4 grid gap-3">
                 {PLAN_ITEMS.map((item) => (
                   <li key={item} className="flex items-start gap-3 text-sm leading-6 text-forest/78">

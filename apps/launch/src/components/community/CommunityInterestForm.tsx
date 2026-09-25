@@ -100,12 +100,12 @@ export function CommunityInterestForm() {
     >
       <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
         <div className="text-center lg:text-left">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-forest/75">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-forest/75">
             A place for you at the table
           </p>
           <h2
             id="connection-heading"
-            className="mt-5 text-5xl leading-[0.98] tracking-[-0.04em] sm:text-6xl"
+            className="mt-5 text-5xl leading-[1.02] tracking-[0.01em] sm:text-6xl"
           >
             Let’s bring a little
             <br className="hidden sm:block" /> good together.

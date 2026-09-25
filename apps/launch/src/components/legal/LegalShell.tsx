@@ -17,10 +17,10 @@ export function LegalShell({ eyebrow, title, intro, children }: LegalShellProps)
       <main className="min-h-screen bg-oat text-forest">
         <div className="border-b border-forest/10 bg-card/50">
           <div className="mx-auto w-full max-w-6xl px-5 pt-12 pb-10 sm:px-8 sm:pt-16 sm:pb-14">
-            <p className="mb-5 text-xs font-bold tracking-[0.18em] text-clay uppercase">
+            <p className="mb-5 text-xs font-medium tracking-[0.18em] text-clay uppercase">
               {eyebrow}
             </p>
-            <h1 className="max-w-3xl text-5xl leading-[0.94] font-normal tracking-[-0.045em] sm:text-7xl">
+            <h1 className="max-w-3xl text-5xl leading-[1.02] font-normal tracking-[0.01em] sm:text-7xl">
               {title}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-forest/72">

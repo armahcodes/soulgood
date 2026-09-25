@@ -40,10 +40,10 @@ export default async function CancelPage() {
       <CustomerShell active="plans">
         <div className="mx-auto max-w-2xl">
           <div className="text-center">
-            <p className="text-xs font-bold tracking-[0.16em] text-clay uppercase">
+            <p className="text-xs font-medium tracking-[0.16em] text-clay uppercase">
               Weekly plan management
             </p>
-            <h1 className="mt-4 text-4xl leading-tight tracking-[-0.04em] sm:text-5xl">
+            <h1 className="mt-4 text-4xl leading-tight tracking-[0.01em] sm:text-5xl">
               Your plans. Your choice.
             </h1>
             <p className="mt-4 text-base leading-7 text-forest/75">

@@ -20,7 +20,7 @@ export function CollectionMenu({
   const def = MENU_COLLECTIONS[collection];
   return (
     <div className="flex w-full flex-col gap-4 text-left">
-      <p className="text-xs font-bold tracking-[0.18em] text-forest/40 uppercase">
+      <p className="text-xs font-medium tracking-[0.18em] text-forest/40 uppercase">
         {eyebrow}
       </p>
       <div className="flex flex-col gap-3">

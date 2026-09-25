@@ -1,12 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { EB_Garamond } from "next/font/google";
+import { Jost, Marcellus } from "next/font/google";
 import { BRAND_NAME, NOURISHMENT, TAGLINE } from "@/lib/brand";
 import "./globals.css";
 
-const ebGaramond = EB_Garamond({
+// Marcellus echoes the flared, chiselled SOUL GOOD wordmark; Jost matches the
+// geometric NOURISH • HEAL • THRIVE tagline.
+const marcellus = Marcellus({
   subsets: ["latin"],
+  weight: "400",
   display: "swap",
-  variable: "--font-eb-garamond",
+  variable: "--font-marcellus",
+});
+
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  display: "swap",
+  variable: "--font-jost",
 });
 
 const SITE_TITLE = `${BRAND_NAME} — ${NOURISHMENT.headline}`;
@@ -46,7 +56,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={ebGaramond.variable} data-scroll-behavior="smooth">
+    <html lang="en" className={`${marcellus.variable} ${jost.variable}`} data-scroll-behavior="smooth">
       <body className="min-h-screen antialiased">{children}</body>
     </html>
   );

@@ -15,8 +15,8 @@ export function QuizIntro({ onBegin }: { onBegin: () => void }) {
     <div className="flex flex-col items-center gap-7 text-center">
       <SeedOfLife size={88} className="text-sage" bloom title="" />
       <div>
-        <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">The Pathway Finder</p>
-        <h1 className="mt-4 text-[clamp(3rem,10vw,4.5rem)] leading-[0.9] font-normal tracking-[-0.05em] text-forest">
+        <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase">The Pathway Finder</p>
+        <h1 className="mt-4 text-[clamp(3rem,10vw,4.5rem)] leading-[1.02] font-normal tracking-[0.01em] text-forest">
           Take a breath.
         </h1>
       </div>
@@ -25,7 +25,7 @@ export function QuizIntro({ onBegin }: { onBegin: () => void }) {
         noticing what your body and your days are asking for — so the food can
         answer it.
       </p>
-      <ul className="flex flex-wrap justify-center gap-2 text-xs font-bold tracking-[0.08em] text-forest/70 uppercase">
+      <ul className="flex flex-wrap justify-center gap-2 text-xs font-medium tracking-[0.08em] text-forest/70 uppercase">
         <li className="rounded-full border border-forest/12 bg-card px-3 py-1.5">{QUESTIONS.length} questions</li>
         <li className="rounded-full border border-forest/12 bg-card px-3 py-1.5">About 2 minutes</li>
         <li className="rounded-full border border-forest/12 bg-card px-3 py-1.5">Bowls matched to you</li>

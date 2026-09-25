@@ -39,7 +39,7 @@ export function OrderHistory({
           >
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-bold tracking-[0.12em] text-forest/65 uppercase">
+                <p className="text-xs font-medium tracking-[0.12em] text-forest/65 uppercase">
                   {order.squareObjectType === "invoice"
                     ? "Weekly order"
                     : "One-time order"}{" "}
@@ -57,7 +57,7 @@ export function OrderHistory({
                 </p>
               </div>
               <div className="flex w-full items-center justify-between gap-4 border-t border-forest/10 pt-3 sm:w-auto sm:flex-col sm:items-end sm:border-0 sm:pt-0">
-                <span className={cn("inline-flex rounded-md px-3 py-1.5 text-xs font-bold tracking-[0.06em] uppercase", statusTone(order.status))}>
+                <span className={cn("inline-flex rounded-md px-3 py-1.5 text-xs font-medium tracking-[0.06em] uppercase", statusTone(order.status))}>
                   {orderStatusLabel(order.status)}
                 </span>
                 <p className="font-serif text-3xl">
@@ -88,7 +88,7 @@ export function OrderHistory({
               </summary>
               <div className="grid gap-6 pb-4 md:grid-cols-2">
                 <div>
-                  <h4 className="font-sans text-xs font-bold tracking-[0.1em] text-forest/65 uppercase">
+                  <h4 className="font-sans text-xs font-medium tracking-[0.1em] text-forest/65 uppercase">
                     Your bowls
                   </h4>
                   <ul className="mt-3 space-y-2 text-sm leading-6">
@@ -106,7 +106,7 @@ export function OrderHistory({
                   </ul>
                   {order.extras?.length ? (
                     <>
-                      <h4 className="mt-5 font-sans text-xs font-bold tracking-[0.1em] text-forest/65 uppercase">
+                      <h4 className="mt-5 font-sans text-xs font-medium tracking-[0.1em] text-forest/65 uppercase">
                         Salads &amp; snacks
                       </h4>
                       <ul className="mt-3 space-y-2 text-sm leading-6">

@@ -39,8 +39,8 @@ export const metadata: Metadata = {
 };
 
 const primaryAction =
-  "inline-flex min-h-13 items-center justify-center gap-3 rounded-md bg-forest px-6 py-4 text-sm font-bold text-oat transition-colors hover:bg-forest/90";
-const eyebrow = "text-xs font-bold uppercase tracking-[0.2em]";
+  "inline-flex min-h-13 items-center justify-center gap-3 rounded-md bg-forest px-5 py-4 text-center text-sm font-semibold text-oat transition-colors hover:bg-forest/90";
+const eyebrow = "text-xs font-medium uppercase tracking-[0.2em]";
 
 export default function FoodForTheSoulPage() {
   return (
@@ -79,9 +79,9 @@ export default function FoodForTheSoulPage() {
       <main id="main-content">
         <section
           aria-labelledby="campaign-title"
-          className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-10 sm:px-8 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:px-12 lg:py-20"
+          className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] items-center gap-10 px-5 py-10 sm:px-8 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:px-12 lg:py-20"
         >
-          <div className="text-center lg:text-left">
+          <div className="min-w-0 text-center lg:text-left">
             <p
               className={`${eyebrow} flex items-center justify-center gap-3 lg:justify-start`}
             >
@@ -90,7 +90,7 @@ export default function FoodForTheSoulPage() {
             </p>
             <h1
               id="campaign-title"
-              className="mt-7 text-[clamp(4.25rem,15vw,7.6rem)] leading-[0.82] tracking-[-0.055em]"
+              className="mt-7 text-[clamp(4.25rem,15vw,7.6rem)] leading-[1.02] tracking-[0.01em]"
             >
               Food for <br />
               the <em className="font-normal text-clay">Soul.</em>
@@ -130,12 +130,12 @@ export default function FoodForTheSoulPage() {
                 className="object-cover"
               />
             </div>
-            <div className="relative -mt-14 mr-5 flex items-center gap-5 rounded-lg bg-forest px-6 py-6 text-oat shadow-[0_24px_40px_-24px_rgb(44_58_52/0.7)] sm:mr-10 sm:px-8">
-              <span className="font-serif text-6xl leading-none tracking-[-0.06em] text-gold sm:text-7xl">
+            <div className="relative -mt-14 mr-5 flex items-center gap-4 rounded-lg bg-forest px-5 py-6 text-oat shadow-[0_24px_40px_-24px_rgb(44_58_52/0.7)] sm:mr-10 sm:gap-5 sm:px-8">
+              <span className="shrink-0 font-serif text-5xl leading-none tracking-[0.01em] text-gold sm:text-7xl">
                 {COMMUNITY_DRIVE.impact}
               </span>
-              <div>
-                <p className="text-base font-bold">meals delivered</p>
+              <div className="min-w-0">
+                <p className="text-base font-semibold">meals delivered</p>
                 <p className="mt-1 text-sm text-oat/80">
                   And more good to share.
                 </p>
@@ -148,7 +148,7 @@ export default function FoodForTheSoulPage() {
         </section>
 
         <div className="border-y border-forest/15 bg-sand/40 px-5 py-5">
-          <p className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-center text-xs font-bold uppercase tracking-[0.14em]">
+          <p className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-center text-xs font-medium uppercase tracking-[0.14em]">
             <span>Good food</span>
             <span aria-hidden="true" className="text-clay">
               ✳
@@ -177,7 +177,7 @@ export default function FoodForTheSoulPage() {
           <Reveal className="relative mx-auto grid max-w-6xl gap-10 text-center md:grid-cols-[0.8fr_1.2fr] md:items-center md:gap-16 md:text-left">
             <div className="border-b border-oat/20 pb-10 md:border-r md:border-b-0 md:py-6 md:pr-12">
               <p className={`${eyebrow} text-gold`}>Our impact so far</p>
-              <p className="mt-5 font-serif text-[7rem] leading-none tracking-[-0.06em] sm:text-[9rem]">
+              <p className="mt-5 font-serif text-[7rem] leading-none tracking-[0.01em] sm:text-[9rem]">
                 {COMMUNITY_DRIVE.impact}
               </p>
               <p className="mt-3 font-serif text-3xl text-gold">
@@ -187,7 +187,7 @@ export default function FoodForTheSoulPage() {
             <div>
               <h2
                 id="impact-heading"
-                className="text-4xl leading-[1.05] tracking-[-0.035em] sm:text-5xl"
+                className="text-4xl leading-[1.05] tracking-[0.01em] sm:text-5xl"
               >
                 More than a meal.
                 <br />A moment of being cared for.
@@ -222,7 +222,7 @@ export default function FoodForTheSoulPage() {
               <p className={eyebrow}>The next meal drive</p>
               <time dateTime={COMMUNITY_DRIVE.dateISO} className="mt-5 block">
                 <span className="block font-serif text-4xl">October</span>
-                <span className="block font-serif text-[8rem] leading-[0.95] tracking-[-0.07em] sm:text-[10rem]">
+                <span className="block font-serif text-[8rem] leading-[1.02] tracking-[0.01em] sm:text-[10rem]">
                   15
                 </span>
                 <span className="mt-4 block text-sm tracking-[0.18em]">
@@ -240,7 +240,7 @@ export default function FoodForTheSoulPage() {
               </p>
               <h2
                 id="drive-heading"
-                className="mt-4 text-4xl leading-tight tracking-[-0.035em] sm:text-5xl"
+                className="mt-4 text-4xl leading-tight tracking-[0.01em] sm:text-5xl"
               >
                 Let’s make October 15
                 <br className="hidden sm:block" /> a little more soulful.
@@ -274,7 +274,7 @@ export default function FoodForTheSoulPage() {
             <p className={eyebrow}>From our kitchen to your community</p>
             <h2
               id="partnership-heading"
-              className="mt-4 text-4xl leading-tight tracking-[-0.035em] sm:text-5xl"
+              className="mt-4 text-4xl leading-tight tracking-[0.01em] sm:text-5xl"
             >
               We bring the meals.
               <br />
@@ -325,7 +325,7 @@ export default function FoodForTheSoulPage() {
         >
           <h2
             id="questions-heading"
-            className="mb-8 text-center text-4xl tracking-[-0.035em]"
+            className="mb-8 text-center text-4xl tracking-[0.01em]"
           >
             A few things you might be wondering.
           </h2>
@@ -370,7 +370,7 @@ export default function FoodForTheSoulPage() {
 
         <section className="border-t border-forest/15 bg-sand/30 px-5 py-14 text-center sm:py-20">
           <p className={eyebrow}>Good grows when it’s shared</p>
-          <h2 className="mt-4 text-4xl leading-tight tracking-[-0.035em] sm:text-5xl">
+          <h2 className="mt-4 text-4xl leading-tight tracking-[0.01em] sm:text-5xl">
             Know a community we should meet?
           </h2>
           <p className="mx-auto mt-5 max-w-lg text-base leading-7 text-forest/80">

@@ -37,7 +37,7 @@ export function CheckoutExtras({ disabled, weekly, className }: { disabled?: boo
       <legend className="sr-only">Optional · Salads and snacks</legend>
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p aria-hidden="true" className="flex items-center gap-2.5 text-xs font-bold tracking-[0.12em] text-forest/70 uppercase">
+          <p aria-hidden="true" className="flex items-center gap-2.5 text-xs font-medium tracking-[0.12em] text-forest/70 uppercase">
             <span className="flex size-6 items-center justify-center rounded-full border border-forest/25 text-[0.65rem] text-forest">+</span>
             Add salads &amp; snacks
             <span className="rounded-full bg-forest/6 px-2 py-0.5 text-[0.6rem] tracking-[0.1em] text-forest/60">Optional</span>

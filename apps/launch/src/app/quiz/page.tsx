@@ -17,7 +17,7 @@ export default function QuizPage() {
         aside={
           <Link
             href="/"
-            className="inline-flex min-h-11 items-center text-[0.7rem] font-bold tracking-[0.1em] text-forest/70 uppercase transition-colors hover:text-clay"
+            className="inline-flex min-h-11 items-center text-[0.7rem] font-medium tracking-[0.1em] text-forest/70 uppercase transition-colors hover:text-clay"
           >
             Exit
           </Link>
