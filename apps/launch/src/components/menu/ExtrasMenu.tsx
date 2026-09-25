@@ -94,7 +94,7 @@ function BuildYourOwnCard({ extra, onOpen }: { extra: MenuExtra; onOpen: () => v
 }
 
 /** Salads, veggie cups, and snacks with an item sheet and the salad builder. */
-export function ExtrasMenu() {
+export function ExtrasMenu({ orderable = true }: { orderable?: boolean }) {
   const [open, setOpen] = useState<MenuExtra | null>(null);
   const { add } = useExtrasCart();
 
@@ -127,7 +127,7 @@ export function ExtrasMenu() {
           </section>
         );
       })}
-      <ExtraSheet extra={open} onClose={() => setOpen(null)} onAdd={add} />
+      <ExtraSheet extra={open} onClose={() => setOpen(null)} onAdd={add} orderable={orderable} />
     </>
   );
 }

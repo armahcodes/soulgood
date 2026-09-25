@@ -12,6 +12,7 @@ import { BRAND_NAME, ORDER_RULES } from "@/lib/brand";
 import { AVAILABLE_BOWLS } from "@/lib/current-offer";
 import { MENU_COLLECTION_LIST } from "@/lib/menu";
 import { MENU_EXTRAS } from "@/lib/menu-extras";
+import { getAddOnVariationIds } from "@/lib/square-catalog";
 
 export const metadata = {
   title: `Menu — ${BRAND_NAME}`,
@@ -22,6 +23,7 @@ export const metadata = {
 const eyebrow = "text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase";
 
 export default function MenuPage() {
+  const orderable = Boolean(getAddOnVariationIds());
   const heroImages = [AVAILABLE_BOWLS[0]?.imagePath, MENU_EXTRAS.find((item) => item.id === "rainbow-crunch")?.imagePath, MENU_EXTRAS.find((item) => item.id === "jerk-cauliflower-bites")?.imagePath].filter(Boolean) as string[];
 
   return (
@@ -73,7 +75,7 @@ export default function MenuPage() {
           </div>
         </section>
 
-        <ExtrasMenu />
+        <ExtrasMenu orderable={orderable} />
 
         <section id="collections" aria-labelledby="collections-heading" className="scroll-mt-36 border-t border-forest/10 bg-card/60 py-14 sm:py-20">
           <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12">
@@ -111,7 +113,7 @@ export default function MenuPage() {
         </section>
       </main>
       <SiteFooter />
-      <CartBar />
+      {orderable ? <CartBar /> : null}
     </>
   );
 }

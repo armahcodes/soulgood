@@ -108,12 +108,14 @@ const DRESSING_LEGEND = { dressing: "Dressing", sauce: "Sauce", dip: "Dip", "bui
  * Salad walks through base → three toppings → mint → dressing with a live
  * summary; every configuration is validated with the same schema checkout uses.
  */
-export function ExtraSheet({ extra, onClose, onAdd }: { extra: MenuExtra | null; onClose: () => void; onAdd: (line: ExtraLine) => void }) {
-  if (!extra) return <BottomSheet open={false} onClose={onClose} labelledBy="extra-sheet-title" closeLabel="Close item details">{null}</BottomSheet>;
-  return <OpenExtraSheet key={extra.id} extra={extra} onClose={onClose} onAdd={onAdd} />;
+type SheetProps = { onClose: () => void; onAdd: (line: ExtraLine) => void; orderable?: boolean };
+
+export function ExtraSheet({ extra, ...props }: SheetProps & { extra: MenuExtra | null }) {
+  if (!extra) return <BottomSheet open={false} onClose={props.onClose} labelledBy="extra-sheet-title" closeLabel="Close item details">{null}</BottomSheet>;
+  return <OpenExtraSheet key={extra.id} extra={extra} {...props} />;
 }
 
-function OpenExtraSheet({ extra, onClose, onAdd }: { extra: MenuExtra; onClose: () => void; onAdd: (line: ExtraLine) => void }) {
+function OpenExtraSheet({ extra, onClose, onAdd, orderable = true }: SheetProps & { extra: MenuExtra }) {
   const [draft, setDraft] = useState<Partial<ExtraLine>>({ quantity: 1 });
   const set = (patch: Partial<ExtraLine>) => setDraft((current) => ({ ...current, ...patch }));
   const reduced = useReducedMotion();
@@ -123,7 +125,11 @@ function OpenExtraSheet({ extra, onClose, onAdd }: { extra: MenuExtra; onClose: 
   const price = extraPriceCents(extra.id);
   const byo = extra.options === "build-your-own";
 
-  const footer = (
+  const footer = !orderable ? (
+    <p className="py-1 text-center text-sm leading-6 text-forest/75">
+      Online ordering for salads and snacks is coming soon. Ask us about them with your next order.
+    </p>
+  ) : (
     <div className="flex items-center gap-3">
       <QuantityStepper
         groupLabel={`${extra.name} quantity`}

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import { ReserveButton } from "@/components/checkout/ReserveButton";
+import { getAddOnVariationIds } from "@/lib/square-catalog";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import { BRAND_NAME, type FulfillmentMethod, NOURISHMENT, PLAN } from "@/lib/brand";
@@ -133,6 +134,7 @@ export default async function CheckoutPage({
               <ReserveButton
                 initialFulfillment={initialFulfillment}
                 paymentsAvailable={checkoutOperationsReady()}
+                addOnsAvailable={Boolean(getAddOnVariationIds())}
                 squareApplicationId={process.env.SQUARE_APPLICATION_ID ?? ""}
                 squareEnvironment={
                   process.env.SQUARE_ENVIRONMENT === "production"

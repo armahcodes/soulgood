@@ -129,6 +129,8 @@ type CheckoutSuccess = {
   paymentPending?: boolean;
 };
 
+const NO_EXTRAS: ExtraLine[] = [];
+
 declare global {
   interface Window {
     Square?: {
@@ -180,12 +182,15 @@ export function ReserveButton({
   squareEnvironment,
   squareLocationId,
   paymentsAvailable = true,
+  addOnsAvailable = false,
 }: {
   initialFulfillment: FulfillmentMethod;
   squareApplicationId: string;
   squareEnvironment: "sandbox" | "production";
   squareLocationId: string;
   paymentsAvailable?: boolean;
+  /** Salads and snacks can be ordered online (Square add-on variations configured). */
+  addOnsAvailable?: boolean;
 }) {
   const router = useRouter();
   const [fulfillmentMethod, setFulfillmentMethod] =
@@ -193,7 +198,8 @@ export function ReserveButton({
   const [purchaseType, setPurchaseType] = useState<PurchaseType>("one-time");
   const [peopleCount, setPeopleCount] = useState(1);
   const [mealsPerDay, setMealsPerDay] = useState(1);
-  const { lines: extras, clear: clearExtras } = useExtrasCart();
+  const { lines: cartExtras, clear: clearExtras } = useExtrasCart();
+  const extras = addOnsAvailable ? cartExtras : NO_EXTRAS;
   const extrasKey = extrasFingerprint(extras);
   const extrasCents = extrasTotalCents(extras);
   const [bowlSelection, setBowlSelection] = useState<BowlSelection>(
@@ -1314,7 +1320,9 @@ export function ReserveButton({
           selection={bowlSelection}
         />
 
-        <CheckoutExtras disabled={pending} weekly={purchaseType === "weekly"} className={STEP_CARD} />
+        {addOnsAvailable ? (
+          <CheckoutExtras disabled={pending} weekly={purchaseType === "weekly"} className={STEP_CARD} />
+        ) : null}
 
         <fieldset id="step-fulfillment" className={STEP_CARD}>
           <StepLegend number={3} title="Pickup or delivery" />
