@@ -1121,6 +1121,10 @@ export function CulinaryQuoteBuilder({
                       reservation, and agree to be contacted about my event.
                     </span>
                   </label>
+                  <p className="text-xs leading-5 text-forest/65">
+                    Your details are used to plan and invoice this event, as described in our{" "}
+                    <a href="/privacy" className="underline underline-offset-2">Privacy Policy</a>.
+                  </p>
                   <Button
                     type="submit"
                     disabled={expired || !accepted}

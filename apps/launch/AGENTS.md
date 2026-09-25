@@ -30,3 +30,11 @@ From `apps/launch`: `npx tsc --noEmit -p .`, `npx eslint src e2e`, `npx vitest r
 - Display: **Marcellus** (`--font-serif`) — the closest web match to the flared SOUL GOOD wordmark. One weight only; headings never use negative tracking or faux bold (`font-synthesis: none`).
 - Body & UI: **Jost** (`--font-sans`) — matches the geometric NOURISH • HEAL • THRIVE tagline. Labels/eyebrows use Jost medium, uppercase, wide tracking (0.16–0.3em), like the tagline.
 - Avoid tight negative letter-spacing, sub-1.0 leading on multi-line headings, and scrolling/sliding text; reveals are fade-only.
+
+## Privacy, newsletter, and community programs
+
+- Legal pages: `/terms`, `/customer-agreement`, `/privacy`, `/privacy-choices`. `LEGAL_VERSION` in `src/lib/brand.ts` is the effective date saved with consent. The postal address (`BUSINESS.mailingAddress`) appears in every email footer (CAN-SPAM) and on legal pages.
+- No analytics/ad cookies or pixels are used. If any are added, update `/privacy` first and gate them on `readPrivacyOptOut()` (honors GPC and the saved `sg_privacy` choice).
+- Newsletter (`src/lib/newsletter.ts`): double opt-in in Mongo `newsletter_subscribers`, synced to Resend Contacts after confirmation; optional `RESEND_NEWSLETTER_SEGMENT_ID`. One-click unsubscribe (RFC 8058) at `/api/newsletter/unsubscribe`.
+- Privacy requests (`/api/privacy-requests`) go to `PRIVACY_EMAIL_TO` (falls back to contact@) with a 45-day respond-by date; keep records 24 months.
+- Food for the Soul host applications (`src/lib/meal-drive.ts`): organizations in LA/OC only; never add fields about protected characteristics or meal recipients; commitments require open, first-come-first-served distribution. `src/lib/__tests__/meal-drive.test.ts` guards this. Team notices go to `COMMUNITY_EMAIL_TO`.

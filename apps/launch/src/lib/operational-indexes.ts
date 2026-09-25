@@ -45,6 +45,16 @@ export function ensureOperationalIndexes(): Promise<void> {
       db
         .collection("request_limits")
         .createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
+      db
+        .collection("newsletter_subscribers")
+        .createIndex({ confirmTokenHash: 1 }, { sparse: true }),
+      db
+        .collection("newsletter_subscribers")
+        .createIndex({ unsubscribeTokenHashes: 1 }),
+      db
+        .collection("meal_drive_applications")
+        .createIndex({ receivedAt: 1 }),
+      db.collection("privacy_requests").createIndex({ receivedAt: 1 }),
     ]);
   })().catch((error) => {
     pending = undefined;

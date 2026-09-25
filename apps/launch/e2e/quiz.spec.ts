@@ -45,10 +45,10 @@ test("quiz requires contact details, captures the lead, and prefills checkout wi
   expect(lead).toBeUndefined();
 
   await page.getByLabel("Full name").fill("Avery Jones");
-  await page.getByLabel("Email").fill("avery@example.com");
+  await page.getByLabel(/^Email/).fill("avery@example.com");
   await page.getByLabel("Phone").fill("3105550100");
   await page.getByLabel("Delivery ZIP").fill("90012");
-  await page.getByRole("checkbox").check();
+  await page.getByRole("checkbox", { name: /Los Angeles or Orange County/ }).check();
   await page.getByRole("button", { name: "Reveal my pathway" }).click();
 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Performance");
@@ -72,7 +72,7 @@ test("a failed save keeps the guest on the contact step with a retry", async ({ 
   await page.goto("/quiz");
   await answerAll(page, ["Slow and intentional", /sitting, studying/, "Calm and steady", "Slowing down and being present at mealtimes", "I want to slow down and nourish myself."]);
   await page.getByLabel("Full name").fill("Sam Lee");
-  await page.getByLabel("Email").fill("sam@example.com");
+  await page.getByLabel(/^Email/).fill("sam@example.com");
   await page.getByLabel("Phone").fill("3105550199");
   await page.getByRole("radio", { name: /Pickup/ }).check();
   await page.getByRole("button", { name: "Reveal my pathway" }).click();
@@ -87,7 +87,7 @@ test("the quiz suggests salads and sides, shows the week by food group, and carr
   await page.goto("/quiz");
   await answerAll(page, PERFORMANCE, { 1: "Soy", 3: ["A made-to-order salad", "Warm roasted bites"] });
   await page.getByLabel("Full name").fill("Avery Jones");
-  await page.getByLabel("Email").fill("avery@example.com");
+  await page.getByLabel(/^Email/).fill("avery@example.com");
   await page.getByLabel("Phone").fill("3105550100");
   await page.getByRole("radio", { name: /Pickup/ }).check();
   await page.getByRole("button", { name: "Reveal my pathway" }).click();

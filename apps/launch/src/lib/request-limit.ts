@@ -19,6 +19,18 @@ export async function allowCommunityRequest(request: Request): Promise<boolean> 
   return allowRequest(request, "community-interest", 600_000, 10);
 }
 
+export async function allowNewsletterRequest(request: Request): Promise<boolean> {
+  return allowRequest(request, "newsletter", 600_000, 10);
+}
+
+export async function allowPrivacyRequest(request: Request): Promise<boolean> {
+  return allowRequest(request, "privacy-request", 3_600_000, 6);
+}
+
+export async function allowMealDriveRequest(request: Request): Promise<boolean> {
+  return allowRequest(request, "meal-drive-application", 3_600_000, 6);
+}
+
 async function allowRequest(
   request: Request,
   scope: string,

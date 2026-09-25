@@ -743,7 +743,7 @@ test("bowl delivery estimates can include salads and snacks from the full menu",
 
   await page.getByRole("button", { name: /Add Build Your Own Salad, \$15\.00 each/ }).click();
   const sheet = page.getByRole("dialog");
-  await sheet.getByText("Green cabbage", { exact: true }).click();
+  await sheet.getByText("Green cabbage", { exact: true }).first().click();
   for (const topping of ["Shredded carrots", "Sliced radishes", "Roasted cauliflower"])
     await sheet.getByRole("button", { name: topping }).click();
   await sheet.getByText("House dressing", { exact: true }).click();

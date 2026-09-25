@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
-import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, NOURISHMENT, ORDER_RULES, PLAN, PRICING, SERVICE_AREA, TAX } from "@/lib/brand";
+import { BRAND_NAME, BUSINESS, CONTACT, FEES, formatCents, LEGAL_VERSION, NOURISHMENT, ORDER_RULES, PLAN, PRICING, SERVICE_AREA, TAX } from "@/lib/brand";
 import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
 import { EAT_NOW } from "@/lib/ordering";
+import { TIER_PRICE_CENTS } from "@/lib/menu-extras";
 
 export const metadata = {
   title: `Customer Agreement — ${BRAND_NAME}`,
@@ -21,6 +22,7 @@ export default function CustomerAgreementPage() {
         <ul>
           <li>For meal prep, each five-day meal set contains {PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls.</li>
           <li>Choose one or more {PRICING.oneTime} meal sets as a one-time order or weekly plan.</li>
+          <li>Optional salads, veggie cups, and snacks are priced per item; on a weekly plan they renew with your bowls.</li>
           <li>Only the weekly plan renews and charges every seven days until you cancel.</li>
           <li>Meal-prep pickup is free for one-time orders; Sunday delivery across {SERVICE_AREA.weekly} is $8.88 per order, or free on orders over $100.</li>
           <li>Every meal-prep and Take Out order has a {ORDER_RULES.minimumLabel.toLowerCase()}.</li>
@@ -50,6 +52,16 @@ export default function CustomerAgreementPage() {
           proteins, sides, and ingredients may vary. Reasonable substitutions may be
           made for seasonal, quality, or supply reasons.
         </p>
+        <h3>Salads, veggie cups, and snacks</h3>
+        <p>
+          You may add salads, veggie cups, snacks, and tasting trios to a meal-prep order:
+          signature salads {formatCents(TIER_PRICE_CENTS["signature-salad"])}, build-your-own salads {formatCents(TIER_PRICE_CENTS["build-your-own"])},
+          veggie cups {formatCents(TIER_PRICE_CENTS["veggie-cup"])}, snacks {formatCents(TIER_PRICE_CENTS.snack)}, and the tasting trio {formatCents(TIER_PRICE_CENTS["tasting-trio"])} each,
+          before tax. Your chosen base, toppings, dressing, sauce, dip, or trio selections are
+          recorded with the order. Salads and snacks are packed with your bowls, count toward
+          the order minimum and free-delivery threshold, and, on a weekly plan, are included
+          in every renewal at the price shown at checkout until you change or cancel the plan.
+        </p>
         <h3>Take Out · Individual bowls</h3>
         <p>
           Take Out is a separate single-order menu at checkout.soulgood.kitchen.
@@ -76,7 +88,8 @@ export default function CustomerAgreementPage() {
         <h2>3. Charges</h2>
         <p>
           For scheduled meal prep, each five-meal set is {PRICING.oneTime}. The base order or weekly renewal
-          is that amount multiplied by the number of people and daily meals selected.
+          is that amount multiplied by the number of people and daily meals selected, plus
+          any salads, veggie cups, and snacks you add at their listed prices.
           {` ${FEES.delivery.label}`}:
           {` ${FEES.delivery.disclosure}`} One-time meal-prep pickup has no fulfillment fee.
           {` ${FEES.containerDeposit.label}`}:
@@ -171,7 +184,9 @@ export default function CustomerAgreementPage() {
         <p>
           This Customer Agreement incorporates the <Link href="/terms">Terms of Service</Link>.
           If the two conflict about a purchase, this Customer Agreement controls for that
-          purchase. Contact <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a> for order support.
+          purchase. Our <Link href="/privacy">Privacy Policy</Link> explains how order and
+          payment information is handled. Contact <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a> for
+          order support, or write to {BUSINESS.legalName}, {BUSINESS.mailingAddress}.
         </p>
       </section>
     </LegalShell>

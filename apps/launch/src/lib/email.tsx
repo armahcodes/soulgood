@@ -6,6 +6,11 @@ import { OrderConfirmationEmail } from "@/emails/OrderConfirmationEmail";
 import { SubscriptionCancelledEmail } from "@/emails/SubscriptionCancelledEmail";
 import { CulinaryQuoteEmail } from "@/emails/CulinaryQuoteEmail";
 import { CommunityInterestEmail } from "@/emails/CommunityInterestEmail";
+import { NewsletterConfirmEmail, NewsletterWelcomeEmail } from "@/emails/NewsletterEmails";
+import { MealDriveApplicantEmail, MealDriveTeamEmail } from "@/emails/MealDriveEmails";
+import { PrivacyAckEmail, PrivacyTeamEmail } from "@/emails/PrivacyRequestEmails";
+import type { PrivacyRequestRecord } from "./privacy-requests";
+import type { MealDriveApplicationRecord } from "./meal-drive-application";
 import type { CommunityInterestRecord } from "./community-drive";
 import type { CulinaryQuote, CulinaryRequest } from "./culinary-booking";
 import { describeExtraOptions, findExtra, type ExtraLine } from "./menu-extras";
@@ -290,4 +295,121 @@ export async function sendExchangeUpdateEmail(input: {
     { idempotencyKey: `exchange-update/${input.caseId}/${input.updateId}` },
   );
   return assertSent(result);
+}
+
+/** RFC 8058 one-click unsubscribe headers for newsletter mail. */
+function listUnsubscribeHeaders(unsubscribeUrl: string): Record<string, string> {
+  const token = new URL(unsubscribeUrl).searchParams.get("unsubscribe") ?? "";
+  return {
+    "List-Unsubscribe": `<https://www.soulgood.kitchen/api/newsletter/unsubscribe?token=${encodeURIComponent(token)}>, <mailto:${REPLY_TO}?subject=unsubscribe>`,
+    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+  };
+}
+
+export async function sendNewsletterConfirmEmail(input: {
+  email: string;
+  confirmUrl: string;
+  unsubscribeUrl: string;
+}): Promise<string> {
+  return assertSent(
+    await resendClient().emails.send(
+      {
+        from: sender(),
+        to: input.email,
+        replyTo: REPLY_TO,
+        subject: "Confirm your Soul Good newsletter subscription",
+        react: <NewsletterConfirmEmail confirmUrl={input.confirmUrl} unsubscribeUrl={input.unsubscribeUrl} />,
+        headers: listUnsubscribeHeaders(input.unsubscribeUrl),
+        tags: [{ name: "category", value: "newsletter-confirm" }],
+      },
+      { idempotencyKey: `newsletter-confirm/${input.confirmUrl.slice(-24)}` },
+    ),
+  );
+}
+
+export async function sendNewsletterWelcomeEmail(input: { email: string; unsubscribeUrl: string }): Promise<string> {
+  return assertSent(
+    await resendClient().emails.send(
+      {
+        from: sender(),
+        to: input.email,
+        replyTo: REPLY_TO,
+        subject: "You’re on the Soul Good newsletter",
+        react: <NewsletterWelcomeEmail unsubscribeUrl={input.unsubscribeUrl} />,
+        headers: listUnsubscribeHeaders(input.unsubscribeUrl),
+        tags: [{ name: "category", value: "newsletter-welcome" }],
+      },
+      { idempotencyKey: `newsletter-welcome/${input.unsubscribeUrl.slice(-24)}` },
+    ),
+  );
+}
+
+export async function sendMealDriveTeamEmail(application: MealDriveApplicationRecord): Promise<string> {
+  return assertSent(
+    await resendClient().emails.send(
+      {
+        from: sender(),
+        to: process.env.COMMUNITY_EMAIL_TO || REPLY_TO,
+        replyTo: application.email,
+        subject: `Host application ${application.reference} · ${application.organizationName}`,
+        react: <MealDriveTeamEmail application={application} />,
+        tags: [{ name: "category", value: "meal-drive-application" }],
+      },
+      { idempotencyKey: `meal-drive/${application._id}/team` },
+    ),
+  );
+}
+
+export async function sendMealDriveApplicantEmail(input: {
+  email: string;
+  contactName: string;
+  organizationName: string;
+  reference: string;
+  preferredDate: string;
+}): Promise<string> {
+  return assertSent(
+    await resendClient().emails.send(
+      {
+        from: sender(),
+        to: input.email,
+        replyTo: process.env.COMMUNITY_EMAIL_TO || REPLY_TO,
+        subject: `We received your Food for the Soul host application · ${input.reference}`,
+        react: <MealDriveApplicantEmail {...input} />,
+        tags: [{ name: "category", value: "meal-drive-application" }],
+      },
+      { idempotencyKey: `meal-drive/${input.reference}/applicant` },
+    ),
+  );
+}
+
+export async function sendPrivacyTeamEmail(request: PrivacyRequestRecord): Promise<string> {
+  return assertSent(
+    await resendClient().emails.send(
+      {
+        from: sender(),
+        to: process.env.PRIVACY_EMAIL_TO || REPLY_TO,
+        replyTo: request.email,
+        subject: `Privacy request ${request.reference} · respond by ${request.respondBy}`,
+        react: <PrivacyTeamEmail request={request} />,
+        tags: [{ name: "category", value: "privacy-request" }],
+      },
+      { idempotencyKey: `privacy/${request._id}/team` },
+    ),
+  );
+}
+
+export async function sendPrivacyAckEmail(input: { email: string; name: string; reference: string; requestType: string; respondBy: string }): Promise<string> {
+  return assertSent(
+    await resendClient().emails.send(
+      {
+        from: sender(),
+        to: input.email,
+        replyTo: REPLY_TO,
+        subject: `We received your privacy request · ${input.reference}`,
+        react: <PrivacyAckEmail {...input} />,
+        tags: [{ name: "category", value: "privacy-request" }],
+      },
+      { idempotencyKey: `privacy/${input.reference}/requester` },
+    ),
+  );
 }

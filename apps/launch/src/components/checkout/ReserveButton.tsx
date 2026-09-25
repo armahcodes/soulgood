@@ -1666,6 +1666,10 @@ export function ReserveButton({
             .
           </span>
         </label>
+        <p className="-mt-2 text-xs leading-5 text-forest/60">
+          We use your contact, address, and order details to prepare and deliver your food, as described in our{" "}
+          <Link href="/privacy" className="underline underline-offset-2">Privacy Policy</Link>. Card details go directly to Square.
+        </p>
 
         {purchaseType === "one-time" ? (
           <div

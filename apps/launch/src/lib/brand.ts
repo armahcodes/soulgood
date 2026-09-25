@@ -13,6 +13,10 @@ export const BUSINESS = {
   legalName: "Soul Goods LLC",
   jurisdiction: "California",
   serviceArea: "Los Angeles and Orange County, California",
+  /** Postal address for legal notices, privacy requests, and marketing emails (CAN-SPAM). */
+  mailingAddress: "2450 Colorado Ave, Suite 100E, Santa Monica, CA 90404",
+  kitchenAddress: "456 Elm Ave, Long Beach, CA 90802",
+  website: "https://www.soulgood.kitchen",
 } as const;
 
 /** Where and when each kind of delivery runs. */
@@ -43,7 +47,7 @@ export const CONTACT = {
 } as const;
 
 /** Version saved with customer consent records. */
-export const LEGAL_VERSION = "2026-09-24";
+export const LEGAL_VERSION = "2026-09-25";
 
 function parseFeeCents(value: string | undefined): number | null {
   if (!value || !/^\d+$/.test(value)) return null;

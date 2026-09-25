@@ -23,9 +23,12 @@ const colors = {
 export function EmailLayout({
   children,
   preview,
+  footer,
 }: {
   children: ReactNode;
   preview: string;
+  /** Extra footer content, e.g. an unsubscribe link for marketing email. */
+  footer?: ReactNode;
 }) {
   return (
     <Html lang="en">
@@ -41,7 +44,7 @@ export function EmailLayout({
           <Hr style={dividerStyle} />
           <Section style={footerStyle}>
             <Text style={footerTextStyle}>
-              Soul Bowls™ by Soul Goods LLC · Los Angeles County, California
+              Soul Bowls™ by Soul Goods LLC · 2450 Colorado Ave, Suite 100E, Santa Monica, CA 90404
             </Text>
             <Text style={footerTextStyle}>
               <Link href="https://www.soulgood.kitchen/account" style={footerLinkStyle}>
@@ -52,10 +55,15 @@ export function EmailLayout({
                 Customer Agreement
               </Link>
               {" · "}
+              <Link href="https://www.soulgood.kitchen/privacy" style={footerLinkStyle}>
+                Privacy
+              </Link>
+              {" · "}
               <Link href="mailto:contact@soulgood.com" style={footerLinkStyle}>
                 Contact
               </Link>
             </Text>
+            {footer}
           </Section>
         </Container>
       </Body>

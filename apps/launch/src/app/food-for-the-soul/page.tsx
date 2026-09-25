@@ -116,6 +116,13 @@ export default function FoodForTheSoulPage() {
                 Meet the October 15 meal drive{" "}
                 <ArrowDown size={16} aria-hidden="true" />
               </a>
+              <a
+                href="/food-for-the-soul/host"
+                className="inline-flex min-h-12 items-center justify-center gap-2 text-sm font-bold underline underline-offset-4"
+              >
+                Organizations: apply to host a drive{" "}
+                <ArrowRight size={16} aria-hidden="true" />
+              </a>
             </div>
           </div>
           <div className="relative mx-auto w-full max-w-[450px]">
@@ -336,11 +343,15 @@ export default function FoodForTheSoulPage() {
             ],
             [
               "Can we bring a meal drive to our community?",
-              "That’s exactly the conversation we’d love to have. Choose “Bring a drive to my community” above and tell us where you are. Our team will discuss what’s possible; submitting the form doesn’t confirm a date or location.",
+              "That’s exactly the conversation we’d love to have. Organizations in Los Angeles and Orange County can apply through our host application; if you’re still exploring, choose “Bring a drive to my community” above. Applications are reviewed in the order received using the same published criteria, and submitting doesn’t confirm a date or location.",
             ],
             [
               "Do I need to represent an organization?",
-              "No. You can reach out as a community member, a potential volunteer, or someone who simply wants to learn more. Start wherever you are.",
+              "To host a drive, yes: drives are run with an organization that can provide a site and volunteers. Anyone can still reach out here as a community member, a potential volunteer, or someone who simply wants to learn more.",
+            ],
+            [
+              "Who can receive a meal?",
+              "Everyone who comes. Meals are free and served first come, first served while supplies last. No one is asked for ID, proof of income, immigration status, or membership, and no one is turned away because of who they are.",
             ],
             [
               "Where and when is the October 15 drive?",

@@ -7,6 +7,12 @@ import {
   sendPaymentUpdateEmail,
   sendCulinaryQuoteEmail,
   sendCommunityInterestEmail,
+  sendNewsletterConfirmEmail,
+  sendNewsletterWelcomeEmail,
+  sendMealDriveTeamEmail,
+  sendMealDriveApplicantEmail,
+  sendPrivacyTeamEmail,
+  sendPrivacyAckEmail,
 } from "./email";
 import {
   updateCheckoutConfirmationEmail,
@@ -21,6 +27,12 @@ type MailPayloads = {
   fulfillment: Parameters<typeof sendFulfillmentReminderEmail>[0];
   exchange: Parameters<typeof sendExchangeUpdateEmail>[0];
   paymentUpdate: Parameters<typeof sendPaymentUpdateEmail>[0];
+  newsletterConfirm: Parameters<typeof sendNewsletterConfirmEmail>[0];
+  newsletterWelcome: Parameters<typeof sendNewsletterWelcomeEmail>[0];
+  mealDriveTeam: Parameters<typeof sendMealDriveTeamEmail>[0];
+  mealDriveApplicant: Parameters<typeof sendMealDriveApplicantEmail>[0];
+  privacyTeam: Parameters<typeof sendPrivacyTeamEmail>[0];
+  privacyAck: Parameters<typeof sendPrivacyAckEmail>[0];
 };
 type MailJob = {
   [K in keyof MailPayloads]: { kind: K; payload: MailPayloads[K] };
@@ -135,6 +147,24 @@ export async function drainEmailOutbox(limit = 5): Promise<number> {
           break;
         case "paymentUpdate":
           resendId = await sendPaymentUpdateEmail(job.payload);
+          break;
+        case "newsletterConfirm":
+          resendId = await sendNewsletterConfirmEmail(job.payload);
+          break;
+        case "newsletterWelcome":
+          resendId = await sendNewsletterWelcomeEmail(job.payload);
+          break;
+        case "mealDriveTeam":
+          resendId = await sendMealDriveTeamEmail(job.payload);
+          break;
+        case "mealDriveApplicant":
+          resendId = await sendMealDriveApplicantEmail(job.payload);
+          break;
+        case "privacyTeam":
+          resendId = await sendPrivacyTeamEmail(job.payload);
+          break;
+        case "privacyAck":
+          resendId = await sendPrivacyAckEmail(job.payload);
           break;
       }
       await outbox().updateOne(

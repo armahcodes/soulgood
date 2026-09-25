@@ -39,7 +39,7 @@ test("Take Out opens the live-menu destination without signup, personal data or 
   await expect(page.getByText(NOURISHMENT.deliveryDisclosure, { exact: false })).toBeVisible();
   await expect(page.getByText(/Check available pickup and delivery times in the menu before ordering/)).toBeVisible();
   await expect(page.getByText(/select “One time”/)).toBeVisible();
-  await expect(page.getByRole("textbox")).toHaveCount(0);
+  await expect(page.getByRole("main").getByRole("textbox")).toHaveCount(0);
   const link = page.getByRole("link", { name: "Open the Take Out menu", exact: true });
   await expect(link).toHaveAttribute("href", EAT_NOW.menuUrl);
   await link.click();

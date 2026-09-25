@@ -10,7 +10,7 @@ async function fillInquiry(page: Page) {
   await page
     .getByLabel("Community or city", { exact: true })
     .fill("Long Beach");
-  await page.getByRole("checkbox").check();
+  await page.getByRole("checkbox", { name: /may contact me about Food for the Soul/ }).check();
 }
 
 test.beforeEach(async ({ page }) => {
@@ -96,7 +96,7 @@ test("validation focuses the missing field and optional city works for volunteer
   await page
     .getByLabel("Email address", { exact: true })
     .fill("neighbor@example.com");
-  await page.getByRole("checkbox").check();
+  await page.getByRole("checkbox", { name: /may contact me about Food for the Soul/ }).check();
   await page.getByRole("button", { name: "Let’s connect" }).click();
   await expect(
     page.getByLabel("Community or city", { exact: true }),

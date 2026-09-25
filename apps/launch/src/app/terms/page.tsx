@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
-import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, NOURISHMENT, ORDER_RULES, PRICING, SERVICE_AREA, TAX } from "@/lib/brand";
+import { BRAND_NAME, BUSINESS, CONTACT, FEES, formatCents, LEGAL_VERSION, NOURISHMENT, ORDER_RULES, PRICING, SERVICE_AREA, TAX } from "@/lib/brand";
 import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
 import { EAT_NOW } from "@/lib/ordering";
+import { CULINARY_PRICING } from "@/lib/culinary-booking";
+import { TIER_PRICE_CENTS } from "@/lib/menu-extras";
+import { NON_DISCRIMINATION_STATEMENT } from "@/lib/meal-drive";
 
 export const metadata = {
   title: `Terms of Service — ${BRAND_NAME}`,
@@ -23,7 +26,8 @@ export default function TermsPage() {
           {` ${BUSINESS.legalName}`} (“Soul Goods,” “we,” “us,” or “our”). By using
           this website, creating an order, or starting a subscription, you agree
           to these Terms and, for purchases, the <Link href="/customer-agreement">Customer Agreement</Link>.
-          If you do not agree, do not use the service or place an order.
+          Our <Link href="/privacy">Privacy Policy</Link> explains how we handle personal
+          information. If you do not agree, do not use the service or place an order.
         </p>
       </section>
 
@@ -62,6 +66,16 @@ export default function TermsPage() {
           Take Out is our separate single-order menu at checkout.soulgood.kitchen.
           Bowls are sold individually at the displayed menu prices. A Take Out
           one-time purchase does not enroll you in a weekly meal-prep subscription.
+        </p>
+        <h3>Salads, veggie cups, and snacks</h3>
+        <p>
+          You may add made-to-order salads, veggie cups, snacks, and tasting trios to a
+          meal-prep order at the listed prices (signature salads {formatCents(TIER_PRICE_CENTS["signature-salad"])},
+          build-your-own salads {formatCents(TIER_PRICE_CENTS["build-your-own"])}, veggie cups {formatCents(TIER_PRICE_CENTS["veggie-cup"])},
+          snacks {formatCents(TIER_PRICE_CENTS.snack)}, and the tasting trio {formatCents(TIER_PRICE_CENTS["tasting-trio"])}), with
+          the dressings, bases, and toppings you choose. They count toward the order
+          minimum and free-delivery threshold. On a weekly plan, the salads and snacks
+          in your order are included in every renewal until you change or cancel the plan.
         </p>
       </section>
 
@@ -146,7 +160,39 @@ export default function TermsPage() {
       </section>
 
       <section>
-        <h2>7. Allergies and food safety</h2>
+        <h2>7. Gatherings and culinary bookings</h2>
+        <p>
+          Gathering estimates are available for addresses in Los Angeles County. Bowl
+          delivery starts at {CULINARY_PRICING.deliveryMinimumBowls} bowls and may include salads, veggie cups, and
+          snacks at menu prices. Plated service is {formatCents(CULINARY_PRICING.platedPersonCents)} per guest with a
+          {` ${formatCents(CULINARY_PRICING.platedFoodMinimumCents)}`} food minimum, plus {formatCents(CULINARY_PRICING.platedSupportCents)} culinary support.
+          Delivery and sales tax are shown in the estimate.
+        </p>
+        <p>
+          An estimate is not a reservation or invoice, and it expires after 30 minutes.
+          Requesting a booking doesn’t reserve a date. After we confirm availability, we
+          send a contract and Square invoice; a {CULINARY_PRICING.depositPercentage}% deposit reserves the date once
+          the contract is signed, and the balance is due on the event date before our team
+          arrives. There is no automatic charge. The signed contract controls for that event.
+        </p>
+      </section>
+
+      <section>
+        <h2>8. Pathway Finder and food information</h2>
+        <p>
+          The Pathway Finder and the “by food group” information on our menu suggest
+          food based on your answers and on the ingredients printed on our labels. Food
+          groups describe ingredients as USDA MyPlate groups them; they don’t measure
+          nutrients or amounts. This information is for choosing food you’ll enjoy. It isn’t
+          medical or nutrition advice, doesn’t diagnose or treat any condition, and isn’t a
+          promise of any health result. Talk with a registered dietitian or healthcare
+          provider about specific dietary needs, and always review ingredients and allergens
+          before ordering.
+        </p>
+      </section>
+
+      <section>
+        <h2>9. Allergies and food safety</h2>
         <p>
           Our kitchen handles common allergens, including milk, eggs, fish, shellfish,
           tree nuts, peanuts, wheat, soy, and sesame. We cannot guarantee an allergen-free
@@ -156,7 +202,7 @@ export default function TermsPage() {
       </section>
 
       <section>
-        <h2>8. No-refund and exchange policy</h2>
+        <h2>10. No-refund and exchange policy</h2>
         <p>
           Because our products are perishable and prepared for a specific delivery,
           completed orders are final and nonrefundable, including for change of mind,
@@ -172,7 +218,7 @@ export default function TermsPage() {
       </section>
 
       <section>
-        <h2>9. Reusable containers</h2>
+        <h2>11. Reusable containers</h2>
         <p>
           When a reusable-container deposit applies, its amount and return terms are
           disclosed before the containers are issued and the deposit is collected
@@ -184,7 +230,7 @@ export default function TermsPage() {
       </section>
 
       <section>
-        <h2>10. Acceptable use and intellectual property</h2>
+        <h2>12. Acceptable use and intellectual property</h2>
         <p>
           You may use this site only for lawful personal purposes. The Soul Bowls™ name,
           logo, recipes, copy, illustrations, photography, and site content belong to
@@ -194,7 +240,38 @@ export default function TermsPage() {
       </section>
 
       <section>
-        <h2>11. Disclaimers and limitation of liability</h2>
+        <h2>13. Newsletter and communications</h2>
+        <p>
+          We send transactional messages about sign-in, orders, plans, bookings, and
+          applications you make. The Soul Good newsletter is optional and sent only after
+          you confirm your subscription; every issue includes an unsubscribe link. You can
+          manage email and other choices on <Link href="/privacy-choices">Your Privacy Choices</Link>.
+        </p>
+      </section>
+
+      <section>
+        <h2>14. Food for the Soul community meal drives</h2>
+        <p>
+          Food for the Soul meals are free. At every drive, meals are served first come,
+          first served, while supplies last, and no one is asked for identification, proof of
+          income, immigration status, residency, or membership, or required to take part in
+          any program, service, sale, or religious activity. {NON_DISCRIMINATION_STATEMENT}
+        </p>
+        <p>
+          Organizations in Los Angeles and Orange County may apply to host a drive. We
+          review complete applications in the order received using our published criteria:
+          community need, open access, a safe site, and workable logistics. We don’t consider
+          protected characteristics of an organization or the people it serves. Applying
+          doesn’t guarantee a drive. Hosts are responsible for permission to use their site,
+          a safe setup, and following our food-safety and handling guidance; we may
+          reschedule or cancel a drive for safety, weather, food-safety, or capacity reasons.
+          Hosts may not collect personal information from meal recipients without their clear
+          permission, and may not use drives for fundraising, sales, or recruitment.
+        </p>
+      </section>
+
+      <section>
+        <h2>15. Disclaimers and limitation of liability</h2>
         <p>
           To the fullest extent permitted by law, the website and service are provided
           “as is” and “as available.” We do not guarantee uninterrupted site access,
@@ -207,7 +284,7 @@ export default function TermsPage() {
       </section>
 
       <section>
-        <h2>12. Governing law</h2>
+        <h2>16. Governing law</h2>
         <p>
           California law governs these Terms. Any dispute not resolved informally will
           be brought in a court of competent jurisdiction in Los Angeles County,
@@ -217,11 +294,12 @@ export default function TermsPage() {
       </section>
 
       <section>
-        <h2>13. Changes and contact</h2>
+        <h2>17. Changes and contact</h2>
         <p>
           We may update these Terms prospectively. Material subscription changes will
           be communicated as required by law before they take effect. Questions may be
-          sent to <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.
+          sent to <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a> or by mail to
+          {` ${BUSINESS.legalName}, ${BUSINESS.mailingAddress}`}.
         </p>
       </section>
     </LegalShell>

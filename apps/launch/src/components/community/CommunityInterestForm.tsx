@@ -229,6 +229,15 @@ export function CommunityInterestForm() {
                       </label>
                     ))}
                   </div>
+                  {interest === "host" ? (
+                    <p className="mt-4 rounded-lg border border-sage/30 bg-sage/10 p-3 text-sm leading-6 text-forest">
+                      Representing an organization and ready to plan?{" "}
+                      <a href="/food-for-the-soul/host" className="font-bold underline underline-offset-4">
+                        Use the host application
+                      </a>
+                      . Not sure yet? Start a conversation here.
+                    </p>
+                  ) : null}
                   <p className="mt-6 text-xs text-forest/75">
                     All fields required unless marked optional.
                   </p>
@@ -393,7 +402,8 @@ export function CommunityInterestForm() {
                   <p className="mt-4 text-center text-xs leading-5 text-forest/75">
                     An invitation to connect. No payment or commitment required.
                     <br />
-                    Contact us anytime to update or remove your details.
+                    Contact us anytime to update or remove your details. See our{" "}
+                    <a href="/privacy" className="underline underline-offset-2">Privacy Policy</a>.
                   </p>
                 </fieldset>
               </form>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Wordmark } from "@/components/ui/Wordmark";
+import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup";
 import { BUSINESS, CONTACT, TAGLINE } from "@/lib/brand";
 import { EAT_NOW } from "@/lib/ordering";
 
@@ -20,6 +21,8 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
     title: "Community",
     links: [
       { href: "/food-for-the-soul", label: "Food for the Soul" },
+      { href: "/food-for-the-soul/host", label: "Host a meal drive" },
+      { href: "/newsletter", label: "Newsletter" },
       { href: `mailto:${CONTACT.email}`, label: "Contact", external: true },
     ],
   },
@@ -35,6 +38,8 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
     links: [
       { href: "/terms", label: "Terms of Service" },
       { href: "/customer-agreement", label: "Customer Agreement" },
+      { href: "/privacy", label: "Privacy Policy" },
+      { href: "/privacy-choices", label: "Your Privacy Choices" },
     ],
   },
 ];
@@ -62,6 +67,10 @@ export function SiteFooter() {
               with care from the Soul Good team. Weekly nourishment is available
               on Sundays; Take Out times are shown in the menu.
             </p>
+            <div className="w-full max-w-sm border-t border-oat/12 pt-5">
+              <p className="mb-3 font-serif text-2xl text-oat">Good news from our kitchen.</p>
+              <NewsletterSignup source="footer" tone="dark" />
+            </div>
           </div>
 
           <nav
@@ -95,7 +104,7 @@ export function SiteFooter() {
 
         <div className="mt-14 flex flex-col gap-3 border-t border-oat/12 pt-6 text-xs text-oat/50 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} {BUSINESS.legalName} · {BUSINESS.serviceArea}
+            © {new Date().getFullYear()} {BUSINESS.legalName} · {BUSINESS.mailingAddress}
           </p>
           <p className="tracking-[0.2em] uppercase">{TAGLINE}</p>
         </div>

@@ -39,6 +39,7 @@ export function LeadGate({
   });
   const [errors, setErrors] = useState<FieldErrors>({});
   const [pending, setPending] = useState(false);
+  const [newsletter, setNewsletter] = useState(false);
   const errorRef = useRef<HTMLParagraphElement>(null);
 
   const set = <K extends keyof JoinFormValues>(key: K, value: JoinFormValues[K]) => {
@@ -77,6 +78,13 @@ export function LeadGate({
         JSON.stringify({ givenName, familyName: rest.join(" "), email: values.email.trim(), phone: values.phone.trim() }),
       );
       window.sessionStorage.setItem("soulbowls:fulfillment", values.fulfillmentMethod);
+      // Optional and separate from the lead: double opt-in by email, never blocks the result.
+      if (newsletter)
+        void fetch("/api/newsletter", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: values.email.trim(), source: "quiz", consent: true }),
+        }).catch(() => undefined);
       if (values.fulfillmentMethod === "delivery") {
         window.sessionStorage.setItem("soulbowls:deliveryZip", values.deliveryZip.trim());
       }
@@ -215,6 +223,16 @@ export function LeadGate({
           </div>
         ) : null}
 
+        <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-forest/75">
+          <input
+            type="checkbox"
+            className="mt-0.5 size-5 shrink-0 accent-forest"
+            checked={newsletter}
+            onChange={(event) => setNewsletter(event.target.checked)}
+          />
+          <span>Also send me the Soul Good newsletter (optional). We’ll email a link to confirm first.</span>
+        </label>
+
         {errors._root ? (
           <p ref={errorRef} tabIndex={-1} role="alert" className="rounded-md border border-clay/30 bg-clay/8 px-4 py-3 text-sm text-forest outline-none">
             {errors._root}
@@ -226,7 +244,9 @@ export function LeadGate({
         </Button>
         <p className="text-center text-xs leading-relaxed text-forest/65">
           No charge and no order on this step. By continuing, you agree to our{" "}
-          <Link href="/terms" className="underline underline-offset-2">Terms of Service</Link>.
+          <Link href="/terms" className="underline underline-offset-2">Terms of Service</Link>. We use your answers,
+          including any allergies you share, only to suggest food and help with your order, as explained in our{" "}
+          <Link href="/privacy" className="underline underline-offset-2">Privacy Policy</Link>.
         </p>
       </form>
     </div>
