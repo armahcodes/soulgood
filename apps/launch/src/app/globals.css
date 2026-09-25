@@ -138,6 +138,27 @@ html {
   body:has(#mobile-tabbar) .site-footer {
     padding-bottom: calc(6rem + env(safe-area-inset-bottom));
   }
+
+  /* Pinned wizard actions sit just above the floating tab bar... */
+  body:has(#mobile-tabbar) .culinary-sticky-actions {
+    bottom: calc(4.75rem + max(0.75rem, env(safe-area-inset-bottom)));
+    padding-bottom: 0.75rem;
+    border-radius: 0.5rem;
+    transition: bottom 300ms var(--ease-soft);
+  }
+
+  /* ...unless a focused task is on screen (components/ui/FocusTask.tsx). */
+  body[data-focus-task] #mobile-tabbar {
+    transform: translateY(calc(100% + 1.5rem));
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  body[data-focus-task]:has(#mobile-tabbar) .culinary-sticky-actions {
+    bottom: 0;
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    border-radius: 0;
+  }
 }
 
 .scrollbar-none {

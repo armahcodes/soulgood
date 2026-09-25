@@ -285,3 +285,33 @@ describe("culinary minimums and mandatory fees", () => {
     ).toBe(false);
   });
 });
+
+describe("salads and snacks on gathering estimates", () => {
+  const extras = [
+    { id: "rainbow-crunch", quantity: 4, dressing: "lemon" as const },
+    { id: "veggie-tasting-trio", quantity: 2, trio: ["jerk-cauliflower" as const, "rainbow-crunch" as const, "smoky-sweet-potatoes" as const] },
+  ];
+
+  it("prices salads and snacks at menu prices alongside bowls and delivery", () => {
+    const items = culinaryLineItems("delivery", balancedCulinarySelection(10), { extras });
+    const added = items.filter((item) => item.kind === "extra");
+    expect(added).toEqual([
+      expect.objectContaining({ label: "Rainbow Crunch", note: "Lemon dressing", quantity: 4, unitCents: 1400, amountCents: 5600 }),
+      expect.objectContaining({ label: "Veggie Tasting Trio", note: "Jerk cauliflower, Rainbow crunch, Smoky sweet potatoes", quantity: 2, unitCents: 1600, amountCents: 3200 }),
+    ]);
+    expect(items.reduce((sum, item) => sum + item.amountCents, 0)).toBe(10 * 1760 + 5600 + 3200 + CULINARY_PRICING.deliveryCents);
+  });
+
+  it("accepts add-ons on bowl delivery, still requires 10 bowls, and rejects them for plated dinners", () => {
+    expect(culinaryInputSchema.safeParse({ ...culinaryInput(10), extras }).success).toBe(true);
+    expect(culinaryInputSchema.safeParse({ ...culinaryInput(9), extras }).success).toBe(false);
+    const plated = { ...culinaryInput(20, "plated"), bowlSelection: balancedCulinarySelection(0), platedMenu: "chicken" as const, extras };
+    expect(culinaryInputSchema.safeParse(plated).error?.issues[0]?.message).toBe("Salads and snacks can be added to bowl delivery");
+    expect(culinaryInputSchema.safeParse({ ...culinaryInput(10), extras: [{ id: "rainbow-crunch", quantity: 1 }] }).success).toBe(false);
+  });
+
+  it("ignores add-ons for plated line items", () => {
+    const items = culinaryLineItems("plated", balancedCulinarySelection(0), { platedMenu: "chicken", guestCount: 20, extras });
+    expect(items.some((item) => item.kind === "extra")).toBe(false);
+  });
+});

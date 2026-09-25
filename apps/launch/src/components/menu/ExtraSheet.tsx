@@ -108,14 +108,20 @@ const DRESSING_LEGEND = { dressing: "Dressing", sauce: "Sauce", dip: "Dip", "bui
  * Salad walks through base → three toppings → mint → dressing with a live
  * summary; every configuration is validated with the same schema checkout uses.
  */
-type SheetProps = { onClose: () => void; onAdd: (line: ExtraLine) => void; orderable?: boolean };
+type SheetProps = {
+  onClose: () => void;
+  onAdd: (line: ExtraLine) => void;
+  orderable?: boolean;
+  /** Wording for the primary action, e.g. "Add to estimate" for gatherings. */
+  addLabel?: string;
+};
 
 export function ExtraSheet({ extra, ...props }: SheetProps & { extra: MenuExtra | null }) {
   if (!extra) return <BottomSheet open={false} onClose={props.onClose} labelledBy="extra-sheet-title" closeLabel="Close item details">{null}</BottomSheet>;
   return <OpenExtraSheet key={extra.id} extra={extra} {...props} />;
 }
 
-function OpenExtraSheet({ extra, onClose, onAdd, orderable = true }: SheetProps & { extra: MenuExtra }) {
+function OpenExtraSheet({ extra, onClose, onAdd, orderable = true, addLabel = "Add to order" }: SheetProps & { extra: MenuExtra }) {
   const [draft, setDraft] = useState<Partial<ExtraLine>>({ quantity: 1 });
   const set = (patch: Partial<ExtraLine>) => setDraft((current) => ({ ...current, ...patch }));
   const reduced = useReducedMotion();
@@ -157,7 +163,7 @@ function OpenExtraSheet({ extra, onClose, onAdd, orderable = true }: SheetProps 
       >
         <AnimatePresence mode="wait" initial={false}>
           <motion.span key={added ? "added" : "add"} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} className="inline-flex items-center gap-2">
-            {added ? (<><Check className="size-4" aria-hidden /> Added to your order</>) : parsed.success ? `Add to order · ${formatCents(price * line.quantity)}` : "Make your choices"}
+            {added ? (<><Check className="size-4" aria-hidden /> Added</>) : parsed.success ? `${addLabel} · ${formatCents(price * line.quantity)}` : "Make your choices"}
           </motion.span>
         </AnimatePresence>
       </Button>

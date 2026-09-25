@@ -118,7 +118,9 @@ export async function createCulinaryInvoiceDraft(
           quantity: String(item.quantity),
           base_price_money: { amount: item.unitCents, currency: "USD" },
           note:
-            item.kind === "plated"
+            item.kind === "extra"
+              ? item.note
+              : item.kind === "plated"
               ? "Food style for the whole group. Final dishes and dietary requests confirmed before booking."
               : item.kind === "bowl"
                 ? record.input.experience === "plated"

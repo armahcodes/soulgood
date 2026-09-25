@@ -40,7 +40,7 @@ export function PlatedMenu({
           return (
             <label
               key={menu.id}
-              className={`flex cursor-pointer items-start gap-3 border p-4 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-clay sm:gap-4 sm:p-5 ${value === menu.id ? "border-forest bg-forest text-oat" : "border-forest/20 bg-white/40 hover:border-sage"}`}
+              className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-colors focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-clay sm:gap-4 sm:p-5 ${value === menu.id ? "border-forest bg-forest text-oat" : "border-forest/20 bg-white/40 hover:border-sage"}`}
             >
               <Icon size={22} className="mt-1 shrink-0" aria-hidden="true" />
               <span className="min-w-0 flex-1">

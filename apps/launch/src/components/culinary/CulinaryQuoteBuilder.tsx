@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ChefHat, Check, Printer, Truck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -8,6 +9,8 @@ import { type BowlId } from "@/lib/current-offer";
 import { bowlSelectionTotal, type BowlSelection } from "@/lib/bowl-selection";
 import { CulinaryMenu } from "./CulinaryMenu";
 import { PlatedMenu } from "./PlatedMenu";
+import { GatheringExtras } from "./GatheringExtras";
+import type { ExtraLine } from "@/lib/menu-extras";
 import { recipeName } from "@/lib/culinary-menu";
 import {
   balancedCulinarySelection,
@@ -29,14 +32,21 @@ const LABEL = "grid min-w-0 gap-2 text-sm font-semibold text-forest";
 const EMPTY_CONTACT = { name: "", email: "", phone: "" };
 const STEPS = ["Experience", "Menu", "Event", "Review", "Contact"];
 
-export function CulinaryQuoteBuilder({ today }: { today: string }) {
-  const [experience, setExperience] = useState<CulinaryExperience>("delivery");
+export function CulinaryQuoteBuilder({
+  today,
+  initialExperience = "delivery",
+}: {
+  today: string;
+  initialExperience?: CulinaryExperience;
+}) {
+  const [experience, setExperience] = useState<CulinaryExperience>(initialExperience);
   const [guestCountInput, setGuestCountInput] = useState("10");
   const [guestCountTouched, setGuestCountTouched] = useState(false);
   const [platedMenu, setPlatedMenu] = useState<PlatedMenuId>("chefs-selection");
   const [step, setStep] = useState(0);
   const [furthestStep, setFurthestStep] = useState(0);
   const wizard = useRef<HTMLDivElement | null>(null);
+  const [extras, setExtras] = useState<ExtraLine[]>([]);
   const [selection, setSelection] = useState(() =>
     balancedCulinarySelection(10),
   );
@@ -80,10 +90,13 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
     quote?.items ??
     (experience === "plated" && !validGuestCount
       ? []
-      : culinaryLineItems(experience, selection, { platedMenu, guestCount }));
+      : culinaryLineItems(experience, selection, { platedMenu, guestCount, extras }));
   const foodItems = items.filter(
     (item) => item.kind === "bowl" || item.kind === "plated",
   );
+  const extraItems = items.filter((item) => item.kind === "extra");
+  const extrasTotal = extraItems.reduce((sum, item) => sum + item.amountCents, 0);
+  const extrasItemCount = extraItems.reduce((sum, item) => sum + item.quantity, 0);
   const foodTotal = foodItems.reduce((sum, item) => sum + item.amountCents, 0);
   const subtotal = items.reduce((total, item) => total + item.amountCents, 0);
   const validCount =
@@ -168,6 +181,7 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
       bowlSelection:
         experience === "plated" ? balancedCulinarySelection(0) : selection,
       ...(experience === "plated" ? { platedMenu } : {}),
+      ...(experience === "delivery" && extras.length ? { extras } : {}),
       eventDate,
       eventTime,
       occasion,
@@ -288,13 +302,20 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
           ? "Booking request received"
           : `Step ${step + 1} of 5: ${STEPS[step]}`
       }
-      className="culinary-layout mx-auto w-full max-w-3xl scroll-mt-5 outline-none"
+      className="culinary-layout mx-auto w-full max-w-3xl scroll-mt-28 outline-none"
     >
       {!received && (
         <nav
           aria-label="Quote progress"
-          className="print-hidden mb-6 grid grid-cols-5 gap-1 sm:gap-3"
+          className="print-hidden relative mb-6 grid grid-cols-5 gap-1 sm:gap-3"
         >
+          {/* Progress rail — brand adaptation of 21st.dev shadcnspace/segmented-progress-pill-stepper */}
+          <span aria-hidden="true" className="pointer-events-none absolute inset-x-[10%] top-[1.375rem] h-0.5 rounded-full bg-forest/10">
+            <span
+              className="block h-full rounded-full bg-sage transition-[width] duration-500 ease-(--ease-soft)"
+              style={{ width: `${(step / (STEPS.length - 1)) * 100}%` }}
+            />
+          </span>
           {STEPS.map((label, index) => (
             <button
               key={label}
@@ -307,10 +328,10 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
               }
               aria-current={index === step ? "step" : undefined}
               onClick={() => goToStep(index)}
-              className={`flex min-h-14 min-w-0 flex-col items-center justify-center gap-1 border-b-2 px-1 py-2 text-[11px] font-semibold sm:text-sm ${index === step ? "border-forest text-forest" : "border-forest/10 text-forest/60 disabled:opacity-50"}`}
+              className={`relative flex min-h-14 min-w-0 flex-col items-center justify-start gap-1.5 rounded-md px-1 py-2 text-[11px] font-semibold transition-colors sm:text-sm ${index === step ? "text-forest" : "text-forest/60 enabled:hover:text-forest disabled:opacity-50"}`}
             >
               <span
-                className={`flex h-6 w-6 items-center justify-center rounded-full text-xs ${index === step ? "bg-forest text-oat" : "bg-sand/60"}`}
+                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs ring-4 ring-card transition-colors duration-300 ${index === step ? "bg-forest text-oat" : index < step ? "bg-sage text-oat" : "bg-sand text-forest/70"}`}
               >
                 {index < step ? (
                   <Check size={13} aria-hidden="true" />
@@ -333,7 +354,7 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
               ? validGuestCount
                 ? `${guestCount} ${guestCount === 1 ? "guest" : "guests"} · Plated`
                 : "Plated experience"
-              : `${count} bowls · Delivery`}
+              : `${count} bowls${extrasItemCount ? ` + ${extrasItemCount} salads & snacks` : ""} · Delivery`}
           </span>
           {experience === "plated" && !validGuestCount ? (
             <span>Enter guests to see your estimate</span>
@@ -371,8 +392,17 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
               {(["delivery", "plated"] as const).map((option) => (
                 <label
                   key={option}
-                  className={`relative flex cursor-pointer flex-col gap-3 rounded-lg border p-5 transition-colors ${experience === option ? "border-forest bg-forest text-oat" : "border-forest/20 bg-white/40 text-forest hover:border-sage"}`}
+                  className={`relative flex cursor-pointer flex-col gap-3 overflow-hidden rounded-lg border p-5 pt-0 transition-[border-color,background-color,box-shadow] duration-300 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-clay ${experience === option ? "border-forest bg-forest text-oat shadow-[0_24px_48px_-32px_rgb(44_58_52/0.8)]" : "border-forest/20 bg-white/40 text-forest hover:border-sage"}`}
                 >
+                  <span className="relative -mx-5 mb-2 block aspect-[16/9] overflow-hidden">
+                    <Image
+                      src={option === "delivery" ? "/gatherings/team-lunch.webp" : "/gatherings/plated-dinner.webp"}
+                      alt=""
+                      fill
+                      sizes="(min-width: 640px) 360px, 100vw"
+                      className={`object-cover transition-transform duration-700 ${experience === option ? "scale-[1.03]" : ""}`}
+                    />
+                  </span>
                   <div className="flex items-center justify-between">
                     <span>
                       {option === "delivery" ? (
@@ -493,6 +523,15 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
                 }}
               />
             )}
+            {experience === "delivery" ? (
+              <GatheringExtras
+                lines={extras}
+                onChange={(next) => {
+                  invalidate();
+                  setExtras(next);
+                }}
+              />
+            ) : null}
           </fieldset>
 
           <fieldset
@@ -620,7 +659,7 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
               {error}
             </p>
           )}
-          <div className="sticky bottom-0 z-10 flex items-center gap-3 border-t border-forest/15 bg-oat/95 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur">
+          <div className="culinary-sticky-actions sticky bottom-0 z-10 flex items-center gap-3 border-t border-forest/15 bg-oat/95 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur">
             {step > 0 && (
               <Button
                 type="button"
@@ -721,12 +760,17 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
                 </button>
               </div>
               <ul className="mt-1 grid gap-2 text-forest/75">
-                {foodItems.map((item) => (
+                {[...foodItems, ...extraItems].map((item) => (
                   <li key={item.id} className="flex justify-between gap-4">
                     <span>
                       {item.kind === "plated"
                         ? platedMenuName(platedMenu)
-                        : recipeName(item.label)}
+                        : item.kind === "extra"
+                          ? item.label
+                          : recipeName(item.label)}
+                      {item.note ? (
+                        <span className="block text-xs text-forest/55">{item.note}</span>
+                      ) : null}
                     </span>
                     <span className="shrink-0 font-semibold">
                       {item.kind === "plated"
@@ -760,9 +804,20 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
                   {formatCents(foodTotal)}
                 </dd>
               </div>
+              {extrasTotal > 0 && (
+                <div className="flex items-start justify-between gap-4">
+                  <dt>
+                    Salads &amp; snacks
+                    <span className="mt-1 block text-xs text-forest/65">
+                      {extrasItemCount} {extrasItemCount === 1 ? "item" : "items"} at menu prices
+                    </span>
+                  </dt>
+                  <dd className="shrink-0 font-semibold">{formatCents(extrasTotal)}</dd>
+                </div>
+              )}
               {items
                 .filter(
-                  (item) => item.kind !== "bowl" && item.kind !== "plated",
+                  (item) => item.kind !== "bowl" && item.kind !== "plated" && item.kind !== "extra",
                 )
                 .map((item) => (
                   <div
@@ -962,6 +1017,7 @@ export function CulinaryQuoteBuilder({ today }: { today: string }) {
                   setEventDate("");
                   setEventTime("");
                   setOccasion("");
+                  setExtras([]);
                   setFurthestStep(0);
                   goToStep(0);
                 }}

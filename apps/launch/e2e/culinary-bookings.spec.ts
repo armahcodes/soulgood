@@ -730,3 +730,43 @@ test("group menu supports keyboard selection and stays within a 320px screen", a
     ),
   ).toBe(true);
 });
+
+test("bowl delivery estimates can include salads and snacks from the full menu", async ({ page }) => {
+  let savedInput: CulinaryInput | null = null;
+  await page.route("**/api/culinary-quotes", async (route) => {
+    savedInput = route.request().postDataJSON();
+    await route.fulfill({ status: 201, json: { quote: quote(savedInput!) } });
+  });
+  await page.goto("/quote");
+  await expect(page.getByRole("tab", { name: "Salads" }).first()).toBeVisible();
+  await page.getByRole("button", { name: "Choose my menu", exact: true }).click();
+
+  await page.getByRole("button", { name: /Add Build Your Own Salad, \$15\.00 each/ }).click();
+  const sheet = page.getByRole("dialog");
+  await sheet.getByText("Green cabbage", { exact: true }).click();
+  for (const topping of ["Shredded carrots", "Sliced radishes", "Roasted cauliflower"])
+    await sheet.getByRole("button", { name: topping }).click();
+  await sheet.getByText("House dressing", { exact: true }).click();
+  await sheet.getByRole("button", { name: "One more Build Your Own Salad" }).click();
+  await sheet.getByRole("button", { name: "Add to estimate · $30.00" }).click();
+  await expect(page.locator("dialog[open]")).toHaveCount(0);
+
+  await page.getByRole("tablist", { name: "Salads and snacks categories" }).getByRole("tab", { name: "Snacks & bites" }).click();
+  await page.getByRole("button", { name: /Add Roasted Cabbage Wedges, \$8\.00 each/ }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Add to estimate · $8.00" }).click();
+
+  const summary = page.getByLabel("Running estimate");
+  await expect(summary.getByText("10 bowls + 3 salads & snacks · Delivery")).toBeVisible();
+  await expect(summary.getByText("$222.88", { exact: true })).toBeVisible();
+
+  await eventDetails(page);
+  await page.getByRole("button", { name: "Generate my quote", exact: true }).click();
+  expect(savedInput!.extras).toEqual([
+    { id: "build-your-own-salad", quantity: 2, base: "green-cabbage", toppings: ["shredded-carrots", "sliced-radishes", "roasted-cauliflower"], dressing: "house" },
+    { id: "roasted-cabbage-wedges", quantity: 1 },
+  ]);
+  const review = page.getByRole("complementary");
+  await expect(review.getByText("3 items at menu prices")).toBeVisible();
+  await expect(review.getByText("Green cabbage · Shredded carrots, Sliced radishes, Roasted cauliflower · House dressing")).toBeVisible();
+  await expect(review.getByText("$38.00", { exact: true })).toBeVisible();
+});

@@ -8,6 +8,13 @@ import {
   CURRENT_BOWLS,
   CURRENT_OFFER,
 } from "./current-offer";
+import {
+  describeExtraOptions,
+  extraLinesSchema,
+  extraPriceCents,
+  findExtra,
+  type ExtraLine,
+} from "./menu-extras";
 
 export const CULINARY_PRICING = {
   bowlUnitCents: PRICING.oneTimeCents / CURRENT_OFFER.bowlsPerWeek,
@@ -88,8 +95,16 @@ export const culinaryInputSchema = z
       .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Choose an event time"),
     occasion: z.string().trim().max(120).default(""),
     address: deliveryAddressSchema,
+    /** Salads, veggie cups, and snacks at menu prices (bowl delivery only). */
+    extras: extraLinesSchema.optional(),
   })
   .superRefine((input, context) => {
+    if (input.extras?.length && input.experience !== "delivery")
+      context.addIssue({
+        code: "custom",
+        path: ["extras"],
+        message: "Salads and snacks can be added to bowl delivery",
+      });
     const recipeCount = bowlSelectionTotal(input.bowlSelection);
     const count = culinaryServingCount(input);
     if (input.platedMenu && input.experience !== "plated")
@@ -186,8 +201,10 @@ export type CulinaryRequest = z.infer<typeof culinaryRequestSchema>;
 
 export type CulinaryLineItem = {
   id: string;
-  kind: "bowl" | "plated" | "minimum" | "support" | "delivery";
+  kind: "bowl" | "plated" | "extra" | "minimum" | "support" | "delivery";
   label: string;
+  /** Customer choices for a salad or snack, e.g. "Lemon dressing". */
+  note?: string;
   quantity: number;
   unitCents: number;
   amountCents: number;
@@ -196,7 +213,7 @@ export type CulinaryLineItem = {
 export function culinaryLineItems(
   experience: CulinaryExperience,
   selection: BowlSelection,
-  options: { platedMenu?: PlatedMenuId; guestCount?: number } = {},
+  options: { platedMenu?: PlatedMenuId; guestCount?: number; extras?: readonly ExtraLine[] } = {},
 ): CulinaryLineItem[] {
   const unitCents =
     experience === "plated"
@@ -222,6 +239,23 @@ export function culinaryLineItems(
           unitCents,
           amountCents: selection[bowl.id] * unitCents,
         }));
+  if (experience === "delivery") {
+    (options.extras ?? []).forEach((line, index) => {
+      const extra = findExtra(line.id);
+      if (!extra) return;
+      const unit = extraPriceCents(line.id);
+      const note = describeExtraOptions(line);
+      items.push({
+        id: `extra-${index}-${line.id}`,
+        kind: "extra",
+        label: extra.name,
+        ...(note ? { note } : {}),
+        quantity: line.quantity,
+        unitCents: unit,
+        amountCents: unit * line.quantity,
+      });
+    });
+  }
   if (experience === "plated") {
     const food = items.reduce((sum, item) => sum + item.amountCents, 0);
     const adjustment = Math.max(

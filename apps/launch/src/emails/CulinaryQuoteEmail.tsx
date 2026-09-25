@@ -57,7 +57,8 @@ export function CulinaryQuoteEmail({
         {quote.items.map((item) => (
           <Text key={item.id} style={emailStyles.muted}>
             {item.label}
-            {item.kind === "bowl" || item.kind === "plated"
+            {item.note ? ` (${item.note})` : ""}
+            {item.kind === "bowl" || item.kind === "plated" || item.kind === "extra"
               ? ` · ${item.quantity} × ${formatCents(item.unitCents)}`
               : ""}
             : {formatCents(item.amountCents)}
