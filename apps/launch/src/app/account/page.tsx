@@ -114,15 +114,15 @@ export default async function AccountPage() {
         )}
       </section>
       <aside className="mt-10 rounded-lg border border-forest/12 bg-card/70 p-6 sm:p-8">
-        <h2 className="text-2xl">Looking for an Eat Now order?</h2>
+        <h2 className="text-2xl">Looking for a Take Out order?</h2>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-forest/75">
-          Single orders from our Eat Now menu have their own Square
+          Single orders from our Take Out menu have their own Square
           confirmations and do not appear here.{" "}
           <Link
             href={`${EAT_NOW.infoPath}#order-help`}
             className="font-semibold underline underline-offset-4"
           >
-            Find help with an Eat Now order
+            Find help with a Take Out order
           </Link>
           .
         </p>

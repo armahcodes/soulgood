@@ -10,7 +10,7 @@ This guidance applies the philosophy in **Soul Good BrandKit.pdf**, especially �
 - **Nourish · Heal · Thrive** is the brand signature. Do not extend it into claims that a bowl treats, prevents, or cures a condition.
 - **Weekly nourishment** describes the scheduled offering. It is available as a one-time purchase or a weekly subscription; the name does not imply automatic enrollment.
 - **Build your ritual** invites customers to the scheduled-order checkout. Pair it with clear product and price information.
-- **Eat Now · Single orders** describes individual orders from the Square Online menu. Availability and service times come from that menu; never promise immediate or same-day service without confirmation.
+- **Take Out · Single orders** describes individual orders from the Square Online menu. Availability and service times come from that menu; never promise immediate or same-day service without confirmation.
 
 The shared signature, offering label, headline, and primary invitation live in `src/lib/brand.ts`.
 
@@ -29,10 +29,10 @@ Use “five bowls” where it answers a practical question. Do not repeat “fiv
 - Distinguish **one-time purchase** from a **weekly subscription renewing every seven days until canceled**. Keep explicit renewal consent and cancellation information.
 - Scheduled orders use Sunday service: free pickup for one-time orders, or **$8.88 in-house LA County delivery**. Do not imply weekly subscriptions include pickup.
 - Weekly meal prep is delivered **exclusively by the Soul Good team**, not third-party couriers.
-- Eat Now delivery uses available courier partners such as **DoorDash, Uber Eats, or Postmates**, or a **Soul Good courier**. Do not guarantee a particular provider, coverage, or arrival time. Its live checkout determines delivery availability and charges; the meal-prep fee does not configure Eat Now pricing.
+- Take Out delivery uses available courier partners such as **DoorDash, Uber Eats, or Postmates**, or a **Soul Good courier**. Do not guarantee a particular provider, coverage, or arrival time. Its live checkout determines delivery availability and charges; the meal-prep fee does not configure Take Out pricing.
 - Keep ingredients, allergens, availability, food-storage instructions, taxes, and customer policies factual. A copy refresh must not change them.
-- Keep operational status plain: an enrolled plan with payment pending is not a paid order. A return link from Eat Now is not proof of payment.
-- Eat Now purchases use Square confirmations and are not currently included in the main site's account order history. Explain the distinction helpfully, without promising synchronization.
+- Keep operational status plain: an enrolled plan with payment pending is not a paid order. A return link from Take Out is not proof of payment.
+- Take Out purchases use Square confirmations and are not currently included in the main site's account order history. Explain the distinction helpfully, without promising synchronization.
 
 ## Examples
 

@@ -18,7 +18,7 @@ type NavLink = { href: string; label: string; external?: boolean };
 export const PRIMARY_NAV: readonly NavLink[] = [
   { href: "/#bowls", label: "Menu" },
   { href: "/quiz", label: "Find your pathway" },
-  { href: EAT_NOW.menuUrl, label: "Eat Now", external: true },
+  { href: EAT_NOW.menuUrl, label: "Take Out", external: true },
   { href: "/quote", label: "Gatherings" },
 ];
 

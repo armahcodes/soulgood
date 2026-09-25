@@ -13,7 +13,7 @@ const TABS: readonly Tab[] = [
   { href: "/", label: "Home", icon: House },
   { href: "/#bowls", label: "Menu", icon: Soup },
   { href: "/quiz", label: "Pathway", icon: Compass },
-  { href: EAT_NOW.menuUrl, label: "Eat Now", icon: ShoppingBag, external: true },
+  { href: EAT_NOW.menuUrl, label: "Take Out", icon: ShoppingBag, external: true },
   { href: "/account", label: "Orders", icon: UserRound },
 ];
 

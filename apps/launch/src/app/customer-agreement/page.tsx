@@ -6,7 +6,7 @@ import { EAT_NOW } from "@/lib/ordering";
 
 export const metadata = {
   title: `Customer Agreement — ${BRAND_NAME}`,
-  description: `Purchase and delivery terms for ${BRAND_NAME} Eat Now orders and weekly meal prep, including renewal, cancellation, and exchanges.`,
+  description: `Purchase and delivery terms for ${BRAND_NAME} Take Out orders and weekly meal prep, including renewal, cancellation, and exchanges.`,
 };
 
 export default function CustomerAgreementPage() {
@@ -23,9 +23,9 @@ export default function CustomerAgreementPage() {
           <li>Choose one or more {PRICING.oneTime} meal sets as a one-time order or weekly plan.</li>
           <li>Only the weekly plan renews and charges every seven days until you cancel.</li>
           <li>Meal-prep pickup is free for one-time orders; Sunday delivery across {SERVICE_AREA.weekly} is $8.88 per order, or free on orders over $100.</li>
-          <li>Every meal-prep and Eat Now order has a {ORDER_RULES.minimumLabel.toLowerCase()}.</li>
+          <li>Every meal-prep and Take Out order has a {ORDER_RULES.minimumLabel.toLowerCase()}.</li>
           <li>{NOURISHMENT.deliveryDisclosure}</li>
-          <li>Eat Now bowls are sold individually, {EAT_NOW.days}, with on-demand courier delivery within about {EAT_NOW.radiusMiles} miles of our Long Beach kitchen. Courier fees (waived on orders over $100), prices, and service times are shown at Eat Now checkout.</li>
+          <li>Take Out bowls are sold individually, {EAT_NOW.days}, with on-demand courier delivery within about {EAT_NOW.radiusMiles} miles of our Long Beach kitchen. Courier fees (waived on orders over $100), prices, and service times are shown at Take Out checkout.</li>
           <li>Applicable sales tax is shown at checkout; any reusable-container deposit is disclosed and collected separately.</li>
           <li>Cancel future renewals online at any time; orders already charged remain final.</li>
           <li>Service is limited to verified addresses in {BUSINESS.serviceArea}.</li>
@@ -33,7 +33,7 @@ export default function CustomerAgreementPage() {
       </section>
 
       <section>
-        <h2>1. Meal prep and Eat Now orders</h2>
+        <h2>1. Meal prep and Take Out orders</h2>
         <h3>Scheduled meal prep</h3>
         <p>
           Each meal-prep purchase or renewal creates an order made from one or more five-meal
@@ -49,11 +49,11 @@ export default function CustomerAgreementPage() {
           proteins, sides, and ingredients may vary. Reasonable substitutions may be
           made for seasonal, quality, or supply reasons.
         </p>
-        <h3>Eat Now · Individual bowls</h3>
+        <h3>Take Out · Individual bowls</h3>
         <p>
-          Eat Now is a separate single-order menu at checkout.soulgood.kitchen.
+          Take Out is a separate single-order menu at checkout.soulgood.kitchen.
           Bowls are sold individually at the prices shown in the live menu, not as
-          the meal sets described above. An Eat Now one-time purchase does not
+          the meal sets described above. A Take Out one-time purchase does not
           enroll you in a weekly meal-prep plan. Keep your Square order confirmation
           for payment and order details.
         </p>
@@ -85,9 +85,9 @@ export default function CustomerAgreementPage() {
           before you authorize payment.
         </p>
         <p>
-          Eat Now item prices, distance-based courier fees (waived on orders over
+          Take Out item prices, distance-based courier fees (waived on orders over
           $100), applicable tax, and the total are shown in its checkout before
-          payment. Meal-prep pricing and delivery charges do not set Eat Now prices
+          payment. Meal-prep pricing and delivery charges do not set Take Out prices
           or guarantee delivery availability.
         </p>
         <p>{TAX.disclosure} Tax is added to the subtotal where required.</p>
@@ -114,7 +114,7 @@ export default function CustomerAgreementPage() {
           the location and window are confirmed before fulfillment. Weekly plans
           require delivery.
         </p>
-        <h3>Eat Now</h3>
+        <h3>Take Out</h3>
         <p>{EAT_NOW.deliveryDetails}</p>
         <p>{EAT_NOW.coverage}</p>
         <p>{EAT_NOW.availability}</p>

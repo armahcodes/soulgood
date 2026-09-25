@@ -28,8 +28,8 @@ export const SERVICE_AREA = {
 export type ServiceCounty = (typeof SERVICE_AREA.weeklyCounties)[number];
 
 /**
- * Order rules shared by weekly nourishment and on-demand (Eat Now) orders.
- * Eat Now enforces these in its Square Online settings; checkout enforces them here.
+ * Order rules shared by weekly nourishment and on-demand (Take Out) orders.
+ * Take Out enforces these in its Square Online settings; checkout enforces them here.
  */
 export const ORDER_RULES = {
   minimumOrderCents: 5000,

@@ -16,23 +16,23 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
-test("home separates Eat Now from five-bowl checkout on every screen", async ({ page }) => {
+test("home separates Take Out from five-bowl checkout on every screen", async ({ page }) => {
   await page.goto("/");
-  const menuLink = page.getByRole("link", { name: "Eat Now · Single orders", exact: true }).last();
+  const menuLink = page.getByRole("link", { name: "Take Out · Single orders", exact: true }).last();
   await expect(menuLink).toHaveAttribute("href", EAT_NOW.menuUrl);
   await expect(menuLink).toHaveAttribute("target", "_self");
   await expect(page.getByRole("link", { name: "Build your ritual", exact: true }).last()).toHaveAttribute("href", "/checkout");
-  await expect(page.getByRole("link", { name: "How Eat Now works" })).toHaveAttribute("href", EAT_NOW.infoPath);
+  await expect(page.getByRole("link", { name: "How Take Out works" })).toHaveAttribute("href", EAT_NOW.infoPath);
   await menuLink.click();
   await expect(page).toHaveURL(EAT_NOW.menuUrl);
   await expect(page.getByRole("heading", { name: "Single-order menu" })).toBeVisible();
   expect(page.context().pages()).toHaveLength(1);
   await page.goBack();
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.getByRole("link", { name: "How Eat Now works" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "How Take Out works" })).toBeVisible();
 });
 
-test("Eat Now opens the live-menu destination without signup, personal data or cart transfer", async ({ page }) => {
+test("Take Out opens the live-menu destination without signup, personal data or cart transfer", async ({ page }) => {
   await page.goto("/eat-now?email=do-not-forward%40example.com&orderId=unverified&redirect=https://example.com");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("A little good, whenever it fits.");
   await expect(page.getByText(EAT_NOW.deliveryDetails, { exact: true })).toBeVisible();
@@ -40,7 +40,7 @@ test("Eat Now opens the live-menu destination without signup, personal data or c
   await expect(page.getByText(/Check available pickup and delivery times in the menu before ordering/)).toBeVisible();
   await expect(page.getByText(/select “One time”/)).toBeVisible();
   await expect(page.getByRole("textbox")).toHaveCount(0);
-  const link = page.getByRole("link", { name: "Open the Eat Now menu", exact: true });
+  const link = page.getByRole("link", { name: "Open the Take Out menu", exact: true });
   await expect(link).toHaveAttribute("href", EAT_NOW.menuUrl);
   await link.click();
   await expect(page).toHaveURL(EAT_NOW.menuUrl);
@@ -58,7 +58,7 @@ test("the return page provides help, not an unverified payment-success screen", 
   await expect(page).toHaveURL(/\/$/);
 });
 
-test("app delivery disclosures distinguish courier-based Eat Now from team-only meal prep", async ({ page }) => {
+test("app delivery disclosures distinguish courier-based Take Out from team-only meal prep", async ({ page }) => {
   for (const path of ["/eat-now", "/customer-agreement", "/terms"]) {
     await page.goto(path);
     await expect(page.getByText(EAT_NOW.deliveryDetails, { exact: true })).toBeVisible();
@@ -70,7 +70,7 @@ test("app delivery disclosures distinguish courier-based Eat Now from team-only 
   await page.goto("/eat-now");
   await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Uber Direct or DoorDash/);
   await expect(page.getByText(EAT_NOW.availability, { exact: true })).toBeVisible();
-  await expect(page.getByText(/Eat Now has its own courier fees and service times/)).toBeVisible();
+  await expect(page.getByText(/Take Out has its own courier fees and service times/)).toBeVisible();
 
   for (const path of ["/", "/checkout"]) {
     await page.goto(path);
@@ -82,10 +82,10 @@ test("app delivery disclosures distinguish courier-based Eat Now from team-only 
 test("meal-plan checkout and the global footer expose the single-order menu", async ({ page }) => {
   await page.goto("/checkout");
   await expect(page.getByRole("heading", { name: "Make this ritual yours." })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Order from the Eat Now menu" })).toHaveAttribute("href", EAT_NOW.menuUrl);
+  await expect(page.getByRole("link", { name: "Order from the Take Out menu" })).toHaveAttribute("href", EAT_NOW.menuUrl);
   const footer = page.getByRole("navigation", { name: "Legal and support" });
-  await expect(footer.getByRole("link", { name: "Eat Now menu", exact: true })).toHaveAttribute("href", EAT_NOW.menuUrl);
-  await footer.getByRole("link", { name: "About Eat Now" }).click();
+  await expect(footer.getByRole("link", { name: "Take Out menu", exact: true })).toHaveAttribute("href", EAT_NOW.menuUrl);
+  await footer.getByRole("link", { name: "About Take Out" }).click();
   await expect(page).toHaveURL(/\/eat-now$/);
 });
 
@@ -101,13 +101,13 @@ test("brand-led invitations keep the scheduled offer and renewal terms clear", a
   await expect(page.getByRole("group", { name: /Step 2 · Choose your bowls/ })).toBeVisible();
 });
 
-test("Eat Now stays usable without JavaScript", async ({ browser }) => {
+test("Take Out stays usable without JavaScript", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   try {
     await page.goto("http://localhost:3109/eat-now");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Open the Eat Now menu", exact: true })).toHaveAttribute("href", EAT_NOW.menuUrl);
+    await expect(page.getByRole("link", { name: "Open the Take Out menu", exact: true })).toHaveAttribute("href", EAT_NOW.menuUrl);
   } finally {
     await context.close();
   }
@@ -119,8 +119,8 @@ test("mobile and desktop layouts keep primary actions inside the viewport", asyn
     for (const path of ["/", "/eat-now"]) {
       await page.goto(path);
       const action = path === "/"
-        ? page.getByRole("link", { name: "Eat Now · Single orders", exact: true }).last()
-        : page.getByRole("link", { name: "Open the Eat Now menu", exact: true });
+        ? page.getByRole("link", { name: "Take Out · Single orders", exact: true }).last()
+        : page.getByRole("link", { name: "Open the Take Out menu", exact: true });
       const box = await action.boundingBox();
       expect(box).not.toBeNull();
       expect(box!.x).toBeGreaterThanOrEqual(0);

@@ -9,7 +9,7 @@ import { DeliveryOptions } from "@/components/sections/DeliveryOptions";
 import { CURRENT_BOWLS } from "@/lib/current-offer";
 import { EAT_NOW } from "@/lib/ordering";
 
-const title = `Eat Now — Single-order ${BRAND_NAME}`;
+const title = `Take Out — Single-order ${BRAND_NAME}`;
 const description =
   `Order single Soul Bowls™ on demand, ${EAT_NOW.days}, within about ${EAT_NOW.radiusMiles} miles of our Long Beach kitchen. ${EAT_NOW.deliveryDetails} $50 minimum; free delivery on orders over $100.`;
 
@@ -24,12 +24,12 @@ export const metadata: Metadata = {
 export default function EatNowPage() {
   return (
     <>
-      <SiteHeader cta={{ href: EAT_NOW.menuUrl, label: "Eat Now menu", short: "Order" }} />
+      <SiteHeader cta={{ href: EAT_NOW.menuUrl, label: "Take Out menu", short: "Order" }} />
       <main className="min-h-screen bg-oat">
 
         <section className="mx-auto grid w-full max-w-6xl items-center gap-8 px-5 py-10 sm:px-8 sm:py-16 lg:grid-cols-2 lg:gap-14">
           <div className="min-w-0 text-center lg:text-left">
-            <p className="text-xs font-bold tracking-[0.18em] text-clay uppercase">Eat Now · Single orders</p>
+            <p className="text-xs font-bold tracking-[0.18em] text-clay uppercase">Take Out · Single orders</p>
             <h1 className="mx-auto mt-5 max-w-[12ch] font-serif text-6xl leading-[0.95] tracking-[-0.045em] text-forest sm:text-7xl lg:mx-0">
               A little good, whenever it fits.
             </h1>
@@ -49,14 +49,14 @@ export default function EatNowPage() {
               {EAT_NOW.coverage}
             </p>
             <Button as="a" href={EAT_NOW.menuUrl} target="_self" size="lg" className="mt-7 w-full sm:w-auto">
-              Open the Eat Now menu
+              Open the Take Out menu
             </Button>
             <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-forest/65 lg:mx-0">
               Browse and order at checkout.soulgood.kitchen.
               Secure payment through Square; care from the Soul Good team.
             </p>
             <a href="#order-help" className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-forest underline underline-offset-4">
-              Already placed an Eat Now order?
+              Already placed a Take Out order?
             </a>
           </div>
           <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-lg bg-sand/35 shadow-[0_40px_70px_-45px_rgb(44_58_52/0.6)]">
@@ -109,14 +109,14 @@ export default function EatNowPage() {
         <section id="order-help" aria-labelledby="eat-now-help" className="mx-auto grid max-w-6xl gap-8 px-5 py-12 sm:px-8 sm:py-16 md:grid-cols-2">
           <div className="text-center md:text-left">
             <h2 id="eat-now-help" className="font-serif text-3xl text-forest sm:text-4xl">Already ordered?</h2>
-            <p className="mt-4 text-sm leading-7 text-forest/75">Your Square confirmation is the place to check your Eat Now order and payment details. Eat Now purchases do not appear in your Soul Good account’s weekly nourishment history.</p>
+            <p className="mt-4 text-sm leading-7 text-forest/75">Your Square confirmation is the place to check your Take Out order and payment details. Take Out purchases do not appear in your Soul Good account’s weekly nourishment history.</p>
             <p className="mt-3 text-sm leading-7 text-forest/75">For an update, a missing confirmation, or help with delivery, contact our team with the order reference from your confirmation. Do not send card details.</p>
-            <a href={`mailto:${CONTACT.email}?subject=Eat%20Now%20order%20help`} className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-forest underline underline-offset-4">Contact Soul Good</a>
+            <a href={`mailto:${CONTACT.email}?subject=Take%20Out%20order%20help`} className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-forest underline underline-offset-4">Contact Soul Good</a>
           </div>
           <div className="rounded-lg border border-forest/15 bg-card p-6 text-center sm:p-8 md:text-left">
             <h2 className="font-serif text-3xl text-forest sm:text-4xl">A ritual to come home to.</h2>
             <p className="mt-4 text-sm leading-7 text-forest/75">Make space for nourishment throughout your week with Soul Bowls™, once or weekly. {NOURISHMENT.deliveryDisclosure}</p>
-            <p className="mt-3 text-sm leading-7 text-forest/75">Weekly delivery arrives Sundays across Los Angeles and Orange County: $8.88, or free on orders over $100. Sunday pickup is free for one-time orders. Applicable tax is additional. Eat Now has its own courier fees and service times, shown at checkout.</p>
+            <p className="mt-3 text-sm leading-7 text-forest/75">Weekly delivery arrives Sundays across Los Angeles and Orange County: $8.88, or free on orders over $100. Sunday pickup is free for one-time orders. Applicable tax is additional. Take Out has its own courier fees and service times, shown at checkout.</p>
             <Button as="a" href="/checkout" variant="secondary" className="mt-5 w-full sm:w-auto">{NOURISHMENT.cta}</Button>
           </div>
           <Link href="/" className="inline-flex min-h-11 items-center justify-center text-sm font-semibold text-forest underline underline-offset-4 md:col-span-2">Back to Soul Good</Link>

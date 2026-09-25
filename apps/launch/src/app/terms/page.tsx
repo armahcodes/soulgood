@@ -6,7 +6,7 @@ import { EAT_NOW } from "@/lib/ordering";
 
 export const metadata = {
   title: `Terms of Service — ${BRAND_NAME}`,
-  description: `Terms governing Soul Bowls™ Eat Now orders and weekly meal prep operated by ${BUSINESS.legalName}.`,
+  description: `Terms governing Soul Bowls™ Take Out orders and weekly meal prep operated by ${BUSINESS.legalName}.`,
 };
 
 export default function TermsPage() {
@@ -32,8 +32,8 @@ export default function TermsPage() {
         <p>
           You must be at least 18 years old and able to enter a binding contract.
           Weekly meal-prep delivery is available only to verified addresses within
-          {` ${BUSINESS.serviceArea}`}. On-demand Eat Now delivery is limited to about
-          {` ${EAT_NOW.radiusMiles}`} miles from our Long Beach kitchen, as shown in Eat Now checkout.
+          {` ${BUSINESS.serviceArea}`}. On-demand Take Out delivery is limited to about
+          {` ${EAT_NOW.radiusMiles}`} miles from our Long Beach kitchen, as shown in Take Out checkout.
           We may decline, pause, or cancel service when an address is outside the
           service area, unsafe or inaccessible, or beyond current delivery capacity.
           If we charge an order and then determine the address is outside our service
@@ -59,8 +59,8 @@ export default function TermsPage() {
           has already been charged and committed to production.
         </p>
         <p>
-          Eat Now is our separate single-order menu at checkout.soulgood.kitchen.
-          Bowls are sold individually at the displayed menu prices. An Eat Now
+          Take Out is our separate single-order menu at checkout.soulgood.kitchen.
+          Bowls are sold individually at the displayed menu prices. A Take Out
           one-time purchase does not enroll you in a weekly meal-prep subscription.
         </p>
       </section>
@@ -73,18 +73,18 @@ export default function TermsPage() {
           sets, and the displayed base price scales by the number of sets.
           {` ${FEES.delivery.label}`}:
           {` ${FEES.delivery.disclosure}`} Sunday pickup has no fulfillment fee.
-          {` Every meal-prep and Eat Now order is subject to a ${ORDER_RULES.minimumLabel.toLowerCase()}.`}
+          {` Every meal-prep and Take Out order is subject to a ${ORDER_RULES.minimumLabel.toLowerCase()}.`}
           {` ${FEES.containerDeposit.label}`}:
           {` ${FEES.containerDeposit.disclosure}`} Order and fulfillment amounts due
           at checkout will be displayed before payment. We do not add undisclosed
           handling or service fees.
         </p>
         <p>
-          Eat Now has its own item prices, courier fees, and service availability.
-          On-demand courier fees are calculated by distance and shown in Eat Now
-          checkout; they are waived on Eat Now orders over $100. Review the applicable
-          charges, tax, and total in Eat Now checkout before paying. The meal-prep
-          delivery fee does not set Eat Now courier fees.
+          Take Out has its own item prices, courier fees, and service availability.
+          On-demand courier fees are calculated by distance and shown in Take Out
+          checkout; they are waived on Take Out orders over $100. Review the applicable
+          charges, tax, and total in Take Out checkout before paying. The meal-prep
+          delivery fee does not set Take Out courier fees.
         </p>
         <p>
           {TAX.disclosure} Tax is added to the displayed subtotal where required.
@@ -108,7 +108,7 @@ export default function TermsPage() {
           delivery is available to verified addresses in {SERVICE_AREA.weekly}, is
           scheduled for Sunday, and costs $8.88 per order, or nothing on orders over $100.
         </p>
-        <h3>Eat Now</h3>
+        <h3>Take Out</h3>
         <p>{EAT_NOW.deliveryDetails}</p>
         <p>{EAT_NOW.coverage}</p>
         <p>{EAT_NOW.availability}</p>

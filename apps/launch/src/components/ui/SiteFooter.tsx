@@ -11,8 +11,8 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
     title: "Order",
     links: [
       { href: "/checkout", label: "Weekly nourishment" },
-      { href: EAT_NOW.menuUrl, label: "Eat Now menu", external: true },
-      { href: EAT_NOW.infoPath, label: "About Eat Now" },
+      { href: EAT_NOW.menuUrl, label: "Take Out menu", external: true },
+      { href: EAT_NOW.infoPath, label: "About Take Out" },
       { href: "/quote", label: "Culinary bookings" },
     ],
   },
@@ -60,7 +60,7 @@ export function SiteFooter() {
             <p className="max-w-sm text-sm leading-relaxed text-oat/62">
               Thoughtfully prepared in Los Angeles. From our kitchen to your table,
               with care from the Soul Good team. Weekly nourishment is available
-              on Sundays; Eat Now times are shown in the menu.
+              on Sundays; Take Out times are shown in the menu.
             </p>
           </div>
 

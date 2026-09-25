@@ -5,15 +5,15 @@ import { Button } from "@/components/ui/Button";
 import { EAT_NOW } from "../ordering";
 import { FEES, fulfillmentFeeCents, NOURISHMENT, PRICING } from "../brand";
 
-describe("Eat Now navigation", () => {
-  it("distinguishes available Eat Now couriers from exclusive team meal-prep delivery without changing fees", () => {
+describe("Take Out navigation", () => {
+  it("distinguishes available Take Out couriers from exclusive team meal-prep delivery without changing fees", () => {
     for (const provider of ["Uber Direct", "DoorDash", "a Soul Good courier"])
       expect(EAT_NOW.deliveryDetails).toContain(provider);
     expect(EAT_NOW.coverage).toContain("Thursday through Sunday");
     expect(EAT_NOW.coverage).toContain("20 miles of our Long Beach kitchen");
     expect(EAT_NOW.coverage).toContain("$50 minimum");
     expect(EAT_NOW.deliveryDetails).toContain("depending on availability");
-    expect(EAT_NOW.availability).toContain("your total at Eat Now checkout before paying");
+    expect(EAT_NOW.availability).toContain("your total at Take Out checkout before paying");
     expect(NOURISHMENT.deliveryDisclosure).toContain("exclusively by the Soul Good team");
     expect(NOURISHMENT.deliveryDisclosure).toContain("not third-party couriers");
     expect(FEES.delivery.amountCents).toBe(888);
@@ -44,7 +44,7 @@ describe("Eat Now navigation", () => {
   });
 
   it("allows same-tab menu navigation while preserving existing external-link defaults", () => {
-    const menu = renderToStaticMarkup(createElement(Button, { as: "a", href: EAT_NOW.menuUrl, target: "_self" }, "Eat Now"));
+    const menu = renderToStaticMarkup(createElement(Button, { as: "a", href: EAT_NOW.menuUrl, target: "_self" }, "Take Out"));
     expect(menu).toContain('target="_self"');
     const existing = renderToStaticMarkup(createElement(Button, { as: "a", href: "https://example.com" }, "External"));
     expect(existing).toContain('target="_blank"');

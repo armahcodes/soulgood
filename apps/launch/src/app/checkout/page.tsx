@@ -52,7 +52,7 @@ export default async function CheckoutPage({
       <main className="min-h-screen bg-oat">
         <div className="border-b border-forest/12 bg-sand/25 px-5 py-3 text-center text-sm leading-6 text-forest/75">
           A bowl for today?{" "}
-          <a href={EAT_NOW.menuUrl} className="inline-flex min-h-11 items-center font-semibold text-forest underline underline-offset-4">Order from the Eat Now menu</a>
+          <a href={EAT_NOW.menuUrl} className="inline-flex min-h-11 items-center font-semibold text-forest underline underline-offset-4">Order from the Take Out menu</a>
           . Here, build your weekly nourishment order.
         </div>
 

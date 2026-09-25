@@ -45,7 +45,7 @@ export function DeliveryOptions({ showEatNowAction = true }: { showEatNowAction?
         </article>
 
         <article className="rounded-lg border border-clay/25 bg-card p-6 sm:p-7">
-          <p className="text-[0.65rem] font-bold tracking-[0.18em] text-clay uppercase">Eat Now · On demand</p>
+          <p className="text-[0.65rem] font-bold tracking-[0.18em] text-clay uppercase">Take Out · On demand</p>
           <h3 className="mt-2 text-3xl leading-tight tracking-[-0.02em] text-forest">A bowl when you want it.</h3>
           <p className="mt-3 text-sm leading-6 text-forest/72">
             Order single bowls Thursday through Sunday. An on-demand courier, through partners like
@@ -61,7 +61,7 @@ export function DeliveryOptions({ showEatNowAction = true }: { showEatNowAction?
           </ul>
           {showEatNowAction ? (
             <Button as="a" href={EAT_NOW.menuUrl} target="_self" variant="secondary" className="mt-6 w-full sm:w-auto">
-              See the Eat Now menu
+              See the Take Out menu
             </Button>
           ) : null}
         </article>
@@ -71,7 +71,7 @@ export function DeliveryOptions({ showEatNowAction = true }: { showEatNowAction?
         <DeliveryMap />
         <p className="mt-3 text-xs leading-5 text-forest/60">
           Areas are approximate. Weekly delivery addresses are verified at checkout; on-demand
-          coverage and courier fees depend on your exact address and are shown in Eat Now checkout.
+          coverage and courier fees depend on your exact address and are shown in Take Out checkout.
         </p>
       </Reveal>
     </div>
