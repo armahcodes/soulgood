@@ -18,10 +18,10 @@ export function BrandFooter({ className }: BrandFooterProps) {
         className,
       )}
     >
-      <p className="text-xs font-medium tracking-[0.22em] text-sage">
+      <p className="text-xs font-medium tracking-[0.22em] text-sage-ink">
         {TAGLINE}
       </p>
-      <p className="text-xs tracking-wide text-forest/55">
+      <p className="text-xs tracking-wide text-forest/72">
         {BRAND_NAME} · Crafted by {FOUNDER}
       </p>
     </footer>

@@ -117,7 +117,7 @@ export function SiteHeader({
                   className={cn(
                     "relative inline-flex min-h-11 items-center gap-1 rounded-md px-3.5 text-[0.72rem] font-medium tracking-[0.1em] uppercase transition-colors",
                     "after:absolute after:inset-x-3.5 after:bottom-2 after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 hover:after:scale-x-100",
-                    isActive(link.href) ? "text-forest after:scale-x-100" : link.external ? "text-clay" : "text-forest/70 hover:text-forest",
+                    isActive(link.href) ? "text-forest after:scale-x-100" : link.external ? "text-clay-ink" : "text-forest/72 hover:text-forest",
                   )}
                 >
                   {link.label}
@@ -203,9 +203,9 @@ function MobileMenu({
               >
                 {link.label}
                 {link.external ? (
-                  <ArrowUpRight className="size-5 text-clay" aria-hidden />
+                  <ArrowUpRight className="size-5 text-clay-ink" aria-hidden />
                 ) : (
-                  <span aria-hidden className="font-sans text-base text-clay">→</span>
+                  <span aria-hidden className="font-sans text-base text-clay-ink">→</span>
                 )}
               </NavItem>
             </li>
@@ -230,7 +230,7 @@ function MobileMenu({
             {NOURISHMENT.cta}
           </Button>
         </div>
-        <p className="mt-auto pt-10 text-center text-xs leading-5 text-forest/60">
+        <p className="mt-auto pt-10 text-center text-xs leading-5 text-forest/72">
           Weekly delivery Sundays · On demand Thursday–Sunday
         </p>
       </nav>

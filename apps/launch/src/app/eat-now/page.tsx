@@ -29,7 +29,7 @@ export default function EatNowPage() {
 
         <section className="mx-auto grid w-full max-w-6xl items-center gap-8 px-5 py-10 sm:px-8 sm:py-16 lg:grid-cols-2 lg:gap-14">
           <div className="min-w-0 text-center lg:text-left">
-            <p className="text-xs font-medium tracking-[0.18em] text-clay uppercase">Take Out · Single orders</p>
+            <p className="text-xs font-medium tracking-[0.18em] text-clay-ink uppercase">Take Out · Single orders</p>
             <h1 className="mx-auto mt-5 max-w-[12ch] font-serif text-6xl leading-[1.02] tracking-[0.01em] text-forest sm:text-7xl lg:mx-0">
               A little good, whenever it fits.
             </h1>
@@ -51,7 +51,7 @@ export default function EatNowPage() {
             <Button as="a" href={EAT_NOW.menuUrl} target="_self" size="lg" className="mt-7 w-full sm:w-auto">
               Open the Take Out menu
             </Button>
-            <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-forest/65 lg:mx-0">
+            <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-forest/72 lg:mx-0">
               Browse and order at checkout.soulgood.kitchen.
               Secure payment through Square; care from the Soul Good team.
             </p>
@@ -102,7 +102,7 @@ export default function EatNowPage() {
                 <p className="mt-3 text-sm leading-6 text-forest/75">Square confirms the order after checkout. Our team prepares your food; an available courier partner or Soul Good courier brings it to you. Keep your order reference and contact Soul Good if you need help.</p>
               </li>
             </ol>
-            <p className="mt-8 text-center text-sm leading-6 text-forest/70">Made with care, on our kitchen’s schedule. Check available pickup and delivery times in the menu before ordering.</p>
+            <p className="mt-8 text-center text-sm leading-6 text-forest/80">Made with care, on our kitchen’s schedule. Check available pickup and delivery times in the menu before ordering.</p>
           </div>
         </section>
 

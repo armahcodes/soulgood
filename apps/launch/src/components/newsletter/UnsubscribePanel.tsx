@@ -37,7 +37,7 @@ export function UnsubscribePanel({ token }: { token?: string }) {
   if (status === "done")
     return (
       <p role="status" className="flex items-start gap-3 rounded-lg bg-sage/10 p-4 text-sm leading-6 text-forest">
-        <Check className="mt-1 size-4 shrink-0 text-sage" aria-hidden />
+        <Check className="mt-1 size-4 shrink-0 text-sage-ink" aria-hidden />
         <span>
           <strong className="font-semibold">You’re unsubscribed.</strong> You won’t receive the newsletter anymore. Order,
           account, and booking emails you request will still arrive.
@@ -65,7 +65,7 @@ export function UnsubscribePanel({ token }: { token?: string }) {
         Unsubscribe from the newsletter
       </Button>
       {error ? (
-        <p role="alert" className="text-sm text-clay">
+        <p role="alert" className="text-sm text-clay-ink">
           {error}
         </p>
       ) : null}

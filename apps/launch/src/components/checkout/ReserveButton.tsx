@@ -140,7 +140,7 @@ declare global {
 }
 
 const INPUT_CLASS =
-  "min-h-[50px] w-full rounded-md border border-forest/18 bg-white/80 px-4 text-base text-forest transition-[border-color,box-shadow] placeholder:text-forest/35 focus:border-forest/60 focus:outline-none focus:ring-4 focus:ring-sage/20 disabled:bg-forest/5 disabled:text-forest/55";
+  "min-h-[50px] w-full rounded-md border border-forest/18 bg-white/80 px-4 text-base text-forest transition-[border-color,box-shadow] placeholder:text-forest/35 focus:border-forest/60 focus:outline-none focus:ring-4 focus:ring-sage/20 disabled:bg-forest/5 disabled:text-forest/72";
 
 const STEP_CARD =
   "grid scroll-mt-40 gap-3 rounded-lg border border-forest/12 bg-card p-4 sm:p-6 [&>legend+*]:clear-both";
@@ -150,7 +150,7 @@ const OPTION_CARD =
 
 function StepLegend({ number, title }: { number?: number; title: string }) {
   return (
-    <legend className="float-left mb-2 flex w-full items-center gap-2.5 text-xs font-medium tracking-[0.12em] text-forest/70 uppercase">
+    <legend className="float-left mb-2 flex w-full items-center gap-2.5 text-xs font-medium tracking-[0.12em] text-forest/72 uppercase">
       {number ? (
         <>
           <span aria-hidden="true" className="flex size-6 shrink-0 items-center justify-center rounded-full bg-forest text-[0.65rem] text-oat">
@@ -1056,7 +1056,7 @@ export function ReserveButton({
     const labelPrefix = target === "billing" ? "Billing" : "Delivery";
     return (
       <div className="grid gap-3">
-        <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
+        <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/72 uppercase">
           {labelPrefix} street address
           <input
             autoComplete={`${prefix} address-line1`}
@@ -1068,7 +1068,7 @@ export function ReserveButton({
             }
           />
         </label>
-        <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
+        <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/72 uppercase">
           Apartment or suite{" "}
           <span className="font-normal normal-case">(optional)</span>
           <input
@@ -1082,7 +1082,7 @@ export function ReserveButton({
           />
         </label>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-[1fr_72px_96px] sm:gap-2">
-          <label className="col-span-2 grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase sm:col-span-1">
+          <label className="col-span-2 grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/72 uppercase sm:col-span-1">
             City
             <input
               autoComplete={`${prefix} address-level2`}
@@ -1094,7 +1094,7 @@ export function ReserveButton({
               }
             />
           </label>
-          <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
+          <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/72 uppercase">
             State
             {target === "delivery" ? (
               <input className={INPUT_CLASS} disabled value="CA" />
@@ -1116,7 +1116,7 @@ export function ReserveButton({
               </select>
             )}
           </label>
-          <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
+          <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/72 uppercase">
             ZIP
             <input
               autoComplete={`${prefix} postal-code`}
@@ -1203,7 +1203,7 @@ export function ReserveButton({
               <p className="font-serif text-2xl text-forest">
                 {peopleCount} {peopleCount === 1 ? "person" : "people"}
               </p>
-              <p className="mt-1 text-xs leading-relaxed text-forest/55">
+              <p className="mt-1 text-xs leading-relaxed text-forest/72">
                 For you, or the people sharing your table. One checkout for everyone.
               </p>
             </div>
@@ -1228,7 +1228,7 @@ export function ReserveButton({
           </div>
 
           <div className="border-t border-forest/10 pt-4">
-            <p className="text-xs font-medium tracking-[0.1em] text-forest/55 uppercase">
+            <p className="text-xs font-medium tracking-[0.1em] text-forest/72 uppercase">
               Meals per person, per day
             </p>
             <div className="mt-3 grid grid-cols-3 gap-2">
@@ -1249,7 +1249,7 @@ export function ReserveButton({
                       "min-h-12 rounded-md border px-2 text-sm font-bold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-35",
                       mealsPerDay === meals
                         ? "border-forest bg-forest text-oat"
-                        : "border-forest/15 bg-oat/70 text-forest/70 hover:border-forest/40",
+                        : "border-forest/15 bg-oat/70 text-forest/72 hover:border-forest/40",
                     )}
                   >
                     {meals} {meals === 1 ? "meal" : "meals"}
@@ -1259,7 +1259,7 @@ export function ReserveButton({
             </div>
           </div>
 
-          <p className="border-t border-forest/10 pt-4 text-sm leading-relaxed text-forest/68">
+          <p className="border-t border-forest/10 pt-4 text-sm leading-relaxed text-forest/72">
             <strong className="text-forest">
               {peopleCount} × {mealsPerDay} × 5 days = {targetBowls} bowls
             </strong>
@@ -1296,7 +1296,7 @@ export function ReserveButton({
                       <strong className="block text-forest">
                         {option.label}
                       </strong>
-                      <span className="mt-1 block leading-relaxed text-forest/65">
+                      <span className="mt-1 block leading-relaxed text-forest/72">
                         {type === "weekly" && fulfillmentMethod === "pickup"
                           ? "Weekly plans currently require delivery. One-time pickup is available."
                           : option.disclosure}
@@ -1364,7 +1364,7 @@ export function ReserveButton({
         <fieldset id="step-details" className={STEP_CARD}>
           <StepLegend number={4} title="Your details" />
           <div className="grid gap-3 sm:grid-cols-2">
-            <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
+            <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/72 uppercase">
               First name
               <input
                 autoComplete="given-name"
@@ -1376,7 +1376,7 @@ export function ReserveButton({
                 }
               />
             </label>
-            <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
+            <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/72 uppercase">
               Last name
               <input
                 autoComplete="family-name"
@@ -1389,7 +1389,7 @@ export function ReserveButton({
               />
             </label>
           </div>
-          <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
+          <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/72 uppercase">
             Email
             <input
               autoComplete="email"
@@ -1401,7 +1401,7 @@ export function ReserveButton({
               onChange={(event) => updateContact("email", event.target.value)}
             />
           </label>
-          <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/58 uppercase">
+          <label className="grid gap-2 text-xs font-medium tracking-[0.08em] text-forest/72 uppercase">
             Phone
             <input
               autoComplete="tel"
@@ -1433,7 +1433,7 @@ export function ReserveButton({
                 <strong className="block text-forest">
                   Use a different billing address
                 </strong>
-                <span className="mt-1 block text-xs leading-relaxed text-forest/55">
+                <span className="mt-1 block text-xs leading-relaxed text-forest/72">
                   Select this when the payment method is billed somewhere other
                   than the delivery address.
                 </span>
@@ -1451,7 +1451,7 @@ export function ReserveButton({
 
         <fieldset className={STEP_CARD}>
           <StepLegend title="Cardholder name" />
-          <label className="flex items-start gap-3 text-sm text-forest/70">
+          <label className="flex items-start gap-3 text-sm text-forest/72">
             <input
               type="checkbox"
               className="mt-0.5 h-5 w-5 accent-forest"
@@ -1492,7 +1492,7 @@ export function ReserveButton({
               </label>
             </div>
           )}
-          <p className="text-xs text-forest/55">
+          <p className="text-xs text-forest/72">
             US billing addresses are supported. Delivery eligibility is checked
             separately.
           </p>
@@ -1517,7 +1517,7 @@ export function ReserveButton({
             ref={errorRef}
             role="alert"
             tabIndex={-1}
-            className="rounded-lg border border-clay/35 bg-clay/8 px-4 py-3 text-sm leading-relaxed text-clay outline-none"
+            className="rounded-lg border border-clay/35 bg-clay/8 px-4 py-3 text-sm leading-relaxed text-clay-ink outline-none"
           >
             {error}
           </p>
@@ -1525,18 +1525,18 @@ export function ReserveButton({
 
         <dl
           id="step-total"
-          className="grid scroll-mt-40 gap-3 rounded-lg border border-forest/12 bg-card p-5 text-sm text-forest/70 sm:p-6"
+          className="grid scroll-mt-40 gap-3 rounded-lg border border-forest/12 bg-card p-5 text-sm text-forest/72 sm:p-6"
         >
           <div className="-mt-1 mb-1 flex items-center justify-between border-b border-dashed border-forest/15 pb-3">
             <dt className="font-serif text-xl text-forest">Order summary</dt>
-            <dd className="text-xs font-medium tracking-[0.1em] text-forest/60 uppercase">
+            <dd className="text-xs font-medium tracking-[0.1em] text-forest/72 uppercase">
               {bowlSelectionTotal(bowlSelection)} of {targetBowls} bowls
             </dd>
           </div>
           <div className="flex justify-between gap-4">
             <dt>
               {mealSets} {mealSets === 1 ? "set" : "sets"} of five bowls
-              <span className="block text-xs text-forest/50">
+              <span className="block text-xs text-forest/72">
                 {peopleCount} {peopleCount === 1 ? "person" : "people"} ·{" "}
                 {mealsPerDay} {mealsPerDay === 1 ? "meal" : "meals"}/day
               </span>
@@ -1549,7 +1549,7 @@ export function ReserveButton({
             <div className="flex justify-between gap-4">
               <dt>
                 Salads &amp; snacks
-                <span className="block text-xs text-forest/50">
+                <span className="block text-xs text-forest/72">
                   {extrasCount(extras)} {extrasCount(extras) === 1 ? "item" : "items"}
                   {purchaseType === "weekly" ? " · every week" : ""}
                 </span>
@@ -1569,7 +1569,7 @@ export function ReserveButton({
             <dt>
               California sales tax
               {quote && (
-                <span className="block text-xs text-forest/50">
+                <span className="block text-xs text-forest/72">
                   {quote.percentage}% · {quote.jurisdiction}
                 </span>
               )}
@@ -1581,7 +1581,7 @@ export function ReserveButton({
           <div className="flex items-end justify-between gap-4 border-t border-forest/10 pt-4">
             <dt className="font-semibold text-forest">
               {purchaseType === "weekly" ? "Weekly charge" : "Total charge"}
-              <span className="block text-xs font-normal text-forest/50">
+              <span className="block text-xs font-normal text-forest/72">
                 {purchaseType === "weekly"
                   ? "Renews every 7 days until canceled"
                   : "Charged once · no automatic renewal"}
@@ -1598,7 +1598,7 @@ export function ReserveButton({
         </dl>
 
         <div id="step-pay" className="scroll-mt-40">
-          <p className="mb-3 flex items-center gap-2.5 text-xs font-medium tracking-[0.12em] text-forest/70 uppercase">
+          <p className="mb-3 flex items-center gap-2.5 text-xs font-medium tracking-[0.12em] text-forest/72 uppercase">
             <span aria-hidden="true" className="flex size-6 items-center justify-center rounded-full bg-forest text-[0.65rem] text-oat">
               5
             </span>
@@ -1610,12 +1610,12 @@ export function ReserveButton({
             className="min-h-[90px] rounded-md border border-forest/15 bg-white p-3"
           />
           {!configured && (
-            <p className="mt-2 text-sm text-clay">
+            <p className="mt-2 text-sm text-clay-ink">
               Secure payment is currently unavailable. Please try again later.
             </p>
           )}
           {configured && !cardReady && !error && (
-            <p className="mt-2 text-xs text-forest/50">
+            <p className="mt-2 text-xs text-forest/72">
               Loading Square’s secure card form…
             </p>
           )}
@@ -1666,7 +1666,7 @@ export function ReserveButton({
             .
           </span>
         </label>
-        <p className="-mt-2 text-xs leading-5 text-forest/60">
+        <p className="-mt-2 text-xs leading-5 text-forest/72">
           We use your contact, address, and order details to prepare and deliver your food, as described in our{" "}
           <Link href="/privacy" className="underline underline-offset-2">Privacy Policy</Link>. Card details go directly to Square.
         </p>
@@ -1678,7 +1678,7 @@ export function ReserveButton({
           >
             <div className="flex items-center gap-3" aria-hidden="true">
               <span className="h-px flex-1 bg-forest/12" />
-              <span className="text-xs font-medium tracking-[0.1em] text-forest/50 uppercase">
+              <span className="text-xs font-medium tracking-[0.1em] text-forest/72 uppercase">
                 Express checkout
               </span>
               <span className="h-px flex-1 bg-forest/12" />
@@ -1707,29 +1707,29 @@ export function ReserveButton({
               <div id="google-pay-button" className="min-h-12 w-full" />
             </div>
             {!quote ? (
-              <p className="text-center text-xs leading-relaxed text-forest/55">
+              <p className="text-center text-xs leading-relaxed text-forest/72">
                 Calculate your total to check this device for Apple Pay or
                 Google Pay.
               </p>
             ) : !walletCheckComplete ? (
-              <p className="text-center text-xs leading-relaxed text-forest/55">
+              <p className="text-center text-xs leading-relaxed text-forest/72">
                 Checking this device for Apple Pay and Google Pay…
               </p>
             ) : !applePayReady && !googlePayReady ? (
-              <p className="text-center text-xs leading-relaxed text-forest/60">
+              <p className="text-center text-xs leading-relaxed text-forest/72">
                 {walletError
                   ? "Digital wallets could not load. This may be a device, connection, or configuration issue. You can continue by card."
                   : "This device did not offer a digital wallet. You can continue by card or use a supported device with a wallet configured."}
               </p>
             ) : !walletPaymentReady ? (
-              <p className="text-center text-xs leading-relaxed text-forest/55">
+              <p className="text-center text-xs leading-relaxed text-forest/72">
                 Complete your details, calculate the total, and accept the terms
                 to use express checkout.
               </p>
             ) : null}
           </div>
         ) : (
-          <p className="rounded-lg border border-forest/12 bg-oat/70 px-4 py-3 text-xs leading-relaxed text-forest/65">
+          <p className="rounded-lg border border-forest/12 bg-oat/70 px-4 py-3 text-xs leading-relaxed text-forest/72">
             Weekly plans require a card because Apple Pay and Google Pay cannot
             be saved for automatic renewal through Square.
           </p>
@@ -1755,7 +1755,7 @@ export function ReserveButton({
             : `${purchaseType === "weekly" ? "Start weekly Soul Bowls™" : "Pay by card"}${quote ? ` — ${formatCents(quote.totalCents)}` : ""}`}
         </Button>
 
-        <p className="text-xs leading-relaxed text-forest/50">
+        <p className="text-xs leading-relaxed text-forest/72">
           Secure{" "}
           {purchaseType === "weekly"
             ? "card storage and recurring billing are"

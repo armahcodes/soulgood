@@ -52,11 +52,11 @@ export function PlanPicker() {
     <div className="grid overflow-hidden rounded-lg border border-forest/12 bg-card shadow-[0_30px_60px_-40px_rgb(44_58_52/0.45)] lg:grid-cols-[1.05fr_0.95fr]">
       <div className="flex flex-col gap-8 p-6 sm:p-10">
         <div>
-          <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase">Make it yours</p>
+          <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase">Make it yours</p>
           <h2 className="mt-3 text-5xl leading-none font-normal tracking-[0.01em] text-forest sm:text-6xl">
             Nourishing meals, ready when you are.
           </h2>
-          <p className="mt-4 max-w-md text-sm leading-6 text-forest/70">
+          <p className="mt-4 max-w-md text-sm leading-6 text-forest/72">
             Wholesome, chef-made bowls for your workweek, your family, or the whole table. Order once,
             or let a weekly plan take care of Sundays.
           </p>
@@ -64,13 +64,13 @@ export function PlanPicker() {
 
         <div className="grid gap-5 sm:grid-cols-2">
           <fieldset className="grid gap-2">
-            <legend className="mb-2 text-[0.65rem] font-medium tracking-[0.18em] text-forest/60 uppercase">How often</legend>
+            <legend className="mb-2 text-[0.65rem] font-medium tracking-[0.18em] text-forest/72 uppercase">How often</legend>
             <SegmentedControl label="How often" options={PURCHASE_CHOICES} value={purchase} onValueChange={choosePurchase} className="w-full" />
           </fieldset>
           <fieldset className="grid gap-2">
-            <legend className="mb-2 text-[0.65rem] font-medium tracking-[0.18em] text-forest/60 uppercase">Sunday service</legend>
+            <legend className="mb-2 text-[0.65rem] font-medium tracking-[0.18em] text-forest/72 uppercase">Sunday service</legend>
             {purchase === "weekly" ? (
-              <p className="flex min-h-[3.25rem] items-center rounded-lg border border-dashed border-forest/20 px-4 text-xs leading-5 text-forest/70">
+              <p className="flex min-h-[3.25rem] items-center rounded-lg border border-dashed border-forest/20 px-4 text-xs leading-5 text-forest/72">
                 Weekly plans are delivered by our team.
               </p>
             ) : (
@@ -82,7 +82,7 @@ export function PlanPicker() {
         <ul className="grid gap-3 text-sm leading-6 text-forest/78">
           {INCLUDED.map((item) => (
             <li key={item} className="flex gap-3">
-              <Check className="mt-1 size-4 shrink-0 text-sage" aria-hidden />
+              <Check className="mt-1 size-4 shrink-0 text-sage-ink" aria-hidden />
               {item}
             </li>
           ))}

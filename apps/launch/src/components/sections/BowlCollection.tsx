@@ -91,11 +91,11 @@ export function BowlCollection() {
     <>
       <div className="mb-6 grid gap-3">
         <div className="flex items-center justify-between gap-4">
-          <p className="flex items-center gap-2 text-[0.68rem] font-medium tracking-[0.14em] text-forest/65 uppercase">
+          <p className="flex items-center gap-2 text-[0.68rem] font-medium tracking-[0.14em] text-forest/72 uppercase">
             <SlidersHorizontal className="size-3.5" aria-hidden />
             Filter by label
           </p>
-          <p className="text-xs text-forest/65" aria-live="polite">
+          <p className="text-xs text-forest/72" aria-live="polite">
             {visible.length} {visible.length === 1 ? "bowl" : "bowls"}
             {active.size ? (
               <button
@@ -127,7 +127,7 @@ export function BowlCollection() {
                 <span
                   className={cn(
                     "flex h-6 min-w-6 items-center justify-center rounded-full px-1.5 text-[0.7rem] tabular-nums",
-                    pressed ? "bg-oat/20 text-oat" : "bg-forest/8 text-forest/70",
+                    pressed ? "bg-oat/20 text-oat" : "bg-forest/8 text-forest/72",
                   )}
                 >
                   {count}
@@ -196,22 +196,22 @@ export function BowlCollection() {
                 </span>
                 <span className="block pt-5">
                   <span className="block font-serif text-[1.7rem] leading-[1.02] tracking-[0.01em] text-forest">{bowl.name}</span>
-                  <span className="mt-3 line-clamp-2 block text-sm leading-6 text-forest/68">{bowl.ingredients}</span>
+                  <span className="mt-3 line-clamp-2 block text-sm leading-6 text-forest/72">{bowl.ingredients}</span>
                   <span className="mt-4 flex flex-wrap gap-1.5">
                     {bowl.dietary.map((tag) => (
-                      <span key={tag} className="rounded-md border border-forest/12 px-2 py-1 text-[0.65rem] font-medium tracking-[0.06em] text-forest/70 uppercase">
+                      <span key={tag} className="rounded-md border border-forest/12 px-2 py-1 text-[0.65rem] font-medium tracking-[0.06em] text-forest/72 uppercase">
                         {tag}
                       </span>
                     ))}
                   </span>
-                  {bowl.allergen ? <span className="mt-3 block text-xs font-semibold text-clay">{bowl.allergen}</span> : null}
+                  {bowl.allergen ? <span className="mt-3 block text-xs font-semibold text-clay-ink">{bowl.allergen}</span> : null}
                 </span>
               </button>
             </motion.article>
           ))}
         </AnimatePresence>
         {visible.length === 0 ? (
-          <p className="w-full py-10 text-center text-sm text-forest/70 lg:col-span-3">
+          <p className="w-full py-10 text-center text-sm text-forest/72 lg:col-span-3">
             No bowl matches all of those labels.{" "}
             <button type="button" onClick={() => setActive(new Set())} className="font-semibold text-forest underline underline-offset-4">
               Clear filters
@@ -219,7 +219,7 @@ export function BowlCollection() {
           </p>
         ) : null}
       </div>
-      <p className="mt-2 text-xs leading-5 text-forest/60">
+      <p className="mt-2 text-xs leading-5 text-forest/72">
         Filters use current label information. Our kitchen handles other major allergens and cross-contact can occur.
       </p>
 

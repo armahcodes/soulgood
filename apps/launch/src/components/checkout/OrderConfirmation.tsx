@@ -28,7 +28,7 @@ function StatusSeal({ pending }: { pending: boolean }) {
       initial={reduced ? false : { scale: 0.6, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      className={`relative mb-8 flex size-20 items-center justify-center rounded-full ${pending ? "bg-gold/25 text-forest" : "bg-sage text-oat"}`}
+      className={`relative mb-8 flex size-20 items-center justify-center rounded-full ${pending ? "bg-gold/25 text-forest" : "bg-sage-ink text-oat"}`}
     >
       <span aria-hidden className={`absolute inset-0 rounded-full ${pending ? "" : "motion-safe:animate-ping bg-sage/30 [animation-iteration-count:2]"}`} />
       <motion.span
@@ -101,13 +101,13 @@ export function OrderConfirmation() {
         <div className="mb-8 flex size-20 items-center justify-center rounded-full bg-forest">
           <Logo size={42} title="" variant="cream" />
         </div>
-        <p className="mb-5 text-xs font-medium tracking-[0.18em] text-clay uppercase">
+        <p className="mb-5 text-xs font-medium tracking-[0.18em] text-clay-ink uppercase">
           Confirmation unavailable
         </p>
         <h1 className="max-w-[12ch] text-5xl leading-[1.02] font-normal tracking-[0.01em] text-forest sm:text-7xl">
           Let&rsquo;s find your order.
         </h1>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/68">
+        <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/72">
           This tab does not have a completed checkout to display. If you already
           paid, sign in with the email used at checkout to see the order and its
           Square receipt. You can also check your confirmation email.
@@ -140,7 +140,7 @@ export function OrderConfirmation() {
   return (
     <section className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center px-5 py-12 text-center sm:px-8 sm:py-16">
       <StatusSeal pending={pending} />
-      <p className="mb-5 text-xs font-medium tracking-[0.18em] text-clay uppercase">
+      <p className="mb-5 text-xs font-medium tracking-[0.18em] text-clay-ink uppercase">
         {confirmation.paymentPending ||
         confirmation.status === "PENDING_PAYMENT"
           ? "Plan enrolled · payment pending"
@@ -154,7 +154,7 @@ export function OrderConfirmation() {
           ? "Your plan is enrolled."
           : "Your bowls are confirmed."}
       </h1>
-      <p className="mt-6 max-w-2xl text-lg leading-relaxed text-forest/68">
+      <p className="mt-6 max-w-2xl text-lg leading-relaxed text-forest/72">
         {confirmation.paymentPending ||
         confirmation.status === "PENDING_PAYMENT"
           ? "Square is processing your first invoice. This is not a payment receipt. We’ll confirm your bowls after payment clears. Check your account for the latest status."
@@ -164,7 +164,7 @@ export function OrderConfirmation() {
       <section className="mt-10 w-full overflow-hidden rounded-lg border border-forest/12 bg-card p-6 text-left shadow-[0_30px_60px_-45px_rgb(44_58_52/0.5)] sm:p-8">
         <div className="flex flex-col justify-between gap-5 border-b border-forest/10 pb-6 sm:flex-row sm:items-start">
           <div>
-            <p className="text-xs font-medium tracking-[0.16em] text-clay uppercase">
+            <p className="text-xs font-medium tracking-[0.16em] text-clay-ink uppercase">
               {weekly ? "Weekly plan" : "One-time order"}
             </p>
             <p className="mt-2 font-serif text-3xl text-forest">
@@ -174,7 +174,7 @@ export function OrderConfirmation() {
               {confirmation.mealsPerDay}{" "}
               {confirmation.mealsPerDay === 1 ? "meal" : "meals"}/day
             </p>
-            <p className="mt-2 text-xs text-forest/50">
+            <p className="mt-2 text-xs text-forest/72">
               Order {orderReference}
             </p>
           </div>
@@ -190,7 +190,7 @@ export function OrderConfirmation() {
 
         <div className="grid gap-7 pt-6 md:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <p className="text-xs font-medium tracking-[0.12em] text-forest/55 uppercase">
+            <p className="text-xs font-medium tracking-[0.12em] text-forest/72 uppercase">
               Your chosen bowls
             </p>
             <ul className="mt-4 grid divide-y divide-forest/8">
@@ -213,7 +213,7 @@ export function OrderConfirmation() {
             </ul>
             {confirmation.extras?.length ? (
               <>
-                <p className="mt-6 text-xs font-medium tracking-[0.12em] text-forest/55 uppercase">Salads &amp; snacks</p>
+                <p className="mt-6 text-xs font-medium tracking-[0.12em] text-forest/72 uppercase">Salads &amp; snacks</p>
                 <ul className="mt-3 grid divide-y divide-forest/8">
                   {confirmation.extras.map((line, index) => {
                     const extra = findExtra(line.id);
@@ -227,7 +227,7 @@ export function OrderConfirmation() {
                           ) : null}
                           <span className="min-w-0">
                             <span className="block font-serif text-lg leading-tight text-forest">{extra?.name ?? line.id}</span>
-                            {describeExtraOptions(line) ? <span className="block text-xs text-forest/60">{describeExtraOptions(line)}</span> : null}
+                            {describeExtraOptions(line) ? <span className="block text-xs text-forest/72">{describeExtraOptions(line)}</span> : null}
                           </span>
                         </span>
                         <span className="shrink-0 rounded-full bg-forest/6 px-2.5 py-1 text-xs font-bold whitespace-nowrap text-forest tabular-nums">× {line.quantity}</span>
@@ -239,7 +239,7 @@ export function OrderConfirmation() {
             ) : null}
           </div>
 
-          <dl className="grid content-start gap-3 text-sm text-forest/62">
+          <dl className="grid content-start gap-3 text-sm text-forest/72">
             <div className="flex justify-between gap-4">
               <dt>Fulfillment</dt>
               <dd className="font-semibold text-forest">
@@ -266,7 +266,7 @@ export function OrderConfirmation() {
                   href={confirmation.receiptUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-semibold text-clay underline underline-offset-4"
+                  className="font-semibold text-clay-ink underline underline-offset-4"
                 >
                   View Square receipt
                 </a>
@@ -291,7 +291,7 @@ export function OrderConfirmation() {
         ))}
       </ol>
 
-      <div className="mt-8 max-w-3xl rounded-lg border border-forest/12 bg-card/70 p-5 text-sm leading-relaxed text-forest/70">
+      <div className="mt-8 max-w-3xl rounded-lg border border-forest/12 bg-card/70 p-5 text-sm leading-relaxed text-forest/72">
         {weekly
           ? "Your plan renews every seven days until canceled."
           : "This order is charged once and does not renew automatically."}{" "}
@@ -339,7 +339,7 @@ export function OrderConfirmation() {
           Return home
         </Button>
       </div>
-      <p className="mt-4 text-xs leading-relaxed text-forest/50">
+      <p className="mt-4 text-xs leading-relaxed text-forest/72">
         Repeat orders open as one-time purchases. You can review the quantity,
         mix, fulfillment, and total before paying.
       </p>

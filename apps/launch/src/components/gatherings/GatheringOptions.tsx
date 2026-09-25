@@ -68,19 +68,19 @@ export function GatheringOptions() {
             ) : null}
           </div>
           <div className="flex flex-1 flex-col p-6 sm:p-8">
-            <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay uppercase">{option.eyebrow}</p>
+            <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay-ink uppercase">{option.eyebrow}</p>
             <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
               <h3 className="font-serif text-3xl leading-none tracking-[0.01em] text-forest sm:text-4xl">{option.name}</h3>
               <p className="text-forest">
                 <span className="font-serif text-3xl tracking-[0.01em]">{option.price}</span>{" "}
-                <span className="text-sm text-forest/65">{option.unit}</span>
+                <span className="text-sm text-forest/72">{option.unit}</span>
               </p>
             </div>
             <p className="mt-3 text-sm leading-6 text-forest/72">{option.blurb}</p>
             <ul className="mt-5 grid gap-2.5 border-t border-forest/10 pt-5">
               {option.points.map((point) => (
                 <li key={point} className="flex items-start gap-3 text-sm leading-6 text-forest/80">
-                  <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-sage/15 text-sage">
+                  <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-sage/15 text-sage-ink">
                     <Check className="size-3" aria-hidden />
                   </span>
                   {point}

@@ -43,7 +43,7 @@ export function MenuJumpNav() {
               aria-current={active === section.id ? "true" : undefined}
               className={cn(
                 "inline-flex min-h-10 items-center rounded-full px-4 text-sm font-semibold whitespace-nowrap transition-colors duration-200",
-                active === section.id ? "bg-forest text-oat" : "text-forest/70 hover:bg-forest/5 hover:text-forest",
+                active === section.id ? "bg-forest text-oat" : "text-forest/72 hover:bg-forest/5 hover:text-forest",
               )}
             >
               {section.label}

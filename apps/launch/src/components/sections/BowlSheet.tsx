@@ -119,7 +119,7 @@ export function BowlSheet({ bowl, onClose }: { bowl: CurrentBowl | null; onClose
             </div>
 
             <div className="px-5 pt-5 md:p-8">
-              <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay uppercase">{bowl.serving} · 32 oz jar</p>
+              <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay-ink uppercase">{bowl.serving} · 32 oz jar</p>
               <h2 id="bowl-sheet-title" className="mt-2 text-4xl leading-none tracking-[0.01em] text-forest">{bowl.name}</h2>
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {bowl.dietary.map((tag) => (
@@ -131,27 +131,27 @@ export function BowlSheet({ bowl, onClose }: { bowl: CurrentBowl | null; onClose
 
               <dl className="mt-6 grid gap-4 text-sm leading-6">
                 <div>
-                  <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/60 uppercase">What’s inside</dt>
+                  <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/72 uppercase">What’s inside</dt>
                   <dd className="mt-1 text-forest/80">{bowl.ingredients}</dd>
                 </div>
                 <div>
-                  <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/60 uppercase">By food group</dt>
+                  <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/72 uppercase">By food group</dt>
                   <dd className="mt-2">
                     <FoodGroupList items={BOWL_INGREDIENTS[bowl.id]} />
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/60 uppercase">Allergens</dt>
+                  <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/72 uppercase">Allergens</dt>
                   <dd className="mt-1">
                     {bowl.allergen ? (
-                      <span className="font-semibold text-clay">{bowl.allergen}</span>
+                      <span className="font-semibold text-clay-ink">{bowl.allergen}</span>
                     ) : (
                       <span className="text-forest/75">No named major allergen on the current label. Cross-contact can still occur.</span>
                     )}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/60 uppercase">Enjoy it</dt>
+                  <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/72 uppercase">Enjoy it</dt>
                   <dd className="mt-1 text-forest/75">
                     {CURRENT_OFFER.coldServing} {CURRENT_OFFER.warmServing}
                   </dd>
@@ -162,7 +162,7 @@ export function BowlSheet({ bowl, onClose }: { bowl: CurrentBowl | null; onClose
                 <Button type="button" size="lg" className="w-full" disabled={!bowl.available} onClick={startMix}>
                   {bowl.available ? "Build a mix with this bowl" : "Sold out this week"}
                 </Button>
-                <p className="text-center text-xs text-forest/60">
+                <p className="text-center text-xs text-forest/72">
                   {bowl.available ? "Starts you with two of these and a variety of the others. Change anything at checkout." : "Check back soon, or choose another bowl."}
                 </p>
               </div>

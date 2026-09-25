@@ -78,5 +78,5 @@ export function ProductCardTitle({ className, children }: { className?: string; 
 }
 
 export function ProductCardSubtitle({ className, children }: { className?: string; children: React.ReactNode }) {
-  return <p className={cn("mt-3 text-sm leading-6 text-forest/68", className)}>{children}</p>;
+  return <p className={cn("mt-3 text-sm leading-6 text-forest/72", className)}>{children}</p>;
 }

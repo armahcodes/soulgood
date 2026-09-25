@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/ui/SiteHeader";
 import { BRAND_NAME } from "@/lib/brand";
 
 export const metadata = {
+  alternates: { canonical: "/quiz" },
   title: `Find your pathway — ${BRAND_NAME}`,
   description:
     "Answer a few gentle questions about your days and energy. We’ll match your Soul Good pathway and suggest Soul Bowls™ that suit you.",
@@ -18,7 +19,7 @@ export default function QuizPage() {
         aside={
           <Link
             href="/"
-            className="inline-flex min-h-11 items-center text-[0.7rem] font-medium tracking-[0.1em] text-forest/70 uppercase transition-colors hover:text-clay"
+            className="inline-flex min-h-11 items-center text-[0.7rem] font-medium tracking-[0.1em] text-forest/72 uppercase transition-colors hover:text-clay-ink"
           >
             Exit
           </Link>

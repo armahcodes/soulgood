@@ -74,7 +74,7 @@ export function CartBar() {
             <Button as="a" href="/checkout" size="lg" className="w-full">
               Continue to checkout · {formatCents(extrasTotalCents(lines))}
             </Button>
-            <p className="text-center text-xs text-forest/60">Salads and snacks join your Soul Bowls™ order at checkout.</p>
+            <p className="text-center text-xs text-forest/72">Salads and snacks join your Soul Bowls™ order at checkout.</p>
           </div>
         }
       >
@@ -95,7 +95,7 @@ export function CartBar() {
                       <span className="font-serif text-lg leading-tight text-forest">{extra.name}</span>
                       <span className="shrink-0 text-sm font-semibold text-forest tabular-nums">{formatCents(extraLineTotalCents(line))}</span>
                     </p>
-                    {options ? <p className="mt-0.5 text-xs leading-5 text-forest/65">{options}</p> : null}
+                    {options ? <p className="mt-0.5 text-xs leading-5 text-forest/72">{options}</p> : null}
                     <div className="mt-2 flex items-center gap-2">
                       <QuantityStepper
                         size="sm"
@@ -113,7 +113,7 @@ export function CartBar() {
                         type="button"
                         onClick={() => setQuantity(index, 0)}
                         aria-label={`Remove ${extra.name}`}
-                        className="flex size-11 items-center justify-center rounded-full text-forest/60 transition-colors hover:bg-clay/10 hover:text-clay"
+                        className="flex size-11 items-center justify-center rounded-full text-forest/72 transition-colors hover:bg-clay/10 hover:text-clay-ink"
                       >
                         <Trash2 className="size-4" aria-hidden />
                       </button>

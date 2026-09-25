@@ -43,9 +43,9 @@ export function GatheringExtras({ lines, onChange }: { lines: ExtraLine[]; onCha
     <section aria-labelledby="gathering-extras-title" className="mt-8 border-t border-forest/15 pt-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay uppercase">Optional · menu prices</p>
+          <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay-ink uppercase">Optional · menu prices</p>
           <h3 id="gathering-extras-title" className="mt-1 font-serif text-2xl text-forest sm:text-3xl">Add salads &amp; snacks</h3>
-          <p className="mt-1 text-sm leading-6 text-forest/70">
+          <p className="mt-1 text-sm leading-6 text-forest/72">
             Made-to-order salads, veggie cups, and shareable bites, delivered with your bowls.
           </p>
         </div>
@@ -68,9 +68,9 @@ export function GatheringExtras({ lines, onChange }: { lines: ExtraLine[]; onCha
                 <div className="min-w-0 flex-1">
                   <p className="flex items-baseline justify-between gap-3">
                     <span className="min-w-0 truncate text-sm font-semibold text-forest">{extra.name}</span>
-                    <span className="shrink-0 text-xs font-semibold text-forest/70 tabular-nums">{formatCents(extraLineTotalCents(line))}</span>
+                    <span className="shrink-0 text-xs font-semibold text-forest/72 tabular-nums">{formatCents(extraLineTotalCents(line))}</span>
                   </p>
-                  {options ? <p className="text-xs leading-5 text-forest/60">{options}</p> : null}
+                  {options ? <p className="text-xs leading-5 text-forest/72">{options}</p> : null}
                   <div className="mt-2 flex items-center gap-1">
                     <QuantityStepper
                       size="sm"
@@ -88,7 +88,7 @@ export function GatheringExtras({ lines, onChange }: { lines: ExtraLine[]; onCha
                       type="button"
                       onClick={() => setQuantity(index, 0)}
                       aria-label={`Take ${extra.name} off the estimate`}
-                      className="flex size-11 shrink-0 items-center justify-center rounded-full text-forest/55 transition-colors hover:bg-clay/10 hover:text-clay"
+                      className="flex size-11 shrink-0 items-center justify-center rounded-full text-forest/72 transition-colors hover:bg-clay/10 hover:text-clay-ink"
                     >
                       <Trash2 className="size-4" aria-hidden />
                     </button>
@@ -136,7 +136,7 @@ export function GatheringExtras({ lines, onChange }: { lines: ExtraLine[]; onCha
             </span>
             <span className="min-w-0 flex-1">
               <span className="line-clamp-2 block text-sm leading-tight font-semibold text-forest">{extra.name}</span>
-              <span className="mt-0.5 block text-xs text-forest/60 tabular-nums">{formatCents(extraPriceCents(extra.id))}</span>
+              <span className="mt-0.5 block text-xs text-forest/72 tabular-nums">{formatCents(extraPriceCents(extra.id))}</span>
             </span>
             <span aria-hidden="true" className="flex size-8 shrink-0 items-center justify-center rounded-full bg-forest/6 text-forest transition-colors group-hover/add:bg-forest group-hover/add:text-oat">
               <Plus className="size-4" />

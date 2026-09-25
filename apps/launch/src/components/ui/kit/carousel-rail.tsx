@@ -56,8 +56,9 @@ export function CarouselRail({
     <div className={cn("relative", className)} role="region" aria-roledescription="carousel" aria-label={label}>
       <div
         ref={rail}
+        tabIndex={0}
         className={cn(
-          "scrollbar-none -mx-5 flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:scroll-px-8 sm:px-8",
+          "scrollbar-none -mx-5 flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5 pb-2 focus-visible:outline-2 focus-visible:outline-clay sm:-mx-8 sm:scroll-px-8 sm:px-8",
           itemsClassName,
         )}
       >

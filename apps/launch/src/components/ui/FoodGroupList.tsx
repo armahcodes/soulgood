@@ -19,7 +19,7 @@ export function FoodGroupList({ items, className }: { items: Ingredient[]; class
         if (!names.length) return null;
         return (
           <div key={group.id} className="flex flex-wrap items-baseline gap-x-2 gap-y-1.5">
-            <span className="w-24 shrink-0 text-xs text-forest/60">{group.label}</span>
+            <span className="w-24 shrink-0 text-xs text-forest/72">{group.label}</span>
             <ul className="flex min-w-0 flex-1 flex-wrap gap-1.5">
               {names.map((name) => (
                 <li key={name} className={cn("rounded-full border px-2.5 py-0.5 text-xs font-medium text-forest/85", group.tone)}>

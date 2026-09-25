@@ -5,11 +5,12 @@ import { COMMUNITY_DRIVE } from "@/lib/community-drive";
 /** Site-wide announcement — brand adaptation of 21st.dev cnippet-dev/announcement-banner. */
 export function AnnouncementBar() {
   return (
+    <div role="region" aria-label="Announcement">
     <Link
       href={COMMUNITY_DRIVE.path}
       className="group flex min-h-11 items-center justify-center gap-x-2 bg-forest px-5 py-2.5 text-center text-[0.8rem] text-oat transition-colors hover:bg-[#25312c]"
     >
-      <span className="hidden rounded-sm bg-gold/20 px-1.5 py-0.5 text-[0.6rem] font-medium tracking-[0.16em] text-gold uppercase sm:inline">
+      <span className="hidden rounded-sm bg-gold px-1.5 py-0.5 text-[0.6rem] font-medium tracking-[0.16em] text-forest uppercase sm:inline">
         Community
       </span>
       <span>
@@ -22,5 +23,6 @@ export function AnnouncementBar() {
         <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
       </span>
     </Link>
+    </div>
   );
 }

@@ -65,7 +65,7 @@ export function MobileTabBar({ current, hidden = false }: { current?: string; hi
           );
           const className = cn(
             "relative flex min-h-13 flex-col items-center justify-center gap-0.5 rounded-full transition-colors duration-200 active:scale-95",
-            active ? "text-oat" : external ? "text-clay" : "text-forest/70",
+            active ? "text-oat" : external ? "text-clay-ink" : "text-forest/80",
           );
           return (
             <li key={label}>

@@ -159,7 +159,7 @@ export function QuizFlow({ sidesOrderable = false }: { sidesOrderable?: boolean 
 
       {phase === "questions" && question.type !== "single" ? (
         <div className="sticky bottom-0 z-10 -mx-5 mt-10 flex items-center justify-between gap-3 border-t border-forest/10 bg-oat/95 px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur sm:-mx-8 sm:px-8">
-          <p className="text-xs text-forest/60">
+          <p className="text-xs text-forest/72">
             {Array.isArray(answers[question.id]) && (answers[question.id] as string[]).length
               ? `${(answers[question.id] as string[]).length} selected`
               : "Optional"}

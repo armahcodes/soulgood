@@ -27,7 +27,7 @@ import {
 } from "@/lib/culinary-booking";
 
 const INPUT =
-  "min-h-[48px] w-full min-w-0 rounded-md border border-forest/20 bg-white/70 px-3 py-3 text-base text-forest placeholder:text-forest/45 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30 disabled:opacity-60";
+  "min-h-[48px] w-full min-w-0 rounded-md border border-forest/20 bg-white/70 px-3 py-3 text-base text-forest placeholder:text-forest/50 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30 disabled:opacity-60";
 const LABEL = "grid min-w-0 gap-2 text-sm font-semibold text-forest";
 const EMPTY_CONTACT = { name: "", email: "", phone: "" };
 const STEPS = ["Experience", "Menu", "Event", "Review", "Contact"];
@@ -328,10 +328,10 @@ export function CulinaryQuoteBuilder({
               }
               aria-current={index === step ? "step" : undefined}
               onClick={() => goToStep(index)}
-              className={`relative flex min-h-14 min-w-0 flex-col items-center justify-start gap-1.5 rounded-md px-1 py-2 text-[11px] font-semibold transition-colors sm:text-sm ${index === step ? "text-forest" : "text-forest/60 enabled:hover:text-forest disabled:opacity-50"}`}
+              className={`relative flex min-h-14 min-w-0 flex-col items-center justify-start gap-1.5 rounded-md px-1 py-2 text-[11px] font-semibold transition-colors sm:text-sm ${index === step ? "text-forest" : "text-forest/72 enabled:hover:text-forest disabled:opacity-50"}`}
             >
               <span
-                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs ring-4 ring-card transition-colors duration-300 ${index === step ? "bg-forest text-oat" : index < step ? "bg-sage text-oat" : "bg-sand text-forest/70"}`}
+                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs ring-4 ring-card transition-colors duration-300 ${index === step ? "bg-forest text-oat" : index < step ? "bg-sage-ink text-oat" : "bg-sand text-forest/72"}`}
               >
                 {index < step ? (
                   <Check size={13} aria-hidden="true" />
@@ -361,7 +361,7 @@ export function CulinaryQuoteBuilder({
           ) : (
             <span>
               <strong aria-live="polite">{formatCents(subtotal)}</strong>{" "}
-              <span className="text-xs text-forest/65">before tax</span>
+              <span className="text-xs text-forest/72">before tax</span>
             </span>
           )}
         </div>
@@ -386,7 +386,7 @@ export function CulinaryQuoteBuilder({
               id="experience-title"
               className="mb-5 text-center font-serif text-3xl sm:text-left"
             >
-              <span className="mr-3 text-clay">01</span> Choose your experience
+              <span className="mr-3 text-clay-ink">01</span> Choose your experience
             </h2>
             <div className="grid gap-3 sm:grid-cols-2">
               {(["delivery", "plated"] as const).map((option) => (
@@ -434,7 +434,7 @@ export function CulinaryQuoteBuilder({
                       : "$55 per guest, with a $555 food minimum, plus $500 culinary support. Includes plating, service, and ingredient education."}
                   </span>
                   <span
-                    className={`mt-auto text-xs font-semibold ${experience === option ? "text-oat/75" : "text-forest/70"}`}
+                    className={`mt-auto text-xs font-semibold ${experience === option ? "text-oat/75" : "text-forest/72"}`}
                   >
                     Tax and delivery calculated separately
                   </span>
@@ -541,7 +541,7 @@ export function CulinaryQuoteBuilder({
             aria-labelledby="event-title"
           >
             <h2 id="event-title" className="mb-5 font-serif text-3xl">
-              <span className="mr-3 text-clay">03</span> Tell us where & when
+              <span className="mr-3 text-clay-ink">03</span> Tell us where & when
             </h2>
             <div className="grid min-w-0 gap-4 sm:grid-cols-2">
               <label className={LABEL}>
@@ -645,7 +645,7 @@ export function CulinaryQuoteBuilder({
                 </label>
               </div>
             </div>
-            <p className="mt-4 text-xs leading-6 text-forest/70">
+            <p className="mt-4 text-xs leading-6 text-forest/72">
               Los Angeles County only. Your address is used to verify service
               area and calculate current tax. Event dates, timing, and dietary
               requests are subject to confirmation.
@@ -769,7 +769,7 @@ export function CulinaryQuoteBuilder({
                           ? item.label
                           : recipeName(item.label)}
                       {item.note ? (
-                        <span className="block text-xs text-forest/55">{item.note}</span>
+                        <span className="block text-xs text-forest/72">{item.note}</span>
                       ) : null}
                     </span>
                     <span className="shrink-0 font-semibold">
@@ -781,7 +781,7 @@ export function CulinaryQuoteBuilder({
                 ))}
               </ul>
               {experience === "plated" && (
-                <p className="mt-3 text-xs leading-5 text-forest/65">
+                <p className="mt-3 text-xs leading-5 text-forest/72">
                   Food style for the whole group. Final dishes and dietary
                   requests will be confirmed before booking.
                 </p>
@@ -791,7 +791,7 @@ export function CulinaryQuoteBuilder({
               <div className="flex items-start justify-between gap-4">
                 <dt>
                   {experience === "plated" ? "Plated menu" : "Bowl menu"}
-                  <span className="mt-1 block text-xs text-forest/65">
+                  <span className="mt-1 block text-xs text-forest/72">
                     {count} {experience === "plated" ? "guests" : "bowls"} ×{" "}
                     {formatCents(
                       experience === "plated"
@@ -808,7 +808,7 @@ export function CulinaryQuoteBuilder({
                 <div className="flex items-start justify-between gap-4">
                   <dt>
                     Salads &amp; snacks
-                    <span className="mt-1 block text-xs text-forest/65">
+                    <span className="mt-1 block text-xs text-forest/72">
                       {extrasItemCount} {extrasItemCount === 1 ? "item" : "items"} at menu prices
                     </span>
                   </dt>
@@ -827,13 +827,13 @@ export function CulinaryQuoteBuilder({
                     <dt className="min-w-0 leading-5">
                       {item.label}
                       {item.kind === "minimum" && (
-                        <span className="mt-1 block text-xs text-forest/65">
+                        <span className="mt-1 block text-xs text-forest/72">
                           Brings food charges to the $555 minimum; does not add
                           guest servings.
                         </span>
                       )}
                       {item.kind === "support" && (
-                        <span className="mt-1 block text-xs text-forest/65">
+                        <span className="mt-1 block text-xs text-forest/72">
                           Mandatory; in addition to the food minimum.
                         </span>
                       )}
@@ -858,7 +858,7 @@ export function CulinaryQuoteBuilder({
               </div>
             </dl>
             <div className="mt-6 border-y border-forest/15 py-5">
-              <p className="text-xs font-medium uppercase tracking-[0.12em] text-forest/70">
+              <p className="text-xs font-medium uppercase tracking-[0.12em] text-forest/72">
                 {quote ? "Estimated total · USD" : "Estimate before tax · USD"}
               </p>
               <p
@@ -867,7 +867,7 @@ export function CulinaryQuoteBuilder({
               >
                 {formatCents(quote?.totalCents ?? subtotal)}
               </p>
-              <p className="mt-2 text-xs leading-5 text-forest/70">
+              <p className="mt-2 text-xs leading-5 text-forest/72">
                 {quote
                   ? "Current tax rate verified for the event address. Final tax and availability confirmed before payment."
                   : "Generate your quote to verify the address and see tax. This is not the final total."}
@@ -919,7 +919,7 @@ export function CulinaryQuoteBuilder({
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="flex min-h-11 items-center gap-2 text-sm font-semibold text-clay underline underline-offset-4"
+                className="flex min-h-11 items-center gap-2 text-sm font-semibold text-clay-ink underline underline-offset-4"
               >
                 <Printer size={16} aria-hidden="true" />
                 Print / save PDF
@@ -927,7 +927,7 @@ export function CulinaryQuoteBuilder({
             </div>
           )}
           {!received && (
-            <p className="mt-3 text-xs leading-5 text-forest/70">
+            <p className="mt-3 text-xs leading-5 text-forest/72">
               This is an estimate, not a reservation or invoice. No payment is
               collected here.{" "}
               {quote && !received
@@ -1087,7 +1087,7 @@ export function CulinaryQuoteBuilder({
                       onChange={(event) => setNotes(event.target.value)}
                       className={INPUT}
                     />
-                    <span className="font-normal text-forest/70">
+                    <span className="font-normal text-forest/72">
                       Our team will confirm dietary requests before booking.
                     </span>
                   </label>
@@ -1121,7 +1121,7 @@ export function CulinaryQuoteBuilder({
                       reservation, and agree to be contacted about my event.
                     </span>
                   </label>
-                  <p className="text-xs leading-5 text-forest/65">
+                  <p className="text-xs leading-5 text-forest/72">
                     Your details are used to plan and invoice this event, as described in our{" "}
                     <a href="/privacy" className="underline underline-offset-2">Privacy Policy</a>.
                   </p>
@@ -1150,7 +1150,7 @@ export function CulinaryQuoteBuilder({
         Have a question?{" "}
         <a
           href={`mailto:${CONTACT.email}`}
-          className="font-semibold text-clay underline underline-offset-4"
+          className="font-semibold text-clay-ink underline underline-offset-4"
         >
           Contact our team
         </a>

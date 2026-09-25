@@ -1,3 +1,4 @@
+import { menuJsonLd, serializeJsonLd } from "@/lib/structured-data";
 import Image from "next/image";
 import Link from "next/link";
 import { BowlCollection } from "@/components/sections/BowlCollection";
@@ -15,12 +16,13 @@ import { MENU_EXTRAS } from "@/lib/menu-extras";
 import { getAddOnVariationIds } from "@/lib/square-catalog";
 
 export const metadata = {
+  alternates: { canonical: "/menu" },
   title: `Menu — ${BRAND_NAME}`,
   description:
     "The full Soul Good menu: chef-made Soul Bowls™, made-to-order salads you can build your way, veggie cups, and snacks & light bites.",
 };
 
-const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase";
+const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase";
 
 export default function MenuPage() {
   const orderable = Boolean(getAddOnVariationIds());
@@ -30,6 +32,7 @@ export default function MenuPage() {
     <>
       <SiteHeader current="/menu" />
       <main className="bg-oat">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(menuJsonLd()) }} />
         <section className="mx-auto grid w-full max-w-7xl items-center gap-8 px-5 pt-8 pb-10 sm:px-8 sm:pt-12 lg:grid-cols-[1fr_1fr] lg:gap-12 lg:px-12 lg:pb-14">
           <div className="text-center motion-safe:animate-[rise_0.8s_var(--ease-soft)] lg:text-left">
             <p className={eyebrow}>The Soul Good menu</p>
@@ -65,7 +68,7 @@ export default function MenuPage() {
                 </h2>
               </div>
               <div className="flex flex-col gap-3 sm:items-end">
-                <p className="max-w-sm text-sm leading-6 text-forest/70 sm:text-right">
+                <p className="max-w-sm text-sm leading-6 text-forest/72 sm:text-right">
                   32 oz jars, chef-made with whole ingredients. Packed in sets of five for pickup or Sunday delivery.
                 </p>
                 <Button as="a" href="/checkout" className="w-full sm:w-auto">Build your ritual</Button>
@@ -84,22 +87,22 @@ export default function MenuPage() {
               <h2 id="collections-heading" className="mt-3 text-4xl leading-none font-normal tracking-[0.01em] text-forest sm:text-5xl">
                 The wider Soul Good kitchen.
               </h2>
-              <p className="mt-4 text-sm leading-6 text-forest/70">
+              <p className="mt-4 text-sm leading-6 text-forest/72">
                 Wraps, bowls, breakfast, and juices organized by pathway. Online ordering currently covers
                 Soul Bowls™, salads, veggie cups, and snacks; ask us about these dishes for{" "}
-                <Link href="/quote" className="font-semibold text-forest underline underline-offset-4 hover:text-clay">gatherings</Link>.
+                <Link href="/quote" className="font-semibold text-forest underline underline-offset-4 hover:text-clay-ink">gatherings</Link>.
               </p>
             </Reveal>
             <Reveal stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {MENU_COLLECTION_LIST.map((collection) => (
                 <article key={collection.id} className="flex flex-col rounded-lg border border-forest/12 bg-oat p-5">
-                  <p className="text-[0.65rem] font-medium tracking-[0.18em] text-sage uppercase">{collection.tagline}</p>
+                  <p className="text-[0.65rem] font-medium tracking-[0.18em] text-sage-ink uppercase">{collection.tagline}</p>
                   <h3 className="mt-2 font-serif text-3xl leading-none text-forest">{collection.name}</h3>
-                  <p className="mt-2 text-sm leading-6 text-forest/70">{collection.description}</p>
+                  <p className="mt-2 text-sm leading-6 text-forest/72">{collection.description}</p>
                   <dl className="mt-4 grid gap-3 border-t border-forest/10 pt-4">
                     {collection.categories.map((category) => (
                       <div key={category.id}>
-                        <dt className="text-[0.65rem] font-medium tracking-[0.14em] text-forest/55 uppercase">{category.label}</dt>
+                        <dt className="text-[0.65rem] font-medium tracking-[0.14em] text-forest/72 uppercase">{category.label}</dt>
                         <dd className="mt-1 text-sm leading-6 text-forest/80">
                           {category.items.map((item) => `${item.name}${item.note ? ` (${item.note})` : ""}`).join(" · ")}
                         </dd>

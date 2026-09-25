@@ -69,7 +69,7 @@ export default function FoodForTheSoulPage() {
             <a
               key={link.href}
               href={link.href}
-              className="inline-flex min-h-12 shrink-0 items-center gap-2 font-semibold text-forest/72 transition-colors hover:text-clay"
+              className="inline-flex min-h-12 shrink-0 items-center gap-2 font-semibold text-forest/72 transition-colors hover:text-clay-ink"
             >
               {link.label}
             </a>
@@ -93,7 +93,7 @@ export default function FoodForTheSoulPage() {
               className="mt-7 text-[clamp(4.25rem,15vw,7.6rem)] leading-[1.02] tracking-[0.01em]"
             >
               Food for <br />
-              the <em className="font-normal text-clay">Soul.</em>
+              the <em className="font-normal text-clay-ink">Soul.</em>
             </h1>
             <p className="mx-auto mt-8 max-w-lg font-serif text-3xl leading-tight sm:text-4xl lg:mx-0">
               A nourishing meal.
@@ -148,7 +148,7 @@ export default function FoodForTheSoulPage() {
                 </p>
               </div>
             </div>
-            <p className="mt-4 text-center text-xs text-forest/70">
+            <p className="mt-4 text-center text-xs text-forest/72">
               From our kitchen, with care. Meal-drive menus may vary.
             </p>
           </div>
@@ -157,11 +157,11 @@ export default function FoodForTheSoulPage() {
         <div className="border-y border-forest/15 bg-sand/40 px-5 py-5">
           <p className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-center text-xs font-medium uppercase tracking-[0.14em]">
             <span>Good food</span>
-            <span aria-hidden="true" className="text-clay">
+            <span aria-hidden="true" className="text-clay-ink">
               ✳
             </span>
             <span>Real connection</span>
-            <span aria-hidden="true" className="text-clay">
+            <span aria-hidden="true" className="text-clay-ink">
               ✳
             </span>
             <span>Care for our communities</span>
@@ -242,7 +242,7 @@ export default function FoodForTheSoulPage() {
               </div>
             </div>
             <div className="flex flex-col justify-center px-6 py-9 text-center sm:p-12 md:text-left">
-              <p className={`${eyebrow} text-forest/70`}>
+              <p className={`${eyebrow} text-forest/72`}>
                 Our next chapter of good
               </p>
               <h2
@@ -310,7 +310,7 @@ export default function FoodForTheSoulPage() {
                 key={title}
                 className="rounded-lg border border-forest/12 bg-card p-6 text-center md:text-left"
               >
-                <div className="flex items-center justify-center gap-3 text-clay md:justify-start">
+                <div className="flex items-center justify-center gap-3 text-clay-ink md:justify-start">
                   <Icon size={23} strokeWidth={1.5} aria-hidden="true" />
                   <span className="text-xs font-bold tracking-[0.15em]">
                     0{index + 1}
@@ -366,7 +366,7 @@ export default function FoodForTheSoulPage() {
               key={question}
               className="group border-b border-forest/15 first-of-type:border-t"
             >
-              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 font-serif text-xl leading-snug transition-colors hover:text-clay sm:text-2xl [&::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 font-serif text-xl leading-snug transition-colors hover:text-clay-ink sm:text-2xl [&::-webkit-details-marker]:hidden">
                 {question}
                 <span aria-hidden="true" className="flex size-9 shrink-0 items-center justify-center rounded-full border border-forest/20 transition-[transform,background-color,color] duration-300 group-open:rotate-45 group-open:border-forest group-open:bg-forest group-open:text-oat">
                   <Plus size={16} />

@@ -127,7 +127,7 @@ export function LoginForm({
         <div>
           <label
             htmlFor="login-code"
-            className="mb-2 block text-xs font-medium tracking-[0.12em] text-forest/58 uppercase"
+            className="mb-2 block text-xs font-medium tracking-[0.12em] text-forest/72 uppercase"
           >
             Six-digit code
           </label>
@@ -210,7 +210,7 @@ export function LoginForm({
       <div>
         <label
           htmlFor="login-email"
-          className="mb-2 block text-xs font-medium tracking-[0.12em] text-forest/58 uppercase"
+          className="mb-2 block text-xs font-medium tracking-[0.12em] text-forest/72 uppercase"
         >
           Order email
         </label>
@@ -240,7 +240,7 @@ export function LoginForm({
             ? `Send a new code in ${secondsRemaining}s`
             : "Email me a sign-in code"}
       </Button>
-      <p className="text-xs leading-relaxed text-forest/70">
+      <p className="text-xs leading-relaxed text-forest/72">
         Use the same email entered at checkout to find your{" "}
         {managingPlan ? "weekly plan" : "orders"}. Signing in does not place an
         order or change a plan.

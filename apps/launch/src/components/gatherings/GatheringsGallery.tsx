@@ -53,7 +53,7 @@ export function GatheringsGallery({ className }: { className?: string }) {
         ))}
       </div>
 
-      <div className="scrollbar-none -mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8 lg:hidden">
+      <div tabIndex={0} role="region" aria-label="Gatherings photos" className="scrollbar-none -mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8 lg:hidden">
         {GATHERING_SCENES.map((scene, index) => (
           <figure key={scene.src} className="relative aspect-[4/5] w-[72%] shrink-0 snap-center overflow-hidden rounded-lg bg-sand/40 sm:w-[44%]">
             <Image src={scene.src} alt={scene.alt} fill loading={index === 0 ? "eager" : "lazy"} sizes="(min-width: 640px) 44vw, 72vw" className="object-cover" />

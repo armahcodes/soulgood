@@ -26,7 +26,7 @@ export function PathwayBadge() {
   const def = PATHWAY_DEFINITIONS[pathway];
 
   return (
-    <span className="w-fit rounded-full bg-sage/15 px-4 py-1.5 text-xs font-medium tracking-[0.16em] text-sage uppercase">
+    <span className="w-fit rounded-full bg-sage/15 px-4 py-1.5 text-xs font-medium tracking-[0.16em] text-sage-ink uppercase">
       Your pathway · {def.name}
     </span>
   );

@@ -38,3 +38,10 @@ From `apps/launch`: `npx tsc --noEmit -p .`, `npx eslint src e2e`, `npx vitest r
 - Newsletter (`src/lib/newsletter.ts`): double opt-in in Mongo `newsletter_subscribers`, synced to Resend Contacts after confirmation; optional `RESEND_NEWSLETTER_SEGMENT_ID`. One-click unsubscribe (RFC 8058) at `/api/newsletter/unsubscribe`.
 - Privacy requests (`/api/privacy-requests`) go to `PRIVACY_EMAIL_TO` (falls back to contact@) with a 45-day respond-by date; keep records 24 months.
 - Food for the Soul host applications (`src/lib/meal-drive.ts`): organizations in LA/OC only; never add fields about protected characteristics or meal recipients; commitments require open, first-come-first-served distribution. `src/lib/__tests__/meal-drive.test.ts` guards this. Team notices go to `COMMUNITY_EMAIL_TO`.
+
+## Accessibility (color)
+
+- Text uses `text-clay-ink` / `text-sage-ink` (AA 4.5:1 on oat, card, and sand); keep `clay`/`sage` for fills, borders, and art. Light text on sage needs `bg-sage-ink`.
+- Muted forest text is `text-forest/72` or darker; muted oat text on forest is `text-oat/62` or lighter. Anything fainter fails AA for small text.
+- Horizontal scrollers without focusable children need `tabIndex={0}`, `role="region"`, and an `aria-label`.
+- Re-check with axe (scratch install, not a repo dependency) after visual changes; the last full sweep of every page on desktop and mobile had zero violations.

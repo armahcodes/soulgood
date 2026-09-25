@@ -75,7 +75,7 @@ export function SegmentedControl<T extends string>({
     >
       <div className="relative grid" style={{ gridTemplateColumns: template, touchAction: "manipulation" }}>
         {options.map((option) => (
-          <span key={option.value} aria-hidden className={cn(SEGMENT, "pointer-events-none text-forest/65")}>
+          <span key={option.value} aria-hidden className={cn(SEGMENT, "pointer-events-none text-forest/72")}>
             {option.label}
           </span>
         ))}

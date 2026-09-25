@@ -42,11 +42,11 @@ export function TrustSection() {
                 <span className="font-serif text-lg font-medium text-forest">
                   {p.name}
                 </span>
-                <span className="text-sm font-medium tracking-[0.04em] text-sage">
+                <span className="text-sm font-medium tracking-[0.04em] text-sage-ink">
                   {p.descriptor}
                 </span>
               </div>
-              <p className="text-sm leading-relaxed text-forest/70">
+              <p className="text-sm leading-relaxed text-forest/72">
                 {p.description}
               </p>
             </li>
@@ -57,7 +57,7 @@ export function TrustSection() {
       {/* Community give-back */}
       <div className="flex flex-col gap-3 rounded-3xl border border-clay/25 bg-clay/10 p-6 text-left">
         <div className="flex items-center gap-2.5">
-          <Logo size={22} className="text-clay" title="" />
+          <Logo size={22} className="text-clay-ink" title="" />
           <h2 className="font-serif text-xl font-medium text-forest">
             Nourishment that reaches further
           </h2>

@@ -12,12 +12,13 @@ import { HOST_COMMITMENTS, MEAL_DRIVE_LEAD_DAYS, NON_DISCRIMINATION_STATEMENT, R
 
 export const dynamic = "force-dynamic";
 export const metadata = {
+  alternates: { canonical: "/food-for-the-soul/host" },
   title: `Host a Food for the Soul meal drive — ${BRAND_NAME}`,
   description:
     "Organizations in Los Angeles and Orange County can apply to host a Food for the Soul community meal drive. Meals are free, open to all, and served first come, first served.",
 };
 
-const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase";
+const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase";
 const ICONS = { need: HandHeart, open: Users, site: MapPin, logistics: Scale } as const;
 
 const STEPS = [
@@ -73,7 +74,7 @@ export default function HostMealDrivePage() {
             <Reveal className="mb-10 max-w-2xl">
               <p className={eyebrow}>What we look for</p>
               <h2 id="criteria-heading" className="mt-4 text-4xl leading-none text-forest sm:text-5xl">The same four criteria for every applicant.</h2>
-              <p className="mt-4 text-sm leading-6 text-forest/70">
+              <p className="mt-4 text-sm leading-6 text-forest/72">
                 We focus on communities where households are at risk of going without enough food. We don’t ask for, or
                 consider, demographic information about your organization or the people you serve.
               </p>
@@ -83,7 +84,7 @@ export default function HostMealDrivePage() {
                 const Icon = ICONS[criterion.id];
                 return (
                   <div key={criterion.id} className="rounded-lg border border-forest/12 bg-oat p-5">
-                    <Icon className="size-5 text-clay" aria-hidden />
+                    <Icon className="size-5 text-clay-ink" aria-hidden />
                     <h3 className="mt-3 font-serif text-2xl text-forest">{criterion.title}</h3>
                     <p className="mt-2 text-sm leading-6 text-forest/72">{criterion.body}</p>
                   </div>
@@ -120,7 +121,7 @@ export default function HostMealDrivePage() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-6 text-sm leading-6 text-forest/70">
+              <p className="mt-6 text-sm leading-6 text-forest/72">
                 Prefer email? Write to{" "}
                 <a href={`mailto:${CONTACT.email}?subject=Meal%20drive%20application`} className="font-semibold break-all underline underline-offset-4">
                   {CONTACT.email}

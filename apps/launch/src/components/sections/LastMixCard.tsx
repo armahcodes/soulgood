@@ -44,9 +44,9 @@ export function LastMixCard() {
           ))}
         </div>
         <div>
-          <p className="text-[0.65rem] font-medium tracking-[0.16em] text-clay uppercase">Welcome back</p>
+          <p className="text-[0.65rem] font-medium tracking-[0.16em] text-clay-ink uppercase">Welcome back</p>
           <p className="mt-1 font-serif text-xl leading-tight text-forest">Your last mix · {total} bowls</p>
-          <p className="mt-0.5 line-clamp-1 text-xs text-forest/65">
+          <p className="mt-0.5 line-clamp-1 text-xs text-forest/72">
             {bowls.map((bowl) => `${bowl.name.replace("™", "")} ×${mix.bowlSelection[bowl.id]}`).join(" · ")}
           </p>
         </div>

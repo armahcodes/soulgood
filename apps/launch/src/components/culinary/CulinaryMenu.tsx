@@ -66,7 +66,7 @@ function RecipeDialog({
     >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-clay">
+          <p className="text-xs font-semibold uppercase tracking-widest text-clay-ink">
             Soul Bowls™ · Meet your recipe
           </p>
           <h3 id="recipe-dialog-title" className="mt-2 font-serif text-3xl">
@@ -152,7 +152,7 @@ export function CulinaryMenu({
         10. We’ve started you with a balanced menu.
       </p>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-y border-forest/15 py-2">
-        <p className="text-xs font-semibold uppercase tracking-wider text-forest/65">
+        <p className="text-xs font-semibold uppercase tracking-wider text-forest/72">
           Soul Bowls™ · Current menu
         </p>
         <label className="flex items-center gap-2 text-sm">
@@ -255,7 +255,7 @@ export function CulinaryMenu({
         ))}
       </div>
       {SOLD_OUT_BOWLS.length > 0 && (
-        <p className="mt-3 text-xs leading-6 text-forest/65">
+        <p className="mt-3 text-xs leading-6 text-forest/72">
           Currently sold out:{" "}
           {SOLD_OUT_BOWLS.map((bowl) => recipeName(bowl.name)).join(", ")}. Not
           included in your menu.
@@ -274,7 +274,7 @@ export function CulinaryMenu({
         </div>
       )}
       {!complete && (
-        <p className="mt-3 text-sm font-semibold text-clay" role="status">
+        <p className="mt-3 text-sm font-semibold text-clay-ink" role="status">
           Select at least 10 bowls for delivery.
         </p>
       )}

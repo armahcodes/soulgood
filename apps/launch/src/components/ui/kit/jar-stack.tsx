@@ -80,7 +80,7 @@ export function JarStack({ items, className }: { items: readonly JarStackItem[];
       className={cn("relative flex flex-col items-center", className)}
       role="region"
       aria-roledescription="carousel"
-      aria-label="This week’s Soul Bowls™"
+      aria-label="Featured Soul Bowls™"
       onPointerEnter={() => setPaused(true)}
       onPointerLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -130,7 +130,7 @@ export function JarStack({ items, className }: { items: readonly JarStackItem[];
             exit={reduced ? undefined : { opacity: 0, y: -6 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="text-[0.62rem] font-medium tracking-[0.18em] text-forest/65 uppercase">{front.meta}</p>
+            <p className="text-[0.62rem] font-medium tracking-[0.18em] text-forest/72 uppercase">{front.meta}</p>
             <p className="mt-2 font-serif text-3xl leading-none tracking-[0.01em] text-forest">{front.name}</p>
             <p className="mt-2 line-clamp-2 text-sm leading-6 text-forest/72">{front.detail}</p>
           </motion.div>

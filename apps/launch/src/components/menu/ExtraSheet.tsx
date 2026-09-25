@@ -32,9 +32,9 @@ type Option = { id: string; name: string; allergen?: string };
 function ChoiceGroup({ legend, options, value, onChange, hint }: { legend: string; options: readonly Option[]; value?: string; onChange: (id: string) => void; hint?: string }) {
   return (
     <fieldset className="grid gap-2">
-      <legend className="mb-2 flex w-full items-baseline justify-between gap-3 text-[0.68rem] font-medium tracking-[0.16em] text-forest/70 uppercase">
+      <legend className="mb-2 flex w-full items-baseline justify-between gap-3 text-[0.68rem] font-medium tracking-[0.16em] text-forest/72 uppercase">
         {legend}
-        {hint ? <span className="text-[0.68rem] font-semibold tracking-normal text-forest/55 normal-case">{hint}</span> : null}
+        {hint ? <span className="text-[0.68rem] font-semibold tracking-normal text-forest/72 normal-case">{hint}</span> : null}
       </legend>
       <div className="grid gap-2 sm:grid-cols-2">
         {options.map((option) => {
@@ -53,7 +53,7 @@ function ChoiceGroup({ legend, options, value, onChange, hint }: { legend: strin
               </span>
               <span className="min-w-0">
                 <span className="block font-semibold">{option.name}</span>
-                {option.allergen ? <span className={cn("block text-xs", selected ? "text-oat/75" : "text-clay")}>{option.allergen}</span> : null}
+                {option.allergen ? <span className={cn("block text-xs", selected ? "text-oat/75" : "text-clay-ink")}>{option.allergen}</span> : null}
               </span>
             </label>
           );
@@ -67,9 +67,9 @@ function ChoiceGroup({ legend, options, value, onChange, hint }: { legend: strin
 function MultiPick({ legend, options, value, limit, onChange }: { legend: string; options: readonly Option[]; value: string[]; limit: number; onChange: (ids: string[]) => void }) {
   return (
     <fieldset className="grid gap-2">
-      <legend className="mb-2 flex w-full items-baseline justify-between gap-3 text-[0.68rem] font-medium tracking-[0.16em] text-forest/70 uppercase">
+      <legend className="mb-2 flex w-full items-baseline justify-between gap-3 text-[0.68rem] font-medium tracking-[0.16em] text-forest/72 uppercase">
         {legend}
-        <span aria-live="polite" className={cn("rounded-full px-2 py-0.5 text-[0.68rem] tracking-normal normal-case", value.length === limit ? "bg-sage/20 text-forest" : "bg-forest/6 text-forest/65")}>
+        <span aria-live="polite" className={cn("rounded-full px-2 py-0.5 text-[0.68rem] tracking-normal normal-case", value.length === limit ? "bg-sage/20 text-forest" : "bg-forest/6 text-forest/72")}>
           {value.length} of {limit} chosen
         </span>
       </legend>
@@ -90,7 +90,7 @@ function MultiPick({ legend, options, value, limit, onChange }: { legend: string
               }}
               className={cn(
                 "inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors",
-                selected ? "border-forest bg-forest text-oat" : full ? "cursor-not-allowed border-forest/10 bg-card text-forest/35" : "border-forest/15 bg-card text-forest hover:border-forest/40",
+                selected ? "border-forest bg-forest text-oat" : full ? "cursor-not-allowed border-forest/10 bg-card text-forest/72" : "border-forest/15 bg-card text-forest hover:border-forest/40",
               )}
             >
               {selected ? <Check className="size-3.5" aria-hidden /> : null}
@@ -180,7 +180,7 @@ function OpenExtraSheet({ extra, onClose, onAdd, orderable = true, addLabel = "A
         </div>
         <div className="grid gap-6 px-5 pt-6 pb-6 md:px-8 md:pt-8">
           <div>
-            <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay uppercase">{formatCents(price)} · {extra.tags.join(" · ")}</p>
+            <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay-ink uppercase">{formatCents(price)} · {extra.tags.join(" · ")}</p>
             <h2 id="extra-sheet-title" className="mt-2 pr-12 text-4xl leading-none tracking-[0.01em] text-forest">{extra.name}</h2>
             <p className="mt-3 text-sm leading-6 text-forest/75">{extra.description}</p>
           </div>
@@ -195,12 +195,12 @@ function OpenExtraSheet({ extra, onClose, onAdd, orderable = true, addLabel = "A
               <ChoiceGroup legend="1 · Choose a base" options={SALAD_BASES} value={draft.base} onChange={(id) => set({ base: id as ExtraLine["base"] })} />
               <MultiPick legend="2 · Choose three toppings" options={SALAD_TOPPINGS} value={draft.toppings ?? []} limit={TOPPINGS_PER_SALAD} onChange={(ids) => set({ toppings: ids as ExtraLine["toppings"] })} />
               <fieldset className="grid gap-2">
-                <legend className="mb-2 text-[0.68rem] font-medium tracking-[0.16em] text-forest/70 uppercase">3 · Finish (optional)</legend>
+                <legend className="mb-2 text-[0.68rem] font-medium tracking-[0.16em] text-forest/72 uppercase">3 · Finish (optional)</legend>
                 <button
                   type="button"
                   aria-pressed={Boolean(draft.mint)}
                   onClick={() => { haptic(); set({ mint: !draft.mint }); }}
-                  className={cn("inline-flex min-h-11 w-fit items-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors", draft.mint ? "border-sage bg-sage text-oat" : "border-forest/15 bg-card text-forest hover:border-forest/40")}
+                  className={cn("inline-flex min-h-11 w-fit items-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors", draft.mint ? "border-sage bg-sage-ink text-oat" : "border-forest/15 bg-card text-forest hover:border-forest/40")}
                 >
                   <Leaf className="size-4" aria-hidden /> Fresh mint
                 </button>
@@ -235,7 +235,7 @@ function OpenExtraSheet({ extra, onClose, onAdd, orderable = true, addLabel = "A
           ) : null}
 
           <div>
-            <p className="mb-2 text-[0.68rem] font-medium tracking-[0.16em] text-forest/70 uppercase">By food group</p>
+            <p className="mb-2 text-[0.68rem] font-medium tracking-[0.16em] text-forest/72 uppercase">By food group</p>
             <FoodGroupList
               items={
                 byo || extra.options === "trio"
@@ -247,7 +247,7 @@ function OpenExtraSheet({ extra, onClose, onAdd, orderable = true, addLabel = "A
             />
           </div>
 
-          <p className="text-xs leading-5 text-forest/60">
+          <p className="text-xs leading-5 text-forest/72">
             Dressings and sauces follow their labels; our kitchen handles other major allergens and cross-contact can occur.
           </p>
         </div>

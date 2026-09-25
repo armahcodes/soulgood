@@ -70,7 +70,7 @@ export function PlatedMenu({
         One menu for {guestCount} {guestCount === 1 ? "guest" : "guests"} · $55
         per person
       </p>
-      <p className="mt-2 text-center text-xs leading-6 text-forest/70 sm:text-left">
+      <p className="mt-2 text-center text-xs leading-6 text-forest/72 sm:text-left">
         Share allergies and dietary needs in the contact step. Final dishes and
         accommodations are confirmed by our team; these styles are not
         allergen-free guarantees.

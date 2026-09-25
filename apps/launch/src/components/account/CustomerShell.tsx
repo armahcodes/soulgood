@@ -45,7 +45,7 @@ export function CustomerShell({
                     "inline-flex min-h-11 items-center rounded-full px-5 text-sm font-semibold transition-colors duration-200",
                     active === item.key
                       ? "bg-forest text-oat shadow-[0_1px_2px_rgb(44_58_52/0.25)]"
-                      : "text-forest/70 hover:bg-forest/5 hover:text-forest",
+                      : "text-forest/72 hover:bg-forest/5 hover:text-forest",
                   )}
                 >
                   {item.label}

@@ -8,6 +8,7 @@ import { TIER_PRICE_CENTS } from "@/lib/menu-extras";
 import { NON_DISCRIMINATION_STATEMENT } from "@/lib/meal-drive";
 
 export const metadata = {
+  alternates: { canonical: "/terms" },
   title: `Terms of Service — ${BRAND_NAME}`,
   description: `Terms governing Soul Bowls™ Take Out orders and weekly meal prep operated by ${BUSINESS.legalName}.`,
 };

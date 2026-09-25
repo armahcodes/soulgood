@@ -13,6 +13,10 @@
   --color-oat: #f8f3ec;
   --color-gold: #c9a161;
   --color-sand: #ecd6bc;
+  /* Text-safe shades of the brand accents (WCAG AA 4.5:1 on oat and card). Use the
+     original clay and sage for fills, borders, and illustration; use these for text. */
+  --color-clay-ink: #93553d;
+  --color-sage-ink: #596d53;
 
   /* Type: Marcellus (display, matches the wordmark) + Jost (body/UI, matches the tagline) */
   --font-serif: var(--font-marcellus), "Cormorant", Georgia, serif;
@@ -243,7 +247,7 @@ summary {
 
 .legal-copy p,
 .legal-copy li {
-  color: color-mix(in srgb, var(--color-forest) 72%, transparent);
+  color: color-mix(in srgb, var(--color-forest) 82%, transparent);
   font-size: 0.95rem;
   line-height: 1.75;
 }
@@ -265,7 +269,7 @@ summary {
 }
 
 .legal-copy a {
-  color: var(--color-clay);
+  color: var(--color-clay-ink);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }

@@ -6,6 +6,7 @@ import { EAT_NOW } from "@/lib/ordering";
 import { TIER_PRICE_CENTS } from "@/lib/menu-extras";
 
 export const metadata = {
+  alternates: { canonical: "/customer-agreement" },
   title: `Customer Agreement — ${BRAND_NAME}`,
   description: `Purchase and delivery terms for ${BRAND_NAME} Take Out orders and weekly meal prep, including renewal, cancellation, and exchanges.`,
 };

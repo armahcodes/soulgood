@@ -11,7 +11,7 @@ export const metadata = {
   robots: { index: false },
 };
 
-const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase";
+const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase";
 
 export default async function NewsletterPage({ searchParams }: { searchParams: Promise<{ status?: string; unsubscribe?: string }> }) {
   const { status, unsubscribe } = await searchParams;
@@ -53,7 +53,7 @@ export default async function NewsletterPage({ searchParams }: { searchParams: P
                   : "New menus, community meal drives, and kitchen news, a few times a month at most. We’ll email you a link to confirm first."}
               </p>
               <NewsletterSignup source="newsletter-page" />
-              <p className="text-sm leading-6 text-forest/65">
+              <p className="text-sm leading-6 text-forest/72">
                 Already subscribed and want to stop? <Link href="/privacy-choices#email" className="font-semibold underline underline-offset-4">Manage your email choices</Link>.
               </p>
             </div>

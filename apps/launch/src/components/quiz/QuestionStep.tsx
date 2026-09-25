@@ -34,11 +34,11 @@ export function QuestionStep({
           {question.prompt}
         </h1>
         {question.helper ? (
-          <p className="text-sm font-semibold text-clay">{question.helper}</p>
+          <p className="text-sm font-semibold text-clay-ink">{question.helper}</p>
         ) : question.type === "multi" ? (
-          <p className="text-sm text-forest/65">Choose any that apply, or continue.</p>
+          <p className="text-sm text-forest/72">Choose any that apply, or continue.</p>
         ) : question.type === "text" ? (
-          <p className="text-sm text-forest/65">Optional. A few words is plenty.</p>
+          <p className="text-sm text-forest/72">Optional. A few words is plenty.</p>
         ) : null}
       </div>
 

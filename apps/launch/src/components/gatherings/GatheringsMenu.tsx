@@ -44,7 +44,7 @@ export function GatheringsMenu() {
               onClick={() => setTab(item.id)}
               className={cn(
                 "relative inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-sm font-semibold whitespace-nowrap transition-colors duration-200",
-                tab === item.id ? "text-oat" : "text-forest/70 hover:text-forest",
+                tab === item.id ? "text-oat" : "text-forest/72 hover:text-forest",
               )}
             >
               {tab === item.id ? (
@@ -55,7 +55,7 @@ export function GatheringsMenu() {
           ))}
         </div>
       </div>
-      <p className="mt-4 text-center text-sm text-forest/65">{active.note}</p>
+      <p className="mt-4 text-center text-sm text-forest/72">{active.note}</p>
 
       <div id="gm-panel" role="tabpanel" aria-labelledby={`gm-tab-${tab}`} className="mt-8">
         <AnimatePresence mode="wait" initial={false}>
@@ -70,12 +70,12 @@ export function GatheringsMenu() {
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {MENU_COLLECTION_LIST.map((collection) => (
                   <div key={collection.id} className="rounded-lg border border-forest/12 bg-oat p-5">
-                    <p className="text-[0.65rem] font-medium tracking-[0.18em] text-sage uppercase">{collection.tagline}</p>
+                    <p className="text-[0.65rem] font-medium tracking-[0.18em] text-sage-ink uppercase">{collection.tagline}</p>
                     <h3 className="mt-2 font-serif text-3xl leading-none text-forest">{collection.name}</h3>
                     <dl className="mt-4 grid gap-3 border-t border-forest/10 pt-4">
                       {collection.categories.map((category) => (
                         <div key={category.id}>
-                          <dt className="text-[0.65rem] font-medium tracking-[0.14em] text-forest/55 uppercase">{category.label}</dt>
+                          <dt className="text-[0.65rem] font-medium tracking-[0.14em] text-forest/72 uppercase">{category.label}</dt>
                           <dd className="mt-1 text-sm leading-6 text-forest/80">
                             {category.items.map((item) => `${item.name}${item.note ? ` (${item.note})` : ""}`).join(" · ")}
                           </dd>
@@ -99,7 +99,7 @@ export function GatheringsMenu() {
                       </span>
                     </span>
                     <span className="mt-3 block font-serif text-xl leading-[1.05] tracking-[0.01em] text-forest sm:text-2xl">{item.name}</span>
-                    <span className="mt-1.5 line-clamp-3 block text-[0.8rem] leading-5 text-forest/68 sm:text-sm sm:leading-6">{item.description}</span>
+                    <span className="mt-1.5 line-clamp-3 block text-[0.8rem] leading-5 text-forest/72 sm:text-sm sm:leading-6">{item.description}</span>
                   </li>
                 ))}
               </ul>
@@ -107,7 +107,7 @@ export function GatheringsMenu() {
           </motion.div>
         </AnimatePresence>
       </div>
-      <p className="mx-auto mt-10 max-w-2xl text-center text-xs leading-5 text-forest/60">
+      <p className="mx-auto mt-10 max-w-2xl text-center text-xs leading-5 text-forest/72">
         Salads, veggie cups, and snacks can be added to any bowl-delivery estimate. Interested in pathway wraps,
         breakfast, or juices? Add a note in the final step and our team will follow up. Our kitchen handles common
         allergens; every dietary request is confirmed before booking.

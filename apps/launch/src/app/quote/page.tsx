@@ -15,12 +15,13 @@ import { CULINARY_PRICING, todayInLosAngeles, type CulinaryExperience } from "@/
 
 export const dynamic = "force-dynamic";
 export const metadata = {
+  alternates: { canonical: "/quote" },
   title: "Gatherings & culinary bookings — Soul Bowls™",
   description:
     "Plan a Los Angeles County gathering. Bowl delivery starts at 10 bowls. Plated service is $55 per guest, with a $555 food minimum plus $500 culinary support, tax, and delivery. 50% deposit; balance due on the event date before arrival.",
 };
 
-const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase";
+const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase";
 
 const STEPS = [
   { title: "Build your estimate", body: "Choose delivery or a plated dinner, shape the food, and see an itemized total with tax in minutes." },
@@ -70,7 +71,7 @@ export default async function QuotePage({ searchParams }: { searchParams: Promis
                 See the full menu
               </Link>
             </div>
-            <p className="mt-5 text-sm text-forest/65">No payment required to request a booking.</p>
+            <p className="mt-5 text-sm text-forest/72">No payment required to request a booking.</p>
           </div>
           <GatheringsGallery />
         </section>
@@ -79,7 +80,7 @@ export default async function QuotePage({ searchParams }: { searchParams: Promis
           <ul className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-x-6 gap-y-3 px-5 py-5 text-sm font-semibold text-forest/80 sm:px-8 lg:grid-cols-4 lg:px-12">
             {PROMISES.map(({ icon: Icon, text }) => (
               <li key={text} className="flex items-center gap-2.5">
-                <Icon className="size-4 shrink-0 text-clay" aria-hidden />
+                <Icon className="size-4 shrink-0 text-clay-ink" aria-hidden />
                 {text}
               </li>
             ))}
@@ -139,7 +140,7 @@ export default async function QuotePage({ searchParams }: { searchParams: Promis
               <h2 id="quote-section-heading" className="mt-3 text-3xl leading-tight font-normal tracking-[0.01em] text-forest sm:text-5xl">
                 Build it in five calm steps.
               </h2>
-              <p className="mt-3 text-sm leading-6 text-forest/70">
+              <p className="mt-3 text-sm leading-6 text-forest/72">
                 Your selections stay on this page while you work. Nothing is charged, and your date isn’t reserved until you sign.
               </p>
             </div>
@@ -158,7 +159,7 @@ export default async function QuotePage({ searchParams }: { searchParams: Promis
               <h2 id="faq-heading" className="mt-4 text-4xl leading-none font-normal tracking-[0.01em] text-forest sm:text-5xl">
                 Good to know before you gather.
               </h2>
-              <Link href="#quote" className="mt-6 inline-flex min-h-11 items-center text-sm font-semibold text-forest underline underline-offset-4 hover:text-clay">
+              <Link href="#quote" className="mt-6 inline-flex min-h-11 items-center text-sm font-semibold text-forest underline underline-offset-4 hover:text-clay-ink">
                 Back to your estimate
               </Link>
             </Reveal>

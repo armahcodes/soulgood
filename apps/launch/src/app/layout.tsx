@@ -23,6 +23,7 @@ const SITE_TITLE = `${BRAND_NAME} — ${NOURISHMENT.headline}`;
 const SITE_DESCRIPTION = `${TAGLINE}. Chef-made Soul Bowls™ by Chef Kyla. Weekly nourishment delivered Sundays across Los Angeles and Orange County, or order on demand Thursday–Sunday near Long Beach. $50 minimum; free delivery over $100.`;
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.soulgood.kitchen"),
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   applicationName: BRAND_NAME,
@@ -33,10 +34,9 @@ export const metadata: Metadata = {
     siteName: BRAND_NAME,
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    // og:image is optional and graceful — none is supplied for the launch.
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
   },

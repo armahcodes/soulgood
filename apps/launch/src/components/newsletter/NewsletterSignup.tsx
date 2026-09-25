@@ -80,8 +80,8 @@ export function NewsletterSignup({
           className={cn(
             "min-h-12 w-full min-w-0 flex-1 rounded-md border px-4 text-base focus:ring-2 focus:outline-none",
             dark
-              ? "border-oat/25 bg-oat/8 text-oat placeholder:text-oat/45 focus:border-gold focus:ring-gold/30"
-              : "border-forest/20 bg-white text-forest placeholder:text-forest/40 focus:border-sage focus:ring-sage/25",
+              ? "border-oat/25 bg-oat/8 text-oat placeholder:text-oat/55 focus:border-gold focus:ring-gold/30"
+              : "border-forest/20 bg-white text-forest placeholder:text-forest/50 focus:border-sage focus:ring-sage/25",
           )}
         />
         <button
@@ -101,7 +101,7 @@ export function NewsletterSignup({
         <label htmlFor={`${id}-website`}>Leave this empty</label>
         <input id={`${id}-website`} name="website" tabIndex={-1} autoComplete="off" />
       </div>
-      <label className={cn("flex items-start gap-2.5 text-xs leading-5", dark ? "text-oat/75" : "text-forest/70")}>
+      <label className={cn("flex items-start gap-2.5 text-xs leading-5", dark ? "text-oat/75" : "text-forest/72")}>
         <input type="checkbox" name="consent" className={cn("mt-0.5 size-4 shrink-0", dark ? "accent-gold" : "accent-forest")} />
         <span>
           {NEWSLETTER_CONSENT} See our{" "}
@@ -112,7 +112,7 @@ export function NewsletterSignup({
         </span>
       </label>
       {error ? (
-        <p id={`${id}-error`} role="alert" className={cn("text-sm", dark ? "text-gold" : "text-clay")}>
+        <p id={`${id}-error`} role="alert" className={cn("text-sm", dark ? "text-gold" : "text-clay-ink")}>
           {error}
         </p>
       ) : null}

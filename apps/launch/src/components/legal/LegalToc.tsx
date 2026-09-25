@@ -47,7 +47,7 @@ export function LegalToc() {
 
   return (
     <nav aria-label="On this page" className="rounded-lg border border-forest/12 bg-card/70 p-5">
-      <p className="text-[0.65rem] font-medium tracking-[0.18em] text-forest/60 uppercase">On this page</p>
+      <p className="text-[0.65rem] font-medium tracking-[0.18em] text-forest/72 uppercase">On this page</p>
       <ol className="mt-3 grid gap-0.5">
         {entries.map((entry) => (
           <li key={entry.id}>
@@ -58,7 +58,7 @@ export function LegalToc() {
                 "block rounded-md border-l-2 px-3 py-1.5 text-[0.82rem] leading-5 transition-colors",
                 active === entry.id
                   ? "border-clay bg-clay/6 font-semibold text-forest"
-                  : "border-transparent text-forest/68 hover:text-forest",
+                  : "border-transparent text-forest/72 hover:text-forest",
               )}
             >
               {entry.label}

@@ -55,11 +55,11 @@ export function BowlBuilder({
       <legend className="sr-only">Step 2 · Choose your bowls</legend>
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p aria-hidden="true" className="flex items-center gap-2.5 text-xs font-medium tracking-[0.12em] text-forest/70 uppercase">
+          <p aria-hidden="true" className="flex items-center gap-2.5 text-xs font-medium tracking-[0.12em] text-forest/72 uppercase">
             <span className="flex size-6 items-center justify-center rounded-full bg-forest text-[0.65rem] text-oat">2</span>
             Choose your bowls
           </p>
-          <p className="mt-2 text-sm leading-relaxed text-forest/68">
+          <p className="mt-2 text-sm leading-relaxed text-forest/72">
             We start you with five different recipes per set. Swap in any bowl
             from this week’s lineup, or choose more of your favorites.
           </p>
@@ -68,7 +68,7 @@ export function BowlBuilder({
           aria-live="polite"
           className={cn(
             "shrink-0 rounded-md px-2.5 py-1 text-sm font-bold tabular-nums transition-colors",
-            complete ? "bg-sage/15 text-forest" : "bg-clay/10 text-clay",
+            complete ? "bg-sage/15 text-forest" : "bg-clay/10 text-clay-ink",
           )}
         >
           {total} of {target}
@@ -117,15 +117,15 @@ export function BowlBuilder({
                 </div>
                 <div className="flex min-w-0 flex-col justify-between gap-3 p-3.5 sm:p-4">
                   <div>
-                    <h3 className="font-serif text-xl leading-tight text-forest">
+                    <h2 className="font-serif text-xl leading-tight text-forest">
                       {bowl.name}
-                    </h3>
+                    </h2>
                     {!bowl.available ? (
-                      <p className="mt-1 text-xs font-medium tracking-[0.08em] text-clay uppercase">
+                      <p className="mt-1 text-xs font-medium tracking-[0.08em] text-clay-ink uppercase">
                         Currently unavailable
                       </p>
                     ) : null}
-                    <p className="mt-1 text-xs leading-relaxed text-forest/65">
+                    <p className="mt-1 text-xs leading-relaxed text-forest/72">
                       {bowl.dietary.join(" · ")}
                     </p>
                   </div>
@@ -136,15 +136,15 @@ export function BowlBuilder({
                         Learn more
                         <span aria-hidden="true" className="transition-transform group-open:rotate-180">⌄</span>
                       </summary>
-                      <div className="mt-1 border-t border-forest/10 pt-3 text-xs leading-relaxed text-forest/70">
+                      <div className="mt-1 border-t border-forest/10 pt-3 text-xs leading-relaxed text-forest/72">
                         <p>{bowl.ingredients}</p>
                         <p className="mt-2">
                           <strong className="text-forest">Serve:</strong> {bowl.serving}
                         </p>
                         {bowl.allergen ? (
-                          <p className="mt-2 font-bold text-clay">{bowl.allergen}</p>
+                          <p className="mt-2 font-bold text-clay-ink">{bowl.allergen}</p>
                         ) : (
-                          <p className="mt-2 text-forest/60">
+                          <p className="mt-2 text-forest/72">
                             No named major allergen on the current label. Cross-contact
                             can still occur.
                           </p>
@@ -178,12 +178,12 @@ export function BowlBuilder({
       </div>
 
       {!complete ? (
-        <p role="status" className="text-sm font-semibold text-clay">
+        <p role="status" className="text-sm font-semibold text-clay-ink">
           Select {target - total} more {target - total === 1 ? "bowl" : "bowls"}
           {" "}to continue.
         </p>
       ) : (
-        <p role="status" className="text-sm font-semibold text-sage">
+        <p role="status" className="text-sm font-semibold text-sage-ink">
           Your selection is complete: {target} bowls.
         </p>
       )}

@@ -32,7 +32,7 @@ export function WelcomeMenu() {
         <h2 className="font-serif text-xl font-medium text-forest">
           Your {def.name} menu
         </h2>
-        <p className="max-w-[36ch] text-sm leading-relaxed text-forest/70">
+        <p className="max-w-[36ch] text-sm leading-relaxed text-forest/72">
           Every box is curated to your pathway. Here&rsquo;s the full menu your
           meals and juices are drawn from.
         </p>

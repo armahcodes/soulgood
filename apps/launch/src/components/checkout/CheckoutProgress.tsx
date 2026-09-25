@@ -40,10 +40,10 @@ export function CheckoutProgress({ steps }: { steps: readonly CheckoutStep[] }) 
                   className={cn(
                     "flex size-7 items-center justify-center rounded-full border text-xs font-bold transition-colors duration-300",
                     step.complete
-                      ? "border-sage bg-sage text-oat"
+                      ? "border-sage bg-sage-ink text-oat"
                       : current
                         ? "border-forest bg-forest text-oat"
-                        : "border-forest/20 bg-oat text-forest/60",
+                        : "border-forest/20 bg-oat text-forest/72",
                   )}
                 >
                   {step.complete ? <Check className="size-3.5" aria-hidden /> : index + 1}
@@ -51,7 +51,7 @@ export function CheckoutProgress({ steps }: { steps: readonly CheckoutStep[] }) 
                 <span
                   className={cn(
                     "text-[0.62rem] font-medium tracking-[0.08em] uppercase sm:text-[0.68rem]",
-                    current ? "text-forest" : "text-forest/60 group-hover:text-forest",
+                    current ? "text-forest" : "text-forest/72 group-hover:text-forest",
                   )}
                 >
                   {step.label}

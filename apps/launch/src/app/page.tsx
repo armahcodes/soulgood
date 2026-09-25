@@ -1,3 +1,5 @@
+import { organizationJsonLd, serializeJsonLd } from "@/lib/structured-data";
+import { SaladBarShowcase } from "@/components/sections/SaladBarShowcase";
 import Image from "next/image";
 import Link from "next/link";
 import { AnnouncementBar } from "@/components/ui/AnnouncementBar";
@@ -65,7 +67,7 @@ const FAQS = [
     title: "Can I cancel?",
     content: (
       <>
-        Yes. <Link href="/cancel" className="text-clay underline underline-offset-4">Cancel future renewals online</Link> at any time. An order already charged and committed to production remains final.
+        Yes. <Link href="/cancel" className="text-clay-ink underline underline-offset-4">Cancel future renewals online</Link> at any time. An order already charged and committed to production remains final.
       </>
     ),
   },
@@ -99,7 +101,9 @@ const HERO_JARS: JarStackItem[] = AVAILABLE_BOWLS.map((bowl) => ({
   tint: JAR_TINTS[bowl.id] ?? "rgba(236, 214, 188, 0.9)",
 }));
 
-const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase";
+const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase";
+
+export const metadata = { alternates: { canonical: "/" } };
 
 export default function Home() {
   return (
@@ -107,6 +111,7 @@ export default function Home() {
       <AnnouncementBar />
       <SiteHeader current="/" />
       <main className="overflow-x-clip bg-oat">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(organizationJsonLd()) }} />
         {/* Hero — editorial split, adapted from 21st.dev felipemenezes098/hero-08 */}
         <section className="relative">
           {/* Phones: title → jar stack → details, so the product is visible on arrival. Desktop: text left, stack right. */}
@@ -134,7 +139,7 @@ export default function Home() {
                 />
                 <div className="absolute top-4 left-4 z-20 rounded-lg bg-oat/92 px-4 py-3 shadow-sm backdrop-blur sm:top-6 sm:left-6">
                   <p className="font-serif text-2xl leading-none tracking-[0.01em] text-forest">Free delivery</p>
-                  <p className="mt-1 text-[0.62rem] font-medium tracking-[0.16em] text-forest/65 uppercase">On orders over $100</p>
+                  <p className="mt-1 text-[0.62rem] font-medium tracking-[0.16em] text-forest/72 uppercase">On orders over $100</p>
                 </div>
                 <div className="absolute top-4 right-4 z-20 hidden rounded-lg bg-forest px-4 py-3 text-oat shadow-sm sm:top-6 sm:right-6 sm:block">
                   <p className="text-[0.62rem] font-medium tracking-[0.16em] text-gold uppercase">From our kitchen</p>
@@ -175,13 +180,13 @@ export default function Home() {
                 href="/quiz"
                 className="group mx-auto mt-5 flex w-fit items-center gap-3 rounded-full border border-forest/15 bg-card py-1.5 pr-4 pl-1.5 text-sm text-forest transition-colors hover:border-forest/40 lg:mx-0"
               >
-                <span className="shrink-0 rounded-full bg-sage px-2.5 py-1 text-[0.6rem] font-medium tracking-[0.14em] whitespace-nowrap text-oat uppercase">2 min</span>
+                <span className="shrink-0 rounded-full bg-sage-ink px-2.5 py-1 text-[0.6rem] font-medium tracking-[0.14em] whitespace-nowrap text-oat uppercase">2 min</span>
                 <span className="hidden sm:inline">Not sure where to start?</span>{" "}
-                <span className="font-semibold whitespace-nowrap underline underline-offset-4 group-hover:text-clay">Find your pathway</span>
+                <span className="font-semibold whitespace-nowrap underline underline-offset-4 group-hover:text-clay-ink">Find your pathway</span>
               </Link>
-              <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-forest/68 lg:mx-0">
+              <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-forest/72 lg:mx-0">
                 A bowl for today? Take Out delivers on demand Thursday–Sunday through courier partners or a Soul Good courier.{" "}
-                <Link href={EAT_NOW.infoPath} className="font-semibold text-forest underline underline-offset-4 hover:text-clay">
+                <Link href={EAT_NOW.infoPath} className="font-semibold text-forest underline underline-offset-4 hover:text-clay-ink">
                   How Take Out works
                 </Link>
               </p>
@@ -191,10 +196,10 @@ export default function Home() {
 
           {/* A still brand line in the logo's tagline style (Jost, wide tracking, bullet separators). */}
           <div className="border-y border-forest/10 bg-sand/35 py-4">
-            <p className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-4 gap-y-1.5 px-5 text-center text-[0.72rem] font-normal tracking-[0.28em] text-clay uppercase sm:px-8">
+            <p className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-4 gap-y-1.5 px-5 text-center text-[0.72rem] font-normal tracking-[0.28em] text-clay-ink uppercase sm:px-8">
               {BRAND_LINE.map((item, index) => (
                 <span key={item} className="inline-flex items-center gap-4">
-                  {index > 0 ? <span aria-hidden="true" className="text-clay/70">•</span> : null}
+                  {index > 0 ? <span aria-hidden="true" className="text-clay-ink">•</span> : null}
                   {item}
                 </span>
               ))}
@@ -213,7 +218,7 @@ export default function Home() {
                   Find your favorite flavors.
                 </h2>
               </div>
-              <p className="max-w-sm text-sm leading-6 text-forest/70">
+              <p className="max-w-sm text-sm leading-6 text-forest/72">
                 {AVAILABLE_BOWLS.length} recipes this week, made with greens, grains, vegetables, and
                 protein. Every ingredient and allergen is listed, so you can choose with confidence.
               </p>
@@ -222,6 +227,8 @@ export default function Home() {
             <BowlCollection />
           </div>
         </section>
+
+        <SaladBarShowcase />
 
         <Testimonials />
 
@@ -253,7 +260,7 @@ export default function Home() {
               {PATHWAY_LIST.map((pathway) => (
                 <li key={pathway.id} className="rounded-lg border border-oat/15 bg-oat/5 p-5 transition-colors hover:bg-oat/10">
                   <p className="font-serif text-2xl">{pathway.name}</p>
-                  <p className="mt-1 text-[0.68rem] font-medium tracking-[0.14em] text-gold uppercase">{pathway.descriptor}</p>
+                  <p className="mt-1 text-[0.68rem] font-medium tracking-[0.14em] text-sand uppercase">{pathway.descriptor}</p>
                   <p className="mt-3 text-sm leading-6 text-oat/70">{pathway.description}</p>
                 </li>
               ))}
@@ -297,15 +304,15 @@ export default function Home() {
             <Reveal>
               <PlanPicker />
             </Reveal>
-            <p className="mx-auto mt-6 max-w-2xl text-center text-xs leading-5 text-forest/65">
+            <p className="mx-auto mt-6 max-w-2xl text-center text-xs leading-5 text-forest/72">
               Ordering on demand instead? Take Out courier fees and service times depend on your address.{" "}
-              <Link href={EAT_NOW.infoPath} className="underline underline-offset-4 hover:text-clay">See how Take Out delivery works.</Link>
+              <Link href={EAT_NOW.infoPath} className="underline underline-offset-4 hover:text-clay-ink">See how Take Out delivery works.</Link>
             </p>
           </div>
         </section>
 
         {/* Community — 21st.dev danielpetho/basic-number-ticker */}
-        <section className="relative overflow-hidden bg-sage text-oat">
+        <section className="relative overflow-hidden bg-sage-ink text-oat">
           <Image
             src="/botanicals/clay-branch.png"
             alt=""
@@ -317,17 +324,22 @@ export default function Home() {
           <Reveal className="relative mx-auto grid max-w-6xl items-center gap-10 px-5 py-16 text-center sm:px-8 sm:py-20 md:grid-cols-[auto_1fr] md:gap-16 md:text-left lg:px-12">
             <div className="md:border-r md:border-oat/25 md:pr-16">
               <NumberTicker value={100} suffix="+" className="block font-serif text-8xl leading-none tracking-[0.01em] sm:text-9xl" />
-              <p className="mt-3 text-sm font-bold text-oat/85">community meals delivered</p>
+              <p className="mt-3 text-sm font-bold text-oat">community meals delivered</p>
             </div>
             <div>
-              <p className="text-xs font-medium tracking-[0.2em] text-oat/80 uppercase">A community initiative by Soul Good</p>
+              <p className="text-xs font-medium tracking-[0.2em] text-oat uppercase">A community initiative by Soul Good</p>
               <h2 className="mt-3 text-5xl leading-tight tracking-[0.01em]">Food for the Soul.</h2>
-              <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-oat/88 md:mx-0">
+              <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-oat md:mx-0">
                 We provide the meals. Together, we bring them to your community. Partner with us to bring a meal drive where you are, or learn how to get involved in our October 15 drive.
               </p>
-              <Button as="a" href="/food-for-the-soul" className="mt-7 w-full bg-oat text-forest hover:bg-sand sm:w-auto">
-                Explore Food for the Soul
-              </Button>
+              <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row md:items-start">
+                <Button as="a" href="/food-for-the-soul" className="w-full bg-oat text-forest hover:bg-sand sm:w-auto">
+                  Explore Food for the Soul
+                </Button>
+                <a href="/food-for-the-soul/host" className="inline-flex min-h-11 items-center text-sm font-semibold text-oat underline underline-offset-4 hover:text-sand">
+                  Organizations: host a meal drive
+                </a>
+              </div>
             </div>
           </Reveal>
         </section>
@@ -340,9 +352,9 @@ export default function Home() {
               <h2 className="mt-4 text-4xl leading-none font-normal tracking-[0.01em] text-forest sm:text-5xl">
                 Everything, clearly.
               </h2>
-              <p className="mt-5 max-w-sm text-sm leading-6 text-forest/70">
+              <p className="mt-5 max-w-sm text-sm leading-6 text-forest/72">
                 Read the{" "}
-                <Link href="/customer-agreement" className="font-semibold text-clay underline underline-offset-4">Customer Agreement</Link>{" "}
+                <Link href="/customer-agreement" className="font-semibold text-clay-ink underline underline-offset-4">Customer Agreement</Link>{" "}
                 for complete purchase and delivery terms.
               </p>
             </Reveal>
@@ -361,7 +373,7 @@ export default function Home() {
                 pricing is $55 per guest with a $555 food minimum, plus a required $500 culinary-support fee
                 for plating, service, and ingredient education. Tax and delivery are additional.
               </p>
-              <p className="mt-3 text-sm text-forest/70">Los Angeles County only. Build an itemized estimate with no payment required.</p>
+              <p className="mt-3 text-sm text-forest/72">Los Angeles County only. Build an itemized estimate with no payment required.</p>
             </div>
             <Button as="a" href="/quote" size="lg" className="w-full lg:w-auto">Plan a gathering</Button>
           </Reveal>

@@ -25,7 +25,7 @@ export function DeliveryOptions({ showEatNowAction = true }: { showEatNowAction?
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-start lg:gap-12">
       <Reveal stagger className="grid gap-4">
         <article className="rounded-lg border border-forest/12 bg-card p-6 sm:p-7">
-          <p className="text-[0.65rem] font-medium tracking-[0.18em] text-sage uppercase">Weekly nourishment</p>
+          <p className="text-[0.65rem] font-medium tracking-[0.18em] text-sage-ink uppercase">Weekly nourishment</p>
           <h3 className="mt-2 text-3xl leading-tight tracking-[0.01em] text-forest">Delivered every Sunday.</h3>
           <p className="mt-3 text-sm leading-6 text-forest/72">
             Your bowls for the week, prepared by Chef Kyla and brought to your door by our own
@@ -34,7 +34,7 @@ export function DeliveryOptions({ showEatNowAction = true }: { showEatNowAction?
           <ul className="mt-5 grid gap-2.5">
             {WEEKLY.map(({ icon: Icon, text }) => (
               <li key={text} className="flex items-start gap-3 text-sm text-forest/80">
-                <Icon className="mt-0.5 size-4 shrink-0 text-sage" aria-hidden />
+                <Icon className="mt-0.5 size-4 shrink-0 text-sage-ink" aria-hidden />
                 {text}
               </li>
             ))}
@@ -45,7 +45,7 @@ export function DeliveryOptions({ showEatNowAction = true }: { showEatNowAction?
         </article>
 
         <article className="rounded-lg border border-clay/25 bg-card p-6 sm:p-7">
-          <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay uppercase">Take Out · On demand</p>
+          <p className="text-[0.65rem] font-medium tracking-[0.18em] text-clay-ink uppercase">Take Out · On demand</p>
           <h3 className="mt-2 text-3xl leading-tight tracking-[0.01em] text-forest">A bowl when you want it.</h3>
           <p className="mt-3 text-sm leading-6 text-forest/72">
             Order single bowls Thursday through Sunday. An on-demand courier, through partners like
@@ -54,7 +54,7 @@ export function DeliveryOptions({ showEatNowAction = true }: { showEatNowAction?
           <ul className="mt-5 grid gap-2.5">
             {ON_DEMAND.map(({ icon: Icon, text }) => (
               <li key={text} className="flex items-start gap-3 text-sm text-forest/80">
-                <Icon className="mt-0.5 size-4 shrink-0 text-clay" aria-hidden />
+                <Icon className="mt-0.5 size-4 shrink-0 text-clay-ink" aria-hidden />
                 {text}
               </li>
             ))}
@@ -69,7 +69,7 @@ export function DeliveryOptions({ showEatNowAction = true }: { showEatNowAction?
 
       <Reveal className="lg:sticky lg:top-28">
         <DeliveryMap />
-        <p className="mt-3 text-xs leading-5 text-forest/60">
+        <p className="mt-3 text-xs leading-5 text-forest/72">
           Areas are approximate. Weekly delivery addresses are verified at checkout; on-demand
           coverage and courier fees depend on your exact address and are shown in Take Out checkout.
         </p>

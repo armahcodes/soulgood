@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 const INPUT =
   "min-h-12 w-full rounded-md border border-forest/18 bg-white px-4 text-base text-forest transition-[border-color,box-shadow] placeholder:text-forest/35 focus:border-forest/60 focus:ring-4 focus:ring-sage/20 focus:outline-none aria-[invalid=true]:border-clay";
-const LABEL = "grid gap-2 text-xs font-medium tracking-[0.1em] text-forest/70 uppercase";
+const LABEL = "grid gap-2 text-xs font-medium tracking-[0.1em] text-forest/72 uppercase";
 
 type FieldErrors = Partial<Record<keyof JoinFormValues | "_root", string>>;
 
@@ -98,7 +98,7 @@ export function LeadGate({
 
   const fieldError = (key: keyof JoinFormValues) =>
     errors[key] ? (
-      <span id={`lead-${key}-error`} className="text-sm font-normal tracking-normal text-clay normal-case">
+      <span id={`lead-${key}-error`} className="text-sm font-normal tracking-normal text-clay-ink normal-case">
         {errors[key]}
       </span>
     ) : null;
@@ -106,8 +106,8 @@ export function LeadGate({
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col items-center gap-5 text-center">
-        <SeedOfLife size={72} className="text-sage" bloom title="" />
-        <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase">Your pathway is ready</p>
+        <SeedOfLife size={72} className="text-sage-ink" bloom title="" />
+        <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase">Your pathway is ready</p>
         <h1 className="text-[clamp(2.4rem,8vw,3.6rem)] leading-[1.02] font-normal tracking-[0.01em] text-forest">
           Where should we send it?
         </h1>
@@ -162,7 +162,7 @@ export function LeadGate({
         </div>
 
         <fieldset className="grid gap-2">
-          <legend className="mb-2 text-xs font-medium tracking-[0.1em] text-forest/70 uppercase">How would you like your bowls?</legend>
+          <legend className="mb-2 text-xs font-medium tracking-[0.1em] text-forest/72 uppercase">How would you like your bowls?</legend>
           <div className="grid gap-2 sm:grid-cols-2">
             {(["pickup", "delivery"] as const).map((method) => (
               <label
@@ -183,7 +183,7 @@ export function LeadGate({
                   />
                   <strong className="text-forest">{FULFILLMENT[method].label}</strong>
                 </span>
-                <span className="font-semibold text-forest/70">
+                <span className="font-semibold text-forest/72">
                   {FULFILLMENT[method].amountCents === 0 ? "Free, one-time" : formatCents(FULFILLMENT[method].amountCents)}
                 </span>
               </label>
@@ -217,7 +217,7 @@ export function LeadGate({
               />
               <span>
                 I confirm my delivery address is in Los Angeles or Orange County, California.
-                {errors.deliveryCountyConfirmed ? <span className="mt-1 block text-clay">{errors.deliveryCountyConfirmed}</span> : null}
+                {errors.deliveryCountyConfirmed ? <span className="mt-1 block text-clay-ink">{errors.deliveryCountyConfirmed}</span> : null}
               </span>
             </label>
           </div>
@@ -242,7 +242,7 @@ export function LeadGate({
         <Button type="submit" size="lg" disabled={pending} className="w-full">
           {pending ? "Saving…" : "Reveal my pathway"}
         </Button>
-        <p className="text-center text-xs leading-relaxed text-forest/65">
+        <p className="text-center text-xs leading-relaxed text-forest/72">
           No charge and no order on this step. By continuing, you agree to our{" "}
           <Link href="/terms" className="underline underline-offset-2">Terms of Service</Link>. We use your answers,
           including any allergies you share, only to suggest food and help with your order, as explained in our{" "}

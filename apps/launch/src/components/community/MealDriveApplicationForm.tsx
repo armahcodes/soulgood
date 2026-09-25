@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
 
 const STEPS = ["Organization", "Community", "Site & date", "Commitments"] as const;
 const INPUT =
-  "mt-2 min-h-12 w-full min-w-0 rounded-md border border-forest/20 bg-white px-4 py-3 text-base text-forest placeholder:text-forest/40 focus:border-sage focus:ring-2 focus:ring-sage/25 focus:outline-none aria-[invalid=true]:border-clay";
+  "mt-2 min-h-12 w-full min-w-0 rounded-md border border-forest/20 bg-white px-4 py-3 text-base text-forest placeholder:text-forest/50 focus:border-sage focus:ring-2 focus:ring-sage/25 focus:outline-none aria-[invalid=true]:border-clay";
 const LABEL = "block text-sm font-semibold text-forest";
 
 type Values = Record<string, string | string[] | boolean | Record<string, boolean>>;
@@ -127,7 +127,7 @@ export function MealDriveApplicationForm({ today }: { today: string }) {
 
   const error = (key: string) =>
     errors[key] ? (
-      <p id={`md-${key}-error`} className="mt-2 text-sm text-clay">
+      <p id={`md-${key}-error`} className="mt-2 text-sm text-clay-ink">
         {errors[key]}
       </p>
     ) : null;
@@ -185,7 +185,7 @@ export function MealDriveApplicationForm({ today }: { today: string }) {
           <Check className="size-6" aria-hidden />
         </span>
         <h3 className="mt-6 text-4xl leading-tight text-forest">Application received.</h3>
-        <p className="mt-3 text-sm font-medium tracking-[0.16em] text-clay uppercase">Reference {reference}</p>
+        <p className="mt-3 text-sm font-medium tracking-[0.16em] text-clay-ink uppercase">Reference {reference}</p>
         <p className="mt-4 max-w-md text-base leading-7 text-forest/75">
           Thank you. We sent a confirmation to your email. We review complete applications in the order we receive them
           and will reply about fit, timing, and next steps. Your drive isn’t confirmed until we plan it together.
@@ -209,9 +209,9 @@ export function MealDriveApplicationForm({ today }: { today: string }) {
             disabled={index > step}
             aria-current={index === step ? "step" : undefined}
             onClick={() => go(index)}
-            className="relative flex flex-col items-center gap-1.5 text-center text-[0.72rem] font-medium text-forest/70 disabled:opacity-50 aria-[current=step]:text-forest sm:text-sm"
+            className="relative flex flex-col items-center gap-1.5 text-center text-[0.72rem] font-medium text-forest/72 disabled:opacity-50 aria-[current=step]:text-forest sm:text-sm"
           >
-            <span className={cn("flex size-7 items-center justify-center rounded-full text-xs ring-4 ring-card", index === step ? "bg-forest text-oat" : index < step ? "bg-sage text-oat" : "bg-sand text-forest/70")}>
+            <span className={cn("flex size-7 items-center justify-center rounded-full text-xs ring-4 ring-card", index === step ? "bg-forest text-oat" : index < step ? "bg-sage-ink text-oat" : "bg-sand text-forest/72")}>
               {index < step ? <Check className="size-3.5" aria-hidden /> : index + 1}
             </span>
             {label}
@@ -253,7 +253,7 @@ export function MealDriveApplicationForm({ today }: { today: string }) {
               {field("contactRole", "Your role", textInput("contactRole", { maxLength: 100, placeholder: "Organizer, director, coordinator…" }))}
               {field("email", "Email", textInput("email", { type: "email", autoComplete: "email", maxLength: 254 }))}
               {field("phone", "Phone", textInput("phone", { type: "tel", autoComplete: "tel" }))}
-              <p className="text-xs leading-5 text-forest/60 sm:col-span-2">
+              <p className="text-xs leading-5 text-forest/72 sm:col-span-2">
                 Every kind of organization is reviewed the same way. We ask about your group only so we can plan the drive with you.
               </p>
             </div>
@@ -263,7 +263,7 @@ export function MealDriveApplicationForm({ today }: { today: string }) {
               {field("households", "About how many households do you expect?", textInput("households", { type: "number", inputMode: "numeric", min: 25, max: 2000, placeholder: "25–2,000" }), "sm:max-w-xs")}
               <fieldset className="grid gap-2">
                 <legend className={LABEL}>Which describe the need nearby? Choose all that apply.</legend>
-                <p className="-mt-1 mb-1 text-xs leading-5 text-forest/60">
+                <p className="-mt-1 mb-1 text-xs leading-5 text-forest/72">
                   We focus on households at risk of going without enough food. We never ask who the people you serve are.
                 </p>
                 <div className="grid gap-2 sm:grid-cols-2">{NEED_INDICATORS.map((option) => choice("needs", option, true))}</div>
@@ -318,7 +318,7 @@ export function MealDriveApplicationForm({ today }: { today: string }) {
                 <div className="grid gap-2 sm:grid-cols-2">{TIME_WINDOWS.map((option) => choice("timeWindow", option))}</div>
               </fieldset>
               {field("volunteers", "Volunteers you can bring", textInput("volunteers", { type: "number", inputMode: "numeric", min: 2, max: 500 }))}
-              <p className="self-end text-xs leading-5 text-forest/60">
+              <p className="self-end text-xs leading-5 text-forest/72">
                 Plan on about one volunteer for every 50 households, and at least four in total.
               </p>
             </div>

@@ -10,7 +10,7 @@ const TESTIMONIALS: readonly Testimonial[] = [
     quote:
       "Perfect for bringing to work, nourishing, easy, and doesn’t feel like a compromise. The ingredient quality really stands out. I love the sweet potato.",
     name: "José",
-    tone: "bg-sage text-oat",
+    tone: "bg-sage-ink text-oat",
   },
   {
     quote:
@@ -35,7 +35,7 @@ function CornerMark({ className }: { className?: string }) {
       stroke="currentColor"
       strokeWidth="1.5"
       strokeLinecap="round"
-      className={cn("pointer-events-none absolute size-3.5 text-clay", className)}
+      className={cn("pointer-events-none absolute size-3.5 text-clay-ink", className)}
     >
       <path d="M5 12h14" />
       <path d="M12 5v14" />
@@ -64,11 +64,11 @@ export function Testimonials() {
     <section aria-labelledby="testimonials-heading" className="relative overflow-hidden border-t border-forest/10 bg-card/60 pt-16 pb-16 sm:pt-24 md:pb-32">
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-8 lg:px-12">
         <Reveal className="mx-auto mb-12 max-w-2xl text-center sm:mb-16">
-          <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase">Kind words</p>
+          <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase">Kind words</p>
           <h2 id="testimonials-heading" className="mt-4 text-4xl leading-none font-normal tracking-[0.01em] text-forest sm:text-6xl">
             Real nourishment, real days.
           </h2>
-          <div className="mt-5 flex items-center justify-center gap-3 text-sm text-forest/70">
+          <div className="mt-5 flex items-center justify-center gap-3 text-sm text-forest/72">
             <Stars />
             <span>Five-star reviews from our customers</span>
           </div>
@@ -76,6 +76,9 @@ export function Testimonials() {
 
         <Reveal
           stagger
+          tabIndex={0}
+          role="region"
+          aria-label="Customer reviews"
           className="scrollbar-none -mx-5 flex snap-x snap-mandatory scroll-px-5 gap-8 overflow-x-auto px-5 pt-5 pb-6 sm:-mx-8 sm:scroll-px-8 sm:px-8 md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0"
         >
           {TESTIMONIALS.map((testimonial, index) => (
@@ -95,9 +98,9 @@ export function Testimonials() {
                 <Stars />
                 <blockquote className="mt-5">
                   <p className="font-serif text-[1.35rem] leading-snug tracking-[0.01em] text-forest">
-                    <span aria-hidden="true" className="mr-0.5 text-clay">“</span>
+                    <span aria-hidden="true" className="mr-0.5 text-clay-ink">“</span>
                     {testimonial.quote}
-                    <span aria-hidden="true" className="ml-0.5 text-clay">”</span>
+                    <span aria-hidden="true" className="ml-0.5 text-clay-ink">”</span>
                   </p>
                 </blockquote>
               </div>
@@ -114,7 +117,7 @@ export function Testimonials() {
                 </span>
                 <span className="flex flex-col">
                   <cite className="text-sm font-bold text-forest not-italic">{testimonial.name}</cite>
-                  <span className="text-xs text-forest/60">Soul Good customer</span>
+                  <span className="text-xs text-forest/72">Soul Good customer</span>
                 </span>
               </figcaption>
             </figure>

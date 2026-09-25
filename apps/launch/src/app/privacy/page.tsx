@@ -4,6 +4,7 @@ import { BRAND_NAME, BUSINESS, CONTACT, LEGAL_VERSION } from "@/lib/brand";
 import { PRIVACY_RESPONSE_DAYS } from "@/lib/privacy-shared";
 
 export const metadata = {
+  alternates: { canonical: "/privacy" },
   title: `Privacy Policy — ${BRAND_NAME}`,
   description: `How ${BUSINESS.legalName} collects, uses, shares, and protects personal information, and the privacy choices and rights available to you.`,
 };
@@ -71,7 +72,7 @@ export default function PrivacyPolicyPage() {
       <section>
         <h2>2. Information we collect and why</h2>
         <p>We collect information directly from you, from your device when you use the site, and from service providers that process orders and payments for us (for example, Square order and payment status). This section also serves as our notice at collection.</p>
-        <div className="not-prose mt-5 overflow-x-auto rounded-lg border border-forest/12">
+        <div tabIndex={0} role="region" aria-label="Information we collect, scrollable table" className="not-prose mt-5 overflow-x-auto rounded-lg border border-forest/12">
           <table className="w-full min-w-[40rem] text-left text-sm leading-6">
             <thead className="bg-sand/35 text-forest">
               <tr>

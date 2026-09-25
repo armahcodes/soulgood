@@ -35,7 +35,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         "bg-forest text-oat hover:bg-forest/90 active:bg-forest/95",
       secondary:
         "bg-transparent text-forest border border-forest hover:bg-forest hover:text-oat active:bg-forest/90",
-      link: "bg-transparent text-clay hover:text-forest underline underline-offset-4 decoration-1",
+      link: "bg-transparent text-clay-ink hover:text-forest underline underline-offset-4 decoration-1",
     };
 
     // Sizes keep primary/secondary controls at ≥44px tall (thumb targets).

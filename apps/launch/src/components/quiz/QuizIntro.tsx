@@ -13,9 +13,9 @@ import { QUESTIONS } from "@/lib/quiz";
 export function QuizIntro({ onBegin }: { onBegin: () => void }) {
   return (
     <div className="flex flex-col items-center gap-7 text-center">
-      <SeedOfLife size={88} className="text-sage" bloom title="" />
+      <SeedOfLife size={88} className="text-sage-ink" bloom title="" />
       <div>
-        <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase">The Pathway Finder</p>
+        <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase">The Pathway Finder</p>
         <h1 className="mt-4 text-[clamp(3rem,10vw,4.5rem)] leading-[1.02] font-normal tracking-[0.01em] text-forest">
           Take a breath.
         </h1>
@@ -25,7 +25,7 @@ export function QuizIntro({ onBegin }: { onBegin: () => void }) {
         noticing how your days look and how you like to eat — so we can suggest
         bowls, salads, and sides to start with.
       </p>
-      <ul className="flex flex-wrap justify-center gap-2 text-xs font-medium tracking-[0.08em] text-forest/70 uppercase">
+      <ul className="flex flex-wrap justify-center gap-2 text-xs font-medium tracking-[0.08em] text-forest/72 uppercase">
         <li className="rounded-full border border-forest/12 bg-card px-3 py-1.5">{QUESTIONS.length} questions</li>
         <li className="rounded-full border border-forest/12 bg-card px-3 py-1.5">About 2 minutes</li>
         <li className="rounded-full border border-forest/12 bg-card px-3 py-1.5">Bowls matched to you</li>

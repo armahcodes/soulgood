@@ -40,7 +40,7 @@ export default async function CancelPage() {
       <CustomerShell active="plans">
         <div className="mx-auto max-w-2xl">
           <div className="text-center">
-            <p className="text-xs font-medium tracking-[0.16em] text-clay uppercase">
+            <p className="text-xs font-medium tracking-[0.16em] text-clay-ink uppercase">
               Weekly plan management
             </p>
             <h1 className="mt-4 text-4xl leading-tight tracking-[0.01em] sm:text-5xl">
@@ -65,7 +65,7 @@ export default async function CancelPage() {
             >
               Sign in to manage my plan
             </Button>
-            <p className="mt-4 text-xs leading-5 text-forest/70">
+            <p className="mt-4 text-xs leading-5 text-forest/72">
               One-time orders do not renew. Canceling a weekly plan does not
               reverse an order already charged and committed to preparation.
             </p>

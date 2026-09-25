@@ -8,11 +8,12 @@ import { BRAND_NAME, BUSINESS, CONTACT } from "@/lib/brand";
 import { PRIVACY_RESPONSE_DAYS } from "@/lib/privacy-shared";
 
 export const metadata = {
+  alternates: { canonical: "/privacy-choices" },
   title: `Your Privacy Choices — ${BRAND_NAME}`,
   description: "Opt out of sale or sharing, manage marketing email, clear data saved on this device, and make a privacy request.",
 };
 
-const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase";
+const eyebrow = "text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase";
 const card = "scroll-mt-28 rounded-lg border border-forest/12 bg-card p-5 sm:p-8";
 
 const SECTIONS = [

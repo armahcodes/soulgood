@@ -7,14 +7,14 @@ export function CurrentBowlsSection() {
       <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-12 lg:py-28">
         <div className="mb-12 grid gap-5 lg:grid-cols-[1fr_0.72fr] lg:items-end">
           <div>
-            <p className="mb-4 text-xs font-medium tracking-[0.18em] text-clay uppercase">
+            <p className="mb-4 text-xs font-medium tracking-[0.18em] text-clay-ink uppercase">
               In your week now
             </p>
             <h2 className="max-w-[11ch] text-5xl leading-[1.02] font-semibold tracking-[0.01em] text-forest sm:text-6xl">
               Five available. Your mix.
             </h2>
           </div>
-          <p className="max-w-lg text-base leading-relaxed text-forest/65 lg:justify-self-end lg:text-lg">
+          <p className="max-w-lg text-base leading-relaxed text-forest/72 lg:justify-self-end lg:text-lg">
             Choose any five from the available Soul Bowls™ below. Sold-out bowls
             stay visible so you can see what may return. Every selection
             comes layered in {` ${CURRENT_OFFER.format}`} and labeled with prep and
@@ -44,22 +44,22 @@ export function CurrentBowlsSection() {
                 ) : null}
               </div>
               <div className="flex flex-1 flex-col p-6">
-                <div className="mb-7 flex items-center justify-between gap-3 text-xs font-medium tracking-[0.14em] text-forest/48 uppercase">
+                <div className="mb-7 flex items-center justify-between gap-3 text-xs font-medium tracking-[0.14em] text-forest/72 uppercase">
                   <span>{bowl.available ? String(index + 1).padStart(2, "0") : "Sold out"}</span>
                   <span>{bowl.serving}</span>
                 </div>
                 <h3 className="text-2xl leading-tight font-semibold tracking-[0.01em] text-forest">
                   {bowl.name}
                 </h3>
-                <p className="mt-4 text-sm leading-relaxed text-forest/68">
+                <p className="mt-4 text-sm leading-relaxed text-forest/72">
                   {bowl.ingredients}
                 </p>
                 <div className="mt-auto pt-8">
-                  <p className="text-xs leading-relaxed font-semibold text-forest/64">
+                  <p className="text-xs leading-relaxed font-semibold text-forest/72">
                     {bowl.dietary.join(" · ")}
                   </p>
                   {bowl.allergen ? (
-                    <p className="mt-2 text-xs leading-relaxed font-bold text-clay">
+                    <p className="mt-2 text-xs leading-relaxed font-bold text-clay-ink">
                       {bowl.allergen}
                     </p>
                   ) : null}
@@ -69,13 +69,13 @@ export function CurrentBowlsSection() {
           ))}
         </div>
 
-        <div className="mt-8 grid gap-3 rounded-[1.75rem] border border-forest/10 bg-white/55 p-6 text-sm leading-relaxed text-forest/65 md:grid-cols-2">
+        <div className="mt-8 grid gap-3 rounded-[1.75rem] border border-forest/10 bg-white/55 p-6 text-sm leading-relaxed text-forest/72 md:grid-cols-2">
           <p><strong className="text-forest">Cold:</strong> {CURRENT_OFFER.coldServing}</p>
           <p><strong className="text-forest">Warm:</strong> {CURRENT_OFFER.warmServing}</p>
           <p className="md:col-span-2"><strong className="text-forest">Storage:</strong> {CURRENT_OFFER.storage}</p>
         </div>
 
-        <p className="mt-5 text-xs leading-relaxed text-forest/48">
+        <p className="mt-5 text-xs leading-relaxed text-forest/72">
           Ingredients and product descriptions reflect the current labels. The
           kitchen handles major allergens, and cross-contact cannot be ruled out.
         </p>

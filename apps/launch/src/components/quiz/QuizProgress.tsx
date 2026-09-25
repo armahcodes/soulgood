@@ -45,7 +45,7 @@ export function QuizProgress({
           </span>
         ))}
       </div>
-      <p className="shrink-0 text-xs font-bold text-forest/60 tabular-nums">
+      <p className="shrink-0 text-xs font-bold text-forest/72 tabular-nums">
         {current}/{total}
       </p>
     </div>

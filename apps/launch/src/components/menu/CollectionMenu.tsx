@@ -20,7 +20,7 @@ export function CollectionMenu({
   const def = MENU_COLLECTIONS[collection];
   return (
     <div className="flex w-full flex-col gap-4 text-left">
-      <p className="text-xs font-medium tracking-[0.18em] text-forest/40 uppercase">
+      <p className="text-xs font-medium tracking-[0.18em] text-forest/72 uppercase">
         {eyebrow}
       </p>
       <div className="flex flex-col gap-3">
@@ -29,7 +29,7 @@ export function CollectionMenu({
             key={category.id}
             className="flex flex-col gap-2 rounded-2xl border border-sage/20 bg-oat/70 p-4"
           >
-            <p className="text-[11px] font-semibold tracking-[0.18em] text-sage uppercase">
+            <p className="text-[11px] font-semibold tracking-[0.18em] text-sage-ink uppercase">
               {category.label}
             </p>
             <ul className="flex flex-col gap-1.5">
@@ -40,7 +40,7 @@ export function CollectionMenu({
                 >
                   {item.name}
                   {item.note ? (
-                    <span className="text-forest/45"> · {item.note}</span>
+                    <span className="text-forest/72"> · {item.note}</span>
                   ) : null}
                 </li>
               ))}

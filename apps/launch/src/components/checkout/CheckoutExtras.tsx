@@ -37,12 +37,12 @@ export function CheckoutExtras({ disabled, weekly, className }: { disabled?: boo
       <legend className="sr-only">Optional · Salads and snacks</legend>
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p aria-hidden="true" className="flex items-center gap-2.5 text-xs font-medium tracking-[0.12em] text-forest/70 uppercase">
+          <p aria-hidden="true" className="flex items-center gap-2.5 text-xs font-medium tracking-[0.12em] text-forest/72 uppercase">
             <span className="flex size-6 items-center justify-center rounded-full border border-forest/25 text-[0.65rem] text-forest">+</span>
             Add salads &amp; snacks
-            <span className="rounded-full bg-forest/6 px-2 py-0.5 text-[0.6rem] tracking-[0.1em] text-forest/60">Optional</span>
+            <span className="rounded-full bg-forest/6 px-2 py-0.5 text-[0.6rem] tracking-[0.1em] text-forest/72">Optional</span>
           </p>
-          <p className="mt-2 text-sm leading-relaxed text-forest/68">
+          <p className="mt-2 text-sm leading-relaxed text-forest/72">
             Made-to-order salads, veggie cups, and snacks, prepared with your bowls.
             {weekly && lines.length ? " On a weekly plan they repeat with every delivery." : ""}
           </p>
@@ -66,9 +66,9 @@ export function CheckoutExtras({ disabled, weekly, className }: { disabled?: boo
                 <div className="min-w-0 flex-1">
                   <p className="flex items-baseline justify-between gap-3">
                     <span className="min-w-0 truncate text-sm font-semibold text-forest">{extra.name}</span>
-                    <span className="shrink-0 text-xs font-semibold text-forest/70 tabular-nums">{formatCents(extraLineTotalCents(line))}</span>
+                    <span className="shrink-0 text-xs font-semibold text-forest/72 tabular-nums">{formatCents(extraLineTotalCents(line))}</span>
                   </p>
-                  {options ? <p className="text-xs leading-5 text-forest/60">{options}</p> : null}
+                  {options ? <p className="text-xs leading-5 text-forest/72">{options}</p> : null}
                   <div className="mt-2 flex items-center gap-1">
                 <QuantityStepper
                   size="sm"
@@ -86,7 +86,7 @@ export function CheckoutExtras({ disabled, weekly, className }: { disabled?: boo
                   type="button"
                   onClick={() => setQuantity(index, 0)}
                   aria-label={`Remove ${extra.name}`}
-                  className="flex size-11 shrink-0 items-center justify-center rounded-full text-forest/55 transition-colors hover:bg-clay/10 hover:text-clay"
+                  className="flex size-11 shrink-0 items-center justify-center rounded-full text-forest/72 transition-colors hover:bg-clay/10 hover:text-clay-ink"
                 >
                   <Trash2 className="size-4" aria-hidden />
                 </button>
@@ -118,7 +118,7 @@ export function CheckoutExtras({ disabled, weekly, className }: { disabled?: boo
               </span>
             </span>
             <span className="mt-1.5 line-clamp-1 text-xs font-semibold text-forest">{extra.name}</span>
-            <span className="text-xs text-forest/60 tabular-nums">{formatCents(extraPriceCents(extra.id))}</span>
+            <span className="text-xs text-forest/72 tabular-nums">{formatCents(extraPriceCents(extra.id))}</span>
           </button>
         ))}
         <Link href="/menu#salads" className="flex w-32 shrink-0 snap-start flex-col items-center justify-center rounded-md border border-dashed border-forest/20 text-center text-xs font-semibold text-forest underline-offset-4 hover:underline">

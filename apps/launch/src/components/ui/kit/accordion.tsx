@@ -148,14 +148,14 @@ function AccordionRow({
           onKeyDown={onKeyDown}
           className="group flex min-h-16 w-full items-center justify-between gap-6 rounded-md py-5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-clay"
         >
-          <span className="font-serif text-xl leading-snug text-forest transition-colors group-hover:text-clay sm:text-2xl">
+          <span className="font-serif text-xl leading-snug text-forest transition-colors group-hover:text-clay-ink sm:text-2xl">
             {item.title}
           </span>
           <span
             aria-hidden="true"
             className={cn(
               "relative flex size-9 shrink-0 items-center justify-center rounded-full border transition-colors duration-300",
-              open ? "border-forest bg-forest text-oat" : "border-forest/20 text-forest group-hover:border-clay group-hover:text-clay",
+              open ? "border-forest bg-forest text-oat" : "border-forest/20 text-forest group-hover:border-clay group-hover:text-clay-ink",
             )}
           >
             <span className="absolute h-px w-3.5 bg-current" />

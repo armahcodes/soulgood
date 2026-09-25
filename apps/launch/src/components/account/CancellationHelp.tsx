@@ -27,7 +27,7 @@ export function CancellationHelp() {
         </a>{" "}
         directly.
       </p>
-      <p className="mt-3 text-xs leading-5 text-forest/70">
+      <p className="mt-3 text-xs leading-5 text-forest/72">
         Email cancellation requests are effective when received, provided those
         details identify the plan. We’ll email confirmation; no retention call
         is required.

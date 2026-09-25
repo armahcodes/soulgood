@@ -104,14 +104,14 @@ export function DeliveryMap({ className }: { className?: string }) {
           <span aria-hidden="true" className="mt-0.5 size-4 shrink-0 rounded-sm border-2 border-sage bg-sage/30" />
           <span>
             <strong className="block text-forest">Weekly delivery · Sundays</strong>
-            <span className="text-forest/70">Anywhere in {SERVICE_AREA.weekly}</span>
+            <span className="text-forest/72">Anywhere in {SERVICE_AREA.weekly}</span>
           </span>
         </span>
         <span className="flex items-start gap-3">
           <span aria-hidden="true" className="mt-0.5 size-4 shrink-0 rounded-full border-2 border-dashed border-clay bg-clay/15" />
           <span>
             <strong className="block text-forest">On demand · {EAT_NOW.days}</strong>
-            <span className="text-forest/70">About {EAT_NOW.radiusMiles} miles from our {SERVICE_AREA.kitchen} kitchen</span>
+            <span className="text-forest/72">About {EAT_NOW.radiusMiles} miles from our {SERVICE_AREA.kitchen} kitchen</span>
           </span>
         </span>
       </figcaption>

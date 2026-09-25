@@ -21,12 +21,12 @@ export function Timeline({ steps, className }: { steps: readonly TimelineStep[];
     >
       {steps.map((step, index) => (
         <li key={step.title} className="relative grid grid-cols-[2.25rem_1fr] gap-5 pb-9 last:pb-0 lg:grid-cols-1 lg:gap-6 lg:pb-0">
-          <span className="relative z-10 flex size-9 items-center justify-center rounded-full border border-forest/20 bg-oat font-serif text-lg text-clay ring-8 ring-oat">
+          <span className="relative z-10 flex size-9 items-center justify-center rounded-full border border-forest/20 bg-oat font-serif text-lg text-clay-ink ring-8 ring-oat">
             {index + 1}
           </span>
           <div className="pt-1 lg:pt-0">
             <h3 className="text-xl leading-tight font-normal text-forest">{step.title}</h3>
-            <p className="mt-2 text-sm leading-6 text-forest/68">{step.body}</p>
+            <p className="mt-2 text-sm leading-6 text-forest/72">{step.body}</p>
           </div>
         </li>
       ))}

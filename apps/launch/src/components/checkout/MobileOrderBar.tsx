@@ -61,11 +61,11 @@ export function MobileOrderBar({
     >
       <div className="mx-auto flex max-w-xl items-center justify-between gap-4">
         <div className="min-w-0">
-          <p className={cn("text-[0.65rem] font-medium tracking-[0.12em] uppercase", complete ? "text-sage" : "text-clay")}>
+          <p className={cn("text-[0.65rem] font-medium tracking-[0.12em] uppercase", complete ? "text-sage-ink" : "text-clay-ink")}>
             {selected} of {target} bowls
           </p>
           <p className="font-serif text-2xl leading-tight text-forest">
-            {totalLabel} <span className="font-sans text-xs text-forest/60">{totalNote}</span>
+            {totalLabel} <span className="font-sans text-xs text-forest/72">{totalNote}</span>
           </p>
         </div>
         <a

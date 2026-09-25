@@ -48,33 +48,33 @@ export function ServiceAndFaq() {
           <h2 className="max-w-[10ch] text-5xl leading-[1.02] font-semibold tracking-[0.01em] text-forest sm:text-6xl">
             Local by design.
           </h2>
-          <p className="max-w-md text-lg leading-relaxed text-forest/68">
+          <p className="max-w-md text-lg leading-relaxed text-forest/72">
             Pick up your Sunday bowls at no extra charge, or choose $8.88
             delivery throughout Los Angeles County. Delivery addresses are verified.
           </p>
 
           <div className="mt-2 w-full max-w-md rounded-3xl border border-forest/12 bg-oat/75 p-6">
-            <p className="mb-4 text-xs font-medium tracking-[0.16em] text-forest/45 uppercase">
+            <p className="mb-4 text-xs font-medium tracking-[0.16em] text-forest/72 uppercase">
               Transparent charges
             </p>
             <dl className="grid gap-4 text-sm">
               <div className="flex items-start justify-between gap-6">
                 <dt className="font-bold text-forest">Five-bowl order</dt>
-                <dd className="text-right text-forest/65">{PRICING.oneTime} once or weekly</dd>
+                <dd className="text-right text-forest/72">{PRICING.oneTime} once or weekly</dd>
               </div>
               <div className="flex items-start justify-between gap-6 border-t border-forest/10 pt-4">
                 <dt className="font-bold text-forest">Sunday pickup</dt>
-                <dd className="max-w-[16rem] text-right text-forest/65">$0.00</dd>
+                <dd className="max-w-[16rem] text-right text-forest/72">$0.00</dd>
               </div>
               <div className="flex items-start justify-between gap-6 border-t border-forest/10 pt-4">
                 <dt className="font-bold text-forest">{FEES.delivery.label}</dt>
-                <dd className="max-w-[16rem] text-right text-forest/65">
+                <dd className="max-w-[16rem] text-right text-forest/72">
                   {formatCents(FEES.delivery.amountCents)} per order
                 </dd>
               </div>
               <div className="flex items-start justify-between gap-6 border-t border-forest/10 pt-4">
                 <dt className="font-bold text-forest">Container deposit</dt>
-                <dd className="max-w-[16rem] text-right text-forest/65">
+                <dd className="max-w-[16rem] text-right text-forest/72">
                   {FEES.containerDeposit.amountCents === null
                     ? "Confirmed separately"
                     : formatCents(FEES.containerDeposit.amountCents)}{" "}
@@ -83,10 +83,10 @@ export function ServiceAndFaq() {
               </div>
               <div className="flex items-start justify-between gap-6 border-t border-forest/10 pt-4">
                 <dt className="font-bold text-forest">California sales tax</dt>
-                <dd className="max-w-[16rem] text-right text-forest/65">Calculated at checkout</dd>
+                <dd className="max-w-[16rem] text-right text-forest/72">Calculated at checkout</dd>
               </div>
             </dl>
-            <p className="mt-5 text-xs leading-relaxed text-forest/50">
+            <p className="mt-5 text-xs leading-relaxed text-forest/72">
               Food containers are not subject to California CRV. The reusable-container
               deposit is a separate Soul Goods LLC return program.
               {` `}{TAX.disclosure}
@@ -95,7 +95,7 @@ export function ServiceAndFaq() {
         </div>
 
         <div id="faq">
-          <p className="mb-5 text-xs font-medium tracking-[0.18em] text-clay uppercase">
+          <p className="mb-5 text-xs font-medium tracking-[0.18em] text-clay-ink uppercase">
             Common questions
           </p>
           <div className="border-t border-forest/15">
@@ -103,16 +103,16 @@ export function ServiceAndFaq() {
               <details key={faq.question} className="group border-b border-forest/15 py-5">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-lg font-bold text-forest">
                   {faq.question}
-                  <span className="text-2xl font-normal text-clay transition-transform group-open:rotate-45">+</span>
+                  <span className="text-2xl font-normal text-clay-ink transition-transform group-open:rotate-45">+</span>
                 </summary>
-                <p className="max-w-2xl pt-4 text-sm leading-relaxed text-forest/65">
+                <p className="max-w-2xl pt-4 text-sm leading-relaxed text-forest/72">
                   {faq.answer}
                 </p>
               </details>
             ))}
           </div>
-          <p className="mt-6 text-sm text-forest/55">
-            Read the <Link href="/customer-agreement" className="font-bold text-clay underline underline-offset-4">Customer Agreement</Link>
+          <p className="mt-6 text-sm text-forest/72">
+            Read the <Link href="/customer-agreement" className="font-bold text-clay-ink underline underline-offset-4">Customer Agreement</Link>
             {` `}for complete purchase and delivery terms.
           </p>
         </div>

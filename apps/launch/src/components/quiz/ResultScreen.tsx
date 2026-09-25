@@ -81,15 +81,15 @@ export function ResultScreen({
     <div className="flex flex-col gap-10">
       <div className="flex flex-col items-center gap-5 text-center">
         <motion.div {...rise(0)}>
-          <SeedOfLife size={96} className="text-sage" bloom title="" />
+          <SeedOfLife size={96} className="text-sage-ink" bloom title="" />
         </motion.div>
-        <motion.p {...rise(0.1)} className="text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase">
+        <motion.p {...rise(0.1)} className="text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase">
           Your Soul Good pathway
         </motion.p>
         <motion.h1 {...rise(0.18)} className="text-[clamp(3.6rem,14vw,6rem)] leading-[1.02] font-normal tracking-[0.01em] text-forest">
           {pathway.name}
         </motion.h1>
-        <motion.p {...rise(0.26)} className="text-sm font-medium tracking-[0.12em] text-sage uppercase">
+        <motion.p {...rise(0.26)} className="text-sm font-medium tracking-[0.12em] text-sage-ink uppercase">
           {pathway.descriptor}
         </motion.p>
         <motion.p {...rise(0.32)} className="max-w-[38ch] text-lg leading-relaxed text-forest/75">
@@ -100,10 +100,10 @@ export function ResultScreen({
       <motion.section {...rise(0.4)} aria-labelledby="mix-heading" className="overflow-hidden rounded-lg border border-forest/12 bg-card shadow-[0_30px_60px_-45px_rgb(44_58_52/0.5)]">
         <div className="flex flex-wrap items-end justify-between gap-3 border-b border-dashed border-forest/15 p-5 sm:p-7">
           <div>
-            <p className="text-[0.65rem] font-medium tracking-[0.18em] text-forest/60 uppercase">Chosen for your pathway</p>
+            <p className="text-[0.65rem] font-medium tracking-[0.18em] text-forest/72 uppercase">Chosen for your pathway</p>
             <h2 id="mix-heading" className="mt-2 text-3xl leading-none tracking-[0.01em] text-forest">Your starting mix</h2>
           </div>
-          <p className="max-w-xs text-sm leading-6 text-forest/70">{MIX_RATIONALE[state.pathway]}</p>
+          <p className="max-w-xs text-sm leading-6 text-forest/72">{MIX_RATIONALE[state.pathway]}</p>
         </div>
         <ul className="grid gap-px bg-forest/8 sm:grid-cols-2">
           {picks.map((bowl) => (
@@ -116,10 +116,10 @@ export function ResultScreen({
               </div>
               <div className="min-w-0">
                 <p className="font-serif text-xl leading-tight text-forest">{bowl.name}</p>
-                <p className="mt-1 text-xs leading-5 text-forest/65">
+                <p className="mt-1 text-xs leading-5 text-forest/72">
                   {groupChips(BOWL_INGREDIENTS[bowl.id]).map((chip) => chip.label).join(" · ")}
                 </p>
-                {bowl.allergen ? <p className="mt-1 text-xs font-semibold text-clay">{bowl.allergen}</p> : null}
+                {bowl.allergen ? <p className="mt-1 text-xs font-semibold text-clay-ink">{bowl.allergen}</p> : null}
               </div>
             </li>
           ))}
@@ -137,7 +137,7 @@ export function ResultScreen({
               {mix.excluded.map((bowl) => `${bowl.name} (${bowl.reason})`).join(", ")}.
             </p>
           ) : null}
-          <p className="text-xs text-forest/60">
+          <p className="text-xs text-forest/72">
             You can change any bowl at checkout. Our kitchen handles other major allergens and we can’t
             guarantee against cross-contact; customers with severe or life-threatening allergies should not order.
           </p>
@@ -148,10 +148,10 @@ export function ResultScreen({
         <motion.section {...rise(0.45)} aria-labelledby="sides-heading" className="rounded-lg border border-forest/12 bg-card p-5 sm:p-7">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
-              <p className="text-[0.65rem] font-medium tracking-[0.18em] text-forest/60 uppercase">From the salad bar</p>
+              <p className="text-[0.65rem] font-medium tracking-[0.18em] text-forest/72 uppercase">From the salad bar</p>
               <h2 id="sides-heading" className="mt-2 text-3xl leading-none text-forest">Alongside your bowls</h2>
             </div>
-            <p className="max-w-xs text-sm leading-6 text-forest/70">
+            <p className="max-w-xs text-sm leading-6 text-forest/72">
               {sidesOrderable ? "Tap to add or remove. You can change them at checkout." : "Find these on our menu."}
             </p>
           </div>
@@ -171,8 +171,8 @@ export function ResultScreen({
                       <span className="font-serif text-lg leading-tight text-forest">{extra.name}</span>
                       <span className="shrink-0 text-sm font-semibold text-forest tabular-nums">{formatCents(extraLineTotalCents(side.line))}</span>
                     </span>
-                    {options ? <span className="block text-xs text-forest/60">{options}</span> : null}
-                    <span className="mt-1 block text-xs leading-5 text-forest/70">
+                    {options ? <span className="block text-xs text-forest/72">{options}</span> : null}
+                    <span className="mt-1 block text-xs leading-5 text-forest/72">
                       {side.adds.length
                         ? `Adds ${side.adds.join(", ").toLowerCase()} to your week`
                         : groupChips(extraIngredients(side.line)).map((chip) => chip.label).join(" · ")}
@@ -227,10 +227,10 @@ export function ResultScreen({
           Start with this mix
         </Button>
         <div className="flex flex-wrap items-center justify-center gap-x-6 text-sm font-semibold">
-          <Link href="/menu" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-clay">
+          <Link href="/menu" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-clay-ink">
             Browse all bowls
           </Link>
-          <button type="button" onClick={onRetake} className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-clay">
+          <button type="button" onClick={onRetake} className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-clay-ink">
             Retake the quiz
           </button>
         </div>

@@ -21,7 +21,7 @@ export default function NotFound() {
               </div>
             ))}
           </div>
-          <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay uppercase">Page not found</p>
+          <p className="text-[0.68rem] font-medium tracking-[0.22em] text-clay-ink uppercase">Page not found</p>
           <h1 className="mt-4 text-5xl leading-[1.02] font-normal tracking-[0.01em] text-forest sm:text-6xl">
             This bowl isn’t on the menu.
           </h1>

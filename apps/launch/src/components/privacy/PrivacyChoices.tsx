@@ -43,7 +43,7 @@ export function SaleSharingPreference() {
     <div className="grid gap-4">
       {gpc ? (
         <p className="flex items-start gap-3 rounded-lg border border-sage/35 bg-sage/10 p-4 text-sm leading-6 text-forest">
-          <ShieldCheck className="mt-0.5 size-5 shrink-0 text-sage" aria-hidden />
+          <ShieldCheck className="mt-0.5 size-5 shrink-0 text-sage-ink" aria-hidden />
           <span>
             <strong className="font-semibold">Global Privacy Control detected.</strong> Your browser is asking sites not to
             sell or share your information, and we honor it automatically.
@@ -60,12 +60,12 @@ export function SaleSharingPreference() {
         />
         <span>
           <strong className="font-semibold text-forest">Do not sell or share my personal information</strong>
-          <span className="block text-forest/70">
+          <span className="block text-forest/72">
             Includes targeted advertising. We don’t do either today; this saves your choice for this browser.
           </span>
         </span>
       </label>
-      <p aria-live="polite" className="text-sm text-forest/70">
+      <p aria-live="polite" className="text-sm text-forest/72">
         {saved ? (optedOut ? "Saved: you’re opted out on this browser." : "Saved.") : optedOut ? "You’re opted out on this browser." : null}
       </p>
     </div>
@@ -86,7 +86,7 @@ export function ClearDeviceData() {
       <Button type="button" variant="secondary" onClick={clear} className="w-full sm:w-auto">
         Clear saved data on this device
       </Button>
-      <p aria-live="polite" className="text-sm text-forest/70">
+      <p aria-live="polite" className="text-sm text-forest/72">
         {cleared ? "Cleared your saved cart, quiz answers, and last order from this browser." : null}
       </p>
     </div>
@@ -132,12 +132,12 @@ export function PrivacyRequestForm() {
     }
   }
 
-  const error = (key: string) => (errors[key] ? <p className="mt-2 text-sm text-clay">{errors[key]}</p> : null);
+  const error = (key: string) => (errors[key] ? <p className="mt-2 text-sm text-clay-ink">{errors[key]}</p> : null);
 
   if (status === "received")
     return (
       <div role="status" className="flex items-start gap-3 rounded-lg bg-sage/10 p-5 text-sm leading-6 text-forest">
-        <Check className="mt-1 size-5 shrink-0 text-sage" aria-hidden />
+        <Check className="mt-1 size-5 shrink-0 text-sage-ink" aria-hidden />
         <span>
           <strong className="font-semibold">Request received · {reference}.</strong>{" "}
           {values.requestType === "marketing"
@@ -194,7 +194,7 @@ export function PrivacyRequestForm() {
         <label className="text-sm font-semibold text-forest">
           Name of the person you’re acting for
           <input className={INPUT} maxLength={120} value={values.agentFor} aria-invalid={Boolean(errors.agentFor) || undefined} onChange={(event) => set("agentFor", event.target.value)} />
-          <span className="mt-1 block text-xs font-normal text-forest/60">We’ll ask for written permission from them before acting.</span>
+          <span className="mt-1 block text-xs font-normal text-forest/72">We’ll ask for written permission from them before acting.</span>
           {error("agentFor")}
         </label>
       ) : null}

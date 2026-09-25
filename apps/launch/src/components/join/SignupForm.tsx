@@ -115,7 +115,7 @@ export function SignupForm({ initialFulfillment = "delivery" }: { initialFulfill
           })}
         />
         {errors.name && (
-          <p role="alert" className="text-sm text-clay">
+          <p role="alert" className="text-sm text-clay-ink">
             {errors.name.message}
           </p>
         )}
@@ -141,7 +141,7 @@ export function SignupForm({ initialFulfillment = "delivery" }: { initialFulfill
           })}
         />
         {errors.email && (
-          <p role="alert" className="text-sm text-clay">
+          <p role="alert" className="text-sm text-clay-ink">
             {errors.email.message}
           </p>
         )}
@@ -167,7 +167,7 @@ export function SignupForm({ initialFulfillment = "delivery" }: { initialFulfill
           })}
         />
         {errors.phone && (
-          <p role="alert" className="text-sm text-clay">
+          <p role="alert" className="text-sm text-clay-ink">
             {errors.phone.message}
           </p>
         )}
@@ -232,7 +232,7 @@ export function SignupForm({ initialFulfillment = "delivery" }: { initialFulfill
               })}
             />
             {errors.deliveryZip && (
-              <p role="alert" className="text-sm text-clay">
+              <p role="alert" className="text-sm text-clay-ink">
                 {errors.deliveryZip.message}
               </p>
             )}
@@ -254,7 +254,7 @@ export function SignupForm({ initialFulfillment = "delivery" }: { initialFulfill
               <span>I confirm my delivery address is in Los Angeles or Orange County, California.</span>
             </label>
             {errors.deliveryCountyConfirmed && (
-              <p role="alert" className="text-sm text-clay">
+              <p role="alert" className="text-sm text-clay-ink">
                 {errors.deliveryCountyConfirmed.message}
               </p>
             )}
@@ -263,7 +263,7 @@ export function SignupForm({ initialFulfillment = "delivery" }: { initialFulfill
       )}
 
       {submitError && (
-        <p role="alert" className="text-sm text-clay">
+        <p role="alert" className="text-sm text-clay-ink">
           {submitError}
         </p>
       )}
@@ -272,7 +272,7 @@ export function SignupForm({ initialFulfillment = "delivery" }: { initialFulfill
         <Button type="submit" size="lg" className="w-full" disabled={pending !== null}>
           {pending ? "Reserving…" : "Reserve my Soul Bowls™"}
         </Button>
-        <p className="text-center text-xs leading-relaxed text-forest/55">
+        <p className="text-center text-xs leading-relaxed text-forest/72">
           No charge on this step. Purchase terms are shown before payment. By
           continuing, you agree to our <Link href="/terms" className="underline underline-offset-2">Terms</Link>
           {` `}and acknowledge the <Link href="/customer-agreement" className="underline underline-offset-2">Customer Agreement</Link>.

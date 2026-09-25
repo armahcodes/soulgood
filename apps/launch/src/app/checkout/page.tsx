@@ -16,6 +16,7 @@ import { checkoutOperationsReady } from "@/lib/checkout-readiness";
 import { EAT_NOW } from "@/lib/ordering";
 
 export const metadata = {
+  alternates: { canonical: "/checkout" },
   title: `${NOURISHMENT.label} — ${BRAND_NAME}`,
   description: "Make nourishment part of your day with chef-crafted Soul Bowls™, once or weekly. Sunday delivery across Los Angeles and Orange County, free on orders over $100.",
 };
@@ -44,7 +45,7 @@ export default async function CheckoutPage({
         aside={
           <Link
             href="/account"
-            className="inline-flex min-h-11 items-center text-[0.7rem] font-medium tracking-[0.1em] text-forest/70 uppercase transition-colors hover:text-clay"
+            className="inline-flex min-h-11 items-center text-[0.7rem] font-medium tracking-[0.1em] text-forest/72 uppercase transition-colors hover:text-clay-ink"
           >
             My orders
           </Link>
@@ -70,7 +71,7 @@ export default async function CheckoutPage({
                 </div>
               ))}
             </div>
-            <p className="text-xs font-medium tracking-[0.18em] text-clay uppercase">
+            <p className="text-xs font-medium tracking-[0.18em] text-clay-ink uppercase">
               {NOURISHMENT.label} · Once or weekly
             </p>
             <h1 className="mx-auto max-w-[10ch] text-5xl leading-[1.02] font-normal tracking-[0.01em] text-forest sm:text-7xl lg:mx-0 lg:max-w-[9ch]">
@@ -90,24 +91,24 @@ export default async function CheckoutPage({
               href="/quiz"
               className="group mx-auto flex w-fit items-center gap-3 rounded-full border border-forest/15 bg-card py-1.5 pr-4 pl-1.5 text-sm text-forest transition-colors hover:border-forest/40 lg:mx-0"
             >
-              <span className="shrink-0 rounded-full bg-sage px-2.5 py-1 text-[0.6rem] font-medium tracking-[0.14em] whitespace-nowrap text-oat uppercase">2 min</span>
+              <span className="shrink-0 rounded-full bg-sage-ink px-2.5 py-1 text-[0.6rem] font-medium tracking-[0.14em] whitespace-nowrap text-oat uppercase">2 min</span>
               <span className="hidden sm:inline">Not sure which bowls?</span>{" "}
-              <span className="font-semibold whitespace-nowrap underline underline-offset-4 group-hover:text-clay">Find your pathway</span>
+              <span className="font-semibold whitespace-nowrap underline underline-offset-4 group-hover:text-clay-ink">Find your pathway</span>
             </Link>
 
             <div className="mt-2 hidden rounded-lg border border-forest/12 bg-card/70 p-6 text-left sm:block">
-              <p className="text-[0.65rem] font-medium tracking-[0.18em] text-forest/60 uppercase">What’s included</p>
+              <p className="text-[0.65rem] font-medium tracking-[0.18em] text-forest/72 uppercase">What’s included</p>
               <ul className="mt-4 grid gap-3">
                 {PLAN_ITEMS.map((item) => (
                   <li key={item} className="flex items-start gap-3 text-sm leading-6 text-forest/78">
-                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-sage/15 text-sage">
+                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-sage/15 text-sage-ink">
                       <Check className="size-3" aria-hidden />
                     </span>
                     {item}
                   </li>
                 ))}
               </ul>
-              <p className="mt-5 border-t border-forest/10 pt-4 text-xs leading-5 text-forest/65">
+              <p className="mt-5 border-t border-forest/10 pt-4 text-xs leading-5 text-forest/72">
                 {SOLD_OUT_BOWLS.length > 0
                   ? `Sold out this week: ${SOLD_OUT_BOWLS.map((bowl) => bowl.name).join(", ")}. `
                   : ""}
@@ -125,7 +126,7 @@ export default async function CheckoutPage({
               <p className="font-serif text-2xl font-semibold text-forest">
                 Your nourishment, your way.
               </p>
-              <p className="mt-1 text-sm text-forest/55">
+              <p className="mt-1 text-sm text-forest/72">
                 One-time or weekly · 5 to {MAX_BOWLS_PER_ORDER} bowls
               </p>
             </div>
@@ -144,7 +145,7 @@ export default async function CheckoutPage({
                 squareLocationId={process.env.SQUARE_LOCATION_ID ?? ""}
               />
             </div>
-            <p className="mt-4 text-center text-xs leading-relaxed text-forest/50">
+            <p className="mt-4 text-center text-xs leading-relaxed text-forest/72">
               No separate handling fee. Any reusable-container deposit is
               voluntary, refundable, not California Redemption Value, and
               collected separately when containers are issued.

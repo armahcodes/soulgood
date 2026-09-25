@@ -29,7 +29,7 @@ export function WeeklyPlans({
   return (
     <>
       <div className="max-w-2xl text-center sm:text-left">
-        <p className="text-xs font-medium tracking-[0.16em] text-clay uppercase">
+        <p className="text-xs font-medium tracking-[0.16em] text-clay-ink uppercase">
           Your weekly nourishment
         </p>
         <h1 className="mt-4 text-4xl leading-tight tracking-[0.01em] sm:text-5xl">
@@ -39,7 +39,7 @@ export function WeeklyPlans({
           Manage future renewals here. Canceling a plan does not reverse an
           order already charged and committed to preparation.
         </p>
-        <p className="mt-3 break-words text-sm text-forest/70">
+        <p className="mt-3 break-words text-sm text-forest/72">
           Signed in as {email}
         </p>
       </div>
@@ -51,7 +51,7 @@ export function WeeklyPlans({
                 key={plan.id}
                 className="rounded-lg border border-forest/12 bg-card shadow-[0_20px_40px_-36px_rgb(44_58_52/0.45)] p-5 sm:p-7"
               >
-                <p className="text-xs font-medium tracking-[0.12em] text-forest/65 uppercase">
+                <p className="text-xs font-medium tracking-[0.12em] text-forest/72 uppercase">
                   Weekly plan · {plan.id.slice(-8).toUpperCase()}
                 </p>
                 <h2 className="mt-3 text-3xl">Soul Bowls™</h2>
@@ -63,13 +63,13 @@ export function WeeklyPlans({
                 </p>
                 <dl className="my-5 grid gap-3 border-y border-forest/10 py-4 text-sm sm:grid-cols-2">
                   <div>
-                    <dt className="text-forest/65">Started</dt>
+                    <dt className="text-forest/72">Started</dt>
                     <dd className="mt-1 font-semibold">
                       {formatCustomerDate(plan.createdAt)}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-forest/65">Last quoted weekly total</dt>
+                    <dt className="text-forest/72">Last quoted weekly total</dt>
                     <dd className="mt-1 font-semibold">
                       {formatCents(plan.totalCents)}
                     </dd>
