@@ -4,7 +4,7 @@ import { BRAND_NAME } from "@/lib/brand";
 export const metadata = {
   title: `Order Soul Bowls™ — ${BRAND_NAME}`,
   description:
-    "Build and pay for a one-time or weekly Soul Bowls™ order with pickup or Los Angeles County delivery.",
+    "Build and pay for a one-time or weekly Soul Bowls™ order with Sunday pickup or delivery across Los Angeles and Orange County.",
 };
 
 export default async function JoinPage({

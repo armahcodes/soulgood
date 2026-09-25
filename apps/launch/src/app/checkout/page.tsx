@@ -4,7 +4,7 @@ import { Check } from "lucide-react";
 import { ReserveButton } from "@/components/checkout/ReserveButton";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SiteHeader } from "@/components/ui/SiteHeader";
-import { BRAND_NAME, type FulfillmentMethod, NOURISHMENT, PLAN, PRICING } from "@/lib/brand";
+import { BRAND_NAME, type FulfillmentMethod, NOURISHMENT, PLAN } from "@/lib/brand";
 import { MAX_BOWLS_PER_ORDER } from "@/lib/bowl-selection";
 import {
   AVAILABLE_BOWLS,
@@ -16,7 +16,7 @@ import { EAT_NOW } from "@/lib/ordering";
 
 export const metadata = {
   title: `${NOURISHMENT.label} — ${BRAND_NAME}`,
-  description: `Make nourishment part of your day with chef-crafted Soul Bowls™. Five 32 oz bowls start at ${PRICING.weekly}, once or weekly, plus applicable tax and delivery.`,
+  description: "Make nourishment part of your day with chef-crafted Soul Bowls™, once or weekly. Sunday delivery across Los Angeles and Orange County, free on orders over $100.",
 };
 
 const PLAN_ITEMS = [
@@ -76,11 +76,12 @@ export default async function CheckoutPage({
               Make this ritual yours.
             </h1>
             <p className="mx-auto max-w-md text-base leading-relaxed text-forest/72 lg:mx-0">
-              Thoughtfully prepared bowls, chosen around your life. Start with
-              five 32 oz bowls for $88, then adjust for the people at your table
-              and 1–3 meals per person, per day, across five days. Order once or
-              choose weekly delivery. Sunday pickup is free for one-time orders;
-              in-house LA County delivery is $8.88. Applicable tax is additional.
+              Thoughtfully prepared bowls, chosen around your life. Choose them in
+              sets of five and adjust for the people at your table and 1–3 meals
+              per person, per day. Order once or choose weekly delivery. Sunday
+              pickup is free for one-time orders; Sunday delivery across Los Angeles
+              and Orange County is $8.88, or free on orders over $100. Applicable
+              tax is additional.
             </p>
 
             <Link

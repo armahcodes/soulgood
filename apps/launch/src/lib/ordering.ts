@@ -7,9 +7,13 @@ export const EAT_NOW = {
   menuUrl: "https://checkout.soulgood.kitchen/s/order",
   infoPath: "/eat-now",
   returnUrl: "https://www.soulgood.kitchen/eat-now#order-help",
-  fulfillment: "Courier partners or a Soul Good courier",
+  days: "Thursday–Sunday",
+  radiusMiles: 20,
+  fulfillment: "On-demand couriers or a Soul Good courier",
   deliveryDetails:
-    "Eat Now orders may be delivered by courier partners such as DoorDash, Uber Eats, or Postmates, or by a Soul Good courier, depending on availability.",
+    "Eat Now orders may be delivered by on-demand courier partners such as Uber Direct or DoorDash, or by a Soul Good courier, depending on availability.",
+  coverage:
+    "On-demand delivery runs Thursday through Sunday within about 20 miles of our Long Beach kitchen. A courier fee is added at checkout unless your order is over $100. Every order has a $50 minimum.",
   availability:
-    "Check the menu for current items, service times, and pickup or delivery options. Courier availability and delivery coverage depend on your address. Review tax, delivery charges, and your total at Eat Now checkout before paying.",
+    "Check the menu for current items, service times, and pickup or delivery options. Courier availability and delivery coverage depend on your address. Review tax, courier fees, and your total at Eat Now checkout before paying.",
 } as const;

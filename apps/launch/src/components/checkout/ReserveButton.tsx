@@ -26,8 +26,10 @@ import {
 import {
   FEES,
   FULFILLMENT,
+  fulfillmentFeeCents,
   type FulfillmentMethod,
   formatCents,
+  SERVICE_AREA,
   PRICING,
   PURCHASE_OPTIONS,
   type PurchaseType,
@@ -389,7 +391,7 @@ export function ReserveButton({
       walletPaymentsRef.current = payments;
       const bowlsAmount =
         PRICING.oneTimeCents * mealSetCount(peopleCount, mealsPerDay);
-      const fulfillmentAmount = FULFILLMENT[fulfillmentMethod].amountCents;
+      const fulfillmentAmount = fulfillmentFeeCents(fulfillmentMethod, bowlsAmount);
       const paymentRequestOptions = {
         countryCode: "US" as const,
         currencyCode: "USD" as const,
@@ -488,6 +490,7 @@ export function ReserveButton({
   const mealSets = mealSetCount(peopleCount, mealsPerDay);
   const targetBowls = bowlsForPlan(peopleCount, mealsPerDay);
   const bowlOrderCents = PRICING.oneTimeCents * mealSets;
+  const deliveryCents = fulfillmentFeeCents(fulfillmentMethod, bowlOrderCents);
   const bowlSelectionComplete = bowlSelectionSchemaForPlan(
     peopleCount,
     mealsPerDay,
@@ -632,7 +635,7 @@ export function ReserveButton({
       fulfillmentMethod === "delivery" &&
       !addressIsComplete(deliveryAddress)
     ) {
-      reportError("Enter the complete Los Angeles County delivery address.");
+      reportError(`Enter the complete ${SERVICE_AREA.weekly} delivery address.`);
       return;
     }
     setQuoting(true);
@@ -1306,12 +1309,13 @@ export function ReserveButton({
                     </strong>
                     {method === "pickup"
                       ? "Sunday location and window confirmed after checkout"
-                      : "Available throughout Los Angeles County"}
+                      : `Sundays across ${SERVICE_AREA.weekly} · free over $100`}
                   </span>
                 </span>
                 <strong className="shrink-0 text-forest">
-                  {formatCents(option.amountCents)}
-                  {method === "delivery" ? "/order" : ""}
+                  {fulfillmentFeeCents(method, bowlOrderCents) === 0
+                    ? method === "delivery" ? "Free" : formatCents(0)
+                    : formatCents(fulfillmentFeeCents(method, bowlOrderCents))}
                 </strong>
               </label>
             );
@@ -1374,7 +1378,7 @@ export function ReserveButton({
 
         {fulfillmentMethod === "delivery" && (
           <fieldset className={STEP_CARD}>
-            <StepLegend title="LA County delivery address" />
+            <StepLegend title="Sunday delivery address" />
             {renderAddressFields("delivery")}
             <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-forest/12 bg-oat/70 p-4 text-sm text-forest/72">
               <input
@@ -1505,7 +1509,9 @@ export function ReserveButton({
           <div className="flex justify-between gap-4">
             <dt>{FULFILLMENT[fulfillmentMethod].label}</dt>
             <dd className="font-semibold text-forest">
-              {formatCents(FULFILLMENT[fulfillmentMethod].amountCents)}
+              {deliveryCents === 0 && fulfillmentMethod === "delivery"
+                ? "Free"
+                : formatCents(deliveryCents)}
             </dd>
           </div>
           <div className="flex justify-between gap-4">
@@ -1534,7 +1540,7 @@ export function ReserveButton({
               {quote
                 ? formatCents(quote.totalCents)
                 : formatCents(
-                    bowlOrderCents + FULFILLMENT[fulfillmentMethod].amountCents,
+                    bowlOrderCents + deliveryCents,
                   )}
             </dd>
           </div>
@@ -1715,7 +1721,7 @@ export function ReserveButton({
         totalLabel={
           quote
             ? formatCents(quote.totalCents)
-            : formatCents(bowlOrderCents + FULFILLMENT[fulfillmentMethod].amountCents)
+            : formatCents(bowlOrderCents + deliveryCents)
         }
         totalNote={quote ? "incl. tax" : "before tax"}
       />

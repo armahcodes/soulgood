@@ -72,7 +72,7 @@ export const leadSchema = z
       context.addIssue({
         code: "custom",
         path: ["deliveryCountyConfirmed"],
-        message: "Confirm that the delivery address is in Los Angeles County",
+        message: "Confirm that the delivery address is in Los Angeles or Orange County",
       });
     }
   });

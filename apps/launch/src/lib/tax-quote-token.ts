@@ -5,7 +5,7 @@ import {
   MAX_PEOPLE_PER_ORDER,
   mealSetCount,
 } from "./bowl-selection";
-import type { FulfillmentMethod } from "./brand";
+import { SERVICE_AREA, type FulfillmentMethod, type ServiceCounty } from "./brand";
 import type { CheckoutAddress, TaxQuote } from "./square";
 import { hasStrongSecret } from "./strong-secret";
 
@@ -66,7 +66,7 @@ function validQuote(value: unknown): value is TaxQuoteTokenPayload {
     typeof quote.totalCents === "number" &&
     typeof quote.percentage === "string" &&
     typeof quote.jurisdiction === "string" &&
-    quote.county === "LOS ANGELES" &&
+    SERVICE_AREA.weeklyCounties.includes(quote.county as ServiceCounty) &&
     quote.subtotalCents > 0 &&
     quote.taxCents >= 0 &&
     quote.totalCents === quote.subtotalCents + quote.taxCents

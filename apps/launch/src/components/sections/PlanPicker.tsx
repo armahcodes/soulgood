@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/Button";
 import { SegmentedControl } from "@/components/ui/kit/segmented-control";
 import {
   FULFILLMENT,
+  fulfillmentFeeCents,
   NOURISHMENT,
+  ORDER_RULES,
   PLAN,
   PRICING,
   PURCHASE_OPTIONS,
@@ -45,7 +47,7 @@ export function PlanPicker() {
     if (next === "weekly") setFulfillment("delivery");
   };
 
-  const fulfillmentCents = FULFILLMENT[fulfillment].amountCents;
+  const fulfillmentCents = fulfillmentFeeCents(fulfillment, PRICING.oneTimeCents);
   const subtotalCents = PRICING.oneTimeCents + fulfillmentCents;
 
   return (
@@ -54,11 +56,11 @@ export function PlanPicker() {
         <div>
           <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">Make it yours</p>
           <h2 className="mt-3 text-5xl leading-none font-normal tracking-[-0.045em] text-forest sm:text-6xl">
-            Five bowls. $88.
+            Build your week.
           </h2>
           <p className="mt-4 max-w-md text-sm leading-6 text-forest/70">
-            Begin with one of each available recipe, then make the selection your own.
-            Larger orders scale for the people at your table.
+            Choose your bowls in sets of five, for one person or the whole table. Weekly plans arrive
+            every Sunday; one-time orders can be picked up or delivered.
           </p>
         </div>
 
@@ -92,7 +94,7 @@ export function PlanPicker() {
       <div className="flex flex-col justify-between gap-8 bg-forest p-6 text-oat sm:p-10">
         <dl className="grid gap-4 text-sm" aria-live="polite">
           <div className="flex items-baseline justify-between gap-6">
-            <dt className="text-oat/70">{PURCHASE_OPTIONS[purchase].label}</dt>
+            <dt className="text-oat/70">{PURCHASE_OPTIONS[purchase].label} · 5 bowls</dt>
             <dd className="font-serif text-2xl">{PRICING.oneTime}</dd>
           </div>
           <div className="flex items-baseline justify-between gap-6 border-t border-oat/12 pt-4">
@@ -109,7 +111,8 @@ export function PlanPicker() {
 
         <div className="grid gap-4">
           <p className="text-xs leading-5 text-oat/70">
-            {PURCHASE_OPTIONS[purchase].disclosure} {FULFILLMENT[fulfillment].disclosure} Applicable tax is shown before payment.
+            {PURCHASE_OPTIONS[purchase].disclosure} {FULFILLMENT[fulfillment].disclosure} {ORDER_RULES.minimumLabel}. Applicable tax is shown before payment.
+            {fulfillment === "delivery" && fulfillmentCents > 0 ? " Add a second set and delivery is free." : ""}
           </p>
           <Button
             as="a"

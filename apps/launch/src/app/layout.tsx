@@ -10,7 +10,7 @@ const ebGaramond = EB_Garamond({
 });
 
 const SITE_TITLE = `${BRAND_NAME} — ${NOURISHMENT.headline}`;
-const SITE_DESCRIPTION = `${TAGLINE}. Thoughtfully prepared by Chef Kyla. Five 32 oz bowls for $88, once or weekly, with Sunday pickup or in-house LA County delivery. Explore Eat Now for individual orders.`;
+const SITE_DESCRIPTION = `${TAGLINE}. Chef-made Soul Bowls™ by Chef Kyla. Weekly nourishment delivered Sundays across Los Angeles and Orange County, or order on demand Thursday–Sunday near Long Beach. $50 minimum; free delivery over $100.`;
 
 export const metadata: Metadata = {
   title: SITE_TITLE,

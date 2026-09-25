@@ -74,7 +74,7 @@ export function OrderHistory({
               </div>
               <p className="text-xs font-semibold text-forest/65">
                 {bowls.reduce((total, bowl) => total + order.bowlSelection[bowl.id], 0)} bowls ·{" "}
-                {order.fulfillmentMethod === "delivery" ? "LA County delivery" : "Pickup"}
+                {order.fulfillmentMethod === "delivery" ? "Sunday delivery" : "Pickup"}
               </p>
             </div>
             <details className="group mt-4 border-t border-forest/12">
@@ -108,7 +108,7 @@ export function OrderHistory({
                   <div>
                     <dt className="font-semibold">
                       {order.fulfillmentMethod === "delivery"
-                        ? "LA County delivery"
+                        ? "Sunday delivery"
                         : "Pickup"}
                     </dt>
                     <dd className="mt-1 text-forest/75">

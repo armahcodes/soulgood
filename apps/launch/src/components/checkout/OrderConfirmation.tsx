@@ -202,7 +202,7 @@ export function OrderConfirmation() {
               <dt>Fulfillment</dt>
               <dd className="font-semibold text-forest">
                 {confirmation.fulfillmentMethod === "delivery"
-                  ? "LA County delivery"
+                  ? "Sunday delivery"
                   : "Pickup"}
               </dd>
             </div>

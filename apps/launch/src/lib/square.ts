@@ -5,11 +5,14 @@ import {
   type BowlSelection,
 } from "@/lib/bowl-selection";
 import {
-  FULFILLMENT,
+  fulfillmentFeeCents,
   LEGAL_VERSION,
+  ORDER_RULES,
   type FulfillmentMethod,
   PRICING,
   type PurchaseType,
+  SERVICE_AREA,
+  type ServiceCounty,
 } from "@/lib/brand";
 import {
   BOWL_UNIT_PRICE_CENTS,
@@ -28,7 +31,7 @@ export type TaxQuote = {
   totalCents: number;
   percentage: string;
   jurisdiction: string;
-  county: "LOS ANGELES";
+  county: ServiceCounty;
 };
 
 export type ItemizedSquareOrder = {
@@ -159,9 +162,9 @@ export async function createItemizedSquareOrder(input: {
   quote: TaxQuote;
   state: "DRAFT" | "OPEN";
 }): Promise<ItemizedSquareOrder> {
-  const expectedSubtotal =
-    bowlSelectionTotal(input.bowlSelection) * BOWL_UNIT_PRICE_CENTS +
-    FULFILLMENT[input.fulfillmentMethod].amountCents;
+  const bowlsCents = bowlSelectionTotal(input.bowlSelection) * BOWL_UNIT_PRICE_CENTS;
+  const deliveryCents = fulfillmentFeeCents(input.fulfillmentMethod, bowlsCents);
+  const expectedSubtotal = bowlsCents + deliveryCents;
   if (expectedSubtotal !== input.quote.subtotalCents) {
     throw new Error(
       "The Square catalog subtotal does not match the checkout quote",
@@ -173,15 +176,18 @@ export async function createItemizedSquareOrder(input: {
     if (!input.deliveryAddress) {
       throw new Error("A delivery address is required for the Square order");
     }
-    lineItems.push({
-      quantity: "1",
-      catalog_object_id: input.catalog.deliveryVariationId,
-      base_price_money: {
-        amount: FULFILLMENT.delivery.amountCents,
-        currency: "USD",
-      },
-      note: "Los Angeles County delivery · address saved on customer profile",
-    });
+    // Orders over the free-delivery threshold carry no delivery line item.
+    if (deliveryCents > 0) {
+      lineItems.push({
+        quantity: "1",
+        catalog_object_id: input.catalog.deliveryVariationId,
+        base_price_money: {
+          amount: deliveryCents,
+          currency: "USD",
+        },
+        note: `${SERVICE_AREA.weeklyDay} delivery · ${SERVICE_AREA.weeklyShort} · address saved on customer profile`,
+      });
+    }
   }
 
   const fulfillments =
@@ -344,17 +350,23 @@ async function calculateTaxQuote(
   if (!taxableAddress) throw new Error("A delivery address is required");
 
   const tax = await lookupCaliforniaTax(taxableAddress, fetcher);
-  if (fulfillmentMethod === "delivery" && tax.county !== "LOS ANGELES") {
+  const county = SERVICE_AREA.weeklyCounties.find((name) => name === tax.county);
+  if (!county) {
     throw new Error(
-      "Delivery is currently available only in Los Angeles County",
+      fulfillmentMethod === "delivery"
+        ? `Weekly delivery is available only in ${SERVICE_AREA.weekly}`
+        : "The pickup location is outside the service area",
     );
   }
   if (!Number.isFinite(tax.rate) || tax.rate <= 0 || tax.rate >= 0.2) {
     throw new Error("California returned an invalid tax rate");
   }
 
-  const subtotalCents =
-    PRICING.weeklyCents * mealSets + FULFILLMENT[fulfillmentMethod].amountCents;
+  const bowlsCents = PRICING.weeklyCents * mealSets;
+  if (bowlsCents < ORDER_RULES.minimumOrderCents) {
+    throw new Error(`Orders have a ${ORDER_RULES.minimumLabel}`);
+  }
+  const subtotalCents = bowlsCents + fulfillmentFeeCents(fulfillmentMethod, bowlsCents);
   const taxCents = Math.round(subtotalCents * tax.rate);
   return {
     subtotalCents,
@@ -365,7 +377,7 @@ async function calculateTaxQuote(
       .replace(/0+$/, "")
       .replace(/\.$/, ""),
     jurisdiction: tax.jurisdiction,
-    county: "LOS ANGELES",
+    county,
   };
 }
 

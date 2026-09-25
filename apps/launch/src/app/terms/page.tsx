@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
-import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, NOURISHMENT, PRICING, TAX } from "@/lib/brand";
+import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, NOURISHMENT, ORDER_RULES, PRICING, SERVICE_AREA, TAX } from "@/lib/brand";
 import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
 import { EAT_NOW } from "@/lib/ordering";
 
@@ -31,7 +31,9 @@ export default function TermsPage() {
         <h2>2. Eligibility and service area</h2>
         <p>
           You must be at least 18 years old and able to enter a binding contract.
-          Delivery is available only to verified addresses within {BUSINESS.serviceArea}.
+          Weekly meal-prep delivery is available only to verified addresses within
+          {` ${BUSINESS.serviceArea}`}. On-demand Eat Now delivery is limited to about
+          {` ${EAT_NOW.radiusMiles}`} miles from our Long Beach kitchen, as shown in Eat Now checkout.
           We may decline, pause, or cancel service when an address is outside the
           service area, unsafe or inaccessible, or beyond current delivery capacity.
           If we charge an order and then determine the address is outside our service
@@ -71,15 +73,18 @@ export default function TermsPage() {
           sets, and the displayed base price scales by the number of sets.
           {` ${FEES.delivery.label}`}:
           {` ${FEES.delivery.disclosure}`} Sunday pickup has no fulfillment fee.
+          {` Every meal-prep and Eat Now order is subject to a ${ORDER_RULES.minimumLabel.toLowerCase()}.`}
           {` ${FEES.containerDeposit.label}`}:
           {` ${FEES.containerDeposit.disclosure}`} Order and fulfillment amounts due
           at checkout will be displayed before payment. We do not add undisclosed
           handling or service fees.
         </p>
         <p>
-          Eat Now has its own item prices, delivery charges, and service availability.
-          Review the applicable charges, tax, and total in Eat Now checkout before
-          paying. The meal-prep delivery fee does not set Eat Now delivery charges.
+          Eat Now has its own item prices, courier fees, and service availability.
+          On-demand courier fees are calculated by distance and shown in Eat Now
+          checkout; they are waived on Eat Now orders over $100. Review the applicable
+          charges, tax, and total in Eat Now checkout before paying. The meal-prep
+          delivery fee does not set Eat Now courier fees.
         </p>
         <p>
           {TAX.disclosure} Tax is added to the displayed subtotal where required.
@@ -100,10 +105,12 @@ export default function TermsPage() {
           {NOURISHMENT.deliveryDisclosure} Sunday pickup has no fulfillment fee for
           one-time meal-prep orders; weekly plans require delivery. We will provide
           the pickup location and available window before fulfillment. Meal-prep
-          delivery in LA County costs $8.88 per order and is generally scheduled for Sunday.
+          delivery is available to verified addresses in {SERVICE_AREA.weekly}, is
+          scheduled for Sunday, and costs $8.88 per order, or nothing on orders over $100.
         </p>
         <h3>Eat Now</h3>
         <p>{EAT_NOW.deliveryDetails}</p>
+        <p>{EAT_NOW.coverage}</p>
         <p>{EAT_NOW.availability}</p>
         <h3>For all deliveries</h3>
         <p>

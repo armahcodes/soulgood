@@ -68,15 +68,15 @@ test("app delivery disclosures distinguish courier-based Eat Now from team-only 
   }
 
   await page.goto("/eat-now");
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /DoorDash, Uber Eats, or Postmates/);
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Uber Direct or DoorDash/);
   await expect(page.getByText(EAT_NOW.availability, { exact: true })).toBeVisible();
-  await expect(page.getByText(/Eat Now has its own delivery availability and charges/)).toBeVisible();
+  await expect(page.getByText(/Eat Now has its own courier fees and service times/)).toBeVisible();
 
   for (const path of ["/", "/checkout"]) {
     await page.goto(path);
     await expect(page.getByText(NOURISHMENT.deliveryDisclosure, { exact: false })).toBeVisible();
   }
-  await expect(page.getByText(/in-house LA County delivery is \$8\.88/)).toBeVisible();
+  await expect(page.getByText(/Sunday delivery across Los Angeles\s+and Orange County is \$8\.88, or free on orders over \$100/)).toBeVisible();
 });
 
 test("meal-plan checkout and the global footer expose the single-order menu", async ({ page }) => {
@@ -92,12 +92,12 @@ test("meal-plan checkout and the global footer expose the single-order menu", as
 test("brand-led invitations keep the scheduled offer and renewal terms clear", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("Nourishment for your everyday.", { exact: true })).toBeVisible();
-  await expect(page.getByText(/Five 32 oz bowls for \$88\. Order once or choose weekly delivery/)).toBeVisible();
+  await expect(page.getByText(/delivered Sundays across Los Angeles and Orange County/)).toBeVisible();
   await expect(page.getByText(/subscription that renews every seven days until canceled/)).toBeVisible();
   await page.getByRole("link", { name: "Build your ritual", exact: true }).last().click();
   await expect(page).toHaveURL(/\/checkout$/);
   await expect(page.getByRole("heading", { name: "Make this ritual yours." })).toBeVisible();
-  await expect(page.getByText(/Sunday pickup is free for one-time orders; in-house LA County delivery is \$8\.88/)).toBeVisible();
+  await expect(page.getByText(/Sunday pickup is free for one-time orders; Sunday delivery across Los Angeles\s+and Orange County is \$8\.88/)).toBeVisible();
   await expect(page.getByRole("group", { name: /Step 2 · Choose your bowls/ })).toBeVisible();
 });
 

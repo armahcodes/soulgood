@@ -73,7 +73,7 @@ describe("leadSchema", () => {
     expect(leadSchema.safeParse({ ...validLead, deliveryZip: "902" }).success).toBe(false);
   });
 
-  it("requires Los Angeles County delivery confirmation", () => {
+  it("requires Los Angeles or Orange County delivery confirmation", () => {
     expect(
       leadSchema.safeParse({ ...validLead, deliveryCountyConfirmed: false }).success,
     ).toBe(false);

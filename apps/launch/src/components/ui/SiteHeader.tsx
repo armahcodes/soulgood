@@ -227,7 +227,7 @@ function MobileMenu({
           </Button>
         </div>
         <p className="mt-auto pt-10 text-center text-xs leading-5 text-forest/60">
-          Five 32 oz bowls for $88 · Sunday pickup or LA County delivery
+          Weekly delivery Sundays · On demand Thursday–Sunday
         </p>
       </nav>
     </div>,

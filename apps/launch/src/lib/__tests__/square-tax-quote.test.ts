@@ -65,3 +65,34 @@ describe("getTaxQuote for pickup", () => {
     );
   });
 });
+
+describe("getTaxQuote for weekly delivery", () => {
+  const address = (city: string, postalCode: string) => ({
+    addressLine1: "200 Test Street",
+    addressLine2: "",
+    city,
+    state: "CA" as const,
+    postalCode,
+  });
+  const cdtfa = (county: string, rate = 0.0775) =>
+    vi.fn(async () =>
+      new Response(JSON.stringify({ taxRateInfo: [{ rate, jurisdiction: county, county }] }), { status: 200 }),
+    );
+
+  it("accepts Orange County addresses and charges $8.88 delivery on a single set", async () => {
+    const quote = await getTaxQuote("delivery", address("Anaheim", "92805"), 1, cdtfa("ORANGE") as unknown as typeof fetch);
+    expect(quote.county).toBe("ORANGE");
+    expect(quote.subtotalCents).toBe(8800 + 888);
+  });
+
+  it("waives delivery on orders over $100", async () => {
+    const quote = await getTaxQuote("delivery", address("Irvine", "92618"), 2, cdtfa("ORANGE") as unknown as typeof fetch);
+    expect(quote.subtotalCents).toBe(17600);
+  });
+
+  it("rejects delivery outside Los Angeles and Orange County", async () => {
+    await expect(
+      getTaxQuote("delivery", address("Riverside", "92501"), 1, cdtfa("RIVERSIDE") as unknown as typeof fetch),
+    ).rejects.toThrow("Weekly delivery is available only in Los Angeles and Orange County");
+  });
+});

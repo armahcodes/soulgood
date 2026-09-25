@@ -208,7 +208,7 @@ export function LeadGate({
                 onChange={(event) => set("deliveryCountyConfirmed", event.target.checked)}
               />
               <span>
-                I confirm my delivery address is in Los Angeles County, California.
+                I confirm my delivery address is in Los Angeles or Orange County, California.
                 {errors.deliveryCountyConfirmed ? <span className="mt-1 block text-clay">{errors.deliveryCountyConfirmed}</span> : null}
               </span>
             </label>

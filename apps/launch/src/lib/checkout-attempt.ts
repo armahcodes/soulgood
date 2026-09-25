@@ -3,6 +3,7 @@ import type { CheckoutInput } from "./checkout-input";
 import { getMongoDatabase } from "./db/mongodb";
 import { openPaymentSource, sealPaymentSource } from "./secure-payload";
 import {
+  BOWL_UNIT_PRICE_CENTS,
   getSquareCatalogConfig,
   type SquareCatalogConfig,
 } from "./square-catalog";
@@ -14,7 +15,8 @@ import {
   type ItemizedSquareOrder,
   type TaxQuote,
 } from "./square";
-import { FULFILLMENT, LEGAL_VERSION } from "./brand";
+import { fulfillmentFeeCents, LEGAL_VERSION } from "./brand";
+import { bowlSelectionTotal } from "./bowl-selection";
 import { persistCheckoutRecord, type CheckoutRecord } from "./checkout-record";
 import { enqueueOrderEmail } from "./email-outbox";
 
@@ -150,7 +152,10 @@ export async function startCheckoutAttempt(
       process.env.SQUARE_ENVIRONMENT === "production"
         ? "production"
         : "sandbox",
-    fulfillmentFeeCents: FULFILLMENT[input.fulfillmentMethod].amountCents,
+    fulfillmentFeeCents: fulfillmentFeeCents(
+      input.fulfillmentMethod,
+      bowlSelectionTotal(input.bowlSelection) * BOWL_UNIT_PRICE_CENTS,
+    ),
     createdAt: new Date(),
     updatedAt: new Date(),
     leaseUntil: new Date(0),

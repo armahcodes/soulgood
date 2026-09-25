@@ -12,7 +12,30 @@ export const BRAND_NAME = "Soul Bowls™";
 export const BUSINESS = {
   legalName: "Soul Goods LLC",
   jurisdiction: "California",
-  serviceArea: "Los Angeles County, California",
+  serviceArea: "Los Angeles and Orange County, California",
+} as const;
+
+/** Where and when each kind of delivery runs. */
+export const SERVICE_AREA = {
+  /** Weekly meal-prep delivery, verified server-side from the CDTFA county. */
+  weeklyCounties: ["LOS ANGELES", "ORANGE"] as const,
+  weekly: "Los Angeles and Orange County",
+  weeklyShort: "LA & Orange County",
+  weeklyDay: "Sunday",
+  kitchen: "Long Beach",
+} as const;
+
+export type ServiceCounty = (typeof SERVICE_AREA.weeklyCounties)[number];
+
+/**
+ * Order rules shared by weekly nourishment and on-demand (Eat Now) orders.
+ * Eat Now enforces these in its Square Online settings; checkout enforces them here.
+ */
+export const ORDER_RULES = {
+  minimumOrderCents: 5000,
+  freeDeliveryOverCents: 10000,
+  minimumLabel: "$50 minimum order",
+  freeDeliveryLabel: "Free delivery on orders over $100",
 } as const;
 
 export const CONTACT = {
@@ -20,7 +43,7 @@ export const CONTACT = {
 } as const;
 
 /** Version saved with customer consent records. */
-export const LEGAL_VERSION = "2026-09-13";
+export const LEGAL_VERSION = "2026-09-24";
 
 function parseFeeCents(value: string | undefined): number | null {
   if (!value || !/^\d+$/.test(value)) return null;
@@ -37,6 +60,15 @@ export function formatCents(amountCents: number | null): string {
   }).format(amountCents / 100);
 }
 
+/** Delivery fee for a food subtotal (before tax). Pickup is always free. */
+export function fulfillmentFeeCents(
+  method: "pickup" | "delivery",
+  foodSubtotalCents: number,
+): number {
+  if (method === "pickup") return 0;
+  return foodSubtotalCents > ORDER_RULES.freeDeliveryOverCents ? 0 : FEES.delivery.amountCents;
+}
+
 /** Canonical product line. */
 export const TAGLINE = "Nourish · Heal · Thrive";
 
@@ -47,6 +79,8 @@ export const NOURISHMENT = {
   headline: "Nourishment for your everyday.",
   deliveryDisclosure:
     "Weekly meal prep is delivered exclusively by the Soul Good team, not third-party couriers.",
+  deliverySummary:
+    "Sunday delivery across Los Angeles and Orange County. $8.88, or free on orders over $100.",
 } as const;
 
 /** Founder name — always "Chef Kyla" (the source quote-card typo is corrected here). */
@@ -85,9 +119,9 @@ export type PurchaseType = keyof typeof PURCHASE_OPTIONS;
  */
 export const FEES = {
   delivery: {
-    label: "Los Angeles County delivery",
+    label: "Sunday delivery",
     amountCents: 888,
-    disclosure: "$8.88 per delivery within Los Angeles County.",
+    disclosure: "$8.88 per Sunday delivery in Los Angeles and Orange County, free on orders over $100.",
   },
   containerDeposit: {
     label: "Refundable reusable-container deposit",
@@ -105,7 +139,7 @@ export const FULFILLMENT = {
     disclosure: "No fulfillment fee. Pickup location and window are confirmed before fulfillment.",
   },
   delivery: {
-    label: "LA County delivery",
+    label: "Sunday delivery",
     amountCents: FEES.delivery.amountCents,
     disclosure: FEES.delivery.disclosure,
   },
@@ -129,7 +163,7 @@ export const PLAN = {
   /** Day boxes are delivered. */
   deliveryDay: "Sunday",
   /** Short fulfillment line. */
-  deliveryNote: "Sunday pickup or LA County delivery",
+  deliveryNote: "Sunday pickup, or Sunday delivery across LA & Orange County",
 } as const;
 
 /**

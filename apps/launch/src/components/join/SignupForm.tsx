@@ -49,7 +49,7 @@ export function SignupForm({ initialFulfillment = "delivery" }: { initialFulfill
     if (!fields.success) {
       setSubmitError(
         values.fulfillmentMethod === "delivery"
-          ? "Complete your contact information and confirm an eligible LA County delivery ZIP."
+          ? "Complete your contact information and confirm an eligible Los Angeles or Orange County delivery ZIP."
           : "Complete your contact information and pickup preference.",
       );
       return;
@@ -201,11 +201,11 @@ export function SignupForm({ initialFulfillment = "delivery" }: { initialFulfill
               {...register("fulfillmentMethod")}
             />
             <span>
-              <strong className="block text-forest">LA County delivery</strong>
-              Sunday delivery throughout Los Angeles County
+              <strong className="block text-forest">Sunday delivery</strong>
+              Across Los Angeles and Orange County · free over $100
             </span>
           </span>
-          <strong className="text-forest">$8.88/wk</strong>
+          <strong className="text-forest">$8.88</strong>
         </label>
       </fieldset>
 
@@ -248,10 +248,10 @@ export function SignupForm({ initialFulfillment = "delivery" }: { initialFulfill
                   validate: (value) =>
                     fulfillmentMethod !== "delivery" ||
                     value ||
-                    "Confirm that your delivery address is in Los Angeles County",
+                    "Confirm that your delivery address is in Los Angeles or Orange County",
                 })}
               />
-              <span>I confirm my delivery address is in Los Angeles County, California.</span>
+              <span>I confirm my delivery address is in Los Angeles or Orange County, California.</span>
             </label>
             {errors.deliveryCountyConfirmed && (
               <p role="alert" className="text-sm text-clay">

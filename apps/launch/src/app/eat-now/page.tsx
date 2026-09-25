@@ -4,13 +4,14 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SiteHeader } from "@/components/ui/SiteHeader";
-import { BRAND_NAME, CONTACT, NOURISHMENT } from "@/lib/brand";
+import { BRAND_NAME, CONTACT, NOURISHMENT, ORDER_RULES } from "@/lib/brand";
+import { DeliveryOptions } from "@/components/sections/DeliveryOptions";
 import { CURRENT_BOWLS } from "@/lib/current-offer";
 import { EAT_NOW } from "@/lib/ordering";
 
 const title = `Eat Now — Single-order ${BRAND_NAME}`;
 const description =
-  `Order individual Soul Bowls™ from the Soul Good menu. ${EAT_NOW.deliveryDetails} Check available service times before ordering.`;
+  `Order single Soul Bowls™ on demand, ${EAT_NOW.days}, within about ${EAT_NOW.radiusMiles} miles of our Long Beach kitchen. ${EAT_NOW.deliveryDetails} $50 minimum; free delivery on orders over $100.`;
 
 export const metadata: Metadata = {
   title,
@@ -36,9 +37,16 @@ export default function EatNowPage() {
               A bowl for you, a few to share. Thoughtfully prepared Soul Bowls™,
               chosen one at a time. Find the flavors that feel right today.
             </p>
-            <p className="mt-5 text-sm font-semibold text-forest">{EAT_NOW.fulfillment} · Los Angeles County</p>
-            <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-forest/75 lg:mx-0">
+            <ul className="mx-auto mt-6 flex max-w-lg flex-wrap justify-center gap-2 text-xs font-bold tracking-[0.06em] text-forest uppercase lg:mx-0 lg:justify-start">
+              <li className="rounded-full border border-forest/15 bg-card px-3 py-1.5">{EAT_NOW.days}</li>
+              <li className="rounded-full border border-forest/15 bg-card px-3 py-1.5">~{EAT_NOW.radiusMiles} mi from Long Beach</li>
+              <li className="rounded-full border border-forest/15 bg-card px-3 py-1.5">{ORDER_RULES.minimumLabel}</li>
+            </ul>
+            <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-forest/75 lg:mx-0">
               {EAT_NOW.deliveryDetails}
+            </p>
+            <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-forest/75 lg:mx-0">
+              {EAT_NOW.coverage}
             </p>
             <Button as="a" href={EAT_NOW.menuUrl} target="_self" size="lg" className="mt-7 w-full sm:w-auto">
               Open the Eat Now menu
@@ -62,6 +70,18 @@ export default function EatNowPage() {
               sizes="(min-width: 1024px) 448px, (min-width: 640px) 448px, 100vw"
               className="object-cover"
             />
+          </div>
+        </section>
+
+        <section aria-labelledby="eat-now-coverage" className="border-t border-forest/10 py-12 sm:py-16">
+          <div className="mx-auto max-w-6xl px-5 sm:px-8">
+            <h2 id="eat-now-coverage" className="text-center font-serif text-3xl text-forest sm:text-4xl">Where we deliver.</h2>
+            <p className="mx-auto mt-3 mb-10 max-w-2xl text-center text-sm leading-6 text-forest/72">
+              On demand reaches about {EAT_NOW.radiusMiles} miles around our Long Beach kitchen, Thursday
+              through Sunday. Planning your week? Weekly nourishment is delivered every Sunday across Los
+              Angeles and Orange County.
+            </p>
+            <DeliveryOptions showEatNowAction={false} />
           </div>
         </section>
 
@@ -93,10 +113,10 @@ export default function EatNowPage() {
             <p className="mt-3 text-sm leading-7 text-forest/75">For an update, a missing confirmation, or help with delivery, contact our team with the order reference from your confirmation. Do not send card details.</p>
             <a href={`mailto:${CONTACT.email}?subject=Eat%20Now%20order%20help`} className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-forest underline underline-offset-4">Contact Soul Good</a>
           </div>
-          <div className="border border-forest/15 bg-white/35 p-6 text-center sm:p-8 md:text-left rounded-lg">
+          <div className="rounded-lg border border-forest/15 bg-card p-6 text-center sm:p-8 md:text-left">
             <h2 className="font-serif text-3xl text-forest sm:text-4xl">A ritual to come home to.</h2>
-            <p className="mt-4 text-sm leading-7 text-forest/75">Make space for nourishment throughout your week. Five 32 oz Soul Bowls™ start at $88, once or weekly. {NOURISHMENT.deliveryDisclosure}</p>
-            <p className="mt-3 text-sm leading-7 text-forest/75">For meal prep, Sunday pickup is free for one-time orders; LA County delivery is $8.88. Applicable tax is additional. Eat Now has its own delivery availability and charges, shown at checkout.</p>
+            <p className="mt-4 text-sm leading-7 text-forest/75">Make space for nourishment throughout your week with Soul Bowls™, once or weekly. {NOURISHMENT.deliveryDisclosure}</p>
+            <p className="mt-3 text-sm leading-7 text-forest/75">Weekly delivery arrives Sundays across Los Angeles and Orange County: $8.88, or free on orders over $100. Sunday pickup is free for one-time orders. Applicable tax is additional. Eat Now has its own courier fees and service times, shown at checkout.</p>
             <Button as="a" href="/checkout" variant="secondary" className="mt-5 w-full sm:w-auto">{NOURISHMENT.cta}</Button>
           </div>
           <Link href="/" className="inline-flex min-h-11 items-center justify-center text-sm font-semibold text-forest underline underline-offset-4 md:col-span-2">Back to Soul Good</Link>

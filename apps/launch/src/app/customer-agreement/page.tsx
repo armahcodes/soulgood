@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { LegalShell } from "@/components/legal/LegalShell";
-import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, NOURISHMENT, PLAN, PRICING, TAX } from "@/lib/brand";
+import { BRAND_NAME, BUSINESS, CONTACT, FEES, LEGAL_VERSION, NOURISHMENT, ORDER_RULES, PLAN, PRICING, SERVICE_AREA, TAX } from "@/lib/brand";
 import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
 import { EAT_NOW } from "@/lib/ordering";
 
@@ -16,15 +16,16 @@ export default function CustomerAgreementPage() {
       title="Customer Agreement"
       intro={`This agreement applies when you reserve, order, or subscribe to Soul Bowls™ from ${BUSINESS.legalName}. Please read it before authorizing payment.`}
     >
-      <section className="rounded-3xl bg-gold/25 p-6 sm:p-8">
+      <section className="rounded-lg bg-gold/25 p-6 sm:p-8">
         <h2>Important order and recurring-payment terms</h2>
         <ul>
           <li>For meal prep, each five-day meal set contains {PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls.</li>
           <li>Choose one or more {PRICING.oneTime} meal sets as a one-time order or weekly plan.</li>
           <li>Only the weekly plan renews and charges every seven days until you cancel.</li>
-          <li>Meal-prep pickup is free for one-time orders; LA County delivery is $8.88 per order.</li>
+          <li>Meal-prep pickup is free for one-time orders; Sunday delivery across {SERVICE_AREA.weekly} is $8.88 per order, or free on orders over $100.</li>
+          <li>Every meal-prep and Eat Now order has a {ORDER_RULES.minimumLabel.toLowerCase()}.</li>
           <li>{NOURISHMENT.deliveryDisclosure}</li>
-          <li>Eat Now bowls are sold individually, with delivery by available courier partners or a Soul Good courier. Prices, fees, and service times are shown at Eat Now checkout.</li>
+          <li>Eat Now bowls are sold individually, {EAT_NOW.days}, with on-demand courier delivery within about {EAT_NOW.radiusMiles} miles of our Long Beach kitchen. Courier fees (waived on orders over $100), prices, and service times are shown at Eat Now checkout.</li>
           <li>Applicable sales tax is shown at checkout; any reusable-container deposit is disclosed and collected separately.</li>
           <li>Cancel future renewals online at any time; orders already charged remain final.</li>
           <li>Service is limited to verified addresses in {BUSINESS.serviceArea}.</li>
@@ -84,9 +85,10 @@ export default function CustomerAgreementPage() {
           before you authorize payment.
         </p>
         <p>
-          Eat Now item prices, delivery charges, applicable tax, and the total are
-          shown in its checkout before payment. Meal-prep pricing and delivery
-          charges do not set Eat Now prices or guarantee delivery availability.
+          Eat Now item prices, distance-based courier fees (waived on orders over
+          $100), applicable tax, and the total are shown in its checkout before
+          payment. Meal-prep pricing and delivery charges do not set Eat Now prices
+          or guarantee delivery availability.
         </p>
         <p>{TAX.disclosure} Tax is added to the subtotal where required.</p>
       </section>
@@ -104,7 +106,7 @@ export default function CustomerAgreementPage() {
       </section>
 
       <section>
-        <h2>5. Pickup and Los Angeles County delivery</h2>
+        <h2>5. Pickup and delivery</h2>
         <h3>Weekly meal prep</h3>
         <p>
           {NOURISHMENT.deliveryDisclosure} Meal-prep delivery is generally scheduled
@@ -114,6 +116,7 @@ export default function CustomerAgreementPage() {
         </p>
         <h3>Eat Now</h3>
         <p>{EAT_NOW.deliveryDetails}</p>
+        <p>{EAT_NOW.coverage}</p>
         <p>{EAT_NOW.availability}</p>
         <h3>For all deliveries</h3>
         <p>

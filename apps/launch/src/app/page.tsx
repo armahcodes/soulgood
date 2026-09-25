@@ -19,16 +19,17 @@ import {
 } from "@/components/ui/kit/product-card";
 import { Reveal } from "@/components/ui/kit/reveal";
 import { Timeline } from "@/components/ui/kit/timeline";
+import { DeliveryOptions } from "@/components/sections/DeliveryOptions";
 import { PlanPicker } from "@/components/sections/PlanPicker";
 import { PATHWAY_LIST } from "@/lib/pathways";
 import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
 import { EAT_NOW } from "@/lib/ordering";
-import { BUSINESS, FOUNDER, NOURISHMENT, PLAN, PRICING, TAGLINE } from "@/lib/brand";
+import { BUSINESS, FOUNDER, NOURISHMENT, ORDER_RULES, PLAN, PRICING, TAGLINE } from "@/lib/brand";
 
 const RITUAL_STEPS = [
   { title: "Make it yours", body: "Choose the bowls you love. Order once or return to a weekly rhythm." },
   { title: "Made with intention", body: "Thoughtfully prepared by Chef Kyla with whole ingredients and care." },
-  { title: "A Sunday connection", body: "Choose free pickup for a one-time order, or let our team deliver in LA County for $8.88." },
+  { title: "A Sunday connection", body: "Choose free pickup for a one-time order, or let our team deliver across LA and Orange County." },
   { title: "Make a moment of it", body: "Set the table, enjoy your bowl, and make a little space for yourself." },
   { title: "Find your rhythm", body: "Choose a one-time order or a subscription that renews every seven days until canceled." },
 ] as const;
@@ -37,7 +38,9 @@ const PROMISES = [
   "Thoughtfully prepared by Chef Kyla",
   "32 oz glass jars",
   "Whole ingredients, comforting flavors",
-  "Sunday pickup or LA County delivery",
+  "Sunday delivery across LA & Orange County",
+  "On demand Thursday–Sunday",
+  "Free delivery over $100",
   "Delivered by the Soul Good team",
   "Order once or weekly",
 ] as const;
@@ -56,7 +59,7 @@ const FAQS = [
   {
     id: "delivery",
     title: "Where do you deliver?",
-    content: `Delivery is $8.88 per order to verified addresses throughout ${BUSINESS.serviceArea}. We confirm eligibility before activating delivery.`,
+    content: `Weekly nourishment is delivered on Sundays to verified addresses throughout ${BUSINESS.serviceArea}: $8.88, or free on orders over $100. On-demand Eat Now orders are delivered Thursday through Sunday within about 20 miles of our Long Beach kitchen, with a courier fee shown at checkout. Every order has a $50 minimum.`,
   },
   {
     id: "pickup",
@@ -66,7 +69,7 @@ const FAQS = [
   {
     id: "billing",
     title: "How does billing work?",
-    content: `A one-time order is ${PRICING.oneTime} and does not renew. The weekly plan is ${PRICING.weekly} every seven days until canceled. Applicable sales tax and any refundable reusable-container deposit are disclosed before payment.`,
+    content: `Bowls come in sets of five (${PRICING.oneTime} per set). One-time orders don’t renew; weekly plans renew every seven days until canceled. Sunday delivery is $8.88, or free on orders over $100. Applicable sales tax and any refundable reusable-container deposit are disclosed before payment.`,
   },
   {
     id: "cancel",
@@ -131,11 +134,20 @@ export default function Home() {
                 Thoughtfully prepared by {FOUNDER}, Soul Bowls™ bring whole ingredients and
                 comforting flavors to your daily rhythm. A nourishing moment, made for you.
               </p>
-              <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-forest/72 lg:mx-0">
-                Five 32 oz bowls for $88. Order once or choose weekly delivery.
-                Free Sunday pickup for one-time orders, or $8.88 LA County delivery.
-                Applicable tax is shown at checkout.
-              </p>
+              <ul className="mx-auto mt-5 grid max-w-md gap-2 text-left text-sm leading-6 text-forest/78 lg:mx-0">
+                <li className="flex gap-3">
+                  <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-sage" />
+                  <span><strong className="text-forest">Weekly nourishment</strong>, delivered Sundays across Los Angeles and Orange County.</span>
+                </li>
+                <li className="flex gap-3">
+                  <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-clay" />
+                  <span><strong className="text-forest">On demand</strong> Thursday–Sunday near our Long Beach kitchen.</span>
+                </li>
+                <li className="flex gap-3">
+                  <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-gold" />
+                  <span>{ORDER_RULES.minimumLabel} · {ORDER_RULES.freeDeliveryLabel.toLowerCase()}.</span>
+                </li>
+              </ul>
               <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap lg:justify-start">
                 <Button as="a" href="/checkout" size="lg" className="w-full sm:w-auto">
                   {NOURISHMENT.cta}
@@ -153,7 +165,7 @@ export default function Home() {
                 <span className="font-semibold whitespace-nowrap underline underline-offset-4 group-hover:text-clay">Find your pathway</span>
               </Link>
               <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-forest/68 lg:mx-0">
-                A bowl for today? Explore Eat Now, with delivery by available courier partners or a Soul Good courier.{" "}
+                A bowl for today? Eat Now delivers on demand Thursday–Sunday through courier partners or a Soul Good courier.{" "}
                 <Link href={EAT_NOW.infoPath} className="font-semibold text-forest underline underline-offset-4 hover:text-clay">
                   How Eat Now works
                 </Link>
@@ -172,8 +184,8 @@ export default function Home() {
                   className="pointer-events-none absolute -top-10 -right-12 z-0 w-44 rotate-12 opacity-25 sm:w-56"
                 />
                 <div className="absolute top-4 left-4 z-20 rounded-lg bg-oat/92 px-4 py-3 shadow-sm backdrop-blur sm:top-6 sm:left-6">
-                  <p className="font-serif text-3xl leading-none tracking-[-0.03em] text-forest">$88</p>
-                  <p className="mt-1 text-[0.62rem] font-bold tracking-[0.16em] text-forest/65 uppercase">Five 32 oz bowls</p>
+                  <p className="font-serif text-2xl leading-none tracking-[-0.02em] text-forest">Free delivery</p>
+                  <p className="mt-1 text-[0.62rem] font-bold tracking-[0.16em] text-forest/65 uppercase">On orders over $100</p>
                 </div>
                 <div className="absolute top-4 right-4 z-20 hidden rounded-lg bg-forest px-4 py-3 text-oat shadow-sm sm:top-6 sm:right-6 sm:block">
                   <p className="text-[0.62rem] font-bold tracking-[0.16em] text-gold uppercase">From our kitchen</p>
@@ -283,13 +295,30 @@ export default function Home() {
         </section>
 
         {/* Plan & fulfillment — pricing card with segmented controls */}
+        {/* Delivery — weekly vs on demand, with the service-area map */}
+        <section id="delivery" className="scroll-mt-24 border-t border-forest/10 py-16 sm:py-24">
+          <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12">
+            <Reveal className="mb-10 max-w-2xl sm:mb-14">
+              <p className={eyebrow}>Delivery &amp; pickup</p>
+              <h2 className="mt-4 text-4xl leading-none font-normal tracking-[-0.045em] text-forest sm:text-6xl">
+                Two ways to bring it home.
+              </h2>
+              <p className="mt-5 text-base leading-7 text-forest/72">
+                Plan your week with Sunday delivery, or order a bowl on demand when the moment calls
+                for it. Prefer to pick up? One-time weekly orders can be collected free on Sunday.
+              </p>
+            </Reveal>
+            <DeliveryOptions />
+          </div>
+        </section>
+
         <section id="fulfillment" className="scroll-mt-24 py-16 sm:py-24">
           <div id="price" className="mx-auto w-full max-w-6xl scroll-mt-24 px-5 sm:px-8 lg:px-12">
             <Reveal>
               <PlanPicker />
             </Reveal>
             <p className="mx-auto mt-6 max-w-2xl text-center text-xs leading-5 text-forest/65">
-              Ordering Eat Now instead? Courier partners, service times, and charges depend on availability.{" "}
+              Ordering on demand instead? Eat Now courier fees and service times depend on your address.{" "}
               <Link href={EAT_NOW.infoPath} className="underline underline-offset-4 hover:text-clay">See how Eat Now delivery works.</Link>
             </p>
           </div>
