@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowUpRight, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Wordmark } from "@/components/ui/Wordmark";
+import { MobileTabBar } from "@/components/ui/MobileTabBar";
 import { MenuToggleIcon } from "@/components/ui/kit/menu-toggle-icon";
 import { useScroll } from "@/components/ui/kit/use-scroll";
 import { NOURISHMENT } from "@/lib/brand";
@@ -91,10 +92,11 @@ export function SiteHeader({
   const isActive = (href: string) => href === current;
 
   return (
+    <>
     <header
       ref={headerRef}
       className={cn(
-        "sticky top-0 z-40 w-full border-b transition-[background-color,border-color,box-shadow] duration-300",
+        "sticky top-0 z-40 w-full border-b pt-[env(safe-area-inset-top)] transition-[background-color,border-color,box-shadow] duration-300",
         scrolled || open
           ? "border-forest/10 bg-oat/88 shadow-[0_1px_0_rgb(44_58_52/0.04),0_8px_24px_-18px_rgb(44_58_52/0.35)] backdrop-blur-xl supports-[backdrop-filter]:bg-oat/78"
           : "border-transparent bg-oat",
@@ -162,6 +164,8 @@ export function SiteHeader({
 
       {variant === "full" ? <MobileMenu open={open} top={menuTop} onNavigate={() => setOpen(false)} isActive={isActive} /> : null}
     </header>
+    {variant === "full" ? <MobileTabBar current={current} hidden={open} /> : null}
+    </>
   );
 }
 

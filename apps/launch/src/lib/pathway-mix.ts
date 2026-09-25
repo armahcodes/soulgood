@@ -117,3 +117,18 @@ export function recommendMix(
   }
   return { selection, excluded, fallback: false };
 }
+
+/**
+ * The standard one-of-each mix, with the featured bowl doubled (a recipe that
+ * sits last in the list gives up its slot). Always a valid five-bowl selection.
+ */
+export function mixFeaturing(featured: BowlId): BowlSelection {
+  const selection = { ...DEFAULT_BOWL_SELECTION };
+  const bowl = CURRENT_BOWLS.find((item) => item.id === featured);
+  if (!bowl?.available) return selection;
+  const giver = [...CURRENT_BOWLS].reverse().find((item) => item.available && item.id !== featured && selection[item.id] > 0);
+  if (!giver) return selection;
+  selection[giver.id] -= 1;
+  selection[featured] += 1;
+  return selection;
+}

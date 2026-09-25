@@ -1,6 +1,7 @@
 "use client";
 
 import { Check } from "lucide-react";
+import { haptic } from "@/lib/haptics";
 import { cn } from "@/lib/utils";
 
 /** A multi-select toggle chip. Label is rendered verbatim. */
@@ -22,7 +23,9 @@ export function Pill({
       aria-pressed={selected}
       aria-disabled={disabled || undefined}
       onClick={() => {
-        if (!disabled) onToggle();
+        if (disabled) return;
+        haptic();
+        onToggle();
       }}
       className={cn(
         "inline-flex min-h-11 items-center rounded-full border px-4 text-[0.92rem] transition-[border-color,background-color,color] duration-200",

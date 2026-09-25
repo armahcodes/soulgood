@@ -16,6 +16,8 @@ export const metadata: Metadata = {
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   applicationName: BRAND_NAME,
+  appleWebApp: { capable: true, title: "Soul Good", statusBarStyle: "default" },
+  formatDetection: { telephone: false },
   openGraph: {
     type: "website",
     siteName: BRAND_NAME,
@@ -33,7 +35,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#2C3A34",
+  viewportFit: "cover",
+  // Matches the sticky oat header so mobile browser chrome blends into the page.
+  themeColor: "#F8F3EC",
 };
 
 export default function RootLayout({

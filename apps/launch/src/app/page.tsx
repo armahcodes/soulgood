@@ -5,24 +5,17 @@ import { Button } from "@/components/ui/Button";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import { Accordion } from "@/components/ui/kit/accordion";
-import { CarouselRail } from "@/components/ui/kit/carousel-rail";
 import { JarStack, type JarStackItem } from "@/components/ui/kit/jar-stack";
 import { Marquee } from "@/components/ui/kit/marquee";
 import { NumberTicker } from "@/components/ui/kit/number-ticker";
-import {
-  ProductCard,
-  ProductCardBadge,
-  ProductCardContent,
-  ProductCardImage,
-  ProductCardSubtitle,
-  ProductCardTitle,
-} from "@/components/ui/kit/product-card";
 import { Reveal } from "@/components/ui/kit/reveal";
 import { Timeline } from "@/components/ui/kit/timeline";
+import { BowlCollection } from "@/components/sections/BowlCollection";
 import { DeliveryOptions } from "@/components/sections/DeliveryOptions";
+import { LastMixCard } from "@/components/sections/LastMixCard";
 import { PlanPicker } from "@/components/sections/PlanPicker";
 import { PATHWAY_LIST } from "@/lib/pathways";
-import { AVAILABLE_BOWLS, CURRENT_OFFER, SOLD_OUT_BOWLS } from "@/lib/current-offer";
+import { AVAILABLE_BOWLS, CURRENT_OFFER } from "@/lib/current-offer";
 import { EAT_NOW } from "@/lib/ordering";
 import { BUSINESS, FOUNDER, NOURISHMENT, ORDER_RULES, PLAN, PRICING, TAGLINE } from "@/lib/brand";
 
@@ -92,7 +85,6 @@ const FAQS = [
   },
 ];
 
-const DISPLAY_BOWLS = [...AVAILABLE_BOWLS, ...SOLD_OUT_BOWLS];
 const JAR_TINTS: Record<string, string> = {
   "glow-bowl": "rgba(201, 161, 97, 0.34)",
   "golden-harvest-bowl": "rgba(236, 214, 188, 0.95)",
@@ -117,7 +109,7 @@ export default function Home() {
   return (
     <>
       <AnnouncementBar />
-      <SiteHeader />
+      <SiteHeader current="/" />
       <main className="overflow-x-clip bg-oat">
         {/* Hero — editorial split, adapted from 21st.dev felipemenezes098/hero-08 */}
         <section className="relative">
@@ -204,6 +196,7 @@ export default function Home() {
         {/* Bowls — 21st.dev product-card + product-carousel patterns */}
         <section id="bowls" className="scroll-mt-24 py-16 sm:py-24">
           <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12">
+            <LastMixCard />
             <Reveal className="mb-10 flex flex-col items-center gap-5 text-center sm:mb-14 lg:flex-row lg:items-end lg:justify-between lg:text-left">
               <div>
                 <p className={eyebrow}>Thoughtfully made, thoughtfully chosen</p>
@@ -217,31 +210,7 @@ export default function Home() {
               </p>
             </Reveal>
 
-            <CarouselRail label="This week’s Soul Bowls™" itemsClassName="lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-x-8 lg:gap-y-14 lg:overflow-visible lg:px-0">
-              {DISPLAY_BOWLS.map((bowl) => (
-                <ProductCard key={bowl.id} className="w-[76%] shrink-0 snap-start sm:w-[44%] lg:w-auto">
-                  <ProductCardImage src={bowl.imagePath} alt={`${bowl.name} in a 32 ounce Soul Good jar`} muted={!bowl.available}>
-                    {bowl.available ? (
-                      <ProductCardBadge>{bowl.serving}</ProductCardBadge>
-                    ) : (
-                      <ProductCardBadge tone="dark">Sold out</ProductCardBadge>
-                    )}
-                  </ProductCardImage>
-                  <ProductCardContent>
-                    <ProductCardTitle>{bowl.name}</ProductCardTitle>
-                    <ProductCardSubtitle>{bowl.ingredients}</ProductCardSubtitle>
-                    <div className="mt-4 flex flex-wrap gap-1.5">
-                      {bowl.dietary.map((tag) => (
-                        <span key={tag} className="rounded-md border border-forest/12 px-2 py-1 text-[0.65rem] font-bold tracking-[0.06em] text-forest/70 uppercase">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    {bowl.allergen ? <p className="mt-3 text-xs leading-relaxed font-semibold text-clay">{bowl.allergen}</p> : null}
-                  </ProductCardContent>
-                </ProductCard>
-              ))}
-            </CarouselRail>
+            <BowlCollection />
           </div>
         </section>
 

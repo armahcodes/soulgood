@@ -16,6 +16,7 @@ import {
 } from "@/lib/checkout-session";
 import { CURRENT_BOWLS } from "@/lib/current-offer";
 import { orderStatusLabel } from "@/lib/customer-experience";
+import { LAST_MIX_KEY, type LastMix } from "@/lib/last-mix";
 
 /** Animated status seal — adapted from 21st.dev kavikatiyar/order-confirmation-card. */
 function StatusSeal({ pending }: { pending: boolean }) {
@@ -50,11 +51,25 @@ export function OrderConfirmation() {
     let cancelled = false;
     queueMicrotask(() => {
       if (cancelled) return;
-      setConfirmation(
-        parseLastOrderConfirmation(
-          window.sessionStorage.getItem(LAST_ORDER_STORAGE_KEY),
-        ),
+      const parsed = parseLastOrderConfirmation(
+        window.sessionStorage.getItem(LAST_ORDER_STORAGE_KEY),
       );
+      setConfirmation(parsed);
+      if (parsed) {
+        const lastMix: LastMix = {
+          version: 1,
+          bowlSelection: parsed.bowlSelection,
+          peopleCount: parsed.peopleCount,
+          mealsPerDay: parsed.mealsPerDay,
+          fulfillmentMethod: parsed.fulfillmentMethod,
+          savedAt: parsed.acceptedAt,
+        };
+        try {
+          window.localStorage.setItem(LAST_MIX_KEY, JSON.stringify(lastMix));
+        } catch {
+          // Storage can be unavailable (private mode); reordering is optional.
+        }
+      }
     });
     return () => {
       cancelled = true;

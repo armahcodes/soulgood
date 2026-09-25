@@ -44,7 +44,7 @@ const linkClass =
 
 export function SiteFooter() {
   return (
-    <footer className="relative overflow-hidden bg-forest text-oat">
+    <footer className="site-footer relative overflow-hidden bg-forest text-oat">
       <Image
         src="/botanicals/clay-branch.png"
         alt=""

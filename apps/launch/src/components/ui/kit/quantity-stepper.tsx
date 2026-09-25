@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
+import { haptic } from "@/lib/haptics";
 import { cn } from "@/lib/utils";
 
 /**
@@ -53,7 +54,7 @@ export function QuantityStepper({
       aria-label={groupLabel}
       className={cn("inline-flex shrink-0 items-center gap-1 rounded-full border border-forest/15 bg-oat p-1", className)}
     >
-      <button type="button" aria-label={decrementLabel} className={button} disabled={decrementDisabled} onClick={onDecrement}>
+      <button type="button" aria-label={decrementLabel} className={button} disabled={decrementDisabled} onClick={() => { haptic(); onDecrement(); }}>
         <Minus className="size-4" aria-hidden />
       </button>
       <output
@@ -74,7 +75,7 @@ export function QuantityStepper({
           </motion.span>
         </AnimatePresence>
       </output>
-      <button type="button" aria-label={incrementLabel} className={button} disabled={incrementDisabled} onClick={onIncrement}>
+      <button type="button" aria-label={incrementLabel} className={button} disabled={incrementDisabled} onClick={() => { haptic(); onIncrement(); }}>
         <Plus className="size-4" aria-hidden />
       </button>
     </div>

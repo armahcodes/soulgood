@@ -1,6 +1,7 @@
 "use client";
 
 import { Check } from "lucide-react";
+import { haptic } from "@/lib/haptics";
 import { cn } from "@/lib/utils";
 
 /**
@@ -21,7 +22,10 @@ export function OptionButton({
       type="button"
       role="radio"
       aria-checked={selected}
-      onClick={onSelect}
+      onClick={() => {
+        haptic();
+        onSelect();
+      }}
       className={cn(
         "group flex min-h-16 w-full items-center gap-4 rounded-lg border px-5 py-4 text-left text-base leading-snug transition-[border-color,background-color,box-shadow,transform] duration-200 active:scale-[0.99]",
         selected
