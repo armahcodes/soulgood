@@ -15,6 +15,7 @@ const baseLead: Lead = {
   allergens: [],
   foods: [],
   priorities: [],
+  sides: [],
   reflectBody: undefined,
   reflectSoul: undefined,
 };

@@ -27,6 +27,7 @@ const leadSchema = new mongoose.Schema(
     allergens: { type: [String], default: [] },
     foods: { type: [String], default: [] },
     priorities: { type: [String], default: [] },
+    sides: { type: [String], default: [] },
     reflectBody: { type: String },
     reflectSoul: { type: String },
     capturedAt: { type: Date, required: true },

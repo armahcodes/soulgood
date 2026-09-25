@@ -15,6 +15,8 @@ export interface PathwayState {
   allergens: string[];
   foods: string[];
   priorities: string[];
+  /** Absent on states saved before the sides question existed. */
+  sides?: string[];
   reflectBody?: string;
   reflectSoul?: string;
 }
@@ -33,6 +35,7 @@ export function buildPathwayState(answers: QuizAnswers): PathwayState {
     allergens: answers.allergens ?? [],
     foods: answers.foods ?? [],
     priorities: answers.priorities ?? [],
+    sides: answers.sides ?? [],
     ...(reflectBody ? { reflectBody } : {}),
     ...(reflectSoul ? { reflectSoul } : {}),
   };

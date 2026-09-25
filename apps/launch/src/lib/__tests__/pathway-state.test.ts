@@ -40,12 +40,12 @@ describe("buildPathwayState", () => {
     season:
       "I'm reconnecting with my health and creating healthier habits.",
     energy: "Heavy, sluggish, or drained",
-    goal: "Improving digestion and feeling lighter",
+    goal: "Eating lighter, fresher, more vegetable-forward meals",
     mostTrue: "I want to feel refreshed and renewed.",
     dietary: ["Plant-Based"],
     allergens: ["Dairy"],
     foods: ["Fruit"],
-    priorities: ["Flavor", "Energy"],
+    priorities: ["Flavor", "More vegetables"],
     reflectBody: "  rest  ",
     reflectSoul: "",
   };
@@ -59,7 +59,7 @@ describe("buildPathwayState", () => {
     expect(state.dietary).toEqual(["Plant-Based"]);
     expect(state.allergens).toEqual(["Dairy"]);
     expect(state.foods).toEqual(["Fruit"]);
-    expect(state.priorities).toEqual(["Flavor", "Energy"]);
+    expect(state.priorities).toEqual(["Flavor", "More vegetables"]);
   });
 
   it("trims reflections and omits empty ones", () => {

@@ -50,7 +50,7 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
     serving: "Cold or warm",
     ingredients:
       "Roasted sweet potato, carrots, quinoa, chickpeas, greens, and tahini herb dressing.",
-    dietary: ["Plant-forward", "Protein-rich"],
+    dietary: ["Plant-forward", "With chickpeas"],
     allergen: "Contains sesame",
     imagePath: "/api/product-image/golden-harvest-bowl",
     tone: "bg-sage/16",
@@ -62,7 +62,7 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
     serving: "Cold or warm",
     ingredients:
       "Jerk chicken, brown rice, roasted vegetables, greens, herbs, and jerk sauce.",
-    dietary: ["Rooted in nature", "Clean ingredients"],
+    dietary: ["Rooted in nature", "Whole ingredients"],
     allergen: "Marinade may contain soy or wheat",
     imagePath: "/api/product-image/jerk-wellness-bowl",
     tone: "bg-clay/16",
@@ -74,7 +74,7 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
     serving: "Cold or warm",
     ingredients:
       "Grilled chicken, brown rice, sweet potato, broccoli, herbs, and house dressing.",
-    dietary: ["Higher protein", "Performance fuel"],
+    dietary: ["With grilled chicken", "Hearty"],
     imagePath: "/api/product-image/performance-power-bowl",
     tone: "bg-sand/62",
   },

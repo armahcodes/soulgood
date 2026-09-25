@@ -1,15 +1,15 @@
 import { test, expect, type Page } from "@playwright/test";
 
-async function answerAll(page: Page, singles: (string | RegExp)[], extras: Record<number, string> = {}) {
+async function answerAll(page: Page, singles: (string | RegExp)[], extras: Record<number, string | string[]> = {}) {
   await page.getByRole("button", { name: "I’m ready" }).click();
   for (const name of singles) {
     await page.getByRole("radio", { name }).click();
   }
-  // Six optional steps: four multi-selects and two reflections.
-  for (let step = 0; step < 6; step++) {
-    const extra = extras[step];
-    if (extra) await page.getByRole("button", { name: extra, exact: true }).click();
-    await page.getByRole("button", { name: step === 5 ? "See my pathway" : "Continue" }).click();
+  // Seven optional steps: five multi-selects (dietary, allergens, foods, sides, priorities) and two reflections.
+  for (let step = 0; step < 7; step++) {
+    for (const extra of [extras[step]].flat().filter(Boolean) as string[])
+      await page.getByRole("button", { name: extra, exact: true }).click();
+    await page.getByRole("button", { name: step === 6 ? "See my pathway" : "Continue" }).click();
   }
 }
 
@@ -70,7 +70,7 @@ test("a failed save keeps the guest on the contact step with a retry", async ({ 
     return route.fulfill(attempts === 1 ? { status: 503, json: { ok: false } } : { json: { ok: true, id: "retry-lead" } });
   });
   await page.goto("/quiz");
-  await answerAll(page, ["Slow and intentional", /sitting, studying/, "Calm and steady", "Being more present and reducing stress", "I want to slow down and nourish myself."]);
+  await answerAll(page, ["Slow and intentional", /sitting, studying/, "Calm and steady", "Slowing down and being present at mealtimes", "I want to slow down and nourish myself."]);
   await page.getByLabel("Full name").fill("Sam Lee");
   await page.getByLabel("Email").fill("sam@example.com");
   await page.getByLabel("Phone").fill("3105550199");
@@ -80,4 +80,39 @@ test("a failed save keeps the guest on the contact step with a retry", async ({ 
   await page.getByRole("button", { name: "Reveal my pathway" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Mindful");
   expect(attempts).toBe(2);
+});
+
+test("the quiz suggests salads and sides, shows the week by food group, and carries chosen sides to checkout", async ({ page }) => {
+  await page.route("**/api/lead", (route) => route.fulfill({ json: { ok: true, id: "test-lead" } }));
+  await page.goto("/quiz");
+  await answerAll(page, PERFORMANCE, { 1: "Soy", 3: ["A made-to-order salad", "Warm roasted bites"] });
+  await page.getByLabel("Full name").fill("Avery Jones");
+  await page.getByLabel("Email").fill("avery@example.com");
+  await page.getByLabel("Phone").fill("3105550100");
+  await page.getByRole("radio", { name: /Pickup/ }).check();
+  await page.getByRole("button", { name: "Reveal my pathway" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Performance");
+
+  const sides = page.getByRole("region", { name: "Alongside your bowls" });
+  const salad = sides.getByRole("button", { name: /Golden Garden/ });
+  await expect(salad).toHaveAttribute("aria-pressed", "true");
+  await expect(salad).toContainText(/Adds .*cauliflower.* to your week/);
+  // Soy was reported, so the warm pick avoids jerk seasoning.
+  await expect(sides.getByRole("button", { name: /Smoky Sweet Potato Wedges/ })).toHaveAttribute("aria-pressed", "true");
+  await expect(sides.getByText(/Jerk/)).toHaveCount(0);
+
+  const groups = page.getByRole("region", { name: "By food group" });
+  await expect(groups.getByText("Brown rice · whole grain")).toBeVisible();
+  await expect(groups.getByText(/isn’t medical or nutrition advice/)).toBeVisible();
+  const withSalad = await groups.getByText(/different vegetables/).innerText();
+  await salad.click();
+  await expect(salad).toHaveAttribute("aria-pressed", "false");
+  await expect(groups.getByText(/different vegetables/)).not.toHaveText(withSalad);
+  await salad.click();
+
+  await page.getByRole("button", { name: "Start with this mix" }).click();
+  await expect(page).toHaveURL(/\/checkout\?fulfillment=pickup$/);
+  const summary = page.locator("dl").filter({ hasText: "Order summary" });
+  await expect(summary.getByText("Salads & snacks")).toBeVisible();
+  await expect(summary.getByText("$22.00", { exact: true })).toBeVisible();
 });

@@ -31,7 +31,7 @@ function answersForPathway(pathway: Pathway): QuizAnswers {
 }
 
 describe("quiz data integrity", () => {
-  it("exposes all 11 questions in order", () => {
+  it("exposes all 12 questions in order", () => {
     expect(QUESTIONS.map((q) => q.id)).toEqual([
       "mornings",
       "season",
@@ -41,6 +41,7 @@ describe("quiz data integrity", () => {
       "dietary",
       "allergens",
       "foods",
+      "sides",
       "priorities",
       "reflectBody",
       "reflectSoul",
@@ -190,8 +191,8 @@ describe("matchPathway — profile invariance", () => {
     // Profile screams "digestion" but the SCORED answers are all mindful.
     const answers: QuizAnswers = {
       ...answersForPathway("mindful"),
-      priorities: ["Digestive Health"],
-      dietary: ["Anti-Inflammatory"],
+      priorities: ["More vegetables"],
+      dietary: ["Plant-Based"],
     };
     expect(matchPathway(answers)).toBe("mindful");
   });

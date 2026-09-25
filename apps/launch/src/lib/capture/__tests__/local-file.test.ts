@@ -29,6 +29,7 @@ const lead = {
   allergens: [],
   foods: [],
   priorities: [],
+  sides: [],
   reflectBody: undefined,
   reflectSoul: undefined,
   capturedAt: new Date().toISOString(),

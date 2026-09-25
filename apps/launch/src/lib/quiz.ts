@@ -16,13 +16,19 @@ import { PATHWAYS, type Pathway } from "./lead-schema";
  *
  * The "mornings" question is collected for tone/profile only and is NOT scored.
  *
- * The nutrition-profile questions (dietary lifestyles, allergens, foods-to-enjoy,
+ * The profile questions (dietary lifestyles, allergens, foods-to-enjoy, sides,
  * priorities) and the two reflection prompts feed the PROFILE, never the score.
+ *
+ * Wording avoids health claims: goal and priority options describe food and
+ * mealtime preferences (e.g. "more vegetables"), not health outcomes. Options
+ * that implied outcomes (digestion, stress, sleep, weight, anti-inflammatory)
+ * were rephrased or removed.
  * This is a deliberate decision so that editing a dietary lifestyle can never
  * change the matched pathway (see `matchPathway` invariance test). The brief's
  * "sensible reinforcement" example — "improving digestion" → detox — is already
  * realized through the SCORED goal question option "Improving digestion and
- * feeling lighter" (mapped to `detox`), so no profile field needs to mutate the
+ * feeling lighter" (now "Eating lighter, fresher, more vegetable-forward meals",
+ * mapped to `detox`), so no profile field needs to mutate the
  * score to honor it.
  *
  * Tie-break: when two or more pathways share the top score, the winner is the
@@ -67,6 +73,7 @@ export type QuestionId =
   | "dietary"
   | "allergens"
   | "foods"
+  | "sides"
   | "priorities"
   | "reflectBody"
   | "reflectSoul";
@@ -171,8 +178,8 @@ export const QUESTIONS: QuizQuestion[] = [
     scored: true,
     options: [
       {
-        value: "Being more present and reducing stress",
-        label: "Being more present and reducing stress",
+        value: "Slowing down and being present at mealtimes",
+        label: "Slowing down and being present at mealtimes",
         pathway: "mindful",
       },
       {
@@ -181,8 +188,8 @@ export const QUESTIONS: QuizQuestion[] = [
         pathway: "performance",
       },
       {
-        value: "Improving digestion and feeling lighter",
-        label: "Improving digestion and feeling lighter",
+        value: "Eating lighter, fresher, more vegetable-forward meals",
+        label: "Eating lighter, fresher, more vegetable-forward meals",
         pathway: "detox",
       },
       {
@@ -234,7 +241,6 @@ export const QUESTIONS: QuizQuestion[] = [
       { value: "Dairy Conscious", label: "Dairy Conscious" },
       { value: "Low Sugar", label: "Low Sugar" },
       { value: "High Protein", label: "High Protein" },
-      { value: "Anti-Inflammatory", label: "Anti-Inflammatory" },
       { value: "Other", label: "Other", allowsCustom: true },
     ],
   },
@@ -273,6 +279,19 @@ export const QUESTIONS: QuizQuestion[] = [
     ],
   },
   {
+    id: "sides",
+    prompt: "Would you like anything alongside your bowls?",
+    helper: "From our salad bar and veggie sides. Optional.",
+    type: "multi",
+    options: [
+      { value: "A made-to-order salad", label: "A made-to-order salad" },
+      { value: "Veggie cups for between meals", label: "Veggie cups for between meals" },
+      { value: "Warm roasted bites", label: "Warm roasted bites" },
+      { value: "Something to share", label: "Something to share" },
+      { value: "Just my bowls", label: "Just my bowls" },
+    ],
+  },
+  {
     id: "priorities",
     prompt: "What matters most when choosing meals?",
     helper: "Choose up to three.",
@@ -281,12 +300,10 @@ export const QUESTIONS: QuizQuestion[] = [
     options: [
       { value: "Flavor", label: "Flavor" },
       { value: "Convenience", label: "Convenience" },
-      { value: "Energy", label: "Energy" },
-      { value: "Protein", label: "Protein" },
-      { value: "Weight Management", label: "Weight Management" },
-      { value: "Digestive Health", label: "Digestive Health" },
-      { value: "Stress Support", label: "Stress Support" },
-      { value: "Better Sleep", label: "Better Sleep" },
+      { value: "Protein in every meal", label: "Protein in every meal" },
+      { value: "More vegetables", label: "More vegetables" },
+      { value: "Whole grains", label: "Whole grains" },
+      { value: "Plant-forward meals", label: "Plant-forward meals" },
       { value: "Variety", label: "Variety" },
       // PDF prints "amily-Friendly Options"; the leading F is dropped by the PDF
       // text layer. The intended label is "Family-Friendly Options".
@@ -326,6 +343,7 @@ export interface QuizAnswers {
   dietary?: string[];
   allergens?: string[];
   foods?: string[];
+  sides?: string[];
   priorities?: string[];
   reflectBody?: string;
   reflectSoul?: string;

@@ -8,6 +8,8 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { CURRENT_OFFER, type CurrentBowl } from "@/lib/current-offer";
 import { mixFeaturing } from "@/lib/pathway-mix";
+import { BOWL_INGREDIENTS } from "@/lib/food-groups";
+import { FoodGroupList } from "@/components/ui/FoodGroupList";
 import { haptic } from "@/lib/haptics";
 
 /**
@@ -131,6 +133,12 @@ export function BowlSheet({ bowl, onClose }: { bowl: CurrentBowl | null; onClose
                 <div>
                   <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/60 uppercase">What’s inside</dt>
                   <dd className="mt-1 text-forest/80">{bowl.ingredients}</dd>
+                </div>
+                <div>
+                  <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/60 uppercase">By food group</dt>
+                  <dd className="mt-2">
+                    <FoodGroupList items={BOWL_INGREDIENTS[bowl.id]} />
+                  </dd>
                 </div>
                 <div>
                   <dt className="text-[0.65rem] font-medium tracking-[0.16em] text-forest/60 uppercase">Allergens</dt>

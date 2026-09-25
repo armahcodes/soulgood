@@ -46,10 +46,11 @@ const ALLERGEN_BOWLS: Record<string, BowlId[]> = {
 const CHICKEN_BOWLS: BowlId[] = ["jerk-wellness-bowl", "performance-power-bowl", "herb-chicken-nourish-bowl"];
 const NO_CHICKEN_LIFESTYLES = ["Plant-Based", "Vegetarian", "Pescatarian"];
 
+// Describes what's in the bowls — ingredients, not health effects.
 export const MIX_RATIONALE: Record<Pathway, string> = {
-  mindful: "Balanced, plant-forward bowls for an easy, steady week.",
-  performance: "Leans on our chicken bowls, including the higher-protein Performance Power Bowl™.",
-  detox: "Lighter, plant-forward bowls built on fresh greens, herbs, and turmeric.",
+  mindful: "Plant-forward bowls with leafy greens, quinoa, and roasted vegetables for an easy week.",
+  performance: "Leans on our chicken bowls, with brown rice, sweet potato, and broccoli.",
+  detox: "Vegetable-forward bowls built on leafy greens, herbs, and turmeric.",
   alignment: "A little of everything, so you can find the flavors that fit your week.",
 };
 

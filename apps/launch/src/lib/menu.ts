@@ -130,7 +130,7 @@ export const MENU_COLLECTIONS: Record<MenuCollectionId, MenuCollection> = {
   performance: {
     id: "performance",
     name: "Performance",
-    tagline: "Higher protein fuel",
+    tagline: "Hearty & protein-forward",
     description: "For demanding, active lifestyles.",
     categories: [
       {
@@ -139,7 +139,7 @@ export const MENU_COLLECTIONS: Record<MenuCollectionId, MenuCollection> = {
         items: [
           {
             name: "Performance Soul Wrap\u2122",
-            note: "higher protein version of Glow Wrap",
+            note: "a heartier version of the Glow Wrap",
           },
           { name: "California Soul Wrap\u2122", note: "extra protein option" },
           { name: "Turkey Fuel Wrap\u2122" },
@@ -171,7 +171,7 @@ export const MENU_COLLECTIONS: Record<MenuCollectionId, MenuCollection> = {
         label: MENU_CATEGORY_LABELS.juices,
         items: [
           { name: "Golden Energy Smoothie\u2122" },
-          { name: "Green Goddess Glow\u2122 Smoothie", note: "protein boost option" },
+          { name: "Green Goddess Glow\u2122 Smoothie", note: "protein add-in available" },
           { name: "Beet Energy Juice\u2122" },
         ],
       },
@@ -181,7 +181,7 @@ export const MENU_COLLECTIONS: Record<MenuCollectionId, MenuCollection> = {
     id: "detox",
     name: "Detox",
     tagline: "Reset & restore",
-    description: "Reset, hydration, lighter nourishment & digestive support.",
+    description: "Lighter, fresher, vegetable-forward nourishment.",
     categories: [
       {
         id: "wraps",
@@ -226,7 +226,7 @@ export const MENU_COLLECTIONS: Record<MenuCollectionId, MenuCollection> = {
     id: "alignment",
     name: "Alignment",
     tagline: "Personalized nourishment",
-    description: "Aligned with lifestyle, beliefs & body goals.",
+    description: "Aligned with your lifestyle, values & preferences.",
     categories: [
       {
         id: "wraps",

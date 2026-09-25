@@ -36,6 +36,7 @@ export function assembleLead(
     allergens: state?.allergens ?? [],
     foods: state?.foods ?? [],
     priorities: state?.priorities ?? [],
+    sides: state?.sides ?? [],
     ...(state?.reflectBody ? { reflectBody: state.reflectBody } : {}),
     ...(state?.reflectSoul ? { reflectSoul: state.reflectSoul } : {}),
   };

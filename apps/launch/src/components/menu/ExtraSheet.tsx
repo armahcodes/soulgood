@@ -23,6 +23,8 @@ import {
   type MenuExtra,
 } from "@/lib/menu-extras";
 import { cn } from "@/lib/utils";
+import { FoodGroupList } from "@/components/ui/FoodGroupList";
+import { extraIngredients, menuItemIngredients } from "@/lib/food-groups";
 
 type Option = { id: string; name: string; allergen?: string };
 
@@ -231,6 +233,19 @@ function OpenExtraSheet({ extra, onClose, onAdd, orderable = true, addLabel = "A
               ].filter(Boolean).join(" · ")}
             </p>
           ) : null}
+
+          <div>
+            <p className="mb-2 text-[0.68rem] font-medium tracking-[0.16em] text-forest/70 uppercase">By food group</p>
+            <FoodGroupList
+              items={
+                byo || extra.options === "trio"
+                  ? extraIngredients(line).length
+                    ? extraIngredients(line)
+                    : menuItemIngredients(extra.id)
+                  : extraIngredients(line)
+              }
+            />
+          </div>
 
           <p className="text-xs leading-5 text-forest/60">
             Dressings and sauces follow their labels; our kitchen handles other major allergens and cross-contact can occur.

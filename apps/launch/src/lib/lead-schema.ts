@@ -55,6 +55,8 @@ export const leadSchema = z
     allergens: z.array(z.string()).default([]),
     foods: z.array(z.string()).default([]),
     priorities: z.array(z.string()).default([]),
+    /** Salads and sides the guest would like alongside their bowls. */
+    sides: z.array(z.string()).default([]),
     reflectBody: z.string().optional(),
     reflectSoul: z.string().optional(),
   })

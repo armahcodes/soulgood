@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { QuizFlow } from "@/components/quiz/QuizFlow";
+import { getAddOnVariationIds } from "@/lib/square-catalog";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import { BRAND_NAME } from "@/lib/brand";
 
@@ -24,7 +25,7 @@ export default function QuizPage() {
         }
       />
       <main className="flex flex-1 flex-col">
-        <QuizFlow />
+        <QuizFlow sidesOrderable={Boolean(getAddOnVariationIds())} />
       </main>
     </div>
   );

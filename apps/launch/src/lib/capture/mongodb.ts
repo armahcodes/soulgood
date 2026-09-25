@@ -26,6 +26,7 @@ export async function saveLeadToMongo(
     allergens: record.allergens,
     foods: record.foods,
     priorities: record.priorities,
+    sides: record.sides,
     reflectBody: record.reflectBody,
     reflectSoul: record.reflectSoul,
     capturedAt: new Date(record.capturedAt),

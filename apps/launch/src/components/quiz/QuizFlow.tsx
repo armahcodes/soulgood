@@ -29,7 +29,7 @@ function storedFulfillment(): FulfillmentMethod {
 }
 
 /** Pathway Finder: intro → 11 questions → contact → pathway and mix. */
-export function QuizFlow() {
+export function QuizFlow({ sidesOrderable = false }: { sidesOrderable?: boolean }) {
   const reduced = useReducedMotion();
   const [phase, setPhase] = useState<Phase>("intro");
   const [step, setStep] = useState(0);
@@ -152,7 +152,7 @@ export function QuizFlow() {
               }}
             />
           ) : result ? (
-            <ResultScreen state={result} fulfillment={fulfillment} onRetake={retake} />
+            <ResultScreen state={result} fulfillment={fulfillment} onRetake={retake} sidesOrderable={sidesOrderable} />
           ) : null}
         </motion.div>
       </AnimatePresence>

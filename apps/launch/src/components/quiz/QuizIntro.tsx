@@ -22,8 +22,8 @@ export function QuizIntro({ onBegin }: { onBegin: () => void }) {
       </div>
       <p className="max-w-[34ch] text-lg leading-relaxed text-forest/75">
         The next few questions aren&rsquo;t a test. They&rsquo;re a way of
-        noticing what your body and your days are asking for — so the food can
-        answer it.
+        noticing how your days look and how you like to eat — so we can suggest
+        bowls, salads, and sides to start with.
       </p>
       <ul className="flex flex-wrap justify-center gap-2 text-xs font-medium tracking-[0.08em] text-forest/70 uppercase">
         <li className="rounded-full border border-forest/12 bg-card px-3 py-1.5">{QUESTIONS.length} questions</li>

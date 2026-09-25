@@ -28,7 +28,7 @@ const FULFILLMENT_CHOICES = [
 
 const INCLUDED = [
   "Chef-made by Chef Kyla with whole ingredients: greens, grains, vegetables, and protein",
-  "Plant-forward and protein-rich bowls, with every ingredient and allergen listed",
+  "Plant-forward bowls and bowls with chicken, with every ingredient and allergen listed",
   "Prep and eat-by dates on every 32 oz jar",
   NOURISHMENT.deliveryDisclosure,
 ];

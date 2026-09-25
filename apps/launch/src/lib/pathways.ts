@@ -2,8 +2,10 @@ import { getCollectionPreview } from "./menu";
 import { PATHWAYS, type Pathway } from "./lead-schema";
 
 /**
- * The four Soul Good pathways, transcribed VERBATIM from the Pathway Finder PDF
- * (`docs_new/Soul Good_Guide Questionnaire.pdf`, "Your Soul Good Pathway" page).
+ * The four Soul Good pathways. Names and descriptors come from the Pathway Finder
+ * PDF (`docs_new/Soul Good_Guide Questionnaire.pdf`); descriptions and notes were
+ * rewritten to describe food and preferences only, with no health claims
+ * (no digestion, recovery, energy, or anti-inflammatory promises).
  *
  * NOTE: the PDF prints the title as "PERFOMANCE" (a typo). The canonical enum
  * value is `performance` (see `PATHWAYS` in lead-schema.ts); the display name and
@@ -37,8 +39,8 @@ export const PATHWAY_DEFINITIONS: Record<Pathway, PathwayDefinition> = {
     name: "Mindful",
     descriptor: "Grounded. Present. Nourishing.",
     description:
-      "For intentional eating, everyday wellness, and nourishment without overthinking.",
-    note: "Clean, balanced plates that ask nothing of you but to slow down and enjoy them.",
+      "For intentional eating and everyday nourishment, without overthinking.",
+    note: "Balanced plates of vegetables, grains, and protein that ask nothing of you but to slow down and enjoy them.",
     dishes: getCollectionPreview("mindful"),
   },
   performance: {
@@ -46,8 +48,8 @@ export const PATHWAY_DEFINITIONS: Record<Pathway, PathwayDefinition> = {
     name: "Performance",
     descriptor: "Strength. Focus. Momentum.",
     description:
-      "For active lifestyles, busy schedules, recovery, and sustained energy.",
-    note: "Higher-protein, macro-forward fuel built to keep up with everything you carry.",
+      "For active lifestyles and full, busy schedules.",
+    note: "Hearty plates built around chicken or chickpeas, whole grains, and roasted vegetables.",
     dishes: getCollectionPreview("performance"),
   },
   detox: {
@@ -55,8 +57,8 @@ export const PATHWAY_DEFINITIONS: Record<Pathway, PathwayDefinition> = {
     name: "Detox",
     descriptor: "Release. Restore. Renew.",
     description:
-      "For those seeking hydration, digestive support, lighter nourishment, and a fresh start.",
-    note: "Lighter, hydrating, anti-inflammatory plates that leave you feeling clear and renewed.",
+      "For those who want lighter, fresher, vegetable-forward meals and a fresh start.",
+    note: "Bright plates of leafy greens, crisp vegetables, herbs, and turmeric.",
     dishes: getCollectionPreview("detox"),
   },
   alignment: {
@@ -64,8 +66,8 @@ export const PATHWAY_DEFINITIONS: Record<Pathway, PathwayDefinition> = {
     name: "Alignment",
     descriptor: "Balance. Harmony. Personalization.",
     description:
-      "For those seeking nourishment aligned with their goals, values, and lifestyle.",
-    note: "Made-to-order plates tuned to your beliefs, your body, and the way you actually live.",
+      "For those who want food that fits their values, preferences, and lifestyle.",
+    note: "Mix-and-match plates tuned to your preferences and the way you actually live.",
     dishes: getCollectionPreview("alignment"),
   },
 };
