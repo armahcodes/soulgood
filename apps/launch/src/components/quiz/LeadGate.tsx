@@ -104,7 +104,7 @@ export function LeadGate({
           Where should we send it?
         </h1>
         <p className="max-w-[36ch] text-base leading-7 text-forest/72">
-          Share a few details to see your pathway and your five-bowl mix. We’ll keep your
+          Share a few details to see your pathway and the bowls we recommend. We’ll keep your
           answers with them so our team can help you get started.
         </p>
       </div>

@@ -19,7 +19,7 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     shortcuts: [
       { name: "Build your ritual", url: "/checkout", description: "Plan weekly nourishment" },
-      { name: "Find your pathway", url: "/quiz", description: "Get a five-bowl mix for you" },
+      { name: "Find your pathway", url: "/quiz", description: "Get bowls matched to you" },
       { name: "My orders", url: "/account", description: "Receipts and weekly plans" },
     ],
   };

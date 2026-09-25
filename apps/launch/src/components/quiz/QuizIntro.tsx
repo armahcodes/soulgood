@@ -28,7 +28,7 @@ export function QuizIntro({ onBegin }: { onBegin: () => void }) {
       <ul className="flex flex-wrap justify-center gap-2 text-xs font-bold tracking-[0.08em] text-forest/70 uppercase">
         <li className="rounded-full border border-forest/12 bg-card px-3 py-1.5">{QUESTIONS.length} questions</li>
         <li className="rounded-full border border-forest/12 bg-card px-3 py-1.5">About 2 minutes</li>
-        <li className="rounded-full border border-forest/12 bg-card px-3 py-1.5">A five-bowl mix for you</li>
+        <li className="rounded-full border border-forest/12 bg-card px-3 py-1.5">Bowls matched to you</li>
       </ul>
       <Button type="button" size="lg" onClick={onBegin} className="w-full sm:w-auto">
         I&rsquo;m ready

@@ -43,7 +43,7 @@ const FAQS = [
   {
     id: "order",
     title: "What comes in an order?",
-    content: `Choose any ${PLAN.bowlsPerWeek} chef-made 32 oz jarred bowls from the available lineup, prepared together for ${PLAN.deliveryDay} pickup or delivery. One of each available bowl is preselected for convenience.`,
+    content: `Chef-made 32 oz jarred bowls from this week’s lineup, built on whole ingredients and prepared together for ${PLAN.deliveryDay} pickup or delivery. Pick your favorites, or start with one of each and adjust. Every order has a $50 minimum.`,
   },
   {
     id: "storage",
@@ -63,7 +63,7 @@ const FAQS = [
   {
     id: "billing",
     title: "How does billing work?",
-    content: `Bowls come in sets of five (${PRICING.oneTime} per set). One-time orders don’t renew; weekly plans renew every seven days until canceled. Sunday delivery is $8.88, or free on orders over $100. Applicable sales tax and any refundable reusable-container deposit are disclosed before payment.`,
+    content: `Every order has a $50 minimum, and delivery is free on orders over $100 (otherwise $8.88 per Sunday delivery). Weekly bowls are packed in sets of five at ${PRICING.oneTime} per set. One-time orders don’t renew; weekly plans renew every seven days until canceled. Applicable sales tax and any refundable reusable-container deposit are disclosed before payment.`,
   },
   {
     id: "cancel",
@@ -206,8 +206,8 @@ export default function Home() {
                 </h2>
               </div>
               <p className="max-w-sm text-sm leading-6 text-forest/70">
-                {AVAILABLE_BOWLS.length} recipes this week, each in a 32 oz glass jar. Mix and
-                match any five, or scale up for the people at your table.
+                {AVAILABLE_BOWLS.length} recipes this week, made with greens, grains, vegetables, and
+                protein. Every ingredient and allergen is listed, so you can choose with confidence.
               </p>
             </Reveal>
 
@@ -235,7 +235,7 @@ export default function Home() {
               </h2>
               <p className="mt-5 max-w-md text-base leading-7 text-oat/75">
                 A few gentle questions about your days, your energy, and what you enjoy. We’ll match
-                your pathway and suggest a five-bowl mix to start with.
+                your pathway and suggest bowls that suit you to start with.
               </p>
               <Button as="a" href="/quiz" size="lg" className="mt-8 w-full bg-oat text-forest hover:bg-sand sm:w-auto">
                 Find your pathway

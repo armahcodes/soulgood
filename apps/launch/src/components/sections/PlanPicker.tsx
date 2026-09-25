@@ -5,13 +5,12 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { SegmentedControl } from "@/components/ui/kit/segmented-control";
 import {
+  FEES,
   FULFILLMENT,
-  fulfillmentFeeCents,
   NOURISHMENT,
   ORDER_RULES,
-  PLAN,
-  PRICING,
   PURCHASE_OPTIONS,
+  SERVICE_AREA,
   formatCents,
   type FulfillmentMethod,
   type PurchaseType,
@@ -28,8 +27,9 @@ const FULFILLMENT_CHOICES = [
 ] as const satisfies readonly { value: FulfillmentMethod; label: string }[];
 
 const INCLUDED = [
-  `${PLAN.bowlsPerWeek} chef-made 32 oz bowls, chosen by you`,
-  "Prep and eat-by dates on every jar",
+  "Chef-made by Chef Kyla with whole ingredients: greens, grains, vegetables, and protein",
+  "Plant-forward and protein-rich bowls, with every ingredient and allergen listed",
+  "Prep and eat-by dates on every 32 oz jar",
   NOURISHMENT.deliveryDisclosure,
 ];
 
@@ -47,8 +47,6 @@ export function PlanPicker() {
     if (next === "weekly") setFulfillment("delivery");
   };
 
-  const fulfillmentCents = fulfillmentFeeCents(fulfillment, PRICING.oneTimeCents);
-  const subtotalCents = PRICING.oneTimeCents + fulfillmentCents;
 
   return (
     <div className="grid overflow-hidden rounded-lg border border-forest/12 bg-card shadow-[0_30px_60px_-40px_rgb(44_58_52/0.45)] lg:grid-cols-[1.05fr_0.95fr]">
@@ -56,11 +54,11 @@ export function PlanPicker() {
         <div>
           <p className="text-[0.68rem] font-bold tracking-[0.22em] text-clay uppercase">Make it yours</p>
           <h2 className="mt-3 text-5xl leading-none font-normal tracking-[-0.045em] text-forest sm:text-6xl">
-            Build your week.
+            Nourishing meals, ready when you are.
           </h2>
           <p className="mt-4 max-w-md text-sm leading-6 text-forest/70">
-            Choose your bowls in sets of five, for one person or the whole table. Weekly plans arrive
-            every Sunday; one-time orders can be picked up or delivered.
+            Wholesome, chef-made bowls for your workweek, your family, or the whole table. Order once,
+            or let a weekly plan take care of Sundays.
           </p>
         </div>
 
@@ -92,27 +90,38 @@ export function PlanPicker() {
       </div>
 
       <div className="flex flex-col justify-between gap-8 bg-forest p-6 text-oat sm:p-10">
-        <dl className="grid gap-4 text-sm" aria-live="polite">
-          <div className="flex items-baseline justify-between gap-6">
-            <dt className="text-oat/70">{PURCHASE_OPTIONS[purchase].label} · 5 bowls</dt>
-            <dd className="font-serif text-2xl">{PRICING.oneTime}</dd>
-          </div>
-          <div className="flex items-baseline justify-between gap-6 border-t border-oat/12 pt-4">
-            <dt className="text-oat/70">{FULFILLMENT[fulfillment].label}</dt>
-            <dd className="font-serif text-2xl">{fulfillmentCents === 0 ? "Free" : formatCents(fulfillmentCents)}</dd>
-          </div>
-          <div className="flex items-baseline justify-between gap-6 border-t border-oat/25 pt-4">
-            <dt className="font-bold">
-              {purchase === "weekly" ? "Each week, before tax" : "Before tax"}
-            </dt>
-            <dd className="font-serif text-4xl tracking-[-0.03em]">{formatCents(subtotalCents)}</dd>
-          </div>
-        </dl>
+        <div aria-live="polite">
+          <p className="text-[0.65rem] font-bold tracking-[0.18em] text-gold uppercase">
+            {PURCHASE_OPTIONS[purchase].label} · {FULFILLMENT[fulfillment].label}
+          </p>
+          <dl className="mt-5 grid gap-5">
+            <div className="border-b border-oat/15 pb-5">
+              <dt className="text-sm text-oat/70">Minimum order</dt>
+              <dd className="mt-1 font-serif text-5xl leading-none tracking-[-0.03em]">
+                {formatCents(ORDER_RULES.minimumOrderCents).replace(".00", "")}
+              </dd>
+            </div>
+            <div className="border-b border-oat/15 pb-5">
+              <dt className="text-sm text-oat/70">Delivery</dt>
+              <dd className="mt-1 font-serif text-2xl leading-tight">
+                {fulfillment === "pickup" ? "Free Sunday pickup" : "Free on orders over $100"}
+              </dd>
+              {fulfillment === "delivery" ? (
+                <dd className="mt-1 text-xs text-oat/65">Otherwise {formatCents(FEES.delivery.amountCents)} per Sunday delivery.</dd>
+              ) : null}
+            </div>
+            <div>
+              <dt className="text-sm text-oat/70">{fulfillment === "pickup" ? "Pickup" : "Where"}</dt>
+              <dd className="mt-1 font-serif text-2xl leading-tight">
+                {fulfillment === "pickup" ? "Location and window confirmed after checkout" : SERVICE_AREA.weekly}
+              </dd>
+            </div>
+          </dl>
+        </div>
 
         <div className="grid gap-4">
           <p className="text-xs leading-5 text-oat/70">
-            {PURCHASE_OPTIONS[purchase].disclosure} {FULFILLMENT[fulfillment].disclosure} {ORDER_RULES.minimumLabel}. Applicable tax is shown before payment.
-            {fulfillment === "delivery" && fulfillmentCents > 0 ? " Add a second set and delivery is free." : ""}
+            {PURCHASE_OPTIONS[purchase].disclosure} You’ll see your bowls, delivery, and tax before paying.
           </p>
           <Button
             as="a"

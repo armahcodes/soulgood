@@ -20,7 +20,7 @@ export const metadata = {
 };
 
 const PLAN_ITEMS = [
-  `${PLAN.bowlsPerWeek} thoughtfully prepared 32 oz bowls`,
+  "Chef-made bowls built on whole ingredients",
   "For your own rhythm or a table to share",
   "Prep and eat-by dates on every jar",
   PLAN.deliveryNote,
@@ -76,9 +76,10 @@ export default async function CheckoutPage({
               Make this ritual yours.
             </h1>
             <p className="mx-auto max-w-md text-base leading-relaxed text-forest/72 lg:mx-0">
-              Thoughtfully prepared bowls, chosen around your life. Choose them in
-              sets of five and adjust for the people at your table and 1–3 meals
-              per person, per day. Order once or choose weekly delivery. Sunday
+              Nourishing, chef-made bowls, chosen around your life. Every order has
+              a $50 minimum; bowls are packed in sets of five, sized for the people
+              at your table and 1–3 meals per person, per day. Order once or choose
+              weekly delivery. Sunday
               pickup is free for one-time orders; Sunday delivery across Los Angeles
               and Orange County is $8.88, or free on orders over $100. Applicable
               tax is additional.

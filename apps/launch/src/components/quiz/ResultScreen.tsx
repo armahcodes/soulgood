@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/Button";
 import { SeedOfLife } from "@/components/ui/SeedOfLife";
-import { PRICING, type FulfillmentMethod } from "@/lib/brand";
+import type { FulfillmentMethod } from "@/lib/brand";
 import { CURRENT_BOWLS } from "@/lib/current-offer";
 import { MIX_RATIONALE, recommendMix } from "@/lib/pathway-mix";
 import type { PathwayState } from "@/lib/pathway-state";
@@ -69,8 +69,8 @@ export function ResultScreen({
       <motion.section {...rise(0.4)} aria-labelledby="mix-heading" className="overflow-hidden rounded-lg border border-forest/12 bg-card shadow-[0_30px_60px_-45px_rgb(44_58_52/0.5)]">
         <div className="flex flex-wrap items-end justify-between gap-3 border-b border-dashed border-forest/15 p-5 sm:p-7">
           <div>
-            <p className="text-[0.65rem] font-bold tracking-[0.18em] text-forest/60 uppercase">Your starting mix</p>
-            <h2 id="mix-heading" className="mt-2 text-3xl leading-none tracking-[-0.03em] text-forest">Five bowls for {PRICING.oneTime}</h2>
+            <p className="text-[0.65rem] font-bold tracking-[0.18em] text-forest/60 uppercase">Chosen for your pathway</p>
+            <h2 id="mix-heading" className="mt-2 text-3xl leading-none tracking-[-0.03em] text-forest">Your starting mix</h2>
           </div>
           <p className="max-w-xs text-sm leading-6 text-forest/70">{MIX_RATIONALE[state.pathway]}</p>
         </div>

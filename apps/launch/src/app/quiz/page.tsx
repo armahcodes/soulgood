@@ -6,7 +6,7 @@ import { BRAND_NAME } from "@/lib/brand";
 export const metadata = {
   title: `Find your pathway — ${BRAND_NAME}`,
   description:
-    "Answer a few gentle questions about your days and energy. We’ll match your Soul Good pathway and suggest a five-bowl Soul Bowls™ mix to start with.",
+    "Answer a few gentle questions about your days and energy. We’ll match your Soul Good pathway and suggest Soul Bowls™ that suit you.",
 };
 
 export default function QuizPage() {
