@@ -114,16 +114,43 @@ export default function Home() {
       <main className="overflow-x-clip bg-oat">
         {/* Hero — editorial split, adapted from 21st.dev felipemenezes098/hero-08 */}
         <section className="relative">
-          <div className="mx-auto grid w-full max-w-[1440px] items-center gap-12 px-5 pt-8 pb-14 sm:px-8 sm:pt-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-10 lg:px-12 lg:pt-10 lg:pb-20">
-            <div className="relative z-10 text-center motion-safe:animate-[rise_0.8s_var(--ease-soft)] lg:text-left">
+          {/* Phones: title → jar stack → details, so the product is visible on arrival. Desktop: text left, stack right. */}
+          <div className="mx-auto grid w-full max-w-[1440px] gap-6 px-5 pt-6 pb-14 sm:gap-10 sm:px-8 sm:pt-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:grid-rows-[auto_auto] lg:gap-x-10 lg:gap-y-0 lg:px-12 lg:pt-10 lg:pb-20">
+            <div className="relative z-10 text-center motion-safe:animate-[rise_0.8s_var(--ease-soft)] lg:col-start-1 lg:row-start-1 lg:self-end lg:text-left">
               <p className={eyebrow}>{TAGLINE}</p>
-              <h1 className="mt-5 text-[clamp(3.6rem,17vw,5rem)] leading-[0.82] font-normal tracking-[-0.055em] text-forest lg:text-[clamp(5rem,8.4vw,8.4rem)] lg:leading-[0.78]">
+              <h1 className="mt-4 text-[clamp(3.6rem,17vw,5rem)] leading-[0.82] font-normal tracking-[-0.055em] text-forest lg:text-[clamp(5rem,8.4vw,8.4rem)] lg:leading-[0.78]">
                 <span className="inline-flex items-start whitespace-nowrap">
                   Soul Bowls<sup className="relative -top-1 ml-0.5 text-[0.16em] tracking-normal">™</sup>
                 </span>
               </h1>
-              <p className="mt-6 font-serif text-3xl leading-tight text-forest sm:text-4xl">{NOURISHMENT.headline}</p>
-              <p className="mx-auto mt-6 max-w-md text-base leading-7 text-forest/72 sm:text-lg lg:mx-0">
+              <p className="mt-4 font-serif text-2xl leading-tight text-forest sm:mt-6 sm:text-4xl">{NOURISHMENT.headline}</p>
+            </div>
+
+            <div className="relative mx-auto w-full max-w-[560px] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-w-none lg:self-center">
+              <div className="relative overflow-hidden rounded-lg bg-oat ring-1 ring-forest/8">
+                <Image
+                  src="/botanicals/clay-branch.png"
+                  alt=""
+                  width={320}
+                  height={400}
+                  aria-hidden="true"
+                  loading="eager"
+                  className="pointer-events-none absolute -top-10 -right-12 z-0 w-44 rotate-12 opacity-25 sm:w-56"
+                />
+                <div className="absolute top-4 left-4 z-20 rounded-lg bg-oat/92 px-4 py-3 shadow-sm backdrop-blur sm:top-6 sm:left-6">
+                  <p className="font-serif text-2xl leading-none tracking-[-0.02em] text-forest">Free delivery</p>
+                  <p className="mt-1 text-[0.62rem] font-bold tracking-[0.16em] text-forest/65 uppercase">On orders over $100</p>
+                </div>
+                <div className="absolute top-4 right-4 z-20 hidden rounded-lg bg-forest px-4 py-3 text-oat shadow-sm sm:top-6 sm:right-6 sm:block">
+                  <p className="text-[0.62rem] font-bold tracking-[0.16em] text-gold uppercase">From our kitchen</p>
+                  <p className="mt-1 font-serif text-lg leading-none">with care, by {FOUNDER}</p>
+                </div>
+                <JarStack items={HERO_JARS} className="relative z-10 pt-14 sm:pt-20" />
+              </div>
+            </div>
+
+            <div className="relative z-10 flex flex-col text-center motion-safe:animate-[rise_1s_var(--ease-soft)] lg:col-start-1 lg:row-start-2 lg:self-start lg:text-left">
+              <p className="mx-auto max-w-md text-base lg:mt-6 leading-7 text-forest/72 sm:text-lg lg:mx-0">
                 Thoughtfully prepared by {FOUNDER}, Soul Bowls™ bring whole ingredients and
                 comforting flavors to your daily rhythm. A nourishing moment, made for you.
               </p>
@@ -141,7 +168,7 @@ export default function Home() {
                   <span>{ORDER_RULES.minimumLabel} · {ORDER_RULES.freeDeliveryLabel.toLowerCase()}.</span>
                 </li>
               </ul>
-              <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap lg:justify-start">
+              <div className="mt-8 flex flex-col justify-center gap-3 max-lg:order-first max-lg:mt-0 max-lg:mb-8 sm:flex-row sm:flex-wrap lg:justify-start">
                 <Button as="a" href="/checkout" size="lg" className="w-full sm:w-auto">
                   {NOURISHMENT.cta}
                 </Button>
@@ -165,28 +192,6 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[560px] lg:max-w-none">
-              <div className="relative overflow-hidden rounded-lg bg-oat ring-1 ring-forest/8">
-                <Image
-                  src="/botanicals/clay-branch.png"
-                  alt=""
-                  width={320}
-                  height={400}
-                  aria-hidden="true"
-                  loading="eager"
-                  className="pointer-events-none absolute -top-10 -right-12 z-0 w-44 rotate-12 opacity-25 sm:w-56"
-                />
-                <div className="absolute top-4 left-4 z-20 rounded-lg bg-oat/92 px-4 py-3 shadow-sm backdrop-blur sm:top-6 sm:left-6">
-                  <p className="font-serif text-2xl leading-none tracking-[-0.02em] text-forest">Free delivery</p>
-                  <p className="mt-1 text-[0.62rem] font-bold tracking-[0.16em] text-forest/65 uppercase">On orders over $100</p>
-                </div>
-                <div className="absolute top-4 right-4 z-20 hidden rounded-lg bg-forest px-4 py-3 text-oat shadow-sm sm:top-6 sm:right-6 sm:block">
-                  <p className="text-[0.62rem] font-bold tracking-[0.16em] text-gold uppercase">From our kitchen</p>
-                  <p className="mt-1 font-serif text-lg leading-none">with care, by {FOUNDER}</p>
-                </div>
-                <JarStack items={HERO_JARS} className="relative z-10 pt-16 sm:pt-20" />
-              </div>
-            </div>
           </div>
 
           <div className="border-y border-forest/10 bg-sand/35 py-4 text-[0.7rem] font-bold tracking-[0.16em] text-forest/72 uppercase">

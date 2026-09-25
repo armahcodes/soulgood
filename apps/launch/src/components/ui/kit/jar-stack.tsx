@@ -98,7 +98,7 @@ export function JarStack({ items, className }: { items: readonly JarStackItem[];
       />
 
       <div
-        className="relative mt-2 aspect-[4/5] w-[min(60vw,18rem)] sm:w-[19rem] lg:w-[min(20vw,18.5rem)]"
+        className="relative mt-2 aspect-[4/5] w-[min(54vw,16rem)] sm:w-[19rem] lg:w-[min(20vw,18.5rem)]"
         style={{ perspective: 1200 }}
       >
         {order.map((id, index) => {
@@ -121,7 +121,7 @@ export function JarStack({ items, className }: { items: readonly JarStackItem[];
         })}
       </div>
 
-      <div className="mt-7 w-full max-w-sm px-5 text-center" aria-live="polite" aria-atomic="true">
+      <div className="mt-6 w-full max-w-sm px-5 text-center sm:mt-7" aria-live="polite" aria-atomic="true">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={front.id}

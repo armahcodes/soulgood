@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import { Compass, House, ShoppingBag, Soup, UserRound } from "lucide-react";
-import { useScrollDirection } from "@/components/ui/kit/use-scroll-direction";
 import { EAT_NOW } from "@/lib/ordering";
 import { cn } from "@/lib/utils";
 
@@ -20,13 +19,24 @@ const TABS: readonly Tab[] = [
 /**
  * Thumb-zone app navigation for phones — a floating, translucent tab bar with
  * a sliding active pill (brand adaptation of 21st.dev shadcnui-blocks
- * mobile-navigation-tabs and ln-dev7 animated-navigation-tabs). It tucks away
- * while reading down the page and returns on the first scroll up.
+ * mobile-navigation-tabs and ln-dev7 animated-navigation-tabs). Always
+ * available; it only steps aside while the full-screen menu is open.
  */
 export function MobileTabBar({ current, hidden = false }: { current?: string; hidden?: boolean }) {
-  const direction = useScrollDirection();
   const reduced = useReducedMotion();
-  const tucked = hidden || direction === "down";
+  const tucked = hidden;
+
+  // Tabs that point at the page you're already on scroll there instead of doing nothing.
+  const onSamePage = (event: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    const [path, hash] = href.split("#");
+    if (window.location.pathname !== (path || "/")) return;
+    event.preventDefault();
+    const behavior: ScrollBehavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+    const target = hash ? document.getElementById(hash) : null;
+    if (target) target.scrollIntoView({ behavior, block: "start" });
+    else window.scrollTo({ top: 0, behavior });
+    window.history.replaceState(null, "", hash ? `${path || "/"}#${hash}` : path || "/");
+  };
 
   return (
     <nav
@@ -64,7 +74,7 @@ export function MobileTabBar({ current, hidden = false }: { current?: string; hi
                   {content}
                 </a>
               ) : (
-                <Link href={href} aria-current={active ? "page" : undefined} className={className}>
+                <Link href={href} aria-current={active ? "page" : undefined} className={className} onClick={(event) => onSamePage(event, href)}>
                   {content}
                 </Link>
               )}
