@@ -15,6 +15,7 @@ import {
   type LastOrderConfirmation,
 } from "@/lib/checkout-session";
 import { CURRENT_BOWLS } from "@/lib/current-offer";
+import { orderStatusLabel } from "@/lib/customer-experience";
 
 /** Animated status seal — adapted from 21st.dev kavikatiyar/order-confirmation-card. */
 function StatusSeal({ pending }: { pending: boolean }) {
@@ -163,7 +164,7 @@ export function OrderConfirmation() {
           </div>
           <div className="sm:text-right">
             <span className="inline-flex rounded-md bg-sage/14 px-3 py-2 text-xs font-bold tracking-[0.1em] text-forest uppercase">
-              {confirmation.status}
+              {orderStatusLabel(confirmation.status)}
             </span>
             <p className="mt-3 font-serif text-3xl text-forest">
               {formatCents(confirmation.totalCents)}
@@ -176,21 +177,21 @@ export function OrderConfirmation() {
             <p className="text-xs font-bold tracking-[0.12em] text-forest/55 uppercase">
               Your chosen bowls
             </p>
-            <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+            <ul className="mt-4 grid divide-y divide-forest/8">
               {selectedBowls.map((bowl) => (
                 <li
                   key={bowl.id}
-                  className="flex items-center justify-between gap-3 border-b border-forest/8 pb-2 text-sm text-forest/68"
+                  className="flex items-center justify-between gap-3 py-2.5 text-sm text-forest/75"
                 >
                   <span className="flex min-w-0 items-center gap-3">
-                    <span className="relative size-10 shrink-0 overflow-hidden rounded-md bg-sand">
-                      <Image src={bowl.imagePath} alt="" fill unoptimized sizes="40px" className="object-cover" />
+                    <span className="relative size-11 shrink-0 overflow-hidden rounded-md bg-sand">
+                      <Image src={bowl.imagePath} alt="" fill unoptimized sizes="44px" className="object-cover" />
                     </span>
-                    {bowl.name}
+                    <span className="font-serif text-lg leading-tight text-forest">{bowl.name}</span>
                   </span>
-                  <strong className="text-forest">
+                  <span className="shrink-0 rounded-full bg-forest/6 px-2.5 py-1 text-xs font-bold whitespace-nowrap text-forest tabular-nums">
                     × {confirmation.bowlSelection[bowl.id]}
-                  </strong>
+                  </span>
                 </li>
               ))}
             </ul>

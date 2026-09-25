@@ -75,28 +75,12 @@ export default async function CheckoutPage({
             <h1 className="mx-auto max-w-[10ch] text-5xl leading-[0.9] font-normal tracking-[-0.05em] text-forest sm:text-7xl lg:mx-0 lg:max-w-[9ch]">
               Make this ritual yours.
             </h1>
-            <p className="mx-auto max-w-lg text-base leading-relaxed text-forest/68 sm:text-lg lg:mx-0">
+            <p className="mx-auto max-w-md text-base leading-relaxed text-forest/72 lg:mx-0">
               Thoughtfully prepared bowls, chosen around your life. Start with
               five 32 oz bowls for $88, then adjust for the people at your table
               and 1–3 meals per person, per day, across five days. Order once or
               choose weekly delivery. Sunday pickup is free for one-time orders;
               in-house LA County delivery is $8.88. Applicable tax is additional.
-            </p>
-            <p className="mx-auto max-w-lg text-sm font-semibold leading-6 text-forest lg:mx-0">
-              {NOURISHMENT.deliveryDisclosure}
-            </p>
-
-            <p className="mx-auto hidden max-w-lg text-sm leading-relaxed text-forest/55 sm:block lg:mx-0">
-              Available now:{" "}
-              {AVAILABLE_BOWLS.map((bowl) => bowl.name).join(", ")}.
-              {SOLD_OUT_BOWLS.length > 0
-                ? ` Sold out: ${SOLD_OUT_BOWLS.map((bowl) => bowl.name).join(", ")}.`
-                : ""}
-              {` ${CURRENT_OFFER.storage}`}
-            </p>
-
-            <p className="text-sm font-semibold text-sage sm:hidden">
-              Five bowls start at $88 · tax shown before payment
             </p>
 
             <Link
@@ -108,19 +92,29 @@ export default async function CheckoutPage({
               <span className="font-semibold whitespace-nowrap underline underline-offset-4 group-hover:text-clay">Find your pathway</span>
             </Link>
 
-            <ul className="mt-2 hidden gap-3 border-t border-forest/10 pt-6 text-left sm:grid sm:grid-cols-2">
-              {PLAN_ITEMS.map((item) => (
-                <li
-                  key={item}
-                  className="flex items-start gap-3 text-sm leading-6 text-forest/75"
-                >
-                  <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-sage/15 text-sage">
-                    <Check className="size-3" aria-hidden />
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <div className="mt-2 hidden rounded-lg border border-forest/12 bg-card/70 p-6 text-left sm:block">
+              <p className="text-[0.65rem] font-bold tracking-[0.18em] text-forest/60 uppercase">What’s included</p>
+              <ul className="mt-4 grid gap-3">
+                {PLAN_ITEMS.map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-sm leading-6 text-forest/78">
+                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-sage/15 text-sage">
+                      <Check className="size-3" aria-hidden />
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-5 border-t border-forest/10 pt-4 text-xs leading-5 text-forest/65">
+                {SOLD_OUT_BOWLS.length > 0
+                  ? `Sold out this week: ${SOLD_OUT_BOWLS.map((bowl) => bowl.name).join(", ")}. `
+                  : ""}
+                {CURRENT_OFFER.storage}
+              </p>
+            </div>
+
+            <p className="mx-auto max-w-md text-sm leading-6 font-semibold text-forest lg:mx-0">
+              {NOURISHMENT.deliveryDisclosure}
+            </p>
           </section>
 
           <section className="min-w-0 rounded-lg border border-forest/12 bg-white/40 p-4 shadow-[0_30px_60px_-45px_rgb(44_58_52/0.5)] sm:p-9">

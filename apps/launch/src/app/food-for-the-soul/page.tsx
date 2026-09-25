@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, ArrowRight, Heart, HandHeart, Sprout } from "lucide-react";
+import { ArrowDown, ArrowRight, Heart, HandHeart, Plus, Sprout } from "lucide-react";
+import { Reveal } from "@/components/ui/kit/reveal";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { CommunityInterestForm } from "@/components/community/CommunityInterestForm";
@@ -62,7 +63,8 @@ export default function FoodForTheSoulPage() {
           {[
             { href: "#our-impact", label: "Our impact" },
             { href: "#next-drive", label: "The next drive" },
-            { href: "#get-involved", label: "Get involved" },
+            { href: "#how-it-works", label: "How it works" },
+            { href: "#questions", label: "Questions" },
           ].map((link) => (
             <a
               key={link.href}
@@ -91,7 +93,7 @@ export default function FoodForTheSoulPage() {
               className="mt-7 text-[clamp(4.25rem,15vw,7.6rem)] leading-[0.82] tracking-[-0.055em]"
             >
               Food for <br />
-              the <em className="font-normal text-[#996044]">Soul.</em>
+              the <em className="font-normal text-clay">Soul.</em>
             </h1>
             <p className="mx-auto mt-8 max-w-lg font-serif text-3xl leading-tight sm:text-4xl lg:mx-0">
               A nourishing meal.
@@ -117,17 +119,18 @@ export default function FoodForTheSoulPage() {
             </div>
           </div>
           <div className="relative mx-auto w-full max-w-[450px]">
-            <div className="relative aspect-[4/4.4] overflow-hidden rounded-t-[48%] bg-sand">
+            <div className="relative aspect-[4/4.4] overflow-hidden rounded-t-[48%] rounded-b-lg bg-sand shadow-[0_40px_70px_-45px_rgb(44_58_52/0.6)]">
               <Image
                 src="/products/golden-harvest-bowl.webp"
                 alt="A Golden Harvest Bowl from the Soul Good kitchen, layered with grains, vegetables, and greens"
                 fill
-                priority
+                loading="eager"
+                fetchPriority="high"
                 sizes="(min-width: 1024px) 450px, (min-width: 640px) 440px, 90vw"
                 className="object-cover"
               />
             </div>
-            <div className="relative -mt-14 mr-5 flex items-center gap-5 bg-forest px-6 py-6 text-oat sm:mr-10 sm:px-8">
+            <div className="relative -mt-14 mr-5 flex items-center gap-5 rounded-lg bg-forest px-6 py-6 text-oat shadow-[0_24px_40px_-24px_rgb(44_58_52/0.7)] sm:mr-10 sm:px-8">
               <span className="font-serif text-6xl leading-none tracking-[-0.06em] text-gold sm:text-7xl">
                 {COMMUNITY_DRIVE.impact}
               </span>
@@ -171,7 +174,7 @@ export default function FoodForTheSoulPage() {
             className="pointer-events-none absolute -right-24 bottom-0 w-72 rotate-12 opacity-20"
             aria-hidden="true"
           />
-          <div className="relative mx-auto grid max-w-6xl gap-10 text-center md:grid-cols-[0.8fr_1.2fr] md:items-center md:gap-16 md:text-left">
+          <Reveal className="relative mx-auto grid max-w-6xl gap-10 text-center md:grid-cols-[0.8fr_1.2fr] md:items-center md:gap-16 md:text-left">
             <div className="border-b border-oat/20 pb-10 md:border-r md:border-b-0 md:py-6 md:pr-12">
               <p className={`${eyebrow} text-gold`}>Our impact so far</p>
               <p className="mt-5 font-serif text-[7rem] leading-none tracking-[-0.06em] sm:text-[9rem]">
@@ -206,15 +209,15 @@ export default function FoodForTheSoulPage() {
                 <ArrowRight size={16} aria-hidden="true" />
               </a>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <section
           id="next-drive"
           aria-labelledby="drive-heading"
-          className="mx-auto max-w-7xl scroll-mt-8 px-5 py-16 sm:px-8 sm:py-24 lg:px-12"
+          className="mx-auto max-w-7xl scroll-mt-24 px-5 py-16 sm:px-8 sm:py-24 lg:px-12"
         >
-          <div className="grid overflow-hidden rounded-lg border border-forest/20 md:grid-cols-[0.75fr_1.25fr]">
+          <Reveal className="grid overflow-hidden rounded-lg border border-forest/15 bg-card shadow-[0_30px_60px_-45px_rgb(44_58_52/0.5)] md:grid-cols-[0.75fr_1.25fr]">
             <div className="flex flex-col items-center justify-center bg-sand/60 px-8 py-10 text-center sm:py-14">
               <p className={eyebrow}>The next meal drive</p>
               <time dateTime={COMMUNITY_DRIVE.dateISO} className="mt-5 block">
@@ -259,12 +262,13 @@ export default function FoodForTheSoulPage() {
                 Get involved <ArrowRight size={18} aria-hidden="true" />
               </a>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <section
+          id="how-it-works"
           aria-labelledby="partnership-heading"
-          className="mx-auto max-w-6xl px-5 pb-16 sm:px-8 sm:pb-24"
+          className="mx-auto max-w-6xl scroll-mt-24 px-5 pb-16 sm:px-8 sm:pb-24"
         >
           <div className="mx-auto max-w-2xl text-center">
             <p className={eyebrow}>From our kitchen to your community</p>
@@ -277,7 +281,7 @@ export default function FoodForTheSoulPage() {
               Together, we bring the meaning.
             </h2>
           </div>
-          <ol className="mt-10 grid gap-8 md:grid-cols-3 md:gap-10">
+          <Reveal as="ol" stagger className="mt-10 grid gap-4 md:grid-cols-3 md:gap-6">
             {[
               {
                 icon: Heart,
@@ -297,9 +301,9 @@ export default function FoodForTheSoulPage() {
             ].map(({ icon: Icon, title, body }, index) => (
               <li
                 key={title}
-                className="border-t border-forest/25 pt-6 text-center md:text-left"
+                className="rounded-lg border border-forest/12 bg-card p-6 text-center md:text-left"
               >
-                <div className="flex items-center justify-center gap-3 text-[#8F573F] md:justify-start">
+                <div className="flex items-center justify-center gap-3 text-clay md:justify-start">
                   <Icon size={23} strokeWidth={1.5} aria-hidden="true" />
                   <span className="text-xs font-bold tracking-[0.15em]">
                     0{index + 1}
@@ -309,14 +313,15 @@ export default function FoodForTheSoulPage() {
                 <p className="mt-3 text-sm leading-6 text-forest/80">{body}</p>
               </li>
             ))}
-          </ol>
+          </Reveal>
         </section>
 
         <CommunityInterestForm />
 
         <section
+          id="questions"
           aria-labelledby="questions-heading"
-          className="mx-auto max-w-3xl px-5 py-16 sm:px-8 sm:py-20"
+          className="mx-auto max-w-3xl scroll-mt-24 px-5 py-16 sm:px-8 sm:py-20"
         >
           <h2
             id="questions-heading"
@@ -348,12 +353,15 @@ export default function FoodForTheSoulPage() {
           ].map(([question, answer]) => (
             <details
               key={question}
-              className="group border-b border-forest/20 py-1"
+              className="group border-b border-forest/15 first-of-type:border-t"
             >
-              <summary className="cursor-pointer py-5 pr-3 text-base font-bold leading-6">
+              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 font-serif text-xl leading-snug transition-colors hover:text-clay sm:text-2xl [&::-webkit-details-marker]:hidden">
                 {question}
+                <span aria-hidden="true" className="flex size-9 shrink-0 items-center justify-center rounded-full border border-forest/20 transition-[transform,background-color,color] duration-300 group-open:rotate-45 group-open:border-forest group-open:bg-forest group-open:text-oat">
+                  <Plus size={16} />
+                </span>
               </summary>
-              <p className="pb-6 pr-3 text-base leading-7 text-forest/80">
+              <p className="max-w-2xl pr-14 pb-6 text-base leading-7 text-forest/78">
                 {answer}
               </p>
             </details>

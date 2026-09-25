@@ -1,3 +1,5 @@
+import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 import { ReorderButton } from "@/components/checkout/ReorderButton";
 import { formatCents, CONTACT } from "@/lib/brand";
 import type { CustomerOrder } from "@/lib/checkout-record";
@@ -6,6 +8,15 @@ import {
   formatCustomerDate,
   orderStatusLabel,
 } from "@/lib/customer-experience";
+import { cn } from "@/lib/utils";
+
+function statusTone(status: string): string {
+  const value = status.toUpperCase();
+  if (["COMPLETED", "PAID", "ACTIVE"].includes(value)) return "bg-sage/15 text-forest";
+  if (["FAILED", "DECLINED", "CANCELED", "CANCELLED"].includes(value)) return "bg-clay/12 text-clay";
+  if (value.includes("REFUND")) return "bg-forest/8 text-forest/75";
+  return "bg-gold/20 text-forest";
+}
 
 export function OrderHistory({
   orders,
@@ -18,6 +29,7 @@ export function OrderHistory({
     <div className="space-y-5">
       {orders.map((order) => {
         const reference = order.id.slice(-8).toUpperCase();
+        const bowls = CURRENT_BOWLS.filter((bowl) => order.bowlSelection[bowl.id] > 0);
         const helpHref = `mailto:${CONTACT.email}?subject=${encodeURIComponent(`Help with Soul Bowls order ${reference}`)}`;
         return (
           <article
@@ -32,7 +44,7 @@ export function OrderHistory({
                     : "One-time order"}{" "}
                   · {reference}
                 </p>
-                <h3 className="mt-2 text-3xl">
+                <h3 className="mt-2 text-3xl leading-tight">
                   {formatCustomerDate(order.createdAt)}
                 </h3>
                 <p className="mt-2 text-sm leading-6 text-forest/75">
@@ -44,7 +56,7 @@ export function OrderHistory({
                 </p>
               </div>
               <div className="flex w-full items-center justify-between gap-4 border-t border-forest/10 pt-3 sm:w-auto sm:flex-col sm:items-end sm:border-0 sm:pt-0">
-                <span className="inline-flex rounded-md border border-forest/15 bg-oat px-3 py-1.5 text-xs font-semibold">
+                <span className={cn("inline-flex rounded-md px-3 py-1.5 text-xs font-bold tracking-[0.06em] uppercase", statusTone(order.status))}>
                   {orderStatusLabel(order.status)}
                 </span>
                 <p className="font-serif text-3xl">
@@ -52,10 +64,26 @@ export function OrderHistory({
                 </p>
               </div>
             </div>
+            <div aria-hidden="true" className="mt-5 flex items-center gap-3">
+              <div className="flex -space-x-3">
+                {bowls.map((bowl) => (
+                  <span key={bowl.id} className="relative size-11 overflow-hidden rounded-full border-2 border-card bg-sand">
+                    <Image src={bowl.imagePath} alt="" fill unoptimized sizes="44px" className="scale-150 object-cover object-[50%_60%]" />
+                  </span>
+                ))}
+              </div>
+              <p className="text-xs font-semibold text-forest/65">
+                {bowls.reduce((total, bowl) => total + order.bowlSelection[bowl.id], 0)} bowls ·{" "}
+                {order.fulfillmentMethod === "delivery" ? "LA County delivery" : "Pickup"}
+              </p>
+            </div>
             <details className="group mt-4 border-t border-forest/12">
-              <summary className="cursor-pointer py-4 text-sm font-semibold marker:text-clay">
-                Order details{" "}
-                <span className="sr-only">for order {reference}</span>
+              <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between py-3 text-sm font-semibold [&::-webkit-details-marker]:hidden">
+                <span>
+                  Order details{" "}
+                  <span className="sr-only">for order {reference}</span>
+                </span>
+                <ChevronDown className="size-4 text-clay transition-transform duration-300 group-open:rotate-180" aria-hidden />
               </summary>
               <div className="grid gap-6 pb-4 md:grid-cols-2">
                 <div>
@@ -63,9 +91,7 @@ export function OrderHistory({
                     Your bowls
                   </h4>
                   <ul className="mt-3 space-y-2 text-sm leading-6">
-                    {CURRENT_BOWLS.filter(
-                      (bowl) => order.bowlSelection[bowl.id] > 0,
-                    ).map((bowl) => (
+                    {bowls.map((bowl) => (
                       <li
                         key={bowl.id}
                         className="flex justify-between gap-3 border-b border-forest/10 pb-2"

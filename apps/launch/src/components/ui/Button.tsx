@@ -49,7 +49,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       baseStyles,
       variants[variant],
       variant !== "link" && sizes[size],
-      variant === "link" && "px-0 py-0 text-base",
+      variant === "link" && "min-h-11 px-1 py-0 text-sm font-semibold tracking-normal normal-case",
       className
     );
 
