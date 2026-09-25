@@ -134,8 +134,9 @@ export default function TermsPage() {
         <p>
           Customers may choose the displayed number of bowls from the current lineup:
           {` ${AVAILABLE_BOWLS.map((bowl) => bowl.name).join(", ")}`}. Items marked
-          sold out, including {` ${SOLD_OUT_BOWLS.map((bowl) => bowl.name).join(", ")}`},
-          cannot be selected. The mix confirmed
+          sold out
+          {SOLD_OUT_BOWLS.length ? `, including ${SOLD_OUT_BOWLS.map((bowl) => bowl.name).join(", ")},` : ""}
+          {" "}cannot be selected. The mix confirmed
           at checkout applies to the order. Ingredients or builds may change based on
           quality, seasonality, supply, and kitchen capacity. We may make reasonable
           substitutions of comparable quality and will disclose material changes when

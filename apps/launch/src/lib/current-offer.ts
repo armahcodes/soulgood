@@ -81,7 +81,7 @@ export const CURRENT_BOWLS: CurrentBowl[] = [
   {
     id: "herb-chicken-nourish-bowl",
     name: "Herb Chicken Nourish Bowl™",
-    available: false,
+    available: true,
     serving: "Cold or warm",
     ingredients:
       "Herb chicken, quinoa, greens, roasted vegetables, herbs, and light dressing.",

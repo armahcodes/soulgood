@@ -12,6 +12,7 @@ import {
   type CulinaryQuoteRecord,
   type CulinaryQuoteStore,
 } from "../culinary-quotes";
+import { withSoldOut } from "./sold-out";
 
 const mocks = vi.hoisted(() => ({
   enqueue: vi.fn(),
@@ -272,9 +273,11 @@ describe("durable booking requests", () => {
     ).rejects.toMatchObject({ status: 409 });
     mocks.rows.get(quote.id)!.input.bowlSelection["herb-chicken-nourish-bowl"] =
       1;
-    await expect(
-      requestCulinaryBooking(request(quote.id), store),
-    ).rejects.toMatchObject({ expired: true });
+    await withSoldOut("herb-chicken-nourish-bowl", () =>
+      expect(
+        requestCulinaryBooking(request(quote.id), store),
+      ).rejects.toMatchObject({ expired: true }),
+    );
   });
   it("queues both recipient notifications using stable IDs before marking completion", async () => {
     const quote = await createCulinaryQuote(input, { store, tax });

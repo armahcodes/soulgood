@@ -270,10 +270,8 @@ test("delivery starts with 10 bowls, accepts individual quantities, and excludes
   ).toBeVisible();
   await expect(
     page.getByRole("spinbutton", { name: /Herb Chicken/ }),
-  ).toHaveCount(0);
-  await expect(
-    page.getByText(/Currently sold out: Herb Chicken Nourish/),
   ).toBeVisible();
+  await expect(page.getByText(/Currently sold out/)).toHaveCount(0);
   await page.getByRole("button", { name: /Add one Glow Bowl/ }).click();
   await expect(page.getByText("11 bowls selected")).toBeVisible();
   await page.getByRole("button", { name: /Remove one Glow Bowl/ }).click();

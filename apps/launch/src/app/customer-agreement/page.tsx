@@ -42,8 +42,9 @@ export default function CustomerAgreementPage() {
           bowls equals people × meals per person per day × five days. At checkout,
           you may choose the displayed quantity from
           {` ${AVAILABLE_BOWLS.map((bowl) => bowl.name).join(", ")}`}.
-          Items marked sold out, including
-          {` ${SOLD_OUT_BOWLS.map((bowl) => bowl.name).join(", ")}`}, cannot be selected.
+          Items marked sold out
+          {SOLD_OUT_BOWLS.length ? `, including ${SOLD_OUT_BOWLS.map((bowl) => bowl.name).join(", ")},` : ""}
+          {" "}cannot be selected.
           The confirmed mix applies to the order and, for weekly plans, remains
           attached to the plan unless a later selection-change option is provided. Exact recipes,
           proteins, sides, and ingredients may vary. Reasonable substitutions may be

@@ -60,8 +60,8 @@ export function BowlBuilder({
             Choose your bowls
           </p>
           <p className="mt-2 text-sm leading-relaxed text-forest/68">
-            Start with a little of everything: one of each available recipe
-            per set of five. Keep the variety or choose more of your favorites.
+            We start you with five different recipes per set. Swap in any bowl
+            from this week’s lineup, or choose more of your favorites.
           </p>
         </div>
         <span

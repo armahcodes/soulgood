@@ -94,7 +94,7 @@ export function ResultScreen({
         <div className="grid gap-3 p-5 text-sm leading-6 text-forest/72 sm:p-7">
           {mix.fallback ? (
             <p className="rounded-md border border-clay/30 bg-clay/8 px-4 py-3 text-forest">
-              Your answers rule out most of this week’s bowls, so we’ve started you with one of each.
+              Your answers rule out most of this week’s bowls, so we’ve started you with our standard mix.
               Please review the mix at checkout and adjust it to suit you.
             </p>
           ) : null}

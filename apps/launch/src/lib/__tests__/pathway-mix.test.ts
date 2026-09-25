@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { bowlSelectionSchema } from "@/lib/bowl-selection";
 import { PATHWAYS } from "@/lib/lead-schema";
 import { recommendMix } from "@/lib/pathway-mix";
+import { withSoldOut } from "./sold-out";
 
 describe("recommendMix", () => {
   it("always returns a checkout-valid five-bowl selection for every pathway", () => {
@@ -12,17 +13,21 @@ describe("recommendMix", () => {
     }
   });
 
-  it("never recommends a sold-out bowl", () => {
-    for (const pathway of PATHWAYS) {
-      expect(recommendMix(pathway).selection["herb-chicken-nourish-bowl"]).toBe(0);
-    }
+  it("never recommends a sold-out bowl", async () => {
+    await withSoldOut("herb-chicken-nourish-bowl", () => {
+      for (const pathway of PATHWAYS) {
+        const { selection } = recommendMix(pathway);
+        expect(selection["herb-chicken-nourish-bowl"]).toBe(0);
+        expect(bowlSelectionSchema.safeParse(selection).success).toBe(true);
+      }
+    });
   });
 
   it("leans each focused pathway toward its recipes", () => {
     expect(recommendMix("performance").selection).toMatchObject({
       "performance-power-bowl": 2,
       "jerk-wellness-bowl": 2,
-      "golden-harvest-bowl": 1,
+      "herb-chicken-nourish-bowl": 1,
     });
     expect(recommendMix("detox").selection).toMatchObject({
       "glow-bowl": 2,
@@ -33,8 +38,8 @@ describe("recommendMix", () => {
       "glow-bowl": 1,
       "golden-harvest-bowl": 1,
       "jerk-wellness-bowl": 1,
-      "performance-power-bowl": 1,
       "anti-inflammatory-bowl": 1,
+      "herb-chicken-nourish-bowl": 1,
     });
   });
 

@@ -43,7 +43,7 @@ const FAQS = [
   {
     id: "order",
     title: "What comes in an order?",
-    content: `Chef-made 32 oz jarred bowls from this week’s lineup, built on whole ingredients and prepared together for ${PLAN.deliveryDay} pickup or delivery. Pick your favorites, or start with one of each and adjust. Every order has a $50 minimum.`,
+    content: `Chef-made 32 oz jarred bowls from this week’s lineup, built on whole ingredients and prepared together for ${PLAN.deliveryDay} pickup or delivery. Pick your favorites, or start with five different recipes and adjust. Every order has a $50 minimum.`,
   },
   {
     id: "storage",

@@ -23,7 +23,7 @@ const PREFERENCES: Record<Pathway, BowlId[]> = {
   mindful: ["glow-bowl", "golden-harvest-bowl", "anti-inflammatory-bowl", "herb-chicken-nourish-bowl", "jerk-wellness-bowl", "performance-power-bowl"],
   performance: ["performance-power-bowl", "jerk-wellness-bowl", "herb-chicken-nourish-bowl", "golden-harvest-bowl", "glow-bowl", "anti-inflammatory-bowl"],
   detox: ["glow-bowl", "anti-inflammatory-bowl", "golden-harvest-bowl", "herb-chicken-nourish-bowl", "jerk-wellness-bowl", "performance-power-bowl"],
-  alignment: [...BOWL_IDS],
+  alignment: ["glow-bowl", "golden-harvest-bowl", "jerk-wellness-bowl", "anti-inflammatory-bowl", "herb-chicken-nourish-bowl", "performance-power-bowl"],
 };
 
 /** Five slots spread across the top recipes. Alignment keeps the variety of one of each. */
@@ -119,16 +119,17 @@ export function recommendMix(
 }
 
 /**
- * The standard one-of-each mix, with the featured bowl doubled (a recipe that
- * sits last in the list gives up its slot). Always a valid five-bowl selection.
+ * The standard starting mix with the featured bowl doubled; recipes later in
+ * the list give up their slots. Always a valid five-bowl selection.
  */
 export function mixFeaturing(featured: BowlId): BowlSelection {
   const selection = { ...DEFAULT_BOWL_SELECTION };
-  const bowl = CURRENT_BOWLS.find((item) => item.id === featured);
-  if (!bowl?.available) return selection;
-  const giver = [...CURRENT_BOWLS].reverse().find((item) => item.available && item.id !== featured && selection[item.id] > 0);
-  if (!giver) return selection;
-  selection[giver.id] -= 1;
-  selection[featured] += 1;
+  if (!CURRENT_BOWLS.find((item) => item.id === featured)?.available) return selection;
+  while (selection[featured] < MAX_PER_RECIPE) {
+    const giver = [...CURRENT_BOWLS].reverse().find((item) => item.id !== featured && selection[item.id] > 0);
+    if (!giver) break;
+    selection[giver.id] -= 1;
+    selection[featured] += 1;
+  }
   return selection;
 }

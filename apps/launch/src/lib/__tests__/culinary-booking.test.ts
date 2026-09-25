@@ -13,6 +13,8 @@ import {
   type CulinaryInput,
 } from "../culinary-booking";
 import { bowlSelectionTotal } from "../bowl-selection";
+import { CURRENT_BOWLS } from "../current-offer";
+import { withSoldOut } from "./sold-out";
 
 export function culinaryInput(
   count = 10,
@@ -203,7 +205,8 @@ describe("culinary minimums and mandatory fees", () => {
   it("only preselects available bowls and distributes arbitrary totals exactly", () => {
     for (const count of [0, 1, 10, 11, 57, 10000]) {
       const selection = balancedCulinarySelection(count);
-      expect(selection["herb-chicken-nourish-bowl"]).toBe(0);
+      for (const bowl of CURRENT_BOWLS.filter((item) => !item.available))
+        expect(selection[bowl.id]).toBe(0);
       expect(bowlSelectionTotal(selection)).toBe(count);
     }
     expect(bowlSelectionTotal(balancedCulinarySelection(NaN))).toBe(0);
@@ -213,17 +216,19 @@ describe("culinary minimums and mandatory fees", () => {
     input.bowlSelection["glow-bowl"] = quantity;
     expect(culinaryInputSchema.safeParse(input).success).toBe(false);
   });
-  it("rejects sold-out recipes, omitted recipes, client prices, and optional staffing", () => {
+  it("rejects sold-out recipes, omitted recipes, client prices, and optional staffing", async () => {
     const input = culinaryInput();
-    expect(
-      culinaryInputSchema.safeParse({
-        ...input,
-        bowlSelection: {
-          ...input.bowlSelection,
-          "herb-chicken-nourish-bowl": 1,
-        },
-      }).success,
-    ).toBe(false);
+    await withSoldOut("herb-chicken-nourish-bowl", () =>
+      expect(
+        culinaryInputSchema.safeParse({
+          ...input,
+          bowlSelection: {
+            ...input.bowlSelection,
+            "herb-chicken-nourish-bowl": 1,
+          },
+        }).success,
+      ).toBe(false),
+    );
     expect(
       culinaryInputSchema.safeParse({
         ...input,

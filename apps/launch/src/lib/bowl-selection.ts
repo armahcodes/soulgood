@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { BOWL_IDS, type BowlId } from "./current-offer";
+import { BOWL_IDS, CURRENT_BOWLS, type BowlId } from "./current-offer";
 
 export const BOWLS_PER_ORDER = 5;
 export const MAX_PEOPLE_PER_ORDER = 6;
@@ -47,12 +47,14 @@ export function bowlSelectionSchemaForPlan(
         message: `Select exactly ${target} bowls`,
       });
     }
-    if (selection["herb-chicken-nourish-bowl"] > 0) {
-      context.addIssue({
-        code: "custom",
-        path: ["herb-chicken-nourish-bowl"],
-        message: "Herb Chicken Nourish Bowl is sold out",
-      });
+    for (const bowl of CURRENT_BOWLS) {
+      if (!bowl.available && selection[bowl.id] > 0) {
+        context.addIssue({
+          code: "custom",
+          path: [bowl.id],
+          message: `${bowl.name.replace("™", "")} is sold out`,
+        });
+      }
     }
     for (const id of BOWL_IDS) {
       if (selection[id] > maxPerRecipe) {
@@ -105,9 +107,9 @@ export function parseStoredBowlSelection(value: string | null): BowlSelection | 
   try {
     const parsed = bowlSelectionDraftSchema.safeParse(JSON.parse(value));
     if (!parsed.success) return null;
-    return parsed.data["herb-chicken-nourish-bowl"] === 0
-      ? parsed.data
-      : DEFAULT_BOWL_SELECTION;
+    return CURRENT_BOWLS.some((bowl) => !bowl.available && parsed.data[bowl.id] > 0)
+      ? DEFAULT_BOWL_SELECTION
+      : parsed.data;
   } catch {
     return null;
   }

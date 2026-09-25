@@ -10,6 +10,7 @@ import {
   selectionForPlan,
   selectionSourceName,
 } from "../bowl-selection";
+import { withSoldOut } from "./sold-out";
 
 describe("bowl selection", () => {
   it("accepts the five-bowl default and counts it", () => {
@@ -63,17 +64,20 @@ describe("bowl selection", () => {
     expect(bowlSelectionSchema.safeParse(triple).success).toBe(false);
   });
 
-  it("rejects a sold-out Herb Chicken selection", () => {
-    const soldOutMix = {
+  it("accepts Herb Chicken now that it is available, and rejects any sold-out bowl", async () => {
+    const mix = {
       ...DEFAULT_BOWL_SELECTION,
       "anti-inflammatory-bowl": 0,
       "herb-chicken-nourish-bowl": 1,
     };
-    const result = bowlSelectionSchema.safeParse(soldOutMix);
-    expect(result.success).toBe(false);
-    expect(result.error?.issues[0]?.message).toBe(
-      "Herb Chicken Nourish Bowl is sold out",
-    );
+    expect(bowlSelectionSchema.safeParse(mix).success).toBe(true);
+    await withSoldOut("herb-chicken-nourish-bowl", () => {
+      const result = bowlSelectionSchema.safeParse(mix);
+      expect(result.success).toBe(false);
+      expect(result.error?.issues[0]?.message).toBe(
+        "Herb Chicken Nourish Bowl is sold out",
+      );
+    });
   });
 
   it("rejects totals other than five and unknown recipes", () => {
@@ -102,14 +106,17 @@ describe("bowl selection", () => {
     expect(bowlSelectionSchema.safeParse(draft).success).toBe(false);
   });
 
-  it("resets a stored selection containing a sold-out bowl", () => {
+  it("resets a stored selection containing a sold-out bowl", async () => {
     const soldOutDraft = {
       ...DEFAULT_BOWL_SELECTION,
       "anti-inflammatory-bowl": 0,
       "herb-chicken-nourish-bowl": 1,
     };
-    expect(parseStoredBowlSelection(JSON.stringify(soldOutDraft))).toEqual(
-      DEFAULT_BOWL_SELECTION,
+    expect(parseStoredBowlSelection(JSON.stringify(soldOutDraft))).toEqual(soldOutDraft);
+    await withSoldOut("herb-chicken-nourish-bowl", () =>
+      expect(parseStoredBowlSelection(JSON.stringify(soldOutDraft))).toEqual(
+        DEFAULT_BOWL_SELECTION,
+      ),
     );
   });
 });

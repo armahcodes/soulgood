@@ -63,13 +63,7 @@ describe("checkout request boundary", () => {
       deliveryAddress: null,
     },
     { bowlSelection: { ...selection, "glow-bowl": 0 } },
-    {
-      bowlSelection: {
-        ...selection,
-        "anti-inflammatory-bowl": 0,
-        "herb-chicken-nourish-bowl": 1,
-      },
-    },
+    { bowlSelection: { ...selection, "glow-bowl": 3, "golden-harvest-bowl": 0, "jerk-wellness-bowl": 0 } },
     { peopleCount: 7 },
     { mealsPerDay: 4 },
     {

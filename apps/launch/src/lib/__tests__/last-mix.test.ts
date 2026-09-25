@@ -3,6 +3,7 @@ import { bowlSelectionSchema, DEFAULT_BOWL_SELECTION } from "@/lib/bowl-selectio
 import { AVAILABLE_BOWLS } from "@/lib/current-offer";
 import { parseLastMix } from "@/lib/last-mix";
 import { mixFeaturing } from "@/lib/pathway-mix";
+import { withSoldOut } from "./sold-out";
 
 describe("mixFeaturing", () => {
   it("doubles the featured bowl and stays a valid five-bowl mix", () => {
@@ -13,8 +14,10 @@ describe("mixFeaturing", () => {
     }
   });
 
-  it("falls back to the standard mix for a sold-out bowl", () => {
-    expect(mixFeaturing("herb-chicken-nourish-bowl")).toEqual(DEFAULT_BOWL_SELECTION);
+  it("falls back to the standard mix for a sold-out bowl", async () => {
+    await withSoldOut("glow-bowl", () =>
+      expect(mixFeaturing("glow-bowl")).toEqual(DEFAULT_BOWL_SELECTION),
+    );
   });
 });
 

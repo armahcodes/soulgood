@@ -155,7 +155,7 @@ export function BowlSheet({ bowl, onClose }: { bowl: CurrentBowl | null; onClose
                   {bowl.available ? "Build a mix with this bowl" : "Sold out this week"}
                 </Button>
                 <p className="text-center text-xs text-forest/60">
-                  {bowl.available ? "Starts you with two of these and one of each other bowl. Change anything at checkout." : "Check back soon, or choose another bowl."}
+                  {bowl.available ? "Starts you with two of these and a variety of the others. Change anything at checkout." : "Check back soon, or choose another bowl."}
                 </p>
               </div>
             </div>
